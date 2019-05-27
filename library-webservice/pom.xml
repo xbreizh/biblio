@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.troparo</groupId>
+    <artifactId>troparo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <packaging>pom</packaging>
+
+    <!-- ===== General Infos ===== -->
+    <name>troparo</name>
+
+
+    <!-- properties -->
+    <properties>
+        <projectName>troparo</projectName>
+        <cxf.version>3.2.7</cxf.version>
+        <spring.version>5.1.3.RELEASE</spring.version>
+        <hibernate.version>5.4.0.Final</hibernate.version>
+        <postgres.version>42.2.5</postgres.version>
+        <log4j.version>2.9.1</log4j.version>
+        <cxf.scope>compile</cxf.scope>
+        <jaxws.scope>compile</jaxws.scope>
+        <compileSource>1.7</compileSource>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <dockerfile.version>1.4.1</dockerfile.version>
+        <docker.image.prefix>troparo</docker.image.prefix>
+    </properties>
+
+
+    <!-- =============================================================== -->
+    <!-- Modules -->
+    <!-- =============================================================== -->
+    <modules>
+        <module>troparo-web</module>
+        <module>troparo-business</module>
+        <module>troparo-consumer</module>
+        <module>troparo-model</module>
+        <module>troparo-technical</module>
+    </modules>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- ===== Modules ===== -->
+
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>troparo-web</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>troparo-technical</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>troparo-consumer</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>troparo-business</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>troparo-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+
+            <!-- ===== Third Part ===== -->
+
+            <!--apache cxf jax-ws-3.0.2-->
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-frontend-jaxws</artifactId>
+                <version>${cxf.version}</version>
+                <scope>${cxf.scope}</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.cxf</groupId>
+                <artifactId>cxf-rt-transports-http</artifactId>
+                <version>${cxf.version}</version>
+                <scope>${cxf.scope}</scope>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+            <dependency>
+                <groupId>org.springframework.security</groupId>
+                <artifactId>spring-security-core</artifactId>
+                <version>5.1.2.RELEASE</version>
+            </dependency>
+
+            <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+            </dependency>
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>1.2.17</version>
+                <scope>compile</scope>
+            </dependency>
+            <!-- JSR-250 -->
+            <dependency>
+                <groupId>javax.annotation</groupId>
+                <artifactId>javax.annotation-api</artifactId>
+                <version>1.2</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+
+
+</project>

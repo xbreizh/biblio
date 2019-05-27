@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://troparo.org/entities/mail" targetNamespace="http://troparo.org/entities/mail"
+            elementFormDefault="qualified">
+
+
+
+    <!-- Get Mail by Criterias Request Type -->
+    <xsd:element name="getOverdueMailListRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Mail by Criterias Response Type -->
+    <xsd:element name="getOverdueMailListResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MailListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <!--Types-->
+
+    <!-- List of Mails -->
+    <xsd:element name="MailListType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MailTypeOut" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+
+    <!-- Mail Type Out-->
+    <xsd:element name="MailTypeOut">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Email" type="xsd:string"/>
+                <xsd:element name="FirstName" type="xsd:string"/>
+                <xsd:element name="LastName" type="xsd:string"/>
+                <xsd:element name="DueDate" type="xsd:date"/>
+                <xsd:element name="DiffDays" type="xsd:int"/>
+                <xsd:element name="Isbn" type="xsd:string"/>
+                <xsd:element name="Title" type="xsd:string"/>
+                <xsd:element name="Author" type="xsd:string"/>
+                <xsd:element name="Edition" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <!--Token-->
+    <xsd:element name="Token">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:minLength value="10"/>
+                <xsd:maxLength value="200"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <!--Exception-->
+
+    <!-- Business Exception Type -->
+    <xsd:element name="BusinessMailFaultType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="errorCode" type="xsd:int"/>
+                <xsd:element name="errorMessage" type="xsd:string"/>
+                <xsd:element name="errorDescription" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

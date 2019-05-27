@@ -1,0 +1,540 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://troparo.org/entities/member" targetNamespace="http://troparo.org/entities/member"
+            elementFormDefault="qualified">
+
+    <!-- &lt;!&ndash; checkToken Request Type &ndash;&gt;
+     <xsd:element name="checkTokenRequestType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="Token" type="xsd:string"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; checkToken  Response Type &ndash;&gt;
+     <xsd:element name="checkTokenResponseType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="return" type="xsd:boolean"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; getToken Request Type &ndash;&gt;
+     <xsd:element name="invalidateTokenRequestType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="Token" type="xsd:string"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; getToken  Response Type &ndash;&gt;
+     <xsd:element name="invalidateTokenResponseType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="return" type="xsd:boolean"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; getToken Request Type &ndash;&gt;
+     <xsd:element name="getTokenRequestType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="Login" type="xsd:string"/>
+                 <xsd:element name="Password" type="xsd:string"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; getToken  Response Type &ndash;&gt;
+     <xsd:element name="getTokenResponseType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="return" type="xsd:string"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; Connect Request Type &ndash;&gt;
+     <xsd:element name="resetPasswordRequestType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="Login" type="xsd:string"/>
+                 <xsd:element name="Email">
+                     <xsd:simpleType>
+                         <xsd:restriction base="xsd:string">
+                             <xsd:pattern value="[^@]+@[^\.]+\..+"/>
+                         </xsd:restriction>
+                     </xsd:simpleType>
+                 </xsd:element>
+                 <xsd:element name="Password" type="xsd:string"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; Connect  Response Type &ndash;&gt;
+     <xsd:element name="resetPasswordResponseType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="return" type="xsd:boolean"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; Connect Request Type &ndash;&gt;
+     <xsd:element name="connectRequestType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="Login" type="xsd:string"/>
+                 <xsd:element name="Password" type="xsd:string"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>
+
+     &lt;!&ndash; Connect  Response Type &ndash;&gt;
+     <xsd:element name="connectResponseType">
+         <xsd:complexType>
+             <xsd:sequence>
+                 <xsd:element name="return" type="xsd:boolean"/>
+             </xsd:sequence>
+         </xsd:complexType>
+     </xsd:element>-->
+
+    <!-- Add Member Request Type -->
+    <xsd:element name="addMemberRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element ref="tns:MemberTypeIn"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Add Member  Response Type -->
+    <xsd:element name="addMemberResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Member List Request Type -->
+    <xsd:element name="MemberListRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Member List Response Type -->
+    <xsd:element name="MemberListResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MemberListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Member Request Type -->
+    <xsd:element name="getMemberByIdRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element name="Id" type="xsd:int" default="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Member Response Type -->
+    <xsd:element name="getMemberByIdResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MemberTypeOut"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Member Request Type -->
+    <xsd:element name="getMemberByLoginRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element name="Login" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Member Response Type -->
+    <xsd:element name="getMemberByLoginResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MemberTypeOut"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Member by Criterias Request Type -->
+    <xsd:element name="getMemberByCriteriasRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element ref="tns:MemberCriterias"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Member by Criterias Response Type -->
+    <xsd:element name="getMemberByCriteriasResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MemberListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <!-- Update Member Request Type -->
+    <xsd:element name="updateMemberRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element ref="tns:MemberTypeUpdate"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Update Member Response Type -->
+    <xsd:element name="updateMemberResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Remove Member Request Type -->
+    <xsd:element name="removeMemberRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element name="id" type="xsd:int"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Remove Member Response Type -->
+    <xsd:element name="removeMemberResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--Types-->
+
+    <!-- List of Members -->
+    <xsd:element name="MemberListType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MemberTypeOut" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Member Type In-->
+    <xsd:element name="MemberTypeIn">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="FirstName">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="LastName">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Login">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="5"/>
+                            <xsd:maxLength value="20"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Password">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="6"/>
+                            <xsd:maxLength value="10"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Role">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="6"/>
+                            <xsd:maxLength value="10"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Email">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:pattern value="[^@]+@[^\.]+\..+"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Member Criterias-->
+    <xsd:element name="MemberCriterias">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Login">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="5"/>
+                            <xsd:maxLength value="20"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="FirstName" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="LastName" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Email" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:pattern value="[^@]+@[^\.]+\..+"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Role" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Member Type Update-->
+    <xsd:element name="MemberTypeUpdate">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Login">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="5"/>
+                            <xsd:maxLength value="20"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="FirstName" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="LastName" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Password" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="6"/>
+                            <xsd:maxLength value="10"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Email" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:pattern value="[^@]+@[^\.]+\..+"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Role" minOccurs="0">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="50"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Member Type Out-->
+    <xsd:element name="MemberTypeOut">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Id" type="xsd:int"/>
+                <xsd:element name="Login" type="xsd:string"/>
+                <xsd:element name="FirstName" type="xsd:string"/>
+                <xsd:element name="LastName" type="xsd:string"/>
+                <xsd:element name="Password" type="xsd:string"/>
+                <xsd:element name="Email" type="xsd:string"/>
+                <xsd:element name="DateJoin" type="xsd:date"/>
+                <xsd:element name="Role" type="xsd:string"/>
+                <xsd:element ref="tns:LoanListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- List of Loans -->
+    <xsd:element name="LoanListType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:LoanTypeOut" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Loan Type Out-->
+    <xsd:element name="LoanTypeOut">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Id" type="xsd:int"/>
+                <xsd:element name="startDate" type="xsd:date"/>
+                <xsd:element name="plannedEndDate" type="xsd:date"/>
+                <xsd:element name="endDate" type="xsd:date"/>
+                <xsd:element ref="tns:BookTypeOut"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Book Type Out-->
+    <xsd:element name="BookTypeOut">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="id">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:int">
+                            <xsd:minInclusive value="1"/>
+                            <xsd:maxInclusive value="20000"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="ISBN">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minInclusive value="10"/>
+                            <xsd:maxInclusive value="13"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Title">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="200"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Author">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="200"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="PublicationYear">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:int">
+                            <xsd:minInclusive value="1455"/>
+                            <xsd:maxInclusive value="2200"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Edition">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="200"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="NbPages">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:int">
+                            <xsd:minInclusive value="1"/>
+                            <xsd:maxInclusive value="20000"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Keywords">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="2"/>
+                            <xsd:maxLength value="200"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <!--Token-->
+    <xsd:element name="Token">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:minLength value="10"/>
+                <xsd:maxLength value="200"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <!--Exception-->
+
+    <!-- Business Exception Type -->
+    <xsd:element name="BusinessMemberFaultType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="errorCode" type="xsd:int"/>
+                <xsd:element name="errorMessage" type="xsd:string"/>
+                <xsd:element name="errorDescription" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

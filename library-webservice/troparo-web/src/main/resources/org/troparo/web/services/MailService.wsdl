@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://troparo.org/services/MailService/"
+                  xmlns:mail="http://troparo.org/entities/mail"
+                  targetNamespace="http://troparo.org/services/MailService/" name="MailService">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://troparo.org/services/MailService/">
+            <xsd:import namespace="http://troparo.org/entities/mail"
+                        schemaLocation="../entities/mail.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="getOverdueMailListRequest">
+        <wsdl:part element="mail:getOverdueMailListRequest" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getOverdueMailListResponse">
+        <wsdl:part element="mail:getOverdueMailListResponse" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="BusinessExceptionMail">
+        <wsdl:part element="mail:BusinessMailFaultType" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:portType name="IMailService">
+        <wsdl:operation name="getOverdueMailList">
+            <wsdl:input message="tns:getOverdueMailListRequest"/>
+            <wsdl:output message="tns:getOverdueMailListResponse"/>
+            <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="MailServiceSOAPBinding" type="tns:IMailService">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="getOverdueMailList">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMail">
+                <soap:fault name="businessExceptionMail" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="MailService">
+        <wsdl:port name="MailServicePort" binding="tns:MailServiceSOAPBinding">
+            <soap:address
+                    location="http://webservice:8080/troparo_app/services/mail/MailService"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

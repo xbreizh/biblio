@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws" xmlns="http://www.springframework.org/schema/beans"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd">
+
+    <jaxws:endpoint id="memberservice"
+                    implementor="org.troparo.web.service.MemberServiceImpl"
+                    address="/member">
+    </jaxws:endpoint>
+    <jaxws:endpoint id="bookservice"
+                    implementor="org.troparo.web.service.BookServiceImpl"
+                    address="/book">
+    </jaxws:endpoint>
+    <jaxws:endpoint id="loanservice"
+                    implementor="org.troparo.web.service.LoanServiceImpl"
+                    address="/loan">
+    </jaxws:endpoint>
+    <jaxws:endpoint id="connectservice"
+                    implementor="org.troparo.web.service.ConnectServiceImpl"
+                    address="/connect">
+    </jaxws:endpoint>
+    <jaxws:endpoint id="mailservice"
+                    implementor="org.troparo.web.service.MailServiceImpl"
+                    address="/mail">
+    </jaxws:endpoint>
+
+
+</beans>

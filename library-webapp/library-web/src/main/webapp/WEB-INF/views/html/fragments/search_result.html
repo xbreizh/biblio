@@ -1,0 +1,31 @@
+<div th:fragment="search_result" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+    <table class="table table-striped">
+        <tr>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Available</th>
+        </tr>
+        <th:block data-th-each="book : ${books}">
+            <tr th:style="${book.nbAvailable == 0} ? 'color:red' : 'color:green'">
+                <td data-th-text="${book.isbn}"/>
+                <td data-th-text="${book.title}"/>
+                <td data-th-text="${book.author}"/>
+                <td data-th-text="${book.nbAvailable}"/>
+            </tr>
+            <!-- onclick="toggle_display('1234567824')"-->
+            <!-- <tr th:id="${book.isbn}" style="display: inline">
+                 <td data-th-text="${book.publicationYear}"/>
+                 <td data-th-text="${book.edition}"/>
+                 <td data-th-text="${book.nbPages}"/>
+                 <td data-th-text="${book.keywords}"/>
+             </tr>-->
+        </th:block>
+    </table>
+
+</div>
+
+
+</div>

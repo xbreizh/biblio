@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://troparo.org/services/ConnectService/"
+                  xmlns:connect="http://troparo.org/entities/connect"
+                  targetNamespace="http://troparo.org/services/ConnectService/" name="ConnectService">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://troparo.org/services/ConnectService/">
+            <xsd:import namespace="http://troparo.org/entities/connect"
+                        schemaLocation="../entities/connect.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="resetPasswordRequest">
+        <wsdl:part element="connect:resetPasswordRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="resetPasswordResponse">
+        <wsdl:part element="connect:resetPasswordResponseType" name="parameters"/>
+    </wsdl:message>
+    <!--  <wsdl:message name="connectRequest">
+          <wsdl:part element=":connectRequestType" name="parameters"/>
+      </wsdl:message>
+      <wsdl:message name="connectResponse">
+          <wsdl:part element=":connectResponseType" name="parameters"/>
+      </wsdl:message>-->
+    <wsdl:message name="getTokenRequest">
+        <wsdl:part element="connect:getTokenRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getTokenResponse">
+        <wsdl:part element="connect:getTokenResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="checkTokenRequest">
+        <wsdl:part element="connect:checkTokenRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="checkTokenResponse">
+        <wsdl:part element="connect:checkTokenResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="invalidateTokenRequest">
+        <wsdl:part element="connect:invalidateTokenRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="invalidateTokenResponse">
+        <wsdl:part element="connect:invalidateTokenResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="BusinessExceptionConnect">
+        <wsdl:part element="connect:BusinessConnectFaultType" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:portType name="IConnectService">
+        <wsdl:operation name="resetPassword">
+            <wsdl:input message="tns:resetPasswordRequest"/>
+            <wsdl:output message="tns:resetPasswordResponse"/>
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+        </wsdl:operation>
+        <!-- <wsdl:operation name="connect">
+             <wsdl:input message="tns:connectRequest"/>
+             <wsdl:output message="tns:connectResponse"/>
+             <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+         </wsdl:operation>-->
+        <wsdl:operation name="getToken">
+            <wsdl:input message="tns:getTokenRequest"/>
+            <wsdl:output message="tns:getTokenResponse"/>
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkToken">
+            <wsdl:input message="tns:checkTokenRequest"/>
+            <wsdl:output message="tns:checkTokenResponse"/>
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+        </wsdl:operation>
+        <wsdl:operation name="invalidateToken">
+            <wsdl:input message="tns:invalidateTokenRequest"/>
+            <wsdl:output message="tns:invalidateTokenResponse"/>
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="ConnectServiceSOAPBinding" type="tns:IConnectService">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="resetPassword">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionConnect">
+                <soap:fault name="businessExceptionConnect" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <!-- <wsdl:operation name="connect">
+             <soap:operation
+                     soapAction=""/>
+             <wsdl:input>
+                 <soap:body use="literal"/>
+             </wsdl:input>
+             <wsdl:output>
+                 <soap:body use="literal"/>
+             </wsdl:output>
+             <wsdl:fault name="businessExceptionConnect">
+                 <soap:fault name="businessExceptionConnect" use="literal"/>
+             </wsdl:fault>
+         </wsdl:operation>-->
+        <wsdl:operation name="checkToken">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionConnect">
+                <soap:fault name="businessExceptionConnect" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+
+        <wsdl:operation name="getToken">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionConnect">
+                <soap:fault name="businessExceptionConnect" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="invalidateToken">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionConnect">
+                <soap:fault name="businessExceptionConnect" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="ConnectService">
+        <wsdl:port name="ConnectServicePort" binding="tns:ConnectServiceSOAPBinding">
+            <soap:address
+                    location="http://webservice:8080/troparo_app/services/connect/ConnectService"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

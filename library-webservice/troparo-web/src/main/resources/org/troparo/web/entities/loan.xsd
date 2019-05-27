@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:tns="http://troparo.org/entities/loan" targetNamespace="http://troparo.org/entities/loan"
+            elementFormDefault="qualified">
+
+    <!-- Add Loan Request Type -->
+    <xsd:element name="addLoanRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:LoanTypeIn"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Add Loan  Response Type -->
+    <xsd:element name="addLoanResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Loan List Request Type -->
+    <xsd:element name="LoanListRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Loan List Response Type -->
+    <xsd:element name="LoanListResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:LoanListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Loan Request Type -->
+    <xsd:element name="getLoanByIdRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Loan Response Type -->
+    <xsd:element name="getLoanByIdResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:LoanTypeOut"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Loan Status Request Type -->
+    <xsd:element name="getLoanStatusRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Loan Status Response Type -->
+    <xsd:element name="getLoanStatusResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Status"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+
+
+    <!-- Get Loan by Criterias Request Type -->
+    <xsd:element name="getLoanByCriteriasRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:LoanCriterias"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Loan by Criterias Response Type -->
+    <xsd:element name="getLoanByCriteriasResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:LoanListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- is Renewable Request Type -->
+    <xsd:element name="isRenewableRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element name="Id" type="xsd:int"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- is Renewable Response Type -->
+    <xsd:element name="isRenewableResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Renew Loan Request Type -->
+    <xsd:element name="renewLoanRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element name="Id" type="xsd:int"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Renew Loan Response Type -->
+    <xsd:element name="renewLoanResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Terminate Loan Request Type -->
+    <xsd:element name="terminateLoanRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Terminate Loan Response Type -->
+    <xsd:element name="terminateLoanResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--Types-->
+
+    <!-- List of Loans -->
+    <xsd:element name="LoanListType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:LoanTypeOut" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Loan Type In-->
+    <xsd:element name="LoanTypeIn">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Login"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+    <!-- Loan Type Update-->
+    <xsd:element name="LoanTypeUpdate">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Login"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Loan Type Out-->
+    <xsd:element name="LoanTypeOut">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Id"/>
+                <xsd:element ref="tns:Login"/>
+                <xsd:element name="bookId" type="xsd:int"/>
+                <xsd:element name="startDate" type="xsd:date"/>
+                <xsd:element name="plannedEndDate" type="xsd:date"/>
+                <xsd:element name="endDate" type="xsd:date"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--Token-->
+
+    <xsd:element name="Token">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:minLength value="10"/>
+                <xsd:maxLength value="200"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="Login">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:minLength value="5"/>
+                <xsd:maxLength value="20"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+
+    <xsd:element name="ISBN">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <!-- Loan Criterias-->
+    <xsd:element name="LoanCriterias">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Login" minOccurs="0"/>
+                <xsd:element name="bookId" type="xsd:int" default="-1"/>
+                <xsd:element ref="tns:Status" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:element name="Status">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:enumeration value="PROGRESS"/>
+                <xsd:enumeration value="TERMINATED"/>
+                <xsd:enumeration value="OVERDUE"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <xsd:element name="Id" type="xsd:int"/>
+    <!--Exception-->
+
+    <!-- Business Exception Type -->
+    <xsd:element name="BusinessLoanFaultType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="errorCode" type="xsd:int"/>
+                <xsd:element name="errorMessage" type="xsd:string"/>
+                <xsd:element name="errorDescription" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
+</xsd:schema>
+
+

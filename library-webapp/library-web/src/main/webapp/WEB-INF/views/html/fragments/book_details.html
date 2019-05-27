@@ -1,0 +1,29 @@
+<div th:fragment="book_details" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+    <table class="table table-striped" style="display: table">
+        <tr>
+            <th>ISBN</th>
+            <td data-th-text="${loan.book.isbn}"/>
+        </tr>
+        <tr>
+            <th>Title</th>
+            <td data-th-text="${loan.book.title}"/>
+        <tr>
+            <th>Author</th>
+            <td data-th-text="${loan.book.author}"/>
+        </tr>
+        <tr>
+            <th>Edition</th>
+            <td data-th-text="${loan.book.edition}"/>
+        </tr>
+        <tr>
+            <th>Number Pages</th>
+            <td data-th-text="${loan.book.nbPages}"/>
+        </tr>
+        <tr>
+            <th>Keywords</th>
+            <td data-th-text="${loan.book.keywords}"/>
+        </tr>
+    </table>
+</div>

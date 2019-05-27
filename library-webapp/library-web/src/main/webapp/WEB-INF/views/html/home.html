@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+
+<div th:replace="fragments/header :: head1"></div>
+<body>
+<div class="container">
+
+    <div th:replace="fragments/navbar :: navbar"/>
+
+    <div layout:fragment="content" th:remove="tag">
+    <h1>My Space</h1>
+
+        <h2>
+            <button class="btn btn-info" onclick="toggle_displays('myLoans', 'myProfile')">Loans</button>
+            <button class="btn btn-info" onclick="toggle_displays('myProfile', 'myLoans')">Profile</button>
+        </h2>
+        <div id="myLoans" style="display: none">
+            <div th:replace="fragments/loans :: loans"></div>
+        </div>
+        <div id="myProfile" style="display: none">
+            <div th:replace="fragments/table_profile :: profile"></div>
+        </div>
+
+</div>
+    <br><br><br>
+    <h2>Search</h2>
+    <div th:replace="fragments/search :: search"></div>
+    <br><br><br>
+    <div th:replace="fragments/search_result :: search_result"></div>
+    <br><br><br>
+
+
+
+
+    <br><br><br>
+
+</div>
+
+</body>
+<div th:replace="fragments/header :: foot"></div>
+
+
+<script>
+    function toggle_displays(t, d) {
+        var x = document.getElementById(t);
+        var y = document.getElementById(d);
+
+        if (x.style.display === "none" && y.style.display === "block") {
+            y.style.display = "none";
+            x.style.display = "block";
+
+        } else if (x.style.display === "block") {
+            x.style.display = "none";
+
+        } else {
+            x.style.display = "block";
+
+        }
+    }
+</script>
+</html>

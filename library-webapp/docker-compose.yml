@@ -1,0 +1,15 @@
+# Version of docker-compose
+version: '3'
+
+services:
+  # getting library image
+  app:
+    image: library_app
+    container_name: library_app
+    build: .
+    ports:
+      - 8085:8080
+
+
+
+

@@ -1,0 +1,24 @@
+<div th:fragment="profile" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th th:text="Login">Date Planted</th>
+            <th th:text="Firstname">Covered</th>
+            <th th:text="Lastname">Type</th>
+            <th th:text="Email">Features</th>
+            <th th:text="Datejoin">Rows</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td th:text="${member.login}">13/01/2011</td>
+            <td th:text="${member.firstName}">13/01/2011</td>
+            <td th:text="${member.lastName}">13/01/2011</td>
+            <td th:text="${member.email}">13/01/2011</td>
+            <td th:text="${#dates.format(member.dateJoin, 'dd-MM-yyyy')}"/>
+        </tr>
+        </tbody>
+    </table>
+
+</div>

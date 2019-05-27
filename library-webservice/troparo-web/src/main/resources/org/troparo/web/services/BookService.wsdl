@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://troparo.org/services/BookService/"
+                  xmlns:book="http://troparo.org/entities/book"
+                  targetNamespace="http://troparo.org/services/BookService/" name="BookService">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://troparo.org/services/BookService/">
+            <xsd:import namespace="http://troparo.org/entities/book"
+                        schemaLocation="../entities/book.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="addCopyRequest">
+        <wsdl:part element="book:addCopyRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="addCopyResponse">
+        <wsdl:part element="book:addCopyResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getAvailableRequest">
+        <wsdl:part element="book:getAvailableRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getAvailableResponse">
+        <wsdl:part element="book:getAvailableResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="removeBookRequest">
+        <wsdl:part element="book:removeBookRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="removeBookResponse">
+        <wsdl:part element="book:removeBookResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="updateBookRequest">
+        <wsdl:part element="book:updateBookRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="updateBookResponse">
+        <wsdl:part element="book:updateBookResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="BookListRequest">
+        <wsdl:part element="book:BookListRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="BookListResponse">
+        <wsdl:part element="book:BookListResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="addBookRequest">
+        <wsdl:part element="book:addBookRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="addBookResponse">
+        <wsdl:part element="book:addBookResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getBookByIdRequest">
+        <wsdl:part element="book:getBookByIdRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getBookByIdResponse">
+        <wsdl:part element="book:getBookByIdResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getBookByCriteriasRequest">
+        <wsdl:part element="book:getBookByCriteriasRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getBookByCriteriasResponse">
+        <wsdl:part element="book:getBookByCriteriasResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="isAvailableRequest">
+        <wsdl:part element="book:isAvailableRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="isAvailableResponse">
+        <wsdl:part element="book:isAvailableResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="BusinessExceptionBook">
+        <wsdl:part element="book:BusinessBookFaultType" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:portType name="IBookService">
+        <wsdl:operation name="addCopy">
+            <wsdl:input message="tns:addCopyRequest"/>
+            <wsdl:output message="tns:addCopyResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAvailable">
+            <wsdl:input message="tns:getAvailableRequest"/>
+            <wsdl:output message="tns:getAvailableResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="removeBook">
+            <wsdl:input message="tns:removeBookRequest"/>
+            <wsdl:output message="tns:removeBookResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateBook">
+            <wsdl:input message="tns:updateBookRequest"/>
+            <wsdl:output message="tns:updateBookResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAllBooks">
+            <wsdl:input message="tns:BookListRequest"/>
+            <wsdl:output message="tns:BookListResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="addBook">
+            <wsdl:input message="tns:addBookRequest"/>
+            <wsdl:output message="tns:addBookResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="getBookById">
+            <wsdl:input message="tns:getBookByIdRequest"/>
+            <wsdl:output message="tns:getBookByIdResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="getBookByCriterias">
+            <wsdl:input message="tns:getBookByCriteriasRequest"/>
+            <wsdl:output message="tns:getBookByCriteriasResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+        <wsdl:operation name="isAvailable">
+            <wsdl:input message="tns:isAvailableRequest"/>
+            <wsdl:output message="tns:isAvailableResponse"/>
+            <wsdl:fault name="businessExceptionBook" message="tns:BusinessExceptionBook"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="BookServiceSOAPBinding" type="tns:IBookService">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getAvailable">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="removeBook">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateBook">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllBooks">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="addBook">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getBookById">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getBookByCriterias">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="isAvailable">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionBook">
+                <soap:fault name="businessExceptionBook" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="BookService">
+        <wsdl:port name="BookServicePort" binding="tns:BookServiceSOAPBinding">
+            <soap:address
+                    location="http://webservice:8080/troparo_app/services/book/BookService"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

@@ -1,0 +1,80 @@
+<div th:fragment="loans" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Borrowed Date</th>
+            <th>Return Due On</th>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+        </thead>
+
+
+        <tbody>
+        <th:block data-th-each="loan : ${member.loanList}">
+            <div th:if="${loan.status} == 'OVERDUE'">
+                <tr style="color: red">
+            </div>
+            <div th:unless="${loan.status}">
+                <tr style="color: blue">
+            </div>
+
+
+            <td data-th-text="${loan.id}"/>
+            <td data-th-text="${#dates.format(loan.startDate, 'dd-MM-yyyy')}"/>
+            <td data-th-text="${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}"/>
+            <td data-th-text="${loan.book.isbn}"/>
+            <td data-th-text="${loan.book.title}"/>
+            <td data-th-text="${loan.status}"/>
+            <!-- <td data-th-text="${loan.renewable} == true ? 'renew' : 'nope'"/>-->
+            <td>
+                <div th:if="${loan.renewable} == true">
+                    <div>
+                        <form method="post" th:action="@{/renew}" th:object="${renew}">
+
+                            <button class="btn btn-outline-info">
+                                <input id="id" name="id" th:value="${loan.id}" type="hidden">
+                            </button>
+
+
+                            <input type="submit" value="Renew">
+
+
+                        </form>
+                    </div>
+
+                </div>
+                <div th:unless="${loan.renewable}">
+                    <button class="btn btn-outline-warning">
+                        Renewed
+                    </button>
+                </div>
+            </td>
+            </tr>
+
+        </th:block>
+        </tbody>
+    </table>
+    <script>
+        function toggle_table(t) {
+            var x = document.getElementById(t);
+
+            if (x.style.display === "none") {
+                x.style.display = "table";
+            } else {
+                x.style.display = "none";
+            }
+        }
+    </script>
+
+    <!--  <th:block data-th-each="loan : ${member.loanList}">
+          <td data-th-text="${loan.book}"/>
+      </th:block>-->
+
+
+</div>

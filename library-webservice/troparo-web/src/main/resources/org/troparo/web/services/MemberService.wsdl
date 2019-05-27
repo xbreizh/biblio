@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://troparo.org/services/MemberService/"
+                  xmlns:member="http://troparo.org/entities/member"
+                  targetNamespace="http://troparo.org/services/MemberService/" name="MemberService">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://troparo.org/services/MemberService/">
+            <xsd:import namespace="http://troparo.org/entities/member"
+                        schemaLocation="../entities/member.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <!-- <wsdl:message name="resetPasswordRequest">
+         <wsdl:part element="member:resetPasswordRequestType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="resetPasswordResponse">
+         <wsdl:part element="member:resetPasswordResponseType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="connectRequest">
+         <wsdl:part element="member:connectRequestType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="connectResponse">
+         <wsdl:part element="member:connectResponseType" name="parameters"/>
+     </wsdl:message>-->
+    <wsdl:message name="addMemberRequest">
+        <wsdl:part element="member:addMemberRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="addMemberResponse">
+        <wsdl:part element="member:addMemberResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="MemberListRequest">
+        <wsdl:part element="member:MemberListRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="MemberListResponse">
+        <wsdl:part element="member:MemberListResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getMemberByIdRequest">
+        <wsdl:part element="member:getMemberByIdRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getMemberByIdResponse">
+        <wsdl:part element="member:getMemberByIdResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getMemberByLoginRequest">
+        <wsdl:part element="member:getMemberByLoginRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getMemberByLoginResponse">
+        <wsdl:part element="member:getMemberByLoginResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getMemberByCriteriasRequest">
+        <wsdl:part element="member:getMemberByCriteriasRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getMemberByCriteriasResponse">
+        <wsdl:part element="member:getMemberByCriteriasResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="updateMemberRequest">
+        <wsdl:part element="member:updateMemberRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="updateMemberResponse">
+        <wsdl:part element="member:updateMemberResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="removeMemberRequest">
+        <wsdl:part element="member:removeMemberRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="removeMemberResponse">
+        <wsdl:part element="member:removeMemberResponseType" name="parameters"/>
+    </wsdl:message>
+    <!-- <wsdl:message name="getTokenRequest">
+         <wsdl:part element="member:getTokenRequestType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="getTokenResponse">
+         <wsdl:part element="member:getTokenResponseType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="checkTokenRequest">
+         <wsdl:part element="member:checkTokenRequestType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="checkTokenResponse">
+         <wsdl:part element="member:checkTokenResponseType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="invalidateTokenRequest">
+         <wsdl:part element="member:invalidateTokenRequestType" name="parameters"/>
+     </wsdl:message>
+     <wsdl:message name="invalidateTokenResponse">
+         <wsdl:part element="member:invalidateTokenResponseType" name="parameters"/>
+     </wsdl:message>-->
+    <wsdl:message name="BusinessExceptionMember">
+        <wsdl:part element="member:BusinessMemberFaultType" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:portType name="IMemberService">
+        <!-- <wsdl:operation name="resetPassword">
+             <wsdl:input message="tns:resetPasswordRequest"/>
+             <wsdl:output message="tns:resetPasswordResponse"/>
+             <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+         </wsdl:operation>
+         <wsdl:operation name="connect">
+             <wsdl:input message="tns:connectRequest"/>
+             <wsdl:output message="tns:connectResponse"/>
+             <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+         </wsdl:operation>-->
+        <wsdl:operation name="addMember">
+            <wsdl:input message="tns:addMemberRequest"/>
+            <wsdl:output message="tns:addMemberResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAllMembers">
+            <wsdl:input message="tns:MemberListRequest"/>
+            <wsdl:output message="tns:MemberListResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="getMemberById">
+            <wsdl:input message="tns:getMemberByIdRequest"/>
+            <wsdl:output message="tns:getMemberByIdResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="getMemberByLogin">
+            <wsdl:input message="tns:getMemberByLoginRequest"/>
+            <wsdl:output message="tns:getMemberByLoginResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="getMemberByCriterias">
+            <wsdl:input message="tns:getMemberByCriteriasRequest"/>
+            <wsdl:output message="tns:getMemberByCriteriasResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="updateMember">
+            <wsdl:input message="tns:updateMemberRequest"/>
+            <wsdl:output message="tns:updateMemberResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="removeMember">
+            <wsdl:input message="tns:removeMemberRequest"/>
+            <wsdl:output message="tns:removeMemberResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <!--<wsdl:operation name="getToken">
+            <wsdl:input message="tns:getTokenRequest"/>
+            <wsdl:output message="tns:getTokenResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkToken">
+            <wsdl:input message="tns:checkTokenRequest"/>
+            <wsdl:output message="tns:checkTokenResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="invalidateToken">
+            <wsdl:input message="tns:invalidateTokenRequest"/>
+            <wsdl:output message="tns:invalidateTokenResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>-->
+    </wsdl:portType>
+
+    <wsdl:binding name="MemberServiceSOAPBinding" type="tns:IMemberService">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <!-- <wsdl:operation name="resetPassword">
+             <soap:operation
+                     soapAction=""/>
+             <wsdl:input>
+                 <soap:body use="literal"/>
+             </wsdl:input>
+             <wsdl:output>
+                 <soap:body use="literal"/>
+             </wsdl:output>
+             <wsdl:fault name="businessExceptionMember">
+                 <soap:fault name="businessExceptionMember" use="literal"/>
+             </wsdl:fault>
+         </wsdl:operation>
+         <wsdl:operation name="connect">
+             <soap:operation
+                     soapAction=""/>
+             <wsdl:input>
+                 <soap:body use="literal"/>
+             </wsdl:input>
+             <wsdl:output>
+                 <soap:body use="literal"/>
+             </wsdl:output>
+             <wsdl:fault name="businessExceptionMember">
+                 <soap:fault name="businessExceptionMember" use="literal"/>
+             </wsdl:fault>
+         </wsdl:operation>-->
+        <wsdl:operation name="addMember">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllMembers">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getMemberById">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getMemberByLogin">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getMemberByCriterias">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="updateMember">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="removeMember">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <!-- <wsdl:operation name="getToken">
+             <soap:operation
+                     soapAction=""/>
+             <wsdl:input>
+                 <soap:body use="literal"/>
+             </wsdl:input>
+             <wsdl:output>
+                 <soap:body use="literal"/>
+             </wsdl:output>
+             <wsdl:fault name="businessExceptionMember">
+                 <soap:fault name="businessExceptionMember" use="literal"/>
+             </wsdl:fault>
+         </wsdl:operation>
+         <wsdl:operation name="invalidateToken">
+             <soap:operation
+                     soapAction=""/>
+             <wsdl:input>
+                 <soap:body use="literal"/>
+             </wsdl:input>
+             <wsdl:output>
+                 <soap:body use="literal"/>
+             </wsdl:output>
+             <wsdl:fault name="businessExceptionMember">
+                 <soap:fault name="businessExceptionMember" use="literal"/>
+             </wsdl:fault>
+         </wsdl:operation>-->
+    </wsdl:binding>
+
+    <wsdl:service name="MemberService">
+        <wsdl:port name="MemberServicePort" binding="tns:MemberServiceSOAPBinding">
+            <soap:address
+                    location="http://webservice:8080/troparo_app/services/member/MemberService"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

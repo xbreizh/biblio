@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+                  xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+                  xmlns:tns="http://troparo.org/services/LoanService/"
+                  xmlns:loan="http://troparo.org/entities/loan"
+                  targetNamespace="http://troparo.org/services/LoanService/" name="LoanService">
+
+    <wsdl:types>
+        <xsd:schema targetNamespace="http://troparo.org/services/LoanService/">
+            <xsd:import namespace="http://troparo.org/entities/loan"
+                        schemaLocation="../entities/loan.xsd"/>
+        </xsd:schema>
+    </wsdl:types>
+    <wsdl:message name="addLoanRequest">
+        <wsdl:part element="loan:addLoanRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="addLoanResponse">
+        <wsdl:part element="loan:addLoanResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="LoanListRequest">
+        <wsdl:part element="loan:LoanListRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="LoanListResponse">
+        <wsdl:part element="loan:LoanListResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanByIdRequest">
+        <wsdl:part element="loan:getLoanByIdRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanByIdResponse">
+        <wsdl:part element="loan:getLoanByIdResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanByCriteriasRequest">
+        <wsdl:part element="loan:getLoanByCriteriasRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanByCriteriasResponse">
+        <wsdl:part element="loan:getLoanByCriteriasResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanStatusRequest">
+        <wsdl:part element="loan:getLoanStatusRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanStatusResponse">
+        <wsdl:part element="loan:getLoanStatusResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="isRenewableRequest">
+        <wsdl:part element="loan:isRenewableRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="isRenewableResponse">
+        <wsdl:part element="loan:isRenewableResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="renewLoanRequest">
+        <wsdl:part element="loan:renewLoanRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="renewLoanResponse">
+        <wsdl:part element="loan:renewLoanResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="terminateLoanRequest">
+        <wsdl:part element="loan:terminateLoanRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="terminateLoanResponse">
+        <wsdl:part element="loan:terminateLoanResponseType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="BusinessExceptionLoan">
+        <wsdl:part element="loan:BusinessLoanFaultType" name="parameters"/>
+    </wsdl:message>
+
+    <wsdl:portType name="ILoanService">
+        <wsdl:operation name="addLoan">
+            <wsdl:input message="tns:addLoanRequest"/>
+            <wsdl:output message="tns:addLoanResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="getAllLoans">
+            <wsdl:input message="tns:LoanListRequest"/>
+            <wsdl:output message="tns:LoanListResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanById">
+            <wsdl:input message="tns:getLoanByIdRequest"/>
+            <wsdl:output message="tns:getLoanByIdResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanByCriterias">
+            <wsdl:input message="tns:getLoanByCriteriasRequest"/>
+            <wsdl:output message="tns:getLoanByCriteriasResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanStatus">
+            <wsdl:input message="tns:getLoanStatusRequest"/>
+            <wsdl:output message="tns:getLoanStatusResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="isRenewable">
+            <wsdl:input message="tns:isRenewableRequest"/>
+            <wsdl:output message="tns:isRenewableResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="renewLoan">
+            <wsdl:input message="tns:renewLoanRequest"/>
+            <wsdl:output message="tns:renewLoanResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="terminateLoan">
+            <wsdl:input message="tns:terminateLoanRequest"/>
+            <wsdl:output message="tns:terminateLoanResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+    </wsdl:portType>
+
+    <wsdl:binding name="LoanServiceSOAPBinding" type="tns:ILoanService">
+        <soap:binding style="document"
+                      transport="http://schemas.xmlsoap.org/soap/http"/>
+
+        <wsdl:operation name="addLoan">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getAllLoans">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanById">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanByCriterias">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanStatus">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="isRenewable">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="renewLoan">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="terminateLoan">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+    </wsdl:binding>
+
+    <wsdl:service name="LoanService">
+        <wsdl:port name="LoanServicePort" binding="tns:LoanServiceSOAPBinding">
+            <soap:address
+                    location="http://webservice:8080/troparo_app/services/loan/LoanService"/>
+        </wsdl:port>
+    </wsdl:service>
+
+</wsdl:definitions>

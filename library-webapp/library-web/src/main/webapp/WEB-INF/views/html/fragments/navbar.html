@@ -1,0 +1,23 @@
+<div th:fragment="navbar" xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <img alt="book" class="navbar-brand" height="42"
+                     src="https://d3n8a8pro7vhmx.cloudfront.net/sundayassemblyla/pages/2543/attachments/original/1528303608/book.jpg?1528303608"
+                     width="42"/>
+                Troparo
+            </div><!--
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"></li>
+            </ul>
+        </div>-->
+            <form method="post" th:action="@{/logout}">
+                <input type="submit" value="Sign Out"/>
+            </form>
+        </div>
+    </div>
+
+</div>

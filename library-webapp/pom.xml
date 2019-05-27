@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>org.library</groupId>
+    <artifactId>library</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <projectName>library</projectName>
+        <project.version>1.0-SNAPSHOT</project.version>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+        <cxf.version>3.2.7</cxf.version>
+        <jdk.version>1.8</jdk.version>
+        <spring.version>5.1.3.RELEASE</spring.version>
+        <spring-security.version>4.2.3.RELEASE</spring-security.version>
+        <log4j.version>1.2.17</log4j.version>
+        <cxf.scope>compile</cxf.scope>
+        <jaxws.scope>compile</jaxws.scope>
+        <compileSource>1.7</compileSource>
+        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
+    <modules>
+        <module>library-web</module>
+        <module>library-business</module>
+        <module>library-service</module>
+        <module>library-model</module>
+        <module>library-technical</module>
+    </modules>
+
+
+</project>

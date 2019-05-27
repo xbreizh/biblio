@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            targetNamespace="http://troparo.org/entities/connect"
+            elementFormDefault="qualified">
+
+    <!-- checkToken Request Type -->
+    <xsd:element name="checkTokenRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- checkToken  Response Type -->
+    <xsd:element name="checkTokenResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- getToken Request Type -->
+    <xsd:element name="invalidateTokenRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- getToken  Response Type -->
+    <xsd:element name="invalidateTokenResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- getToken Request Type -->
+    <xsd:element name="getTokenRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Login" type="xsd:string"/>
+                <xsd:element name="Password" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- getToken  Response Type -->
+    <xsd:element name="getTokenResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Connect Request Type -->
+    <xsd:element name="resetPasswordRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Login" type="xsd:string"/>
+                <xsd:element name="Email">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:pattern value="[^@]+@[^\.]+\..+"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+                <xsd:element name="Password" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Reset Password  Response Type -->
+    <xsd:element name="resetPasswordResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!--   &lt;!&ndash; Connect Request Type &ndash;&gt;
+       <xsd:element name="connectRequestType">
+           <xsd:complexType>
+               <xsd:sequence>
+                   <xsd:element name="Login" type="xsd:string"/>
+                   <xsd:element name="Password" type="xsd:string"/>
+               </xsd:sequence>
+           </xsd:complexType>
+       </xsd:element>
+
+       &lt;!&ndash; Connect  Response Type &ndash;&gt;
+       <xsd:element name="connectResponseType">
+           <xsd:complexType>
+               <xsd:sequence>
+                   <xsd:element name="return" type="xsd:boolean"/>
+               </xsd:sequence>
+           </xsd:complexType>
+       </xsd:element>-->
+
+
+    <!--Token-->
+    <xsd:element name="Token">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:minLength value="10"/>
+                <xsd:maxLength value="200"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:element>
+
+    <!--Exception-->
+
+    <!-- Business Exception Type -->
+    <xsd:element name="BusinessConnectFaultType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="errorCode" type="xsd:int"/>
+                <xsd:element name="errorMessage" type="xsd:string"/>
+                <xsd:element name="errorDescription" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>

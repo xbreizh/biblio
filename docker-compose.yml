@@ -1,0 +1,73 @@
+# Version of docker-compose
+version: '3'
+
+services:
+  # getting postgres DB
+  db:
+    image: postgres:11.1-alpine
+    container_name: library-db
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: ocp
+      POSTGRES_PASSWORD: 123
+      POSTGRES_DB: troparo
+      POSTGRES_INITDB_ARGS: --data-checksums
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - pg-data:/var/lib/postgresql/data
+    networks:
+      - troparo
+
+
+  # getting library-webservice image
+  webservice:
+    image: troparo_app
+    container_name: library-webservice
+    build: library-webservice/.
+    ports:
+     - 8080:8080
+    #volumes:
+     # - logs:/usr/app/resources
+    depends_on:
+      - db
+    networks:
+      - troparo
+
+       # getting troparo image
+  mailapp:
+    image: library_mailapp
+    container_name: library_mailapp
+    build: library-mailapp/.
+    ports:
+        - 8085:8080
+    volumes:
+      - logs:/usr/app/resources    
+    depends_on:
+      - webservice
+    networks:
+      - troparo
+
+
+    # getting troparo image
+  webapp:
+    image: library_webapp
+    container_name: library_webapp
+    build: library-webapp/.
+    ports:
+        - 8090:8080
+    #volumes:
+     # - logs:/usr/app/resources
+    depends_on:
+      - webservice
+    networks:
+      - troparo
+
+
+volumes:  
+  pg-data:
+  logs:
+
+networks:
+  troparo:
+
