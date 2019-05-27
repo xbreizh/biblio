@@ -15,7 +15,8 @@ services:
       POSTGRES_INITDB_ARGS: --data-checksums
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
-      - pg-data:/var/lib/postgresql/data
+      - "./db-init/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
+      #- pg-data:/var/lib/postgresql/data
     networks:
       - troparo
 
