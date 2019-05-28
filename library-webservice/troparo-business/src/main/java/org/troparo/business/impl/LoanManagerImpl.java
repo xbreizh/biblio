@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Transactional
-@Configuration
+//@Configuration
 @PropertySource("classpath:config.properties")
 public class LoanManagerImpl implements LoanManager {
     @Value("${loanDuration}")

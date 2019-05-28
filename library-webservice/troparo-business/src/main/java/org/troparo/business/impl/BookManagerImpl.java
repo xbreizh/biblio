@@ -4,6 +4,7 @@ package org.troparo.business.impl;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.BookManager;
 import org.troparo.consumer.contract.BookDAO;
+import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 
 import javax.inject.Inject;
@@ -16,6 +17,8 @@ import java.util.*;
 public class BookManagerImpl implements BookManager {
     @Inject
     BookDAO bookDAO;
+    @Inject
+    LoanDAO loanDAO;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private String exception = "";
 
