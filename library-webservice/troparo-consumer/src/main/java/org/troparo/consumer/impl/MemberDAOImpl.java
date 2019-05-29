@@ -40,6 +40,7 @@ public class MemberDAOImpl implements MemberDAO {
         try {
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
+            if(sessionFactory == null) System.out.println("SessionFactory not initialized!");
             return null;
         }
 

@@ -17,8 +17,21 @@ import java.util.*;
 @Named
 public class MemberManagerImpl implements MemberManager {
     private final String pepper = "Tipiak";
+
+
+    public void setMemberDAO(MemberDAO memberDAO) {
+        this.memberDAO = memberDAO;
+    }
+
+    @Override
+    public void setValidator(EmailValidator validator) {
+        this.validator = validator;
+    }
+
     @Inject
     MemberDAO memberDAO;
+
+
     @Inject
     EmailValidator validator;
     private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -65,28 +78,58 @@ public class MemberManagerImpl implements MemberManager {
         if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
             return exception = "Password should have between 2 and 200 characters: " + member.getPassword();
         }
-        if (!validator.validate(member.getEmail())) {
-            return exception = "Invalid Email: " + member.getEmail();
-        }
+        System.out.println(member.getEmail());
+        if (validateEmail(member)) return exception = "Invalid Email: " + member.getEmail();
 
         return exception;
     }
 
+    public boolean validateEmail(Member member) {
+        if (!validator.validate(member.getEmail())) {
+            return true;
+        }
+        return false;
+    }
+
     private String checkRequiredValuesNotNull(Member member) {
 
-        if (member.getLogin().equals("") || member.getLogin().equals("?")) {
+        if (member.getLogin() != null) {
+            if (member.getLogin().equals("") || member.getLogin().equals("?") || member.getLogin() == null) {
+                return "login should be filled";
+            }
+        }else{
             return "login should be filled";
         }
-        if (member.getFirstName().equals("") || member.getFirstName().equals("?")) {
+
+        if (member.getFirstName() != null) {
+            if (member.getFirstName().equals("") || member.getFirstName().equals("?")) {
+                return "FirstName should be filled";
+            }
+        } else {
             return "FirstName should be filled";
         }
-        if (member.getLastName().equals("") || member.getLastName().equals("?")) {
+
+        if(member.getLastName()!=null) {
+            if (member.getLastName().equals("") || member.getLastName().equals("?") || member.getLastName().isEmpty()) {
+                return "LastName should be filled";
+            }
+        }else{
             return "LastName should be filled";
         }
-        if (member.getPassword().equals("") || member.getPassword().equals("?")) {
+
+        if(member.getPassword()!=null) {
+            if (member.getPassword().equals("") || member.getPassword().equals("?") || member.getPassword() == null) {
+                return "Password should be filled";
+            }
+        }else{
             return "Password should be filled";
         }
-        if (member.getEmail().equals("") || member.getEmail().equals("?")) {
+
+        if(member.getEmail() !=null) {
+            if (member.getEmail().equals("") || member.getEmail().equals("?") || member.getEmail() == null) {
+                return "Email should be filled";
+            }
+        }else{
             return "Email should be filled";
         }
         return "";
@@ -156,42 +199,40 @@ public class MemberManagerImpl implements MemberManager {
             return "No Item found with that Login";
         }
         logger.info("getting list: " + loginList.size());
-        for (Member b : loginList
+        for (Member m : loginList
         ) {
-            if (!member.getFirstName().equals("") && !member.getFirstName().equals("?")) {
-                if (member.getFirstName().length() < 2 || member.getFirstName().length() > 50) {
-                    return exception = "FirstName should have between 2 and 200 characters: " + member.getFirstName();
+            if (!m.getFirstName().equals("") && !m.getFirstName().equals("?")) {
+                if (m.getFirstName().length() < 2 || m.getFirstName().length() > 50) {
+                    return exception = "FirstName should have between 2 and 200 characters: " + m.getFirstName();
                 }
                 receivedCriteria = true;
-                b.setFirstName(member.getFirstName());
+                m.setFirstName(m.getFirstName());
             }
-            if (!member.getLastName().equals("") && !member.getLastName().equals("?")) {
-                if (member.getLastName().length() < 2 || member.getLastName().length() > 50) {
-                    return exception = "LastName should have between 2 and 200 characters: " + member.getLastName();
+            if (!m.getLastName().equals("") && !m.getLastName().equals("?")) {
+                if (m.getLastName().length() < 2 || m.getLastName().length() > 50) {
+                    return exception = "LastName should have between 2 and 200 characters: " + m.getLastName();
                 }
                 receivedCriteria = true;
-                b.setLastName(member.getLastName());
+                m.setLastName(m.getLastName());
             }
-            if (!member.getPassword().equals("") && !member.getPassword().equals("?")) {
-                if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
-                    return exception = "Password should have between 2 and 200 characters: " + member.getPassword();
+            if (!m.getPassword().equals("") && !m.getPassword().equals("?")) {
+                if (m.getPassword().length() < 2 || m.getPassword().length() > 200) {
+                    return exception = "Password should have between 2 and 200 characters: " + m.getPassword();
                 }
                 receivedCriteria = true;
-                b.setPassword(encryptPassword(member.getPassword())); // encrypting password
+                m.setPassword(encryptPassword(m.getPassword())); // encrypting password
             }
-            if (!member.getEmail().equals("") && !member.getEmail().equals("?")) {
-                if (!validator.validate(member.getEmail())) {
-                    return exception = "Invalid Email: " + member.getEmail();
-                }
+            if (!m.getEmail().equals("") && !m.getEmail().equals("?")) {
+                if (validateEmail(m)) return exception = "Invalid Email: " + m.getEmail();
                 receivedCriteria = true;
-                b.setEmail(member.getEmail());
+                m.setEmail(m.getEmail());
             }
             if (!receivedCriteria) {
                 return "No criteria was passed in";
             }
-            logger.info(b.getLogin());
-            memberDAO.updateMember(b);
-            logger.info("updated: " + b.getId());
+            logger.info(m.getLogin());
+            memberDAO.updateMember(m);
+            logger.info("updated: " + m.getId());
         }
 
         return exception;
@@ -258,7 +299,7 @@ public class MemberManagerImpl implements MemberManager {
         }
     }
 
-    @Override
+/*    @Override
     public boolean disconnect(String token) {
         return false;
     }
@@ -266,7 +307,7 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public boolean connect(String login, String password) {
         return false;
-    }
+    }*/
 
     @Override
     public String encryptPassword(String password) {
@@ -279,7 +320,6 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public boolean checkPassword(String pwd1, String pwd2) {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-
         return bcrypt.matches(pwd1 + pepper, pwd2);
     }
 
