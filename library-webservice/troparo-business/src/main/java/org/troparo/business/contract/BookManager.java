@@ -1,5 +1,6 @@
 package org.troparo.business.contract;
 
+import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
 import java.util.HashMap;
@@ -27,4 +28,6 @@ public interface BookManager {
     String addCopy(String isbn, int copies);
 
     boolean isAvailable(int id);
+
+    void setBookDAO(BookDAO bookDAO);
 }

@@ -26,7 +26,8 @@ public class BookManagerImpl implements BookManager {
     public String addBook(Book book) {
         exception = "";
         // checking if already existing
-        if (bookDAO.existingISBN(book.getIsbn().toUpperCase())) {
+        book.setIsbn(book.getIsbn().toUpperCase());
+        if (bookDAO.existingISBN(book.getIsbn())) {
             exception = "ISBN already existing";
             return exception;
         }
@@ -41,7 +42,6 @@ public class BookManagerImpl implements BookManager {
         if (!exception.equals("")) {
             return exception;
         }
-        logger.info("in the ");
         // adding insertion date
         book.setInsert_date(new Date());
         book.setIsbn(book.getIsbn().toUpperCase());
@@ -197,7 +197,8 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public Book getBookByIsbn(String isbn) {
-        return bookDAO.getBookByIsbn(isbn.toUpperCase());
+        isbn = isbn.toUpperCase();
+        return bookDAO.getBookByIsbn(isbn);
     }
 
     @Override
@@ -256,5 +257,10 @@ public class BookManagerImpl implements BookManager {
         } else {
             return false;
         }
+    }
+
+    @Override
+    public void setBookDAO(BookDAO bookDAO) {
+        this.bookDAO = bookDAO;
     }
 }

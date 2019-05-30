@@ -2,6 +2,7 @@ package org.troparo.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.troparo.business.EmailValidator;
 import org.troparo.business.contract.MemberManager;
@@ -12,6 +13,9 @@ import org.xml.sax.SAXException;
 import javax.xml.transform.Source;
 import javax.xml.validation.Validator;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -61,30 +65,71 @@ class MemberManagerImplTest {
 
     @Test
     void getMembers() {
+        List<Member> list = new ArrayList<>();
+        when(memberDAO.getAllMembers()).thenReturn(list);
+        assertNotNull(memberManager.getMembers());
     }
 
     @Test
+    @DisplayName("should return member if member id existing")
     void getMemberById() {
+        Member m = new Member();
+        when(memberDAO.getMemberById(anyInt())).thenReturn(m);
+        assertNotNull(memberManager.getMemberById(3));
     }
 
     @Test
+    @DisplayName("should return null if member id not existing")
+    void getMemberById1() {
+        when(memberDAO.getMemberById(anyInt())).thenReturn(null);
+        assertNull(memberManager.getMemberById(3));
+    }
+
+    @Test
+    @DisplayName("should return member if member login existing")
     void getMemberByLogin() {
+        Member m = new Member();
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(m);
+        assertNotNull(memberManager.getMemberByLogin("bob"));
     }
 
     @Test
+    @DisplayName("should return null if member login not existing")
+    void getMemberByLogin1() {
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
+        assertNull(memberManager.getMemberByLogin("bob"));
+    }
+
+    @Test
+    @DisplayName("should return member if member criterias existing")
     void getMembersByCriterias() {
+        List<Member> list = new ArrayList<>();
+        HashMap<String, String> map = new HashMap<>();
+        when(memberDAO.getMembersByCriterias(map)).thenReturn(list);
+        assertNotNull(memberManager.getMembersByCriterias(map));
+    }
+
+    @Test
+    @DisplayName("should return null if member criterias not existing")
+    void getMembersByCriterias1() {
+        HashMap<String, String> map = new HashMap<>();
+        when(memberDAO.getMembersByCriterias(map)).thenReturn(null);
+        assertNull(memberManager.getMembersByCriterias(map));
     }
 
     @Test
     void updateMember() {
+    fail();
     }
 
     @Test
     void remove() {
+        fail();
     }
 
     @Test
     void getToken() {
+        fail();
     }
 
     @Test
@@ -96,14 +141,17 @@ class MemberManagerImplTest {
 
     @Test
     void invalidateToken() {
+        fail();
     }
 
     @Test
     void disconnect() {
+        fail();
     }
 
     @Test
     void connect() {
+        fail();
     }
 
     @Test
@@ -129,9 +177,33 @@ class MemberManagerImplTest {
 
     @Test
     void updatePassword() {
+
+        fail();
     }
 
     @Test
+    @DisplayName("should return true when member role is Admin")
     void checkAdmin() {
+        Member member = new Member();
+        member.setRole("Admin");
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
+        assertTrue(memberManager.checkAdmin(anyString()));
+    }
+
+    @Test
+    @DisplayName("should return false when member role is not Admin")
+    void checkAdmin1() {
+        Member member = new Member();
+        member.setRole("dede");
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
+        assertFalse(memberManager.checkAdmin(anyString()));
+    }
+
+    @Test
+    @DisplayName("should return false when member role is null")
+    void checkAdmin2() {
+        Member member = new Member();
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
+        assertFalse(memberManager.checkAdmin(anyString()));
     }
 }

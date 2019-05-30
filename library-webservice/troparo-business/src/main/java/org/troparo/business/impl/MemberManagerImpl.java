@@ -93,13 +93,7 @@ public class MemberManagerImpl implements MemberManager {
 
     private String checkRequiredValuesNotNull(Member member) {
 
-        if (member.getLogin() != null) {
-            if (member.getLogin().equals("") || member.getLogin().equals("?") || member.getLogin() == null) {
-                return "login should be filled";
-            }
-        }else{
-            return "login should be filled";
-        }
+        if (checkIfLoginHasBeenPassed(member.getLogin())) return "login should be filled";
 
         if (member.getFirstName() != null) {
             if (member.getFirstName().equals("") || member.getFirstName().equals("?")) {
@@ -117,22 +111,21 @@ public class MemberManagerImpl implements MemberManager {
             return "LastName should be filled";
         }
 
-        if(member.getPassword()!=null) {
-            if (member.getPassword().equals("") || member.getPassword().equals("?") || member.getPassword() == null) {
-                return "Password should be filled";
-            }
-        }else{
-            return "Password should be filled";
-        }
+        if (checkIfLoginHasBeenPassed(member.getPassword())) return "Password should be filled";
 
-        if(member.getEmail() !=null) {
-            if (member.getEmail().equals("") || member.getEmail().equals("?") || member.getEmail() == null) {
-                return "Email should be filled";
-            }
-        }else{
-            return "Email should be filled";
-        }
+        if (checkIfLoginHasBeenPassed(member.getEmail())) return "Email should be filled";
         return "";
+    }
+
+    private boolean checkIfLoginHasBeenPassed(String login) {
+        if (login != null) {
+            if (login.equals("") || login.equals("?") || login == null) {
+                return true;
+            }
+        } else {
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -184,18 +177,18 @@ public class MemberManagerImpl implements MemberManager {
     public String updateMember(Member member) {
         exception = "";
         boolean receivedCriteria = false;
-        if (member.getLogin().equals("") || member.getLogin().equals("?")) {
+        if (checkIfLoginHasBeenPassed(member.getLogin())) return "you must provide an Login";
+       /* if (member.getLogin().equals("") || member.getLogin().equals("?")) {
             return "you must provide an Login";
         } else {
             logger.info("member received: " + member);
-        }
+        }*/
 
         List<Member> loginList = new ArrayList<>();
         HashMap<String, String> map = new HashMap<>();
         map.put("Login", member.getLogin());
         logger.info("map size: " + map.size());
-        loginList = memberDAO.getMembersByCriterias(map);
-        if (loginList.size() == 0) {
+        if (memberDAO.getMembersByCriterias(map)!=null) {
             return "No Item found with that Login";
         }
         logger.info("getting list: " + loginList.size());
@@ -348,7 +341,9 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkAdmin(String token) {
         Member m = memberDAO.getMemberByToken(token);
         if (m != null) {
-            return m.getRole().equals("Admin");
+            if(m.getRole()!=null) {
+                return m.getRole().equals("Admin");
+            }
         }
         return false;
     }

@@ -37,8 +37,10 @@ import java.util.*;
 @Named
 public class EmailManagerImpl implements EmailManager {
     private Logger logger = Logger.getLogger(EmailManagerImpl.class);
+
     @Inject
     LoanManager loanManager;
+
 
    /* @Value("${sender}")
     private String mailFrom;
@@ -56,9 +58,9 @@ public class EmailManagerImpl implements EmailManager {
     private String port;*/
 
 
-  /*  public static final String AES = "AES";*/
+    /*  public static final String AES = "AES";*/
 
-  //  @Scheduled(cron = "*/10 * * * * *")
+    //  @Scheduled(cron = "*/10 * * * * *")
   /*  public void sendMail() {
         final String username = "xavier.lamourec@gmail.com";
 
@@ -216,14 +218,15 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("getting overdue list");
         return loanManager.getLoansByCriterias(criterias);
     }*/
-
-    private int calculateDaysBetweenDates(Date d1, Date d2){
+    @Override
+    public int calculateDaysBetweenDates(Date d1, Date d2){
         String format = "MM/dd/yyyy hh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(format);
         long diff = d2.getTime() - d1.getTime();
         int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
         return diffDays;
     }
+
 
    /* private String createMailContent(Loan loan){
         Member member = loan.getBorrower();
@@ -266,19 +269,35 @@ public class EmailManagerImpl implements EmailManager {
 
         return OriginalPassword;
     }*/
-
     @Override
     public List<Mail> getOverdueEmailList() {
         HashMap<String, String> criterias = new HashMap<>();
         criterias.put("status", "OVERDUE");
         logger.info("getting overdue list");
         List<Loan> loans = loanManager.getLoansByCriterias(criterias);
+        /*List<Mail> mailList = new ArrayList<>();*/
+        System.out.println("loans: "+loans.size());
         List<Mail> mailList = new ArrayList<>();
-
-        return createMailListfromLoans(loans);
+        for (Loan loan: loans
+        ) {
+            Mail mail = new Mail();
+            mail.setEmail(loan.getBorrower().getEmail());
+            mail.setFirstname(loan.getBorrower().getFirstName());
+            mail.setLastname(loan.getBorrower().getLastName());
+            mail.setIsbn(loan.getBook().getIsbn());
+            mail.setTitle(loan.getBook().getTitle());
+            mail.setAuthor(loan.getBook().getAuthor());
+            mail.setEdition(loan.getBook().getEdition());
+            mail.setDueDate(loan.getPlannedEndDate());
+            int overDays = calculateDaysBetweenDates(new Date(), loan.getPlannedEndDate());
+            mail.setDiffdays(overDays);
+            mailList.add(mail);
+        }
+        return mailList;
     }
 
-    private List<Mail> createMailListfromLoans(List<Loan> loans) {
+    /*@Override
+    public List<Mail> createMailListfromLoans(List<Loan> loans) {
         List<Mail> mailList = new ArrayList<>();
         for (Loan loan: loans
              ) {
@@ -296,5 +315,9 @@ public class EmailManagerImpl implements EmailManager {
             mailList.add(mail);
         }
         return mailList;
+    }*/
+
+    public void setLoanManager(LoanManager loanManager) {
+        this.loanManager = loanManager;
     }
 }

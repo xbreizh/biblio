@@ -12,14 +12,14 @@
     <artifactId>troparo-consumer</artifactId>
     <build>
         <plugins>
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 
@@ -104,11 +104,11 @@
         </dependency>
 
         <!-- Pool de connexion -->
-        <dependency>
+      <!--  <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-dbcp2</artifactId>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
         <dependency>
             <groupId>org.dbunit</groupId>
