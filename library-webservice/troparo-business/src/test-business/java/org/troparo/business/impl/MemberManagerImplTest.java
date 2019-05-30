@@ -145,11 +145,13 @@ class MemberManagerImplTest {
     }
 
     @Test
+    @DisplayName("")
     void disconnect() {
         fail();
     }
 
     @Test
+    @DisplayName("")
     void connect() {
         fail();
     }
@@ -167,15 +169,24 @@ class MemberManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return true if password correct")
     void checkPassword() {
         String password1 = "test123";
         String password2 = memberManager.encryptPassword(password1);
         String password3 = "plouf";
         assertTrue(memberManager.checkPassword(password1, password2));
+    }
+
+    @Test
+    @DisplayName("should return false if password incorrect")
+    void checkPassword1() {
+        String password1 = "test123";
+        String password3 = "plouf";
         assertFalse(memberManager.checkPassword(password1, password3));
     }
 
     @Test
+    @DisplayName("")
     void updatePassword() {
 
         fail();
