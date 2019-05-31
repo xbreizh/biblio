@@ -75,7 +75,7 @@ public class BookManagerImpl implements BookManager {
     }
 
     boolean checkBookParamLength(Book book, String param) {
-        if(param!=null) {
+        if (param != null) {
             if (param.length() > 2 && param.length() < 200) {
                 return true;
             }
@@ -92,16 +92,15 @@ public class BookManagerImpl implements BookManager {
 
     String replaceSeparatorWithWhiteSpace(String string) {
         System.out.println("trying to replace: " + string);
-        String[] separators = {";", ",", "/", "\\", };
-        for (String sep: separators
-             ) {
-            if(string.contains(sep)){
+        String[] separators = {";", ",", "/", "\\",};
+        for (String sep : separators
+        ) {
+            if (string.contains(sep)) {
                 string = string.replace(sep, " ");
             }
         }
         return string;
     }
-
 
 
     private String checkRequiredValuesNotNull(Book book) {
@@ -163,7 +162,7 @@ public class BookManagerImpl implements BookManager {
         List<String> possibleCriteriasList = Arrays.asList(possibleCriterias);
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
-            if(possibleCriteriasList.contains(entry.getKey())) {
+            if (possibleCriteriasList.contains(entry.getKey())) {
                 if (!entry.getValue().equals("?") && !entry.getValue().equals("")) {
                     criterias.put(entry.getKey(), entry.getValue());
                 }
@@ -174,71 +173,108 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public String updateBook(Book book) {
-        exception = "";
-        if (!checksThatBookHasAnISBN(book)) return "you must provide an ISBN";
-        List<Book> bookList = getBookListForISBN(book.getIsbn());
-        if(bookList!=null) {
-            if (bookList.size() == 0) {
+        if (book == null) return "No book provided!";
+        if(!checksThatBookHasAnISBN(book).equals(""))return checksThatBookHasAnISBN(book);
+        List<Book> bookList;
+        //List<Book> bookList = getBookListForISBN(book.getIsbn());
+        /*if (bookList != null) *//*{*//*
+         *//*if (bookList.size() == 0) {*//*
                 return "No Item found with that ISBN";
-            }
-        }
+            *//*}*//*
+         *//*}*/
 
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ISBN", book.getIsbn().toUpperCase());
+        bookList = bookDAO.getBooksByCriterias(map);
+        if (bookList == null) return "No Item found with that ISBN";
         logger.info("getting list. Size: " + bookList.size());
+        if (bookList.size()==0)return "No book to update";
+        // updates each book from the list when values from book are provided
         for (Book b : bookList
         ) {
-            if(book.getTitle()!=null) {
-                if (!book.getTitle().equals("") && !book.getTitle().equals("?")) {
-                    b.setTitle(book.getTitle());
-                }
-            }
-            if(book.getAuthor()!=null) {
-                if (!book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
-                    b.setAuthor(book.getAuthor());
-                }
-            }
-            if(book.getEdition()!=null) {
-                if (!book.getEdition().equals("") && !book.getEdition().equals("?")) {
-                    b.setEdition(book.getEdition());
-                }
-            }
-            if (book.getPublicationYear() != 0) {
-                b.setPublicationYear(book.getPublicationYear());
-            }
-            if (book.getNbPages() != 0) {
-                b.setNbPages(book.getNbPages());
-            }
-            if(book.getKeywords()!=null) {
-                if (!book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
-                    b.setKeywords(book.getKeywords());
-                }
-            }
+            transferValuesToSimilarBooks(book, b);
             logger.info(b.getAuthor());
             logger.info(b.getTitle());
-            bookDAO.updateBook(b);
+            if(!bookDAO.updateBook(b))return "Issue while updating";
             logger.info("updated: " + b.getId());
         }
 
-        return exception;
+
+        return "";
+    }
+
+    Book transferValuesToSimilarBooks(Book book, Book b) {
+        transferTitleToSimilarBooks(book, b);
+        transferAuthorToSimilarBooks(book, b);
+        transferEditionToSimilarBooks(book, b);
+        transferPublicationYearToSimilarBooks(book, b);
+        transferNbPagesToSimilarBooks(book, b);
+        transferKeywordsToSimilarBooks(book, b);
+        return b;
+    }
+
+    String transferKeywordsToSimilarBooks(Book book, Book b) {
+        if (book.getKeywords() != null) {
+            if (!book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
+                b.setKeywords(book.getKeywords());
+            }
+        }
+        return b.getKeywords();
+    }
+
+    int transferNbPagesToSimilarBooks(Book book, Book b) {
+        if (book.getNbPages() != 0) {
+            b.setNbPages(book.getNbPages());
+        }
+        return b.getNbPages();
+    }
+
+    int transferPublicationYearToSimilarBooks(Book book, Book b) {
+        if (book.getPublicationYear() != 0) {
+            b.setPublicationYear(book.getPublicationYear());
+        }
+        return b.getPublicationYear();
+    }
+
+    String transferEditionToSimilarBooks(Book book, Book b) {
+        if (book.getEdition() != null) {
+            if (!book.getEdition().equals("") && !book.getEdition().equals("?")) {
+                System.out.println("got you");
+                b.setEdition(book.getEdition());
+            }
+        }
+        return b.getEdition();
+    }
+
+    String transferAuthorToSimilarBooks(Book book, Book b) {
+        if (book.getAuthor() != null) {
+            if (!book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
+                b.setAuthor(book.getAuthor());
+            }
+        }
+        return b.getAuthor();
+    }
+
+    String  transferTitleToSimilarBooks(Book book, Book b) {
+        if (book.getTitle() != null) {
+            if (!book.getTitle().equals("") && !book.getTitle().equals("?")) {
+                b.setTitle(book.getTitle());
+            }
+        }
+        return b.getTitle();
     }
 
 
-
-
-    List<Book> getBookListForISBN(String ISBN){
-        HashMap<String, String> map = new HashMap<>();
-        map.put("ISBN", ISBN.toUpperCase());
-        return bookDAO.getBooksByCriterias(map);
-
-    }
-    protected boolean checksThatBookHasAnISBN(Book book) {
-        if(book.getIsbn() ==null)return false;
+    protected String checksThatBookHasAnISBN(Book book) {
+        String str = "You must provide an ISBN";
+        if (book.getIsbn() == null) return str;
         if (book.getIsbn().equals("") || book.getIsbn().equals("?")) {
-            return false;
+            return str;
         } else {
             logger.info(book.getTitle());
             logger.info(book.getAuthor());
         }
-        return true;
+        return "";
     }
 
     @Override

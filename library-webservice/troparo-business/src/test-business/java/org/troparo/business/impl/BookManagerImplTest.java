@@ -8,7 +8,6 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -124,7 +123,7 @@ class BookManagerImplTest {
         criterias.put("Test", "Test");
         criterias.put("Author", "");
         criterias.put("ISBN", "123");
-        criterias.put("", "");
+        criterias.put("Moko", "");
         criterias.put("", "?");
 
         criteriaResults.put("ISBN", "123");
@@ -133,15 +132,83 @@ class BookManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return a Null pointer exception if dao returns null")
     void updateBook() {
-        fail();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ISBN", "ABC");
+        when(bookDAO.getBooksByCriterias(map)).thenReturn(null);
+        Book book = new Book();
+        book.setIsbn("ABC");
+        assertEquals("No Item found with that ISBN", bookManager.updateBook(book));
+    }
+
+    @Test
+    @DisplayName("should return \"no book provided\" if no book has been provided")
+    void updateBook1() {
+        assertEquals("No book provided!", bookManager2.updateBook(null));
+    }
+
+    @Test
+    @DisplayName("should return \"No book to update\" if dao returns an error while updating")
+    void updateBook2() {
+        HashMap<String, String> map = new HashMap<>();
+        List<Book> bookList = new ArrayList<>();
+        Book book = new Book();
+        book.setIsbn("ABC123");
+        when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
+        assertEquals("No book to update", bookManager.updateBook(book));
+    }
+
+    @Test
+    @DisplayName("should return \"You must provide an ISBN\" if ISBN not provided")
+    void updateBook3() {
+        when(bookDAO.updateBook(any(Book.class))).thenReturn(false);
+        assertEquals("You must provide an ISBN", bookManager2.updateBook(new Book()));
+    }
+
+    @Test
+    @DisplayName("should return \"Issue while updating\" if dao returns an error while updating")
+    void updateBook4() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ISBN", "ABC123");
+        List<Book> bookList = new ArrayList<>();
+        Book book = new Book();
+        book.setIsbn("ABC123");
+        bookList.add(book);
+        when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
+        when(bookDAO.updateBook(book)).thenReturn(false);
+        assertEquals("Issue while updating", bookManager.updateBook(book));
+    }
+
+    @Test
+    @DisplayName("should return empty string if no error while updating")
+    void updateBook5() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("ISBN", "ABC123");
+        List<Book> bookList = new ArrayList<>();
+        Book book = new Book();
+        book.setIsbn("ABC123");
+        bookList.add(book);
+        when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
+        when(bookDAO.updateBook(book)).thenReturn(true);
+        assertEquals("", bookManager.updateBook(book));
+    }
+
+
+    @Test
+    @DisplayName("should return empty string if book ISBN is not empty")
+    void checksThatBookHasAnISBN0() {
+        Book book = new Book();
+        book.setIsbn("ABC");
+        assertEquals("", bookManager2.checksThatBookHasAnISBN(book));
+
     }
 
     @Test
     @DisplayName("should return false if book ISBN is null")
     void checksThatBookHasAnISBN() {
         Book book = new Book();
-        assertFalse(bookManager2.checksThatBookHasAnISBN(book));
+        assertEquals("You must provide an ISBN", bookManager2.checksThatBookHasAnISBN(book));
 
     }
 
@@ -150,7 +217,7 @@ class BookManagerImplTest {
     void checksThatBookHasAnISBN1() {
         Book book = new Book();
         book.setIsbn("");
-        assertFalse(bookManager2.checksThatBookHasAnISBN(book));
+        assertEquals("You must provide an ISBN", bookManager2.checksThatBookHasAnISBN(book));
 
     }
 
@@ -159,7 +226,7 @@ class BookManagerImplTest {
     void checksThatBookHasAnISBN2() {
         Book book = new Book();
         book.setIsbn("?");
-        assertFalse(bookManager2.checksThatBookHasAnISBN(book));
+        assertEquals("You must provide an ISBN", bookManager2.checksThatBookHasAnISBN(book));
     }
 
     @Test
@@ -171,14 +238,92 @@ class BookManagerImplTest {
 
 
     @Test
-    @DisplayName("should ignore empty values from parameters")
-    void ignoreEmptyCriteriasFromBook(){
+    @DisplayName("should transfer Title")
+    void transferTitleToSimilarBooks() {
+        String title = "Nemo";
         Book book = new Book();
-        List<Book> bookList= new ArrayList<>();
-        book.setIsbn("");
-        fail();
+        Book book2 = new Book();
+        book.setTitle(title);
+        assertEquals(title, bookManager2.transferTitleToSimilarBooks(book, book2));
 
     }
+    @Test
+    @DisplayName("should transfer Author")
+    void transferAuthorToSimilarBooks() {
+        String author = "Paul Jackson";
+        Book book = new Book();
+        Book book2 = new Book();
+        book.setAuthor(author);
+        assertEquals(author, bookManager2.transferAuthorToSimilarBooks(book, book2));
+
+    }
+    @Test
+    @DisplayName("should transfer Keywords")
+    void transferKeywordsToSimilarBooks() {
+        String keywords = "Mer, Ocean, Poissons";
+        Book book = new Book();
+        Book book2 = new Book();
+        book.setKeywords(keywords);
+        assertEquals(keywords, bookManager2.transferKeywordsToSimilarBooks(book, book2));
+
+    }
+    @Test
+    @DisplayName("should transfer NbPages")
+    void transferNbPagesToSimilarBooks() {
+        int nbPages = 126;
+        Book book = new Book();
+        Book book2 = new Book();
+        book.setNbPages(nbPages);
+        assertEquals(nbPages, bookManager2.transferNbPagesToSimilarBooks(book, book2));
+
+    }
+    @Test
+    @DisplayName("should transfer Publication Year")
+    void transferPublicationYearToSimilarBooks() {
+        int publicationYear = 2017;
+        Book book = new Book();
+        Book book2 = new Book();
+        book.setPublicationYear(publicationYear);
+        assertEquals(publicationYear, bookManager2.transferPublicationYearToSimilarBooks(book, book2));
+
+    }
+
+    @Test
+    @DisplayName("should transfer Edition")
+    void transferPublicationEditionToSimilarBooks() {
+        String edition = "Gaumont";
+        Book book = new Book();
+        Book book2 = new Book();
+        book2.setEdition(edition);
+        book.setEdition("?");
+        assertEquals(edition, bookManager2.transferEditionToSimilarBooks(book, book2));
+
+    }
+
+    @Test
+    @DisplayName("shouls transfert data from a book to another if not empty")
+    void transferValuesToSimilarBooks(){
+        Book book2 = new Book();
+        book2.setEdition("Maroni");
+        book2.setNbPages(143);
+
+        Book book = new Book();
+        book.setTitle("Nemo");
+        book.setEdition("?");
+        book.setAuthor("Roger Marc");
+        book.setPublicationYear(1233);
+        book.setNbPages(0);
+
+        assertAll(
+                () -> assertEquals("Roger Marc", bookManager2.transferValuesToSimilarBooks(book, book2).getAuthor()),
+                () -> assertEquals("Maroni", bookManager2.transferValuesToSimilarBooks(book, book2).getEdition()),
+                () -> assertEquals(1233, bookManager2.transferValuesToSimilarBooks(book, book2).getPublicationYear()),
+                () -> assertEquals(143,  bookManager2.transferValuesToSimilarBooks(book, book2).getNbPages()),
+                () -> assertEquals("Nemo",  bookManager2.transferValuesToSimilarBooks(book, book2).getTitle())
+        );
+
+    }
+
     @Test
     @DisplayName("should return exception if no book found")
     void remove() {
