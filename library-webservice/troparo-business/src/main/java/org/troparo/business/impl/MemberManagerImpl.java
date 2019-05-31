@@ -52,7 +52,7 @@ public class MemberManagerImpl implements MemberManager {
         }
 
         // checking that all values are valid
-        exception = checkInsertion(member);
+        exception = checkValidityOfParametersForMember(member);
         if (!exception.equals("")) {
             return exception;
         }
@@ -65,23 +65,23 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-    private String checkInsertion(Member member) {
+    String checkValidityOfParametersForMember(Member member) {
+
         if (member.getLogin().length() < 5 || member.getLogin().length() > 20) {
-            return exception = "Login must be 5 or 20 characters: " + member.getLogin();
+            return  "Login must be 5 or 20 characters: " + member.getLogin();
         }
         if (member.getFirstName().length() < 2 || member.getFirstName().length() > 50) {
-            return exception = "FirstName should have between 2 and 200 characters: " + member.getFirstName();
+            return  "FirstName should have between 2 and 200 characters: " + member.getFirstName();
         }
         if (member.getLastName().length() < 2 || member.getLastName().length() > 50) {
-            return exception = "LastName should have between 2 and 200 characters: " + member.getLastName();
+            return "LastName should have between 2 and 200 characters: " + member.getLastName();
         }
         if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
-            return exception = "Password should have between 2 and 200 characters: " + member.getPassword();
+            return  "Password should have between 2 and 200 characters: " + member.getPassword();
         }
-        System.out.println(member.getEmail());
-        if (validateEmail(member)) return exception = "Invalid Email: " + member.getEmail();
+        if (validateEmail(member)) return  "Invalid Email: " + member.getEmail();
 
-        return exception;
+        return "";
     }
 
     public boolean validateEmail(Member member) {
@@ -91,10 +91,17 @@ public class MemberManagerImpl implements MemberManager {
         return false;
     }
 
-    private String checkRequiredValuesNotNull(Member member) {
+    String checkRequiredValuesNotNull(Member member) {
+        String login = member.getLogin();
+        if (member.getLogin() != null) {
+            if (!login.equals("") && !login.equals("?") ) {
 
-        if (checkIfLoginHasBeenPassed(member.getLogin())) return "login should be filled";
-
+            }
+            else return "login should be filled";
+        }else return "login should be filled";
+       /* if(member.getLogin() == null) {
+            if (!checkIfLoginHasBeenPassed(member.getLogin())) return "login should be filled";
+        }*/
         if (member.getFirstName() != null) {
             if (member.getFirstName().equals("") || member.getFirstName().equals("?")) {
                 return "FirstName should be filled";
@@ -103,30 +110,44 @@ public class MemberManagerImpl implements MemberManager {
             return "FirstName should be filled";
         }
 
-        if(member.getLastName()!=null) {
+        if (member.getLastName() != null) {
             if (member.getLastName().equals("") || member.getLastName().equals("?") || member.getLastName().isEmpty()) {
                 return "LastName should be filled";
             }
-        }else{
+        } else {
             return "LastName should be filled";
         }
+        if (member.getEmail() != null) {
+            if (member.getEmail().equals("") || member.getEmail().equals("?") || member.getEmail().isEmpty()) {
+                return "Email should be filled";
+            }
+        } else {
+            return "Email should be filled";
+        }
 
-        if (checkIfLoginHasBeenPassed(member.getPassword())) return "Password should be filled";
+        if (member.getPassword() != null) {
+            if (member.getPassword().equals("") || member.getPassword().equals("?") || member.getPassword().isEmpty()) {
+                return "Password should be filled";
+            }
+        } else {
+            return "Password should be filled";
+        }
 
-        if (checkIfLoginHasBeenPassed(member.getEmail())) return "Email should be filled";
+       /* if (checkIfLoginHasBeenPassed(member.getPassword())) return "Password should be filled";
+
+        if (checkIfLoginHasBeenPassed(member.getEmail())) return "Email should be filled";*/
         return "";
     }
 
-    private boolean checkIfLoginHasBeenPassed(String login) {
-        if (login != null) {
-            if (login.equals("") || login.equals("?") || login == null) {
+  /*  protected boolean checkIfLoginHasBeenPassed(Member member) {
+        String login = member.getLogin();
+        if (member.getLogin() != null) {
+            if (!login.equals("") && !login.equals("?") ) {
                 return true;
             }
-        } else {
-            return true;
         }
         return false;
-    }
+    }*/
 
     @Override
     public List<Member> getMembers() {
@@ -175,26 +196,49 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public String updateMember(Member member) {
-        exception = "";
-        boolean receivedCriteria = false;
-        if (checkIfLoginHasBeenPassed(member.getLogin())) return "you must provide an Login";
+        System.out.println("entering");
+        exception = "";/*
+        boolean receivedCriteria = false;*/
+        // checking that all values are provided
+        exception = checkRequiredValuesNotNull(member);
+        if (!exception.equals("")) {
+            return exception;
+        }
+        System.out.println("here");
        /* if (member.getLogin().equals("") || member.getLogin().equals("?")) {
             return "you must provide an Login";
         } else {
             logger.info("member received: " + member);
         }*/
+        // checking that all values are valid
+       // exception = checkValidityOfParametersForMember(member);
+        exception = checkValidityOfParametersForMember(member);
+        if (!exception.equals("")) {
+            return exception;
+        }
+        System.out.println("there");
+
 
         List<Member> loginList = new ArrayList<>();
         HashMap<String, String> map = new HashMap<>();
         map.put("Login", member.getLogin());
-        logger.info("map size: " + map.size());
-        if (memberDAO.getMembersByCriterias(map)!=null) {
+
+        if (memberDAO.getMembersByCriterias(map) != null) {
             return "No Item found with that Login";
         }
+
         logger.info("getting list: " + loginList.size());
-        for (Member m : loginList
-        ) {
-            if (!m.getFirstName().equals("") && !m.getFirstName().equals("?")) {
+        if(loginList.size()>1){
+            logger.error("possible duplication issue in the database");
+            return "the member couldn't be updated at this time. Please contact the administrator";
+        }
+        if(loginList.isEmpty())return "the member couldn't be updated at this time. Please contact the administrator";
+        Member m =loginList.get(0);
+        // checking that all values are valid
+
+        /*for (Member m : loginList
+        ) {*/
+            /*if (!m.getFirstName().equals("") && !m.getFirstName().equals("?")) {
                 if (m.getFirstName().length() < 2 || m.getFirstName().length() > 50) {
                     return exception = "FirstName should have between 2 and 200 characters: " + m.getFirstName();
                 }
@@ -222,25 +266,30 @@ public class MemberManagerImpl implements MemberManager {
             }
             if (!receivedCriteria) {
                 return "No criteria was passed in";
+            }*/
+        // checking that all values are valid
+        /*    exception = checkValidityOfParametersForMember(member);
+            if (!exception.equals("")) {
+                return exception;
             }
             logger.info(m.getLogin());
-            memberDAO.updateMember(m);
-            logger.info("updated: " + m.getId());
-        }
 
-        return exception;
+        }*/
+        memberDAO.updateMember(m);
+        logger.info("updated: " + m.getId());
+        return "";
     }
 
     @Override
     public String remove(int id) {
-        Member login = memberDAO.getMemberById(id);
+        Member member = memberDAO.getMemberById(id);
 
-        if (login == null) {
-            return exception = "No item found";
+        if (member == null) {
+            return "No item found";
         } else {
-            memberDAO.remove(login);
+            if (!memberDAO.remove(member)) return "Issue while removing member";
         }
-        return exception;
+        return "";
     }
 
 
@@ -284,12 +333,12 @@ public class MemberManagerImpl implements MemberManager {
         try {
             Member m = memberDAO.getMemberByToken(token);
             m.setToken(null);
-            memberDAO.updateMember(m);
-            return true;
+            if (!memberDAO.updateMember(m)) return true;
         } catch (Exception e) {
             logger.error("issue while invalidating the token: " + token);
             return false;
         }
+        return true;
     }
 
 /*    @Override
@@ -322,15 +371,19 @@ public class MemberManagerImpl implements MemberManager {
         logger.info("member received: " + login);
         logger.info("email received: " + email);
         logger.info("pwd received: " + password);
+        if (login == null || email == null || password == null) return false;
 
-        if (getMemberByLogin(login.toUpperCase()) != null) {
-            Member m = getMemberByLogin(login.toUpperCase());
-            if (m.getEmail().toUpperCase().equals(email.toUpperCase())) {
+        Member m = getMemberByLogin(login.toUpperCase());
+        if (m != null) {
+            System.out.println(m.getEmail() + " / " + email);
+            if (m.getEmail().equalsIgnoreCase(email)) {
+                System.out.println("member not null");
                 logger.info("email passed: " + m.getEmail());
                 m.setPassword(encryptPassword(password));
-                memberDAO.updateMember(m);
+                if (!memberDAO.updateMember(m)) return false;
                 return true;
             }
+
         } else {
             logger.info("member couldn't be found");
         }
@@ -341,20 +394,22 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkAdmin(String token) {
         Member m = memberDAO.getMemberByToken(token);
         if (m != null) {
-            if(m.getRole()!=null) {
+            if (m.getRole() != null) {
                 return m.getRole().equals("Admin");
             }
         }
         return false;
     }
 
-    private String generateToken() {
+    String generateToken() {
         boolean tokenValid = false;
         String uuid = null;
         while (!tokenValid) {
             uuid = UUID.randomUUID().toString();
+            System.out.println("generating token: " + uuid);
             // checks if token already in use
             if (memberDAO.getMemberByToken(uuid) == null) {
+                System.out.println("here");
                 tokenValid = true;
             }
             System.out.println("token created: " + uuid);

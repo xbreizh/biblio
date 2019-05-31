@@ -2,7 +2,6 @@ package org.troparo.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.troparo.business.EmailValidator;
 import org.troparo.business.contract.MemberManager;
@@ -10,8 +9,6 @@ import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 import org.xml.sax.SAXException;
 
-import javax.xml.transform.Source;
-import javax.xml.validation.Validator;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,12 +22,13 @@ class MemberManagerImplTest {
 
     private MemberManager memberManager;
 
-    MemberDAO memberDAO = mock(MemberDAO.class);
+    private MemberDAO memberDAO;
 
 
     @BeforeEach
     void init() {
         memberManager = new MemberManagerImpl();
+        memberDAO = mock(MemberDAO.class);
         memberManager.setMemberDAO(memberDAO);
         EmailValidator validator = mock(EmailValidator.class);
         memberManager.setValidator(validator);
@@ -118,18 +116,68 @@ class MemberManagerImplTest {
     }
 
     @Test
+    @DisplayName("should update member")
     void updateMember() {
-    fail();
+       /* MemberManagerImpl manager = mock(MemberManagerImpl.class);
+        Member member = new Member();
+       *//* member.setLogin("dedeww");
+        member.setFirstName("Gedeon");
+        member.setLastName("Poligo");
+        member.setPassword("123");
+        member.setEmail("sasa@tet.tet");*//*
+        when(manager.checkRequiredValuesNotNull(member)).thenReturn("");
+        when(manager.checkValidityOfParametersForMember(member)).thenReturn("");
+        //when(manager.checkIfLoginHasBeenPassed("Bobby")).thenReturn(false);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Login", member.getLogin());
+
+
+        when(memberDAO.getMembersByCriterias(map)).thenReturn(null);
+        manager.updateMember(member);
+        //assertEquals("No Item found with that Login", manager.updateMember(member));*/
+        fail();
     }
 
     @Test
+    @DisplayName("should return error if param empty or null")
+    void checkRequiredValuesNotNull(){
+        fail();
+    }
+
+    @Test
+    @DisplayName("should return an empty string if remove successful")
     void remove() {
-        fail();
+        Member member = new Member();
+        when(memberDAO.getMemberById(2)).thenReturn(member);
+        when(memberDAO.remove(member)).thenReturn(true);
+        assertEquals("", memberManager.remove(2));
     }
 
     @Test
+    @DisplayName("should return \"No item found\" if member couldn't be found")
+    void remove1() {
+        Member member = new Member();
+        when(memberDAO.getMemberById(2)).thenReturn(null);
+        assertEquals("No item found", memberManager.remove(2));
+    }
+
+    @Test
+    @DisplayName("should return \"No item found\" if member couldn't be found")
+    void remove2() {
+        Member member = new Member();
+        when(memberDAO.getMemberById(2)).thenReturn(member);
+        when(memberDAO.remove(member)).thenReturn(false);
+        assertEquals("Issue while removing member", memberManager.remove(2));
+    }
+
+    @Test
+    @DisplayName("should return wrong login or password if credentials are wrong")
     void getToken() {
-        fail();
+        MemberManager memberMgr = spy(memberManager);
+        String login = "lpl";
+        String pwd = "lk";
+        when(memberMgr.checkPassword(login, pwd)).thenReturn(false);
+        assertEquals("wrong login or pwd", memberMgr.getToken(login, pwd));
     }
 
     @Test
@@ -140,21 +188,39 @@ class MemberManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return a token")
+    void generateToken() {
+        MemberManagerImpl memberManager1 = spy(MemberManagerImpl.class);
+        memberManager1.setMemberDAO(memberDAO);
+        assertNotNull(memberManager1.generateToken());
+
+    }
+
+    @Test
+    @DisplayName("should return false if any issue while invalidating a token")
     void invalidateToken() {
-        fail();
+        //memberManager.invalidateToken("token123");
+        assertFalse(memberManager.invalidateToken("token123"));
     }
 
     @Test
-    @DisplayName("")
-    void disconnect() {
-        fail();
+    @DisplayName("should return false if any issue updating the member (DAO)")
+    void invalidateToken1() {
+        Member member = new Member();
+        member.setToken("token123");
+        when(memberDAO.updateMember(member)).thenReturn(false);
+        assertFalse(memberManager.invalidateToken("token123"));
     }
 
     @Test
-    @DisplayName("")
-    void connect() {
-        fail();
+    @DisplayName("should return true if invalidate token is successful")
+    void invalidateToken3() {
+        Member member = new Member();
+        member.setToken("token123");
+        when(memberDAO.updateMember(member)).thenReturn(true);
+        assertFalse(memberManager.invalidateToken("token123"));
     }
+
 
     @Test
     @DisplayName("should return a token")
@@ -186,10 +252,75 @@ class MemberManagerImplTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("should return false if member is null")
     void updatePassword() {
+        String login = "KOL";
+        String password = "kokl";
+        String email = "cdcd@test.fr";
+        memberManager.setMemberDAO(memberDAO);
+        memberManager.getMemberByLogin(login);
+        assertFalse(memberManager.updatePassword(login, password, email));
 
-        fail();
+    }
+
+    @Test
+    @DisplayName("should return false if member login, password or email is null")
+    void updatePasswordNoLogin() {
+        MemberManagerImpl mgr = new MemberManagerImpl();
+        String login = "login";
+        String email = "email";
+        String password = "password";
+        assertAll(
+                () -> assertFalse(mgr.updatePassword(null, email, password)),
+                () -> assertFalse(mgr.updatePassword(login, null, password)),
+                () -> assertFalse(mgr.updatePassword(login, email, null))
+        );
+
+
+    }
+
+    @Test
+    @DisplayName("should return false if member email is different")
+    void updatePassword3() {
+        String login = "KOL";
+        String password = "kokl";
+        String email = "cdcd@test.fr";
+        Member member = new Member();
+        member.setLogin(login);
+        member.setEmail("different@email.com");
+        when(memberManager.getMemberByLogin(login)).thenReturn(member);
+        assertFalse(memberManager.updatePassword(login, password, email));
+
+    }
+
+    @Test
+    @DisplayName("should return true if update password ok")
+    void updatePassword4() {
+        String login = "KOL";
+        String email = "cdcd@test.fr";
+        Member member = new Member();
+        member.setEmail(email);
+        when(memberManager.getMemberByLogin(login)).thenReturn(member);
+        when(memberDAO.updateMember(member)).thenReturn(true);
+        assertTrue(memberManager.updatePassword(login, email, anyString()));
+
+    }
+
+
+    @Test
+    @DisplayName("should return false if member password is null")
+    void updatePassword2() {
+        String login = "KOL";
+        String password = "kokl";
+        String email = "cdcd@test.fr";
+        Member member = new Member();
+        member.setLogin(login);
+        member.setEmail(email);
+        memberManager.setMemberDAO(memberDAO);
+        when(memberManager.getMemberByLogin(login)).thenReturn(member);
+        memberManager.getMemberByLogin(login);
+        assertFalse(memberManager.updatePassword(login, password, email));
+
     }
 
     @Test

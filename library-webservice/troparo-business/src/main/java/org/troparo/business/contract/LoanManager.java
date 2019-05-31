@@ -1,5 +1,6 @@
 package org.troparo.business.contract;
 
+import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
 
 import java.util.HashMap;
@@ -24,4 +25,6 @@ public interface LoanManager {
 
 
     String getLoanStatus(int id);
+
+    void setLoanDAO(LoanDAO loanDAO);
 }

@@ -78,14 +78,16 @@ public class LoanManagerImpl implements LoanManager {
     @Override
     public Loan getLoanById(int id) {
         logger.info("getting id (from business): " + id);
-        Loan loan = loanDAO.getLoanById(id);
+        //Loan loan = loanDAO.getLoanById(id);
+       /* System.out.println(loan);
         if (loan != null) {
-            logger.info("loan");
+            logger.info("returning loan"+id );
             return loan;
         } else {
-            logger.info("loan is probably null");
+            logger.info("loan is null");
             return null;
-        }
+        }*/
+        return loanDAO.getLoanById(id);
     }
 
     @Override
@@ -93,8 +95,10 @@ public class LoanManagerImpl implements LoanManager {
         HashMap<String, String> criterias = new HashMap<>();
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")) {
-                criterias.put(entry.getKey(), entry.getValue());
+            if(entry.getKey()!=null && entry.getValue()!=null) {
+                if (!entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")) {
+                    criterias.put(entry.getKey(), entry.getValue());
+                }
             }
 
         }
@@ -133,8 +137,10 @@ public class LoanManagerImpl implements LoanManager {
     public boolean isRenewable(int id) {
         logger.info("checking if loan "+id+" is renewable");
         Loan loan = loanDAO.getLoanById(id);
+        System.out.println("renew duration: "+renewDuration);
 
         if (loan.getEndDate() != null) {
+            System.out.println("endDate false");
             return false;
         }
 
@@ -144,6 +150,7 @@ public class LoanManagerImpl implements LoanManager {
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diff days is: " + diffInDays);
+        System.out.println("diffDays: "+diffInDays);
         if (diffInDays > renewDuration) {
             return false;
         } else {
@@ -190,5 +197,10 @@ public class LoanManagerImpl implements LoanManager {
             logger.error("error while getting loan status");
         }
         return null;
+    }
+
+    @Override
+    public void setLoanDAO(LoanDAO loanDAO) {
+        this.loanDAO = loanDAO;
     }
 }

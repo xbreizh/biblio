@@ -37,9 +37,7 @@ class EmailValidatorTest {
                 "email@example.museum",
                 "email@example.co.jp",
                 "email@111.222.333.44444",
-                "firstname-lastname@example.com",
-                "just”not”right@example.com",
-                "this\" is\"really\"not\\allowed@example.com"
+                "firstname-lastname@example.com"
         };
 
         List<String> list = Arrays.asList(mailListValid);
