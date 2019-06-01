@@ -29,5 +29,5 @@ public interface MemberDAO {
 
     boolean checkToken(String token);
 
-    boolean invalidToken(String token);
+    boolean invalidateToken(String token);
 }

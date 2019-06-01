@@ -67,6 +67,7 @@ public class MemberDAOImpl implements MemberDAO {
     @Override
     public boolean existingLogin(String login) {
         logger.info("in the dao: " + login);
+        login = login.toUpperCase();
         request = "From Member where login = :login";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
@@ -82,6 +83,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
+        map = cleanInvaliMapEntries(map);
         logger.info("map received in DAO: " + map);
         String criterias = "";
         for (Map.Entry<String, String> entry : map.entrySet()
@@ -110,6 +112,15 @@ public class MemberDAOImpl implements MemberDAO {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    private HashMap<String, String>  cleanInvaliMapEntries(HashMap<String, String> map) {
+        String[] authorizedCriterias = {"login", "firstname", "lastname", "role", "email"};
+        List<String> list = Arrays.asList(authorizedCriterias);
+        for (Map.Entry<String, String> entry : map.entrySet()){
+            if (!list.contains(entry.getKey()))map.remove(entry);
+        }
+        return map;
     }
 
     @Override
@@ -143,16 +154,16 @@ public class MemberDAOImpl implements MemberDAO {
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("token", token);
-        if (query.getResultList().size() != 0) {
-            Member m = (Member) query.getResultList().get(0);
+        List<Member> memberList = query.getResultList();
+        if (memberList.size() != 0) {
+            Member m =  memberList.get(0);
             Date now = new Date();
-            /* int time = now.compareTo( m.getDateConnect());*/
-
+            // calculating time since last connect
             int time = Math.toIntExact((now.getTime() - m.getDateConnect().getTime()) / MILLI_TO_HOUR);
             System.out.println("time since last connect: " + time);
             if (getMemberByToken(token) != null && time > maxTimeTokenValidity) {
                 logger.info("invalid token");
-                invalidToken(token);
+                invalidateToken(token);
                 return false;
             }
             logger.info("token valid");
@@ -164,10 +175,11 @@ public class MemberDAOImpl implements MemberDAO {
     }
 
     @Override
-    public boolean invalidToken(String token) {
+    public boolean invalidateToken(String token) {
         logger.info("in the dao: " + token);
         try {
             Member m = getMemberByToken(token);
+            if(m==null)return false;
             m.setToken(null);
             updateMember(m);
         } catch (Exception e) {
