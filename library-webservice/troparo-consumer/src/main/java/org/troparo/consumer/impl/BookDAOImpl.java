@@ -9,10 +9,7 @@ import org.troparo.model.Book;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static java.lang.Math.toIntExact;
 
@@ -67,6 +64,7 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public boolean existingISBN(String isbn) {
         logger.info("in the dao: " + isbn);
+        isbn = isbn.toUpperCase();
         request = "From Book where isbn = :isbn";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
@@ -83,6 +81,9 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public List<Book> getBooksByCriterias(HashMap<String, String> map) {
         logger.info("map received in DAO: " + map);
+        if(map == null)return new ArrayList<>();
+        map =cleanInvaliMapEntries(map);
+        if(map.size()==0)return new ArrayList<>();
         String criterias = "";
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
@@ -113,6 +114,18 @@ public class BookDAOImpl implements BookDAO {
         }
     }
 
+    private HashMap<String, String>  cleanInvaliMapEntries(HashMap<String, String> map) {
+        String[] authorizedCriterias = {"isbn", "author", "title"};
+        List<String> list = Arrays.asList(authorizedCriterias);
+        for (Map.Entry<String, String> entry : map.entrySet()){
+            if (!list.contains(entry.getKey())){ ;
+                map.remove(entry.getKey());
+            }
+        }
+        logger.info("map truc: "+map);
+        return map;
+    }
+
     @Override
     public boolean updateBook(Book book) {
         logger.info("Book from dao: " + book.getTitle());
@@ -120,7 +133,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             sessionFactory.getCurrentSession().update(book);
         } catch (Exception e) {
-            System.err.println("error while updating: " + e.getMessage());
+            logger.error("error while updating: " + e.getMessage());
             return false;
         }
         return true;
@@ -132,7 +145,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             sessionFactory.getCurrentSession().delete(book);
         } catch (Exception e) {
-            System.err.println("error while updating: " + e.getMessage());
+           logger.error("error while removing: " + e.getMessage());
             return false;
         }
         return true;
@@ -172,6 +185,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public Book getBookByIsbn(String isbn) {
+        isbn = isbn.toUpperCase();
         List<Book> list = new ArrayList<>();
         request = "From Book where isbn = :isbn";
 

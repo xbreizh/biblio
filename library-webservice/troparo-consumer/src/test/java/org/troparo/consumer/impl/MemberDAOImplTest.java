@@ -89,12 +89,20 @@ class MemberDAOImplTest {
     }
 
     @Test
-    @DisplayName("should return null if wrong key")
+    @DisplayName("should ignore if wrong key")
     void getMembersByCriterias1() {
         HashMap<String, String> map = new HashMap<>();
         map.put("LOGINo", "jpolinfo");
-        assertNull(memberDAO.getMembersByCriterias(map));
+        assertEquals(0, memberDAO.getMembersByCriterias(map));
     }
+
+    @Test
+    @DisplayName("should return empty list if map is null")
+    void getMembersByCriterias2() {
+
+        assertEquals(0, memberDAO.getMembersByCriterias(null).size());
+    }
+
 
     @Test
     @DisplayName("should update member")

@@ -83,7 +83,9 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
+        if(map == null)return new ArrayList<>();
         map = cleanInvaliMapEntries(map);
+        if(map.size()==0)return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         String criterias = "";
         for (Map.Entry<String, String> entry : map.entrySet()
@@ -118,7 +120,7 @@ public class MemberDAOImpl implements MemberDAO {
         String[] authorizedCriterias = {"login", "firstname", "lastname", "role", "email"};
         List<String> list = Arrays.asList(authorizedCriterias);
         for (Map.Entry<String, String> entry : map.entrySet()){
-            if (!list.contains(entry.getKey()))map.remove(entry);
+            if (!list.contains(entry.getKey()))map.remove(entry.getKey());
         }
         return map;
     }
