@@ -16,9 +16,9 @@ public interface LoanDAO {
 
     Loan getLoanById(int id);
 
-    Loan getLoanByIsbn(String isbn);
+    List<Loan> getLoanByIsbn(String isbn);
 
-    Loan getLoanByLogin(String login);
+    List<Loan> getLoanByLogin(String login);
 
 
     List<Loan> getLoansByCriterias(HashMap<String, String> map);
