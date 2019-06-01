@@ -133,6 +133,8 @@ public class LoanManagerImpl implements LoanManager {
         return exception;
     }
 
+
+
     @Override
     public boolean isRenewable(int id) {
         logger.info("checking if loan "+id+" is renewable");

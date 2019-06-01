@@ -131,6 +131,14 @@ class BookManagerImplTest {
         assertEquals(criteriaResults, bookManager2.removeInvalidEntriesFromCriterias(criterias));
     }
 
+
+    @Test
+    void test(){
+        Book b1 = new Book();
+        Book b2 = b1;
+        bookManager2.transferNbPagesToSimilarBooks(b1, b2);
+    }
+
     @Test
     @DisplayName("should return a Null pointer exception if dao returns null")
     void updateBook() {
@@ -157,6 +165,14 @@ class BookManagerImplTest {
         book.setIsbn("ABC123");
         when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
         assertEquals("No book to update", bookManager.updateBook(book));
+    }
+
+
+    @Test
+    void testMock(){
+        BookManagerImpl bmanager = mock(BookManagerImpl.class);
+        Book book = new Book();
+        when(bmanager.checksThatBookHasAnISBN(book)).thenReturn("");
     }
 
     @Test

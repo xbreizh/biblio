@@ -1,6 +1,7 @@
 package org.troparo.business.impl;
 
 
+import com.google.common.annotations.VisibleForTesting;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.BookManager;
 import org.troparo.consumer.contract.BookDAO;
@@ -176,6 +177,8 @@ public class BookManagerImpl implements BookManager {
         if (book == null) return "No book provided!";
         if(!checksThatBookHasAnISBN(book).equals(""))return checksThatBookHasAnISBN(book);
         List<Book> bookList;
+
+
         //List<Book> bookList = getBookListForISBN(book.getIsbn());
         /*if (bookList != null) *//*{*//*
          *//*if (bookList.size() == 0) {*//*
@@ -222,6 +225,7 @@ public class BookManagerImpl implements BookManager {
         return b.getKeywords();
     }
 
+    //@VisibleForTesting()
     int transferNbPagesToSimilarBooks(Book book, Book b) {
         if (book.getNbPages() != 0) {
             b.setNbPages(book.getNbPages());

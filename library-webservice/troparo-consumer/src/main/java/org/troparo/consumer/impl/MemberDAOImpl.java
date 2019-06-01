@@ -38,9 +38,11 @@ public class MemberDAOImpl implements MemberDAO {
     public List<Member> getAllMembers() {
         logger.info("getting in dao");
         try {
+            System.out.println(sessionFactory);
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
             if(sessionFactory == null) System.out.println("SessionFactory not initialized!");
+            System.out.println(e.getMessage());
             return null;
         }
 

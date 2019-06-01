@@ -1,32 +1,50 @@
 package org.troparo.business.impl;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
 
+import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@PropertySource("classpath:config.properties")
+@PropertySource("classpath:**/config.properties")
 class LoanManagerImplTest {
 
+    private static ConfigurableApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+            "application-context.xml");
+
+    @Inject
     private LoanManager loanManager;
+    @Inject
     private LoanDAO loanDAO;
 
+   /* @Value("${loanDuration}")
+    private int loanDuration;
+    @Value("${renewDuration}")
+    private int renewDuration;
+    @Value("${maxBooks}")
+    private int maxBooks;*/
 
+    @BeforeAll
+    static void initAll(){
+      //  applicationContext.getBean("emailManagerImpl", EmailManagerImpl.class);
+    }
 
     @BeforeEach
     void init() {
@@ -100,3 +118,5 @@ class LoanManagerImplTest {
         fail();
     }
 }
+
+

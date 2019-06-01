@@ -1,9 +1,11 @@
+/*
 package org.troparo.web.service;
 
 
 public class Test {
 
-   /* public static void main(String[] args) {
+   */
+/* public static void main(String[] args) {
         Authenticator authenticator = new Authenticator() {
             @Override
             public Result authenticate(HttpExchange httpExchange) {
@@ -14,5 +16,7 @@ public class Test {
         authenticator.
 
 
-    }*/
+    }*//*
+
 }
+*/
