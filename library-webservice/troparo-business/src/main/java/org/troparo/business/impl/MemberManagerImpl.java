@@ -80,11 +80,13 @@ public class MemberManagerImpl implements MemberManager {
             return  "Password should have between 2 and 200 characters: " + member.getPassword();
         }
         if (validateEmail(member)) return  "Invalid Email: " + member.getEmail();
+        System.out.println("email validation: "+member.getEmail());
 
         return "";
     }
 
     public boolean validateEmail(Member member) {
+        System.out.println("mail: "+member.getEmail());
         if (!validator.validate(member.getEmail())) {
             return true;
         }
@@ -92,6 +94,7 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     String checkRequiredValuesNotNull(Member member) {
+        System.out.println("inda");
         String login = member.getLogin();
         if (member.getLogin() != null) {
             if (!login.equals("") && !login.equals("?") ) {
@@ -171,6 +174,7 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public Member getMemberByLogin(String login) {
         logger.info("getting id (from business): " + login);
+        login = login.toUpperCase();
         Member member = memberDAO.getMemberByLogin(login);
         if (member != null) {
             logger.info("member");
@@ -220,10 +224,10 @@ public class MemberManagerImpl implements MemberManager {
 
 
         List<Member> loginList = new ArrayList<>();
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Login", member.getLogin());
-
-        if (memberDAO.getMembersByCriterias(map) != null) {
+       /* HashMap<String, String> map = new HashMap<>();
+        map.put("Login", member.getLogin());*/
+        System.out.println("youmo");
+        if (memberDAO.getMemberByLogin(member.getLogin()) != null) {
             return "No Item found with that Login";
         }
 

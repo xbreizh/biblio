@@ -219,12 +219,12 @@ public class EmailManagerImpl implements EmailManager {
         return loanManager.getLoansByCriterias(criterias);
     }*/
     @Override
-    public int calculateDaysBetweenDates(Date d1, Date d2){
+    public int calculateDaysBetweenDates(Date d1, Date d2){/*
         String format = "MM/dd/yyyy hh:mm a";
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
+        SimpleDateFormat sdf = new SimpleDateFormat(format);*/
         long diff = d2.getTime() - d1.getTime();
-        int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
-        return diffDays;
+        //int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
+        return (int) diff / (24 * 60 * 60 * 1000);
     }
 
 
@@ -289,11 +289,15 @@ public class EmailManagerImpl implements EmailManager {
             mail.setAuthor(loan.getBook().getAuthor());
             mail.setEdition(loan.getBook().getEdition());
             mail.setDueDate(loan.getPlannedEndDate());
-            int overDays = calculateDaysBetweenDates(new Date(), loan.getPlannedEndDate());
+            int overDays = calculateDaysBetweenDates(getTodaySDate(), loan.getPlannedEndDate());
             mail.setDiffdays(overDays);
             mailList.add(mail);
         }
         return mailList;
+    }
+
+    Date getTodaySDate(){
+        return new Date();
     }
 
     /*@Override

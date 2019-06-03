@@ -197,7 +197,7 @@ public class MemberDAOImpl implements MemberDAO {
         List<Member> list = new ArrayList<>();
         logger.info("login received: " + login);
         request = "From Member where login = :login";
-
+        System.out.println("login received: "+login);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("login", login);
         try {

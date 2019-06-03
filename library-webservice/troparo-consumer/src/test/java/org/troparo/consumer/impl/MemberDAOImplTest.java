@@ -93,7 +93,7 @@ class MemberDAOImplTest {
     void getMembersByCriterias1() {
         HashMap<String, String> map = new HashMap<>();
         map.put("LOGINo", "jpolinfo");
-        assertEquals(0, memberDAO.getMembersByCriterias(map));
+        assertEquals(0, memberDAO.getMembersByCriterias(map).size());
     }
 
     @Test
@@ -164,7 +164,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should get member by login")
     void getMemberByLogin() {
-        final Member member = memberDAO.getMemberByLogin("JPOLINO");
+        Member member = memberDAO.getMemberByLogin("JPOLINO");
         assertAll(
                 () -> assertEquals("JPOLINO", member.getLogin()),
                 () -> assertEquals("JOHN", member.getFirstName()),

@@ -3,12 +3,19 @@ package org.troparo.business.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.EmailValidator;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.MemberDAO;
+import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 import org.xml.sax.SAXException;
 
+import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,20 +24,26 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ContextConfiguration("classpath:/application-context-test.xml")
+@TestPropertySource("classpath:config.properties")
+@ExtendWith(SpringExtension.class)
+@Transactional
 class MemberManagerImplTest {
 
-
+    @Inject
     private MemberManager memberManager;
-
+    private EmailValidator validator;
     private MemberDAO memberDAO;
+    @Inject
+    private MemberDAO mDAO;
 
 
     @BeforeEach
     void init() {
-        memberManager = new MemberManagerImpl();
+        //memberManager = new MemberManagerImpl();
         memberDAO = mock(MemberDAO.class);
         memberManager.setMemberDAO(memberDAO);
-        EmailValidator validator = mock(EmailValidator.class);
+        validator = mock(EmailValidator.class);
         memberManager.setValidator(validator);
     }
 
@@ -118,29 +131,13 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should update member")
     void updateMember() {
-       /* MemberManagerImpl manager = mock(MemberManagerImpl.class);
-        Member member = new Member();
-       *//* member.setLogin("dedeww");
-        member.setFirstName("Gedeon");
-        member.setLastName("Poligo");
-        member.setPassword("123");
-        member.setEmail("sasa@tet.tet");*//*
-        when(manager.checkRequiredValuesNotNull(member)).thenReturn("");
-        when(manager.checkValidityOfParametersForMember(member)).thenReturn("");
-        //when(manager.checkIfLoginHasBeenPassed("Bobby")).thenReturn(false);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("Login", member.getLogin());
+      fail();
 
-
-        when(memberDAO.getMembersByCriterias(map)).thenReturn(null);
-        manager.updateMember(member);
-        //assertEquals("No Item found with that Login", manager.updateMember(member));*/
-        fail();
     }
 
     @Test
     @DisplayName("should return error if param empty or null")
-    void checkRequiredValuesNotNull(){
+    void checkRequiredValuesNotNull() {
         fail();
     }
 
@@ -173,11 +170,11 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return wrong login or password if credentials are wrong")
     void getToken() {
-        MemberManager memberMgr = spy(memberManager);
+      /*  MemberManager memberMgr = spy(memberManager);
         String login = "lpl";
         String pwd = "lk";
-        when(memberMgr.checkPassword(login, pwd)).thenReturn(false);
-        assertEquals("wrong login or pwd", memberMgr.getToken(login, pwd));
+        when(memberMgr.checkPassword(login, pwd)).thenReturn(false);*/
+        assertEquals("wrong login or pwd", memberManager.getToken("Jpolino", "pwd123"));
     }
 
     @Test

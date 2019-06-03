@@ -3,10 +3,16 @@ package org.troparo.business.impl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,8 +22,13 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+@ContextConfiguration("classpath:/application-context-test.xml")
+@TestPropertySource("classpath:config.properties")
+@ExtendWith(SpringExtension.class)
+@Transactional
 class BookManagerImplTest {
 
+    //@Inject
     private BookManager bookManager;
     private BookDAO bookDAO;
     BookManagerImpl bookManager2 = new BookManagerImpl();
@@ -132,12 +143,7 @@ class BookManagerImplTest {
     }
 
 
-    @Test
-    void test(){
-        Book b1 = new Book();
-        Book b2 = b1;
-        bookManager2.transferNbPagesToSimilarBooks(b1, b2);
-    }
+
 
     @Test
     @DisplayName("should return a Null pointer exception if dao returns null")
@@ -168,12 +174,7 @@ class BookManagerImplTest {
     }
 
 
-    @Test
-    void testMock(){
-        BookManagerImpl bmanager = mock(BookManagerImpl.class);
-        Book book = new Book();
-        when(bmanager.checksThatBookHasAnISBN(book)).thenReturn("");
-    }
+
 
     @Test
     @DisplayName("should return \"You must provide an ISBN\" if ISBN not provided")
@@ -246,6 +247,7 @@ class BookManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return book by ISBN")
     void getBookByIsbn() {
         Book book = new Book();
         when(bookDAO.getBookByIsbn("ISBN22")).thenReturn(book);
@@ -350,7 +352,7 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should remove book if found")
     void remove1() {
-        when(bookDAO.getBookById(anyInt())).thenReturn(new Book());
+        when(bookDAO.getBookById(12)).thenReturn(new Book());
         assertEquals("", bookManager.remove(12));
     }
 
@@ -390,8 +392,16 @@ class BookManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return true if available")
     void isAvailable() {
         when(bookDAO.isAvailable(anyInt())).thenReturn(true);
         assertTrue(bookManager.isAvailable(12));
+    }
+
+    @Test
+    @DisplayName("should return false if not available")
+    void isAvailable1() {
+        when(bookDAO.isAvailable(anyInt())).thenReturn(false);
+        assertFalse(bookManager.isAvailable(12));
     }
 }

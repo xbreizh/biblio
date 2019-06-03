@@ -4,11 +4,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
@@ -23,11 +27,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@PropertySource("classpath:**/config.properties")
+@ContextConfiguration("classpath:/application-context-test.xml")
+@TestPropertySource("classpath:config.properties")
+@ExtendWith(SpringExtension.class)
 class LoanManagerImplTest {
 
-    private static ConfigurableApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-            "application-context.xml");
+    /*private static ConfigurableApplicationContext applicationContext = new ClassPathXmlApplicationContext(
+            "application-context.xml");*/
 
     @Inject
     private LoanManager loanManager;

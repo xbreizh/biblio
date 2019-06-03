@@ -20,25 +20,25 @@ import java.util.HashMap;
 import java.util.List;
 
 @Transactional
-//@Configuration
+@Named
 @PropertySource("classpath:config.properties")
 public class LoanManagerImpl implements LoanManager {
     @Value("${loanDuration}")
+    private String loanDurationString;
     private int loanDuration;
     @Value("${renewDuration}")
     private int renewDuration;
     @Value("${maxBooks}")
     private int maxBooks;
-
     @Inject
     LoanDAO loanDAO;
+
     @Inject
     BookManager bookManager;
     @Inject
     MemberManager memberManager;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private String exception = "";
-
     @Override
     public String addLoan(Loan loan) {
 
@@ -153,11 +153,12 @@ public class LoanManagerImpl implements LoanManager {
                 / (1000 * 60 * 60 * 24));
         logger.info("diff days is: " + diffInDays);
         System.out.println("diffDays: "+diffInDays);
-        if (diffInDays > renewDuration) {
+        return (diffInDays > renewDuration);
+       /* if (diffInDays > renewDuration) {
             return false;
         } else {
             return true;
-        }
+        }*/
 
 
     }
@@ -204,5 +205,17 @@ public class LoanManagerImpl implements LoanManager {
     @Override
     public void setLoanDAO(LoanDAO loanDAO) {
         this.loanDAO = loanDAO;
+    }
+
+    public int getLoanDuration() {
+        return loanDuration;
+    }
+
+    public int getRenewDuration() {
+        return renewDuration;
+    }
+
+    public int getMaxBooks() {
+        return maxBooks;
     }
 }
