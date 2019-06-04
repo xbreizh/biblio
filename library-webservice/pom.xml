@@ -45,6 +45,28 @@
         <module>troparo-technical</module>
     </modules>
 
+
+    <profiles>
+
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Business -->
+        <profile>
+            <id>test-business</id>
+        </profile>
+
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Consumer -->
+        <profile>
+            <id>test-consumer</id>
+        </profile>
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Model -->
+        <profile>
+            <id>test-model</id>
+        </profile>
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Web -->
+        <profile>
+            <id>test-web</id>
+        </profile>
+    </profiles>
+
     <dependencyManagement>
         <dependencies>
             <!-- ===== Modules ===== -->
@@ -166,7 +188,6 @@
 
         </dependencies>
     </dependencyManagement>
-
 
 
 </project>
