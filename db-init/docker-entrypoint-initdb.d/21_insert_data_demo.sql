@@ -1,5 +1,5 @@
 INSERT INTO public."member" (id,dateconnect,datejoin,email,firstname,lastname,login,"password","role","token") VALUES 
-(2,'2019-01-22 18:03:32.979','2019-01-17 17:22:58.013','POLI@KOL.FR','JOHN','POLI','JPOLINO','$2a$10$h0swcQCaOyuJ2CffLkVRn.vj.L2VaAqXCH2rRFGhGArN0YjVGktFK','USER','62751f44-b7db-49f5-a19c-5b98edef50db')
+(2,current_timestamp,'2019-01-17 17:22:58.013','POLI@KOL.FR','JOHN','POLI','JPOLINO','$2a$10$h0swcQCaOyuJ2CffLkVRn.vj.L2VaAqXCH2rRFGhGArN0YjVGktFK','USER','62751f44-b7db-49f5-a19c-5b98edef50db')
 ,(1,'2019-05-27 13:24:46.270','2019-01-16 18:58:19.604','LOKI@LOKI.LOKII','JEAN','MOKOTI','LOKII','$2a$10$cG0Byw7K1qHl8yBa71T4UOjDUevz4XKueiRO3rLW9BjOMBwRIdpcu','ADMIN','1b0e0a5b-ae4f-41cf-a600-b8b26e2ec013')
 ;
 

@@ -1,6 +1,7 @@
 -- Drop table
-
--- DROP TABLE public."member";
+DROP TABLE public.loan;
+DROP TABLE public."member";
+DROP TABLE public.book;
 
 CREATE TABLE public."member" (
         id int4 NOT NULL,
@@ -17,7 +18,7 @@ CREATE TABLE public."member" (
 );
 
 
--- DROP TABLE public.book;
+
 
 CREATE TABLE public.book (
         id int4 NOT NULL,
@@ -34,7 +35,7 @@ CREATE TABLE public.book (
 
 -- Drop table
 
--- DROP TABLE public.loan;
+
 
 CREATE TABLE public.loan (
         id int4 NOT NULL,

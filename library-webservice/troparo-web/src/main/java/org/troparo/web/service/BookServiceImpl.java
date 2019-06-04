@@ -34,14 +34,14 @@ public class BookServiceImpl implements IBookService {
 
     // Create
     @Override
-    public AddBookResponseType addBook(org.troparo.entities.book.AddBookRequestType parameters) throws BusinessExceptionBook {
+    public AddBookResponseType addBook(AddBookRequestType parameters) throws BusinessExceptionBook {
         AddBookResponseType ar = new AddBookResponseType();
         ar.setReturn(true);
 
         checkAuthentication(parameters.getToken());
 
         bookTypeIn = parameters.getBookTypeIn();
-        convertBookTypeInIntoBook();
+        this.book = convertBookTypeInIntoBook(bookTypeIn);
         logger.info("bookManager: " + bookManager);
         exception = bookManager.addBook(book);
         if (!exception.equals("")) {
@@ -53,7 +53,7 @@ public class BookServiceImpl implements IBookService {
     }
 
     // Converts Input into Book for business
-    private void convertBookTypeInIntoBook() {
+    private Book convertBookTypeInIntoBook(BookTypeIn bookTypeIn) {
         book = new Book();
         book.setIsbn(bookTypeIn.getISBN().toUpperCase());
         book.setTitle(bookTypeIn.getTitle().toUpperCase());
@@ -64,10 +64,11 @@ public class BookServiceImpl implements IBookService {
         book.setNbPages(bookTypeIn.getNbPages());
         book.setKeywords(bookTypeIn.getKeywords().toUpperCase());
         logger.info("pub date: " + book.getPublicationYear());
+        return book;
     }
 
     // Converts Input into Book for business
-    private void convertBookTypeUpdateIntoBook(org.troparo.entities.book.BookTypeUpdate bookTypeUpdate) {
+    private void convertBookTypeUpdateIntoBook(BookTypeUpdate bookTypeUpdate) {
         book = new Book();
         book.setIsbn(bookTypeUpdate.getISBN().toUpperCase());
         book.setTitle(bookTypeUpdate.getTitle().toUpperCase());

@@ -372,6 +372,7 @@ public class MemberManagerImpl implements MemberManager {
     // Update Password
     @Override
     public boolean updatePassword(String login, String email, String password) {
+        System.out.println("here");
         logger.info("member received: " + login);
         logger.info("email received: " + email);
         logger.info("pwd received: " + password);

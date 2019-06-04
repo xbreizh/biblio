@@ -26,16 +26,16 @@ public class ConnectServiceImpl implements IConnectService {
     private MemberManager memberManager;
 
 
+
     /*@Inject
     private Authentication authentication;*/
-
     private String exception = "";
+
     private List<Member> memberList = new ArrayList<>();
     private MemberTypeOut memberTypeOut = null;
     private MemberTypeIn memberTypeIn = null;
     private MemberListType memberListType = new MemberListType();
     private Member member = null;
-
 
     private void checkAuthentication(String token) throws BusinessExceptionConnect {
         try {
@@ -82,7 +82,7 @@ public class ConnectServiceImpl implements IConnectService {
     public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters) throws BusinessExceptionConnect {
         ResetPasswordResponseType ar = new ResetPasswordResponseType();
         boolean result;
-
+        System.out.println("trying to reset pwd");
         logger.info("trying to reset pwd for: " + parameters.getLogin());
         String login = parameters.getLogin();
         String password = parameters.getPassword();
@@ -101,11 +101,15 @@ public class ConnectServiceImpl implements IConnectService {
         return true;
     }
 
-    boolean checkAdmin(String token) throws Exception {
+  /*  boolean checkAdmin(String token) throws Exception {
         checkToken(token);
         if (!memberManager.checkAdmin(token)) {
             throw new Exception("insufficient rights");
         }
         return true;
+    }*/
+
+    public void setMemberManager(MemberManager memberManager) {
+        this.memberManager = memberManager;
     }
 }
