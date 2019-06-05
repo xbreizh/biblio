@@ -3,8 +3,13 @@
 --DROP TABLE IF EXISTS public.member;
 --DROP TABLE IF EXISTS public.book;
 
+--DROP SEQUENCE hibernate_sequence;
+--DROP SEQUENCE loan_id_seq cascade;
+--DROP SEQUENCE member_id_seq cascade;
+--DROP SEQUENCE book_id_seq cascade;
+
 CREATE TABLE public."member" (
-        id int4 NOT NULL,
+        id SERIAL,
         dateconnect timestamp NULL,
         datejoin timestamp NULL,
         email varchar(255) NULL,
@@ -21,7 +26,7 @@ CREATE TABLE public."member" (
 
 
 CREATE TABLE public.book (
-        id int4 NOT NULL,
+        id SERIAL,
         author varchar(255) NULL,
         edition varchar(255) NULL,
         insert_date timestamp NULL,
@@ -38,7 +43,7 @@ CREATE TABLE public.book (
 
 
 CREATE TABLE public.loan (
-        id int4 NOT NULL,
+        id SERIAL,
         end_date timestamp NULL,
         planned_end_date timestamp NULL,
         start_date timestamp NULL,

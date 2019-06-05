@@ -96,12 +96,12 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should update book author")
     void updateBook() {
-        Book book = bookDAO.getBookById(5);
+        Book book = bookDAO.getBookById(2);
         String newAuthor = "Jean Pialat";
         assertEquals("TEST", book.getAuthor());
         book.setAuthor(newAuthor);
         bookDAO.updateBook(book);
-        assertEquals(newAuthor, bookDAO.getBookById(5).getAuthor());
+        assertEquals(newAuthor, bookDAO.getBookById(2).getAuthor());
     }
 
     @Test

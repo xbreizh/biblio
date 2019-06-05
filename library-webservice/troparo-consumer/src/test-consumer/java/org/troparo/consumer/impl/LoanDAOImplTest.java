@@ -45,7 +45,7 @@ class LoanDAOImplTest {
     @DisplayName("should update loan")
     void updateLoan() {
         Loan loan = loanDAO.getLoanById(4);
-        Book newBook = bookDAO.getBookById(5);
+        Book newBook = bookDAO.getBookById(1);
         assertNotEquals(newBook, loan.getBook());
         loan.setBook(newBook);
         assertEquals(newBook, loan.getBook());
@@ -84,7 +84,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return not empty list if existing loan for a login")
     void getLoanByLogin() {
-        assertEquals(1, loanDAO.getLoanByLogin("Jpolino").size());
+        assertEquals(4, loanDAO.getLoanByLogin("Jpolino").size());
     }
 
     @Test
@@ -105,7 +105,7 @@ class LoanDAOImplTest {
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias1() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("book_id", "3");
+        map.put("book_id", "5");
         assertEquals(1, loanDAO.getLoansByCriterias(map).size());
     }
 

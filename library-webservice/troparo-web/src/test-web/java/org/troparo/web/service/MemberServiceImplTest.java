@@ -5,9 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.services.memberservice.BusinessExceptionMember;
-import org.troparo.services.memberservice.MemberService;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,7 +20,7 @@ class MemberServiceImplTest {
 
 
     @BeforeEach
-        void init(){
+    void init() {
         memberService = new MemberServiceImpl();
         memberManager = mock(MemberManager.class);
         connectService = mock(ConnectServiceImpl.class);
@@ -32,7 +32,14 @@ class MemberServiceImplTest {
     @DisplayName("should return exception if authentication fails")
     void checkAuthentication() throws Exception {
         when(connectService.checkToken("tchok")).thenReturn(false);
-        assertThrows(BusinessExceptionMember.class,()-> memberService.checkAuthentication("tchok"));
+        assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(""));
+    }
+
+    @Test
+    @DisplayName("should not return exception if authentication succeeds")
+    void checkAuthentication1() throws Exception {
+        when(connectService.checkToken("tchok")).thenReturn(true);
+        assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(""));
     }
 
     @Test

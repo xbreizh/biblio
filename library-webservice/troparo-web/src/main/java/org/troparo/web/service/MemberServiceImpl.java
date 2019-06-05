@@ -41,7 +41,7 @@ public class MemberServiceImpl implements IMemberService {
     @Override
     public AddMemberResponseType addMember(AddMemberRequestType parameters) throws BusinessExceptionMember {
         AddMemberResponseType ar = new AddMemberResponseType();
-        /*checkAuthentication(parameters.getToken());*/
+        checkAuthentication(parameters.getToken());
         ar.setReturn(true);
         memberTypeIn = parameters.getMemberTypeIn();
         convertMemberTypeInIntoMember();
@@ -360,12 +360,14 @@ public class MemberServiceImpl implements IMemberService {
     void checkAuthentication(String token) throws BusinessExceptionMember {
         System.out.println("tok tok token");
 
-        try {
-            authentication.checkToken(token);
+        if(!authentication.checkToken(token)){
+            throw new BusinessExceptionMember("invalid token");
+        }
+        /*try {
         } catch (Exception e) {
             e.printStackTrace();
             throw new BusinessExceptionMember("invalid token");
-        }
+        }*/
     }
 
 

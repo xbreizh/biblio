@@ -22,10 +22,6 @@ import java.util.List;
 public class ConnectServiceImpl implements IConnectService {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public MemberManager getMemberManager() {
-        return memberManager;
-    }
-
     @Inject
     private MemberManager memberManager;
 
@@ -74,7 +70,7 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
     @Override
-    public CheckTokenResponseType checkToken(CheckTokenRequestType parameters) {
+    public CheckTokenResponseType checkToken(CheckTokenRequestType parameters)  {
         CheckTokenResponseType ar = new CheckTokenResponseType();
         /*boolean tokenIsValid = false;
         tokenIsValid = memberManager.checkToken(parameters.getToken());*/
@@ -98,9 +94,9 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
 
-    boolean checkToken(String token) throws Exception {
+    boolean checkToken(String token) {
         if (!memberManager.checkToken(token)) {
-            throw new Exception("invalid token");
+            return false;
         }
         return true;
     }

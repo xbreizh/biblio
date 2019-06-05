@@ -51,11 +51,11 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return a member")
     void getMemberById() {
-        final Member member = memberDAO.getMemberById(2);
+        final Member member = memberDAO.getMemberById(1);
         assertAll(
                 () -> assertEquals("JPOLINO", member.getLogin()),
                 () -> assertEquals("JOHN", member.getFirstName()),
-                () -> assertEquals(2, member.getId()),
+                () -> assertEquals(1, member.getId()),
                 () -> assertEquals("POLI@KOL.FR", member.getEmail())
         );
 
@@ -168,7 +168,7 @@ class MemberDAOImplTest {
         assertAll(
                 () -> assertEquals("JPOLINO", member.getLogin()),
                 () -> assertEquals("JOHN", member.getFirstName()),
-                () -> assertEquals(2, member.getId()),
+                () -> assertEquals(1, member.getId()),
                 () -> assertEquals("POLI@KOL.FR", member.getEmail())
         );
     }
