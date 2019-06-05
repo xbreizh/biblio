@@ -44,11 +44,13 @@ public class MemberServiceImpl implements IMemberService {
         checkAuthentication(parameters.getToken());
         ar.setReturn(true);
         memberTypeIn = parameters.getMemberTypeIn();
-        convertMemberTypeInIntoMember();
+        this.member = convertMemberTypeInIntoMember(memberTypeIn);
         logger.info("memberManager: " + memberManager);
         exception = memberManager.addMember(member);
+        System.out.println("exception: ");
         if (!exception.equals("")) {
             logger.info(exception);
+            System.out.println("exx: "+exception);
             throw new BusinessExceptionMember(exception);
         }
 
@@ -56,9 +58,9 @@ public class MemberServiceImpl implements IMemberService {
     }
 
     // Converts Input into Member for business
-    private void convertMemberTypeInIntoMember() {
+    Member convertMemberTypeInIntoMember(MemberTypeIn memberTypeIn) {
         member = new Member();
-
+        System.out.println(memberTypeIn);
         member.setLogin(memberTypeIn.getLogin().toUpperCase());
         member.setFirstName(memberTypeIn.getFirstName().toUpperCase());
         member.setLastName(memberTypeIn.getLastName().toUpperCase());
@@ -66,6 +68,7 @@ public class MemberServiceImpl implements IMemberService {
         member.setEmail(memberTypeIn.getEmail().toUpperCase());
         member.setRole(memberTypeIn.getRole().toUpperCase());
         logger.info("conversion memberType into member done");
+        return member;
     }
 
     // Converts Input into Member for business
