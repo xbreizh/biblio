@@ -63,8 +63,8 @@
         </wsdl:operation>
         <wsdl:operation name="checkToken">
             <wsdl:input message="tns:checkTokenRequest"/>
-            <wsdl:output message="tns:checkTokenResponse"/>
-            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+            <wsdl:output message="tns:checkTokenResponse"/><!--
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>-->
         </wsdl:operation>
         <wsdl:operation name="invalidateToken">
             <wsdl:input message="tns:invalidateTokenRequest"/>
@@ -112,9 +112,6 @@
             <wsdl:output>
                 <soap:body use="literal"/>
             </wsdl:output>
-            <wsdl:fault name="businessExceptionConnect">
-                <soap:fault name="businessExceptionConnect" use="literal"/>
-            </wsdl:fault>
         </wsdl:operation>
 
         <wsdl:operation name="getToken">
@@ -148,8 +145,8 @@
     <wsdl:service name="ConnectService">
         <wsdl:port name="ConnectServicePort" binding="tns:ConnectServiceSOAPBinding">
             <soap:address
-                    location="http://localhost:8080/troparo_app/services/connect/ConnectService"/>
-            <!-- location="http://webservice:8080/troparo_app/services/connect/ConnectService"/>-->
+             location="http://webservice:8080/troparo_app/services/connect/ConnectService"/>
+            <!-- location="http://localhost:8080/troparo_app/services/connect/ConnectService"/>-->
         </wsdl:port>
     </wsdl:service>
 

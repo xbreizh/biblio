@@ -334,6 +334,7 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public boolean invalidateToken(String token) {
+        System.out.println("getting here");
         try {
             Member m = memberDAO.getMemberByToken(token);
             m.setToken(null);

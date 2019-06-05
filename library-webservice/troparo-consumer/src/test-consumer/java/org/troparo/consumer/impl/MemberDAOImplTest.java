@@ -135,7 +135,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return false if token invalid")
     void checkToken1() {
-        assertFalse(memberDAO.checkToken("62751f44-b7db-49f5-a19c-5b98edef50db"));
+        assertFalse(memberDAO.checkToken("62751f44-b7db-49f5-a19c-5b98edef50dbss"));
     }
 
     @Test

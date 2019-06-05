@@ -30,12 +30,13 @@ public class MemberServiceImpl implements IMemberService {
     private ConnectServiceImpl authentication;
 
     private String exception = "";
+
     private List<Member> memberList = new ArrayList<>();
+
     private MemberTypeOut memberTypeOut = null;
     private MemberTypeIn memberTypeIn = null;
     private MemberListType memberListType = new MemberListType();
     private Member member = null;
-
     // Create
     @Override
     public AddMemberResponseType addMember(AddMemberRequestType parameters) throws BusinessExceptionMember {
@@ -98,6 +99,7 @@ public class MemberServiceImpl implements IMemberService {
     }
 
 
+
 /*
     @Override
     public CheckTokenResponseType checkToken(CheckTokenRequestType parameters) throws BusinessException {
@@ -108,7 +110,6 @@ public class MemberServiceImpl implements IMemberService {
         ar.setReturn(tokenIsValid);
         return ar;
     }*/
-
 
     // Get By Id
     @Override
@@ -158,7 +159,6 @@ public class MemberServiceImpl implements IMemberService {
         }
         return loanListType;
     }
-
     private BookTypeOut convertBookIntoBookTypeOut(Book book) {
         BookTypeOut bookTypeOut = new BookTypeOut();
         bookTypeOut.setId(book.getId());
@@ -199,6 +199,8 @@ public class MemberServiceImpl implements IMemberService {
         return rep;
     }
 
+
+
   /*  // Get By Login
     @Override
     public GetMemberByLoginResponseType getMemberByLogin(GetMemberByIdRequestType parameters) throws BusinessExceptionMember {
@@ -229,7 +231,6 @@ public class MemberServiceImpl implements IMemberService {
         return ar;
     }*/
 
-
     // Get All
     @Override
     public MemberListResponseType getAllMembers(MemberListRequestType parameters) throws BusinessExceptionMember {
@@ -247,6 +248,7 @@ public class MemberServiceImpl implements IMemberService {
         return memberListResponseType;
     }
 
+
   /*  @Override
     public GetTokenResponseType getToken(GetTokenRequestType parameters) throws BusinessException {
         GetTokenResponseType ar = new GetTokenResponseType();
@@ -254,7 +256,6 @@ public class MemberServiceImpl implements IMemberService {
         ar.setReturn(token);
         return ar;
     }*/
-
 
     // Get List By Criterias
     @Override
@@ -298,6 +299,7 @@ public class MemberServiceImpl implements IMemberService {
 
     }
 
+
    /* @Override
     public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters) throws BusinessException {
         ResetPasswordResponseType ar = new ResetPasswordResponseType();
@@ -313,7 +315,6 @@ public class MemberServiceImpl implements IMemberService {
         return ar;
     }
 */
-
     // Converts Member from Business into output
     private void convertMemberIntoMemberTypeOut() {
         memberListType.getMemberTypeOut().clear();
@@ -356,8 +357,9 @@ public class MemberServiceImpl implements IMemberService {
         }
         return xmlCalendar;
     }
+    void checkAuthentication(String token) throws BusinessExceptionMember {
+        System.out.println("tok tok token");
 
-    private void checkAuthentication(String token) throws BusinessExceptionMember {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {
@@ -366,4 +368,12 @@ public class MemberServiceImpl implements IMemberService {
         }
     }
 
+
+    public void setMemberManager(MemberManager memberManager) {
+        this.memberManager = memberManager;
+    }
+
+    public void setAuthentication(ConnectServiceImpl authentication) {
+        this.authentication = authentication;
+    }
 }

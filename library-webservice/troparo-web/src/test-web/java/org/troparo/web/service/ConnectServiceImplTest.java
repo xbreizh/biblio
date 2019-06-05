@@ -8,15 +8,17 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
+import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.connect.CheckTokenRequestType;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.connect.InvalidateTokenRequestType;
 import org.troparo.entities.connect.ResetPasswordRequestType;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
-import org.troparo.services.connectservice.ConnectService;
-import org.troparo.services.connectservice.IConnectService;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:/org/troparo/web/config/spring-hibernate-jax-ws-test.xml")
 @TestPropertySource("classpath:config.properties")
@@ -24,28 +26,35 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class ConnectServiceImplTest {
 
-    private IConnectService connectService;
-
+    private ConnectServiceImpl connectService;
+    private MemberManager memberManager;
 
 
     @BeforeEach
     void init() {
-        connectService = new ConnectService().getConnectServicePort();
+        connectService = new ConnectServiceImpl();
+        memberManager = mock(MemberManager.class);
+        connectService.setMemberManager(memberManager);
+
     }
 
     @Test
     @DisplayName("should return true if existing token")
     void invalidateToken() throws BusinessExceptionConnect {
+        String token = "7ca1c74f-02cd-41d9-82f4-5f717a96bcf3";
         InvalidateTokenRequestType parameters = new InvalidateTokenRequestType();
-        parameters.setToken("7ca1c74f-02cd-41d9-82f4-5f717a96bcf3");
+        parameters.setToken(token);
+        when(memberManager.invalidateToken(token)).thenReturn(true);
         assertTrue(connectService.invalidateToken(parameters).isReturn());
     }
 
     @Test
     @DisplayName("should return false if none-existing token")
     void invalidateToken1() throws BusinessExceptionConnect {
+        String token = "7ca1c74f-02cd-41d9-82f4-5f717a96bcf3";
         InvalidateTokenRequestType parameters = new InvalidateTokenRequestType();
-        parameters.setToken("4b2a646a-2b5e-4af3-a465-9add0c47712090");
+        parameters.setToken(token);
+        when(memberManager.invalidateToken(token)).thenReturn(false);
         assertFalse(connectService.invalidateToken(parameters).isReturn());
     }
 
@@ -53,9 +62,11 @@ class ConnectServiceImplTest {
     @DisplayName("should return a token")
     void getToken() throws BusinessExceptionConnect {
         GetTokenRequestType parameters = new GetTokenRequestType();
-        parameters.setLogin("Lokii");
+        String token = "token123";
+        parameters.setLogin("lokii");
         parameters.setPassword("123");
-        assertNotNull(connectService.getToken(parameters).getReturn());
+        when(memberManager.getToken(anyString(), anyString())).thenReturn(token);
+        assertEquals(token, connectService.getToken(parameters).getReturn());
     }
 
     @Test
@@ -64,16 +75,19 @@ class ConnectServiceImplTest {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("Lokii");
         parameters.setPassword("1243");
-        assertEquals("wrong login or pwd", connectService.getToken(parameters).getReturn());
+        String error= "wrong login or pwd";
+        when(memberManager.getToken(anyString(), anyString())).thenReturn(error);
+        assertEquals(error, connectService.getToken(parameters).getReturn());
     }
 
     @Test
-    @DisplayName("should return wrong login or password when login or pwd null")
+    @DisplayName("should return \"something went wrong\" when token is null")
     void getToken2() throws BusinessExceptionConnect {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin(null);
         parameters.setPassword(null);
-        assertEquals("wrong login or pwd", connectService.getToken(parameters).getReturn());
+        when(memberManager.getToken(anyString(), anyString())).thenReturn(null);
+        assertEquals("something went wrong", connectService.getToken(parameters).getReturn());
     }
 
     @Test
@@ -81,7 +95,8 @@ class ConnectServiceImplTest {
     void checkToken() throws BusinessExceptionConnect {
         CheckTokenRequestType parameters = new CheckTokenRequestType();
         parameters.setToken("dedede");
-        assertFalse( connectService.checkToken(parameters).isReturn());
+        when(memberManager.checkToken(anyString())).thenReturn(false);
+        assertFalse(connectService.checkToken(parameters).isReturn());
     }
 
 
@@ -89,9 +104,9 @@ class ConnectServiceImplTest {
     @DisplayName("should return true when token valid")
     void checkToken1() throws BusinessExceptionConnect {
         CheckTokenRequestType parameters = new CheckTokenRequestType();
-
-        parameters.setToken("4b2a646a-2b5e-4af3-a465-9a0c47712090");
-        assertTrue( connectService.checkToken(parameters).isReturn());
+        parameters.setToken("dedede");
+        when(memberManager.checkToken(anyString())).thenReturn(true);
+        assertTrue(connectService.checkToken(parameters).isReturn());
     }
 
     @Test
@@ -101,6 +116,7 @@ class ConnectServiceImplTest {
         parameters.setEmail("POLI@KOL.FR");
         parameters.setLogin("jpolino");
         parameters.setPassword("mik");
+        when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(true);
         assertTrue(connectService.resetPassword(parameters).isReturn());
     }
 
@@ -111,12 +127,19 @@ class ConnectServiceImplTest {
         parameters.setEmail("POLI@KOLs.FR");
         parameters.setLogin("jpolino");
         parameters.setPassword("mik");
+        when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(false);
         assertFalse(connectService.resetPassword(parameters).isReturn());
     }
 
 
-   /* @Test
-    void checkAdmin() {
-        CheckA
-    }*/
+    @Test
+    @DisplayName("should return false if one of the credentials is null")
+    void resetPassword12() throws BusinessExceptionConnect {
+        ResetPasswordRequestType parameters = new ResetPasswordRequestType();
+        parameters.setEmail("POLI@KOLs.FR");
+        parameters.setLogin(null);
+        parameters.setPassword("mik");
+        when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(false);
+        assertFalse(connectService.resetPassword(parameters).isReturn());
+    }
 }

@@ -1,7 +1,7 @@
 -- Drop table
-DROP TABLE public.loan;
-DROP TABLE public."member";
-DROP TABLE public.book;
+--DROP TABLE IF EXISTS public.loan;
+--DROP TABLE IF EXISTS public.member;
+--DROP TABLE IF EXISTS public.book;
 
 CREATE TABLE public."member" (
         id int4 NOT NULL,
