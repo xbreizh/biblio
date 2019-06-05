@@ -266,14 +266,11 @@ public class MemberServiceImpl implements IMemberService {
         HashMap<String, String> map = new HashMap<>();
         checkAuthentication(parameters.getToken());
         MemberCriterias criterias = parameters.getMemberCriterias();
-        map.put("Login", criterias.getLogin().toUpperCase());
-        map.put("FirstName", criterias.getFirstName().toUpperCase());
-        map.put("LastName", criterias.getLastName().toUpperCase());
-        map.put("Email", criterias.getEmail().toUpperCase());
-        map.put("role", criterias.getRole().toUpperCase());
-        logger.info("map: " + map);
+        HashMap<String, String> newMap = cleanCriteriasMap(map, criterias);
 
-        memberList = memberManager.getMembersByCriterias(map);
+
+        System.out.println("after: "+newMap.size());
+        memberList = memberManager.getMembersByCriterias(newMap);
         GetMemberByCriteriasResponseType brt = new GetMemberByCriteriasResponseType();
         logger.info("memberListType beg: " + memberListType.getMemberTypeOut().size());
 
@@ -282,6 +279,24 @@ public class MemberServiceImpl implements IMemberService {
         logger.info("memberListType end: " + memberListType.getMemberTypeOut().size());
         brt.setMemberListType(memberListType);
         return brt;
+    }
+
+    HashMap<String, String> cleanCriteriasMap(HashMap<String, String> map, MemberCriterias criterias) {
+        if(criterias.getLogin()!=null)map.put("Login", criterias.getLogin().toUpperCase());
+        if(criterias.getFirstName()!=null)map.put("FirstName", criterias.getFirstName().toUpperCase());
+        if(criterias.getLastName()!=null)map.put("LastName", criterias.getLastName().toUpperCase());
+        if(criterias.getEmail()!=null)map.put("Email", criterias.getEmail().toUpperCase());
+        if(criterias.getRole()!=null)map.put("role", criterias.getRole().toUpperCase());
+        logger.info("map: " + map);
+
+        HashMap<String, String> newMap = new HashMap<>();
+        for (Map.Entry entry: map.entrySet()
+             ) {
+            if(!entry.getValue().equals("") && !entry.getValue().equals("?")){
+                newMap.put(entry.getKey().toString(), entry.getValue().toString());
+            }
+        }
+        return newMap;
     }
 
 
@@ -349,8 +364,9 @@ public class MemberServiceImpl implements IMemberService {
 
     private XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
         // converting Date into XML date
-
+        if(date==null)return null;
         GregorianCalendar cal = new GregorianCalendar();
+        System.out.println(date);
         cal.setTime(date);
         XMLGregorianCalendar xmlCalendar = null;
         try {
@@ -363,7 +379,8 @@ public class MemberServiceImpl implements IMemberService {
     void checkAuthentication(String token) throws BusinessExceptionMember {
         System.out.println("tok tok token");
 
-        if(!authentication.checkToken(token)){
+        if(token ==null || !authentication.checkToken(token)){
+            System.out.println("bam exception");
             throw new BusinessExceptionMember("invalid token");
         }
         /*try {
