@@ -123,7 +123,7 @@ public class MemberServiceImpl implements IMemberService {
         MemberTypeOut bt = new MemberTypeOut();
         Member member = memberManager.getMemberById(parameters.getId());
         if (member == null) {
-            throw new BusinessExceptionMember("no member found with that id");
+            throw new BusinessExceptionMember("no member found with that bookId");
         } else {
             bt.setId(member.getId());
             bt.setLogin(member.getLogin());
@@ -211,11 +211,11 @@ public class MemberServiceImpl implements IMemberService {
         logger.info("new method added");
         GetMemberByIdResponseType rep = new GetMemberByIdResponseType();
         MemberTypeOut bt = new MemberTypeOut();
-        Member member = memberManager.getMemberById(parameters.getId());
+        Member member = memberManager.getMemberById(parameters.getBookId());
         if (member == null) {
-            throw new BusinessExceptionMember("no member found with that id");
+            throw new BusinessExceptionMember("no member found with that bookId");
         } else {
-            bt.setId(member.getId());
+            bt.setBookId(member.getBookId());
             bt.setLogin(member.getLogin());
             bt.setFirstName(member.getFirstName());
             bt.setLastName(member.getLastName());

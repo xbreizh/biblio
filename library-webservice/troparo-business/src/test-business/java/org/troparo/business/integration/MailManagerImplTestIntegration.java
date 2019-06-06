@@ -7,8 +7,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.contract.EmailManager;
-import org.troparo.business.contract.MemberManager;
+import org.troparo.business.contract.MailManager;
 
 import javax.inject.Inject;
 
@@ -18,17 +17,17 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
-public class EmailManagerImplTestIntegration {
+public class MailManagerImplTestIntegration {
 
 
     @Inject
-    private EmailManager emailManager;
+    private MailManager mailManager;
 
 
     @Test
     @DisplayName("should return overdue emails from database")
     void getOverdueEmailList() {
-        assertNotNull(emailManager.getOverdueEmailList());
+        assertNotNull(mailManager.getOverdueEmailList());
     }
 
 

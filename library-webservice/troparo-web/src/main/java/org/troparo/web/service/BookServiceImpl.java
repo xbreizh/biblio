@@ -129,7 +129,7 @@ public class BookServiceImpl implements IBookService {
         BookTypeOut bt = new org.troparo.entities.book.BookTypeOut();
         Book book = bookManager.getBookById(parameters.getReturn());
         if (book == null) {
-            throw new BusinessExceptionBook("no book found with that id");
+            throw new BusinessExceptionBook("no book found with that bookId");
         } else {
             bt.setId(book.getId());
             bt.setISBN(book.getIsbn());

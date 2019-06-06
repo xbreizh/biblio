@@ -49,7 +49,7 @@ class LoanManagerImplTest {
 
     @BeforeAll
     static void initAll(){
-      //  applicationContext.getBean("emailManagerImpl", EmailManagerImpl.class);
+      //  applicationContext.getBean("emailManagerImpl", MailManagerImpl.class);
     }
 
     @BeforeEach

@@ -1,33 +1,13 @@
 package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
-import org.troparo.business.contract.EmailManager;
+import org.troparo.business.contract.MailManager;
 import org.troparo.business.contract.LoanManager;
-import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Mail;
-import org.troparo.model.Member;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.mail.*;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.io.*;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 /*@Component
@@ -35,8 +15,8 @@ import java.util.*;
 @EnableScheduling
 @PropertySource("classpath:mail.properties")*/
 @Named
-public class EmailManagerImpl implements EmailManager {
-    private Logger logger = Logger.getLogger(EmailManagerImpl.class);
+public class MailManagerImpl implements MailManager {
+    private Logger logger = Logger.getLogger(MailManagerImpl.class);
 
     @Inject
     LoanManager loanManager;

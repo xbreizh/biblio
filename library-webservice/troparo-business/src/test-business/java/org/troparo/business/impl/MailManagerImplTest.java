@@ -7,20 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.troparo.business.contract.EmailManager;
-import org.troparo.business.contract.LoanManager;
-import org.troparo.business.contract.MemberManager;
-import org.troparo.model.Book;
-import org.troparo.model.Loan;
-import org.troparo.model.Member;
+import org.troparo.business.contract.MailManager;
 
 import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,18 +20,18 @@ import static org.mockito.Mockito.*;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
-class EmailManagerImplTest {
+class MailManagerImplTest {
 
     @Inject
-    private EmailManager emailManager;
+    private MailManager mailManager;
     /*@Inject
     private LoanManager loanManager;*/
 
     @BeforeEach
     void init(){
-        /*emailManager = new EmailManagerImpl();
+        /*mailManager = new MailManagerImpl();
         loanManager = spy(LoanManager.class);
-        emailManager.setLoanManager(loanManager);*/
+        mailManager.setLoanManager(loanManager);*/
 
     }
 
@@ -68,12 +60,12 @@ class EmailManagerImplTest {
         loanList.add(loan);
         when(loanManager.getLoansByCriterias(criterias)).thenReturn(loanList);
         assertAll(
-                ()->assertNotNull(emailManager.getOverdueEmailList()),
-                ()-> assertEquals(1, emailManager.getOverdueEmailList().size()),
-                ()->assertEquals("Bob", emailManager.getOverdueEmailList().get(0).getFirstname()),
-                ()->assertEquals("Boravo", emailManager.getOverdueEmailList().get(0).getTitle()),
-                ()->assertEquals(plannedEndDate, emailManager.getOverdueEmailList().get(0).getDueDate()),
-                ()->assertEquals("ISBN123", emailManager.getOverdueEmailList().get(0).getIsbn())
+                ()->assertNotNull(mailManager.getOverdueEmailList()),
+                ()-> assertEquals(1, mailManager.getOverdueEmailList().size()),
+                ()->assertEquals("Bob", mailManager.getOverdueEmailList().get(0).getFirstname()),
+                ()->assertEquals("Boravo", mailManager.getOverdueEmailList().get(0).getTitle()),
+                ()->assertEquals(plannedEndDate, mailManager.getOverdueEmailList().get(0).getDueDate()),
+                ()->assertEquals("ISBN123", mailManager.getOverdueEmailList().get(0).getIsbn())
         );
     }*/
 
@@ -83,7 +75,7 @@ class EmailManagerImplTest {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date date1 = simpleDateFormat.parse("2018-09-02");
-        EmailManagerImpl emailManager = mock(EmailManagerImpl.class);
+        MailManagerImpl emailManager = mock(MailManagerImpl.class);
         when(emailManager.getTodaySDate()).thenReturn(date1);
         assertNotNull(emailManager.getOverdueEmailList());
     }
@@ -95,7 +87,7 @@ class EmailManagerImplTest {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date date1 = simpleDateFormat.parse("2018-09-02");
         Date date2= simpleDateFormat.parse("2018-09-09");
-        assertEquals(7, emailManager.calculateDaysBetweenDates(date1, date2) );
+        assertEquals(7, mailManager.calculateDaysBetweenDates(date1, date2) );
     }
 
 

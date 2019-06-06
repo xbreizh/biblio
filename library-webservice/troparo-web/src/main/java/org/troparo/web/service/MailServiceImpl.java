@@ -2,10 +2,8 @@ package org.troparo.web.service;
 
 
 import org.apache.log4j.Logger;
-import org.troparo.business.contract.EmailManager;
+import org.troparo.business.contract.MailManager;
 import org.troparo.entities.mail.*;
-import org.troparo.model.Book;
-import org.troparo.model.Loan;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
@@ -23,19 +21,20 @@ public class MailServiceImpl implements IMailService {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Inject
-    private EmailManager mailManager;
+    private MailManager mailManager;
 
 
     @Inject
     private ConnectServiceImpl authentication;
 
-    private String exception = "";
+
+
+    /* private String exception = "";*/
    /* private List<Mail> mailList = new ArrayList<>();
     private MailTypeOut mailTypeOut = null;
     private MailTypeIn mailTypeIn = null;
     private MailListType mailListType = new MailListType();
     private Mail mail = null;*/
-
     @Override
     public GetOverdueMailListResponse getOverdueMailList(GetOverdueMailListRequest parameters) throws BusinessExceptionMail {
         checkAuthentication(parameters.getToken());
@@ -45,7 +44,6 @@ public class MailServiceImpl implements IMailService {
         ar.setMailListType(mailListType);
         return ar;
     }
-
 
 
     MailListType convertmailListIntoMailListType(List<Mail> mailList){
@@ -70,10 +68,41 @@ public class MailServiceImpl implements IMailService {
         return mlt;
     }
 
+    XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
+        // converting Date into XML date
+
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        XMLGregorianCalendar xmlCalendar = null;
+        try {
+            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        } catch (DatatypeConfigurationException e) {
+            e.printStackTrace();
+        }
+        return xmlCalendar;
+    }
+
+    private void checkAuthentication(String token) throws BusinessExceptionMail {
+        try {
+            authentication.checkToken(token);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new BusinessExceptionMail("invalid token");
+        }
+    }
+
+    public void setAuthentication(ConnectServiceImpl authentication) {
+        this.authentication = authentication;
+    }
+
+    public void setMailManager(MailManager mailManager) {
+        this.mailManager = mailManager;
+    }
 
 
-  /*  // Get All
+/*  // Get All
     @Override
+    public void setMailManager(MailManager mailManager) {
     public MailListResponseType getAllMails(MailListRequestType parameters) throws BusinessExceptionMail {
         checkAuthentication(parameters.getToken());
         mailList = mailManager.getMails();
@@ -134,6 +163,8 @@ public class MailServiceImpl implements IMailService {
 
 
 *//*
+        this.mailManager = mailManager;
+    }
     @Override
     public CheckTokenResponseType checkToken(CheckTokenRequestType parameters) throws BusinessException {
 
@@ -153,7 +184,7 @@ public class MailServiceImpl implements IMailService {
         for (Loan l : loanList
         ) {
             LoanTypeOut lout = new LoanTypeOut();
-            lout.setId(l.getId());
+            lout.setBookId(l.getBookId());
             XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(l.getStartDate());
             lout.setStartDate(xmlCalendar);
             xmlCalendar = convertDateIntoXmlDate(l.getPlannedEndDate());
@@ -170,7 +201,7 @@ public class MailServiceImpl implements IMailService {
 
     private BookTypeOut convertBookIntoBookTypeOut(Book book) {
         BookTypeOut bookTypeOut = new BookTypeOut();
-        bookTypeOut.setId(book.getId());
+        bookTypeOut.setBookId(book.getBookId());
         bookTypeOut.setISBN(book.getIsbn());
         bookTypeOut.setTitle(book.getTitle());
         bookTypeOut.setAuthor(book.getAuthor());
@@ -191,7 +222,7 @@ public class MailServiceImpl implements IMailService {
         if (mail == null) {
             throw new BusinessExceptionMail("no mail found with that login");
         } else {
-            bt.setId(mail.getId());
+            bt.setBookId(mail.getBookId());
             bt.setLogin(mail.getLogin());
             bt.setFirstName(mail.getFirstName());
             bt.setLastName(mail.getLastName());
@@ -215,11 +246,11 @@ public class MailServiceImpl implements IMailService {
         logger.info("new method added");
         GetMailByIdResponseType rep = new GetMailByIdResponseType();
         MailTypeOut bt = new MailTypeOut();
-        Mail mail = mailManager.getMailById(parameters.getId());
+        Mail mail = mailManager.getMailById(parameters.getBookId());
         if (mail == null) {
-            throw new BusinessExceptionMail("no mail found with that id");
+            throw new BusinessExceptionMail("no mail found with that bookId");
         } else {
-            bt.setId(mail.getId());
+            bt.setBookId(mail.getBookId());
             bt.setLogin(mail.getLogin());
             bt.setFirstName(mail.getFirstName());
             bt.setLastName(mail.getLastName());
@@ -283,7 +314,7 @@ public class MailServiceImpl implements IMailService {
         ar.setReturn(true);
 
         logger.info("mailManager: " + mailManager);
-        exception = mailManager.remove(parameters.getId());
+        exception = mailManager.remove(parameters.getBookId());
         if (!exception.equals("")) {
             throw new BusinessExceptionMail(exception);
         }
@@ -315,7 +346,7 @@ public class MailServiceImpl implements IMailService {
 
             // set values retrieved from DAO class
             mailTypeOut = new MailTypeOut();
-            mailTypeOut.setId(mail.getId());
+            mailTypeOut.setBookId(mail.getBookId());
             mailTypeOut.setLogin(mail.getLogin());
             mailTypeOut.setFirstName(mail.getFirstName());
             mailTypeOut.setLastName(mail.getLastName());
@@ -327,6 +358,7 @@ public class MailServiceImpl implements IMailService {
             // converting xml into Date
 
           *//*  XMLGregorianCalendar xcal = xmlCalendar;
+
             java.util.Date dt = xcal.toGregorianCalendar().getTime();*//*
 
 
@@ -336,29 +368,6 @@ public class MailServiceImpl implements IMailService {
         }
         logger.info("mailListType end: " + mailListType.getMailTypeOut().size());
     }*/
-
-    private XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
-        // converting Date into XML date
-
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        XMLGregorianCalendar xmlCalendar = null;
-        try {
-            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-        } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
-        }
-        return xmlCalendar;
-    }
-
-    private void checkAuthentication(String token) throws BusinessExceptionMail {
-        try {
-            authentication.checkToken(token);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new BusinessExceptionMail("invalid token");
-        }
-    }
 
 
 }

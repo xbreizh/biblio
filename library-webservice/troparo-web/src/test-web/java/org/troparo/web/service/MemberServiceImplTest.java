@@ -3,6 +3,10 @@ package org.troparo.web.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.member.*;
 import org.troparo.model.Member;
@@ -17,18 +21,20 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(MockitoExtension.class)
 class MemberServiceImplTest {
 
     private MemberServiceImpl memberService;
+
+    @Mock
     private MemberManager memberManager;
+    @Mock
     private ConnectServiceImpl connectService;
 
 
     @BeforeEach
     void init() {
         memberService = new MemberServiceImpl();
-        memberManager = mock(MemberManager.class);
-        connectService = mock(ConnectServiceImpl.class);
         memberService.setMemberManager(memberManager);
         memberService.setAuthentication(connectService);
         //when(connectService.checkToken(anyString())).thenReturn(true);
@@ -193,7 +199,7 @@ class MemberServiceImplTest {
         memberCriterias.setLogin("bobb");
         parameters.setMemberCriterias(memberCriterias);
         HashMap<String, String> map = new HashMap<>();
-        map.put("login", "bobb");
+        map.put("Login", "BOBB");
         System.out.println(map.size());
         List<Member> list = new ArrayList<>();
         Member member = new Member();
@@ -205,19 +211,19 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("should throw an exception when getting members by Criterias")
     void getMemberByCriterias1() {
-        when(connectService.checkToken(anyString())).thenReturn(true);
-        GetMemberByCriteriasRequestType parameters = new GetMemberByCriteriasRequestType();
-        parameters.setToken(null);
-        MemberCriterias memberCriterias = new MemberCriterias();
-        memberCriterias.setLogin("bobb");
-        parameters.setMemberCriterias(memberCriterias);
-        HashMap<String, String> map = new HashMap<>();
-        map.put("login", "bobb");
-        System.out.println(map.size());
+        //when(connectService.checkToken(anyString())).thenReturn(true);
+        GetMemberByCriteriasRequestType parameters = new GetMemberByCriteriasRequestType();/*
+        parameters.setToken("de");*/
+        /*MemberCriterias memberCriterias = new MemberCriterias();
+        //memberCriterias.setLogin("bobb");
+        parameters.setMemberCriterias(memberCriterias);*/
+       /* HashMap<String, String> map = new HashMap<>();
+        map.put("login", "bobb");*/
+        /*System.out.println(map.size());
         List<Member> list = new ArrayList<>();
         Member member = new Member();
-        list.add(member);
-        when(memberManager.getMembersByCriterias(map)).thenReturn(list);
+        list.add(member);*/
+       // when(memberManager.getMembersByCriterias(map)).thenReturn(list);
         assertThrows(BusinessExceptionMember.class, () -> memberService.getMemberByCriterias(parameters));
     }
 

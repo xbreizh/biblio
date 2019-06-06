@@ -7,7 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public interface EmailManager {
+public interface MailManager {
 
     List<Mail> getOverdueEmailList();
 

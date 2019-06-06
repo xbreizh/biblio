@@ -22,6 +22,8 @@ import java.util.*;
 public class LoanServiceImpl implements ILoanService {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
+
+
     @Inject
     private LoanManager loanManager;
     @Inject
@@ -47,7 +49,7 @@ public class LoanServiceImpl implements ILoanService {
         checkAuthentication(parameters.getToken());
         ar.setReturn(true);
         loanTypeIn = parameters.getLoanTypeIn();
-        convertLoanTypeInIntoLoan();
+        Loan loan = convertLoanTypeInIntoLoan(loanTypeIn);
         logger.info("loanManager: " + loanManager);
         exception = loanManager.addLoan(loan);
         if (!exception.equals("")) {
@@ -72,7 +74,7 @@ public class LoanServiceImpl implements ILoanService {
         LoanTypeOut loanTypeOut = new LoanTypeOut();
         Loan loan = loanManager.getLoanById(parameters.getId());
         if (loan == null) {
-            throw new BusinessExceptionLoan("no loan found with that id");
+            throw new BusinessExceptionLoan("no loan found with that bookId");
         } else {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setBookId(loan.getBook().getId());
@@ -112,35 +114,45 @@ public class LoanServiceImpl implements ILoanService {
     // Get List By Criterias
     @Override
     public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
+
         checkAuthentication(parameters.getToken());
         HashMap<String, String> map = new HashMap<>();
-        LoanCriterias criterias = parameters.getLoanCriterias();
-        map.put("borrower.login", criterias.getLogin().toUpperCase());
-        if (criterias.getBookId() != -1 && criterias.getBookId() != 0) {
-            map.put("book.id", Integer.toString(criterias.getBookId()));
+        if(parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin()==null && parameters.getLoanCriterias().getStatus() ==null)return null;
+        //LoanCriterias criterias = parameters.getLoanCriterias();
+        //System.out.println(parameters.getLoanCriterias());
+        if(parameters.getLoanCriterias().getLogin()!=null){
+            if(!parameters.getLoanCriterias().getLogin().equals("")||!parameters.getLoanCriterias().getLogin().equals("?")){
+                map.put("borrower.login", parameters.getLoanCriterias().getLogin().toUpperCase());
+            }
         }
-        if (criterias.getStatus() != null) {
-            if (!criterias.getStatus().equals("")) {
-                map.put("status", criterias.getStatus().toUpperCase());
+        if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
+            map.put("book.bookId", Integer.toString(parameters.getLoanCriterias().getBookId()));
+        }
+        if (parameters.getLoanCriterias().getStatus() != null) {
+            if (!parameters.getLoanCriterias().getStatus().equals("")) {
+                map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
             }
         }
         logger.info("map: " + map);
+        System.out.println(map);
 
         loanList = loanManager.getLoansByCriterias(map);
-        GetLoanByCriteriasResponseType brt = new GetLoanByCriteriasResponseType();
+        GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
+        System.out.println(loanList);
         if (loanList != null) {
             if (loanList.size() > 0) {
                 convertLoanIntoLoanTypeOut();
-            } else {
+            } /*else {
+                System.out.println("stuff");
                 return null;
-            }
-        } else {
+            }*/
+        }/* else {
             return null;
-        }
+        }*/
         logger.info("loanListType end: " + loanListType.getLoanTypeOut().size());
-        brt.setLoanListType(loanListType);
-        return brt;
+        responseType.setLoanListType(loanListType);
+        return responseType;
     }
 
     @Override
@@ -231,11 +243,13 @@ public class LoanServiceImpl implements ILoanService {
 
 
     // Converts Input into Loan for business
-    private void convertLoanTypeInIntoLoan() {
+    private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
+        System.out.println(loanTypeIn);
         loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
-        loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
+        loan.setBook(bookManager.getBookById(loanTypeIn.getBookId()));
         logger.info("conversion loanType into loan done");
+        return loan;
     }
 
 
@@ -260,6 +274,22 @@ public class LoanServiceImpl implements ILoanService {
             e.printStackTrace();
             throw new BusinessExceptionLoan("invalid token");
         }
+    }
+
+    public void setLoanManager(LoanManager loanManager) {
+        this.loanManager = loanManager;
+    }
+
+    public void setBookManager(BookManager bookManager) {
+        this.bookManager = bookManager;
+    }
+
+    public void setMemberManager(MemberManager memberManager) {
+        this.memberManager = memberManager;
+    }
+
+    public void setAuthentication(ConnectServiceImpl authentication) {
+        this.authentication = authentication;
     }
 
 }

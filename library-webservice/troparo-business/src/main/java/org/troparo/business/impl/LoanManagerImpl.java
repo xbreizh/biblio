@@ -57,7 +57,7 @@ public class LoanManagerImpl implements LoanManager {
 
         // checks if loan is possible
         if (!bookManager.isAvailable(loan.getBook().getId())) {
-            return "book is not available: " + loan.getBook().getId();
+            return "\"book is not available: \" " + loan.getBook().getId();
         }
         // checks if borrower can borrow
         if (memberManager.getMemberById(loan.getBorrower().getId()).getLoanList().size() < maxBooks) {

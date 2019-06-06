@@ -20,10 +20,10 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-@ContextConfiguration("classpath:/org/troparo/web/config/spring-hibernate-jax-ws-test.xml")
+/*@ContextConfiguration("classpath:/org/troparo/web/config/spring-hibernate-jax-ws-test.xml")
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
-@Transactional
+@Transactional*/
 class ConnectServiceImplTest {
 
     private ConnectServiceImpl connectService;
