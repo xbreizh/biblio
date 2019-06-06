@@ -119,6 +119,7 @@ class LoanServiceImplTest {
         GetLoanByCriteriasRequestType parameters = new GetLoanByCriteriasRequestType();
         parameters.setToken("token123");
         parameters.setLoanCriterias(null);
+
         assertDoesNotThrow(()->loanService.getLoanByCriterias(parameters));
     }
 

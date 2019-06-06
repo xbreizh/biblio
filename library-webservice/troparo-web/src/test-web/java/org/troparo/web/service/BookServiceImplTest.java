@@ -26,7 +26,7 @@ class BookServiceImplTest {
         bookService = new BookService();
     }
 
-  /*  @Test
+ /*   @Test
     void addBook() throws BusinessExceptionBook {
         AddBookRequestType parameters = new AddBookRequestType();
         BookTypeIn bookTypeIn = new BookTypeIn();
@@ -40,9 +40,9 @@ class BookServiceImplTest {
         parameters.setBookTypeIn(bookTypeIn);
         parameters.setToken("token123");
         System.out.println(bookService.getBookServicePort().addBook(parameters));
-    }*/
+    }
 
-/*    @Test
+    @Test
     void updateBook() {
         fail();
     }

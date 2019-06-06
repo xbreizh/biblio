@@ -4,6 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -24,16 +26,19 @@ import static org.mockito.Mockito.when;
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional*/
+@ExtendWith(MockitoExtension.class)
 class ConnectServiceImplTest {
 
+
     private ConnectServiceImpl connectService;
+    @Mock
     private MemberManager memberManager;
 
 
     @BeforeEach
     void init() {
         connectService = new ConnectServiceImpl();
-        memberManager = mock(MemberManager.class);
+        //memberManager = mock(MemberManager.class);
         connectService.setMemberManager(memberManager);
 
     }
@@ -86,7 +91,7 @@ class ConnectServiceImplTest {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin(null);
         parameters.setPassword(null);
-        when(memberManager.getToken(anyString(), anyString())).thenReturn(null);
+        //when(memberManager.getToken(anyString(), anyString())).thenReturn(null);
         assertEquals("something went wrong", connectService.getToken(parameters).getReturn());
     }
 
@@ -139,7 +144,7 @@ class ConnectServiceImplTest {
         parameters.setEmail("POLI@KOLs.FR");
         parameters.setLogin(null);
         parameters.setPassword("mik");
-        when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(false);
+        //when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(false);
         assertFalse(connectService.resetPassword(parameters).isReturn());
     }
 }
