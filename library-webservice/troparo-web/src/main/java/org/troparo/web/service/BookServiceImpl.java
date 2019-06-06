@@ -11,6 +11,7 @@ import org.troparo.services.bookservice.IBookService;
 import javax.inject.Inject;
 import javax.jws.WebService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,6 +19,8 @@ import java.util.List;
         targetNamespace = "http://troparo.org/services/BookService/", portName = "BookServicePort", name = "BookServiceImpl")
 public class BookServiceImpl implements IBookService {
     private Logger logger = Logger.getLogger(this.getClass().getName());
+
+
 
     @Inject
     private BookManager bookManager;
@@ -37,8 +40,11 @@ public class BookServiceImpl implements IBookService {
     public AddBookResponseType addBook(AddBookRequestType parameters) throws BusinessExceptionBook {
         AddBookResponseType ar = new AddBookResponseType();
         ar.setReturn(true);
-
         checkAuthentication(parameters.getToken());
+        if (!checkIfBookHasLegitArguments(parameters.getBookTypeIn())) {
+            logger.info(exception);
+            throw new BusinessExceptionBook(exception);
+        }
 
         bookTypeIn = parameters.getBookTypeIn();
         this.book = convertBookTypeInIntoBook(bookTypeIn);
@@ -50,6 +56,26 @@ public class BookServiceImpl implements IBookService {
         }
 
         return ar;
+    }
+
+    private boolean checkIfBookHasLegitArguments(BookTypeIn bookTypeIn) {
+        String isbn = bookTypeIn.getISBN();
+        String title = bookTypeIn.getTitle();
+        String author = bookTypeIn.getAuthor();
+        String edition = bookTypeIn.getEdition();
+        String keywords = bookTypeIn.getKeywords();
+        int nbPages = bookTypeIn.getNbPages();
+        int publicationYear = bookTypeIn.getPublicationYear();
+        if(isbn==null||title==null||author==null||edition==null||keywords==null)return false;
+        if(nbPages==0||nbPages==-1||publicationYear==0||publicationYear==-1)return false;
+        String[] attributeArray = {isbn, title, author, edition, keywords};
+        List<String> attributeList = Arrays.asList(attributeArray);
+        for (String str: attributeList
+             ) {
+            if(str.equals("")||str.equals("?"))return false;
+        }
+        return true;
+
     }
 
     // Converts Input into Book for business
@@ -126,19 +152,19 @@ public class BookServiceImpl implements IBookService {
 
         logger.info("new method added");
         GetBookByIdResponseType rep = new GetBookByIdResponseType();
-        BookTypeOut bt = new org.troparo.entities.book.BookTypeOut();
-        Book book = bookManager.getBookById(parameters.getReturn());
+        BookTypeOut bookTypeOut = new org.troparo.entities.book.BookTypeOut();
+        Book book = bookManager.getBookById(parameters.getId());
         if (book == null) {
             throw new BusinessExceptionBook("no book found with that bookId");
         } else {
-            bt.setId(book.getId());
-            bt.setISBN(book.getIsbn());
-            bt.setTitle(book.getTitle());
-            bt.setAuthor(book.getAuthor());
-            bt.setEdition(book.getEdition());
-            bt.setNbPages(book.getNbPages());
-            bt.setKeywords(book.getIsbn());
-            rep.setBookTypeOut(bt);
+            bookTypeOut.setId(book.getId());
+            bookTypeOut.setISBN(book.getIsbn());
+            bookTypeOut.setTitle(book.getTitle());
+            bookTypeOut.setAuthor(book.getAuthor());
+            bookTypeOut.setEdition(book.getEdition());
+            bookTypeOut.setNbPages(book.getNbPages());
+            bookTypeOut.setKeywords(book.getKeywords());
+            rep.setBookTypeOut(bookTypeOut);
         }
         return rep;
     }
@@ -275,5 +301,12 @@ public class BookServiceImpl implements IBookService {
         logger.info("bookListType end: " + bookListType.getBookTypeOut().size());
     }
 
+    public void setBookManager(BookManager bookManager) {
+        this.bookManager = bookManager;
+    }
+
+    public void setAuthentication(ConnectServiceImpl authentication) {
+        this.authentication = authentication;
+    }
 
 }
