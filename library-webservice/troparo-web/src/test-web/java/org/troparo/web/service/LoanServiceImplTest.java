@@ -10,6 +10,7 @@ import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.BookManagerImpl;
 import org.troparo.business.impl.MemberManagerImpl;
+import org.troparo.entities.book.IsAvailableRequestType;
 import org.troparo.entities.loan.*;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
@@ -22,8 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -123,7 +123,7 @@ class LoanServiceImplTest {
     }
 
     @Test
-    @DisplayName("should not throw exception if criterias null")
+    @DisplayName("should return empty list if no item found")
     void getLoanByCriterias1() throws BusinessExceptionLoan {
         GetLoanByCriteriasRequestType parameters = new GetLoanByCriteriasRequestType();
         parameters.setToken("token123");
@@ -138,22 +138,78 @@ class LoanServiceImplTest {
     }
 
     @Test
-    void getLoanStatus() {
-        fail();
+    @DisplayName("should return empty list if invalid criterias")
+    void getLoanByCriterias2() throws BusinessExceptionLoan {
+        GetLoanByCriteriasRequestType parameters = new GetLoanByCriteriasRequestType();
+        parameters.setToken("token123");
+        LoanCriterias loanCriterias = new LoanCriterias();
+        loanCriterias.setLogin("kolio");
+        parameters.setLoanCriterias(loanCriterias);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("invalid.criteria", "invalid");
+        assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
+    }
+
+
+
+    @Test
+    @DisplayName("should return loan status")
+    void getLoanStatus() throws BusinessExceptionLoan {
+        GetLoanStatusRequestType parameters = new GetLoanStatusRequestType();
+        parameters.setToken("tok");
+        parameters.setId(3);
+        when(loanManager.getLoanStatus(anyInt())).thenReturn("OVERDUE");
+        assertEquals("OVERDUE", loanService.getLoanStatus(parameters).getStatus());
+
     }
 
     @Test
-    void isRenewable() {
-        fail();
+    @DisplayName("should return true id manager gives true")
+    void isRenewable() throws BusinessExceptionLoan {
+        IsRenewableRequestType parameters = new IsRenewableRequestType();
+        parameters.setToken("tok123");
+        parameters.setId(3);
+        when(loanManager.isRenewable(anyInt())).thenReturn(true);
+        assertTrue(loanService.isRenewable(parameters).isReturn());
     }
 
     @Test
-    void renewLoan() {
-        fail();
+    @DisplayName("should return true id manager gives true")
+    void isRenewable1() throws BusinessExceptionLoan {
+        IsRenewableRequestType parameters = new IsRenewableRequestType();
+        parameters.setToken("tok123");
+        parameters.setId(3);
+        when(loanManager.isRenewable(anyInt())).thenReturn(false);
+        assertFalse(loanService.isRenewable(parameters).isReturn());
     }
 
+
+
     @Test
-    void terminateLoan() {
-        fail();
+    void renewLoan() throws BusinessExceptionLoan {
+        RenewLoanRequestType parameters = new RenewLoanRequestType();
+        parameters.setToken("tok123");
+        parameters.setId(3);
+        String stringFromManager = "feedback from manager";
+        when(loanManager.renewLoan(anyInt())).thenReturn(stringFromManager);
+        assertEquals(stringFromManager, loanService.renewLoan(parameters).getReturn());
     }
+
+
+    @Test
+    void terminateLoan() throws BusinessExceptionLoan {
+       TerminateLoanRequestType parameters = new TerminateLoanRequestType();
+       parameters.setToken("tok123");
+       parameters.setId(3);
+        String stringFromManager = "feedback from manager";
+       when(loanManager.terminate(anyInt())).thenReturn(stringFromManager);
+       assertEquals(stringFromManager, loanService.terminateLoan(parameters).getReturn());
+    }
+    /*  @Test
+      void isAvailable(){
+          IsAvailableRequestType parameters = new IsAvailableRequestType();
+          parameters.setToken("tok123");
+          parameters.setId(2);
+          loanManager.
+      }*/
 }

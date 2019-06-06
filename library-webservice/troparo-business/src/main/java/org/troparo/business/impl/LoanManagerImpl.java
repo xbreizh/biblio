@@ -109,7 +109,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String renewLoan(int id) {
-        exception = "";
+        /*exception = "";*/
         Loan loan = loanDAO.getLoanById(id);
 
         if (loan.getEndDate() != null) {
@@ -130,7 +130,7 @@ public class LoanManagerImpl implements LoanManager {
             loan.setPlannedEndDate(cal.getTime());
             loanDAO.updateLoan(loan);
         }
-        return exception;
+        return "";
     }
 
 

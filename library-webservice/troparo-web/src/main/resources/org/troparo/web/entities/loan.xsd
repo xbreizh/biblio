@@ -45,7 +45,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Token"/>
-                <xsd:element ref="tns:BookId"/>
+                <xsd:element ref="tns:Id"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -64,7 +64,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Token"/>
-                <xsd:element ref="tns:BookId"/>
+                <xsd:element ref="tns:Id"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -133,7 +133,7 @@
     <xsd:element name="renewLoanResponseType">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="return" type="xsd:boolean"/>
+                <xsd:element name="return" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -143,7 +143,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Token"/>
-                <xsd:element ref="tns:BookId"/>
+                <xsd:element ref="tns:Id"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -152,7 +152,7 @@
     <xsd:element name="terminateLoanResponseType">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="return" type="xsd:boolean"/>
+                <xsd:element name="return" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -173,7 +173,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Login"/>
-                <xsd:element ref="tns:BookId"/>
+                <xsd:element ref="tns:Id"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -184,7 +184,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Login"/>
-                <xsd:element ref="tns:BookId"/>
+                <xsd:element ref="tns:Id"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -193,7 +193,7 @@
     <xsd:element name="LoanTypeOut">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="tns:BookId"/>
+                <xsd:element ref="tns:Id"/>
                 <xsd:element ref="tns:Login"/>
                 <xsd:element name="bookId" type="xsd:int"/>
                 <xsd:element name="startDate" type="xsd:date"/>
@@ -252,7 +252,7 @@
         </xsd:simpleType>
     </xsd:element>
 
-    <xsd:element name="BookId" type="xsd:int"/>
+    <xsd:element name="Id" type="xsd:int"/>
     <!--Exception-->
 
     <!-- Business Exception Type -->

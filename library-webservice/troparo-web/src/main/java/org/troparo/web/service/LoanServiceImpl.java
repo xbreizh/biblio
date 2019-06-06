@@ -114,9 +114,10 @@ public class LoanServiceImpl implements ILoanService {
     // Get List By Criterias
     @Override
     public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
-
+        String[] validCriterias = {"borrower.login", "book.bookId", "status"};
         checkAuthentication(parameters.getToken());
         HashMap<String, String> map = new HashMap<>();
+
         if(parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin()==null && parameters.getLoanCriterias().getStatus() ==null)return null;
         //LoanCriterias criterias = parameters.getLoanCriterias();
         //System.out.println(parameters.getLoanCriterias());
@@ -137,6 +138,7 @@ public class LoanServiceImpl implements ILoanService {
         System.out.println(map);
 
         loanList = loanManager.getLoansByCriterias(map);
+        System.out.println("stuff");
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
         System.out.println(loanList);
@@ -179,11 +181,11 @@ public class LoanServiceImpl implements ILoanService {
     public RenewLoanResponseType renewLoan(RenewLoanRequestType parameters) throws BusinessExceptionLoan {
         checkAuthentication(parameters.getToken());
         RenewLoanResponseType ar = new RenewLoanResponseType();
-        ar.setReturn(false);
         String feedback = loanManager.renewLoan(parameters.getId());
-        if (feedback.equals("")) {
-            ar.setReturn(true);
-        }
+       /* if (feedback.equals("")) {
+            ar.setReturn(feedback);
+        }*/
+        ar.setReturn(feedback);
         return ar;
     }
 
@@ -191,11 +193,11 @@ public class LoanServiceImpl implements ILoanService {
     public TerminateLoanResponseType terminateLoan(TerminateLoanRequestType parameters) throws BusinessExceptionLoan {
         checkAuthentication(parameters.getToken());
         TerminateLoanResponseType ar = new TerminateLoanResponseType();
-        ar.setReturn(false);
+        //ar.setReturn(false);
         String feedback = loanManager.terminate(parameters.getId());
-        if (feedback.equals("")) {
-            ar.setReturn(true);
-        }
+       /* if (feedback.equals("")) {
+        }*/
+        ar.setReturn(feedback);
         return ar;
     }
 
@@ -247,7 +249,7 @@ public class LoanServiceImpl implements ILoanService {
         System.out.println(loanTypeIn);
         loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
-        loan.setBook(bookManager.getBookById(loanTypeIn.getBookId()));
+        loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
         logger.info("conversion loanType into loan done");
         return loan;
     }
