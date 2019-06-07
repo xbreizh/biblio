@@ -10,9 +10,11 @@ import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.bookservice.IBookService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jws.WebService;
 import java.util.*;
 
+@Named
 @WebService(serviceName = "BookService", endpointInterface = "org.troparo.services.bookservice.IBookService",
         targetNamespace = "http://troparo.org/services/BookService/", portName = "BookServicePort", name = "BookServiceImpl")
 public class BookServiceImpl implements IBookService {

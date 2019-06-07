@@ -59,6 +59,7 @@ public class ConnectServiceImpl implements IConnectService {
         logger.info("entering get token method");
         logger.info("login: " + parameters.getLogin());
         logger.info("password: " + parameters.getPassword());
+        System.out.println("mgr: "+memberManager);
         String token = memberManager.getToken(parameters.getLogin(), parameters.getPassword());
         logger.info("token returned: " + token);
         if (token == null) {

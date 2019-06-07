@@ -195,11 +195,13 @@ public class MemberDAOImpl implements MemberDAO {
     @Override
     public Member getMemberByLogin(String login) {
         List<Member> list = new ArrayList<>();
-        logger.info("login received: " + login);
+        logger.info("login received(from DAO): " + login);
+        System.out.println("session: "+sessionFactory);
         request = "From Member where login = :login";
         System.out.println("login received: "+login);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("login", login);
+        System.out.println("query: "+query);
         try {
             return (Member) query.getResultList().get(0);
         } catch (Exception e) {

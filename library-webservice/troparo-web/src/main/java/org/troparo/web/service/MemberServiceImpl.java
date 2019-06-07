@@ -11,12 +11,14 @@ import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
+@Named
 @WebService(serviceName = "MemberService", endpointInterface = "org.troparo.services.memberservice.IMemberService",
         targetNamespace = "http://troparo.org/services/MemberService/", portName = "MemberServicePort", name = "MemberServiceImpl")
 public class MemberServiceImpl implements IMemberService {

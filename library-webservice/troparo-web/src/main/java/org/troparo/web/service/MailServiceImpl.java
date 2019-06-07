@@ -9,12 +9,13 @@ import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
-
+@Named
 @WebService(serviceName = "MailService", endpointInterface = "org.troparo.services.mailservice.IMailService",
         targetNamespace = "http://troparo.org/services/MailService/", portName = "MailServicePort", name = "MailServiceImpl")
 public class MailServiceImpl implements IMailService {

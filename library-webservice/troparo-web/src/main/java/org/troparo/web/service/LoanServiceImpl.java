@@ -11,12 +11,14 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
+@Named
 @WebService(serviceName = "LoanService", endpointInterface = "org.troparo.services.loanservice.ILoanService",
         targetNamespace = "http://troparo.org/services/LoanService/", portName = "LoanServicePort", name = "LoanServiceImpl")
 public class LoanServiceImpl implements ILoanService {

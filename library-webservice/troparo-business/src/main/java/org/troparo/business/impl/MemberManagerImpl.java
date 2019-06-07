@@ -251,8 +251,9 @@ public class MemberManagerImpl implements MemberManager {
         logger.info("getting id (from business): " + login);
         login = login.toUpperCase();
         Member member = memberDAO.getMemberByLogin(login);
+        System.out.println("member returned: "+member);
         if (member != null) {
-            logger.info("member");
+            logger.info("member: "+member);
             return member;
         } else {
             logger.info("member is probably null");
@@ -473,8 +474,12 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("trying to get token from business");
             m = getMemberByLogin(login.toUpperCase());
             // checking password match
+            System.out.println("member found: "+m);
+            System.out.println(login);
+            System.out.println(password);
             if (m != null) {
                 if (checkPassword(password, m.getPassword())) {
+                    System.out.println("indere");
                     String token = generateToken();
                     m.setToken(token);
                     m.setDateConnect(new Date());
@@ -483,6 +488,8 @@ public class MemberManagerImpl implements MemberManager {
                 } else {
                     logger.info("no token");
                 }
+            }else{
+                System.out.println("member is null");
             }
         } catch (NullPointerException e) {
             logger.info("wrong login or pwd");
