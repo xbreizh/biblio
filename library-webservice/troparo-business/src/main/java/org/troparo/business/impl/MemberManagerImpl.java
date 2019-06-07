@@ -52,7 +52,7 @@ public class MemberManagerImpl implements MemberManager {
         }
 
         // checking that all values are valid
-        exception = checkValidityOfParametersForMember(member);
+        exception = checkValidityOfParametersForInsertMember(member);
         if (!exception.equals("")) {
             return exception;
         }
@@ -65,36 +65,111 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-    String checkValidityOfParametersForMember(Member member) {
+    String checkValidityOfParametersForInsertMember(Member member) {
+        if(member==null)return "no member provided";
 
+        if(member.getLogin()==null)return "No login provided";
+        if (member.getLogin().equals("")||member.getLogin().equals("?"))return "No login provided";
         if (member.getLogin().length() < 5 || member.getLogin().length() > 20) {
             return  "Login must be 5 or 20 characters: " + member.getLogin();
         }
+        if(member.getFirstName()==null)return "No firstname provided";
+        if (member.getFirstName().equals("")||member.getFirstName().equals("?"))return "No firstname provided";
         if (member.getFirstName().length() < 2 || member.getFirstName().length() > 50) {
             return  "FirstName should have between 2 and 200 characters: " + member.getFirstName();
         }
+        if(member.getLastName()==null)return "No lastname provided";
+        if (member.getLastName().equals("")||member.getLastName().equals("?"))return "No lastname provided";
         if (member.getLastName().length() < 2 || member.getLastName().length() > 50) {
             return "LastName should have between 2 and 200 characters: " + member.getLastName();
         }
+        if(member.getPassword()==null)return "No password provided";
+        if (member.getPassword().equals("")||member.getPassword().equals("?"))return "No password provided";
         if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
             return  "Password should have between 2 and 200 characters: " + member.getPassword();
         }
-        if (validateEmail(member)) return  "Invalid Email: " + member.getEmail();
-        System.out.println("email validation: "+member.getEmail());
+        if(member.getEmail()==null)return "No email provided";
+        if (member.getEmail().equals("")||member.getEmail().equals("?"))return "No email provided";
+        if (!validator.validate(member.getEmail())) return  "Invalid Email: " + member.getEmail();
+        //System.out.println("email validation: "+member.getEmail());
 
         return "";
     }
 
-    public boolean validateEmail(Member member) {
+
+    String checkValidityOfParametersForUpdateMember( Member memberNewValues) {
+        if(memberNewValues==null)return "no member provided";
+        int nbValuesToUpdate = 0;
+        String login = memberNewValues.getLogin();
+        System.out.println("login: "+login);
+        if(login==null)return "No login provided";
+        if (login.equals("")||login.equals("?"))return "No login provided";
+        if (login.length() < 5 || login.length() > 20) {
+            return  "Login must be 5 or 20 characters: " +login;
+        }
+        String firstname = memberNewValues.getFirstName();
+        if(firstname!=null){
+            if(!firstname.equals("")&&!firstname.equals("?")) {
+                if (firstname.length() < 2 || firstname.length() > 50) {
+                    return "FirstName should have between 2 and 200 characters: " + firstname;
+                }else{
+                    nbValuesToUpdate++;
+                }
+            }
+            }
+        String lastname = memberNewValues.getLastName();
+        if(lastname!=null) {
+            if(!lastname.equals("")&&!lastname.equals("?")) {
+                if (lastname.length() < 2 || lastname.length() > 50) {
+                    return "LastName should have between 2 and 200 characters: " + lastname;
+                }else{
+                    nbValuesToUpdate++;
+                }
+            }
+        }
+        String password = memberNewValues.getPassword();
+        if(password!=null) {
+            if(!password.equals("")&&!password.equals("?")) {
+                if (password.length() < 2 || password.length() > 200) {
+                    return "Password should have between 2 and 200 characters: " + password;
+                }else{
+                    nbValuesToUpdate++;
+                }
+            }
+        }
+        String email = memberNewValues.getEmail();
+        if(email!=null) {
+            if (!email.equals("") && !email.equals("?")) {
+                if (!validator.validate(email)){
+                    return "Invalid Email: " + email;
+                }else{
+                    nbValuesToUpdate++;
+                }
+            }
+        }
+        String role = memberNewValues.getRole();
+        if(role!=null){
+            if(!role.equals("")&&!role.equals("?")){
+                if (role.length() < 6 || role.length() > 10) {
+                    return  "Role should have between 6 and 10 characters: " + role;
+                }else{
+                    nbValuesToUpdate++;
+                }
+            }
+        }
+        System.out.println("nb values: "+nbValuesToUpdate);
+        if(nbValuesToUpdate==0)return "There is no value to be updated";
+        return "";
+    }
+   /* public boolean validateEmail(Member member) {
         System.out.println("mail: "+member.getEmail());
-        if (!validator.validate(member.getEmail())) {
+        if (validator.validate(member.getEmail())) {
             return true;
         }
         return false;
-    }
+    }*/
 
     String checkRequiredValuesNotNull(Member member) {
-        System.out.println("inda");
         String login = member.getLogin();
         if (member.getLogin() != null) {
             if (!login.equals("") && !login.equals("?") ) {
@@ -198,46 +273,67 @@ public class MemberManagerImpl implements MemberManager {
         return memberDAO.getMembersByCriterias(criterias);
     }
 
+
+
     @Override
     public String updateMember(Member member) {
         System.out.println("entering");
-        exception = "";/*
-        boolean receivedCriteria = false;*/
-        // checking that all values are provided
-        exception = checkRequiredValuesNotNull(member);
+        exception = "";
+        if(member==null)return "No member passed";
+        String login = member.getLogin();
+        /*if (checkIfLoginPassed(login)) return "you must provide a login";
+        if(!checkIfAnyvaluePassed(member))return "no value passed";
+        //exception = checkDetailsToUpdate(member);
+        if(!exception.equals(""))return exception;*/
+        Member memberFromDatabase = memberDAO.getMemberByLogin(login);
+        if(memberFromDatabase==null)return "No member found with that login";
+        System.out.println("reaching here");
+        exception = checkValidityOfParametersForUpdateMember(member);
         if (!exception.equals("")) {
+            System.out.println("ex "+exception);
             return exception;
         }
-        System.out.println("here");
+        Member memberToTestIfAnyChange = memberFromDatabase;
+        memberFromDatabase = transfertUpdatedDetails(member, memberFromDatabase);
+        if(memberFromDatabase==memberToTestIfAnyChange)return "nothing to update";
+
+        /*
+        if(memberFromDatabase==null) return "Nothing to"*/
+        /*boolean receivedCriteria = false;*/
+        // checking that all values are provided
+
+
        /* if (member.getLogin().equals("") || member.getLogin().equals("?")) {
             return "you must provide an Login";
         } else {
             logger.info("member received: " + member);
         }*/
         // checking that all values are valid
-       // exception = checkValidityOfParametersForMember(member);
-        exception = checkValidityOfParametersForMember(member);
+       // exception = checkValidityOfParametersForInsertMember(member);
+       /* exception = checkValidityOfParametersForInsertMember(member);
         if (!exception.equals("")) {
             return exception;
         }
-        System.out.println("there");
+*/
 
-
-        List<Member> loginList = new ArrayList<>();
+       /* List<Member> loginList = new ArrayList<>();*/
        /* HashMap<String, String> map = new HashMap<>();
         map.put("Login", member.getLogin());*/
-        System.out.println("youmo");
-        if (memberDAO.getMemberByLogin(member.getLogin()) != null) {
+       /* System.out.println("youmo");
+        Member m = memberDAO.getMemberByLogin(member.getLogin());
+        if (m != null) {
             return "No Item found with that Login";
-        }
+        }*/
 
-        logger.info("getting list: " + loginList.size());
-        if(loginList.size()>1){
+
+       /* logger.info("getting list: " + loginList.size());
+        System.out.println(loginList);*/
+        /*if(loginList.size()>1){
             logger.error("possible duplication issue in the database");
             return "the member couldn't be updated at this time. Please contact the administrator";
         }
-        if(loginList.isEmpty())return "the member couldn't be updated at this time. Please contact the administrator";
-        Member m =loginList.get(0);
+        if(loginList.isEmpty())return "the member couldn't be updated at this time. Please contact the administrator";*/
+        //Member m =loginList.get(0);
         // checking that all values are valid
 
         /*for (Member m : loginList
@@ -272,17 +368,85 @@ public class MemberManagerImpl implements MemberManager {
                 return "No criteria was passed in";
             }*/
         // checking that all values are valid
-        /*    exception = checkValidityOfParametersForMember(member);
+        /*    exception = checkValidityOfParametersForInsertMember(member);
             if (!exception.equals("")) {
                 return exception;
             }
             logger.info(m.getLogin());
 
         }*/
-        memberDAO.updateMember(m);
-        logger.info("updated: " + m.getId());
+        //exception = checkValuesToUpdate(member)
+        memberDAO.updateMember(memberFromDatabase);
+        logger.info("updated: " + memberFromDatabase.getId());
         return "";
     }
+
+    Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
+        String firstname = newMember.getFirstName();
+        String lastname = newMember.getLastName();
+        String password = newMember.getPassword();
+        String email = newMember.getEmail();
+        String role = newMember.getRole();
+        if(firstname!=null){
+            if(!firstname.equals("")&&!firstname.equals("?"))memberFromDatabase.setFirstName(firstname);
+        }
+        if(lastname!=null){
+            if(!lastname.equals("")&&!lastname.equals("?"))memberFromDatabase.setLastName(lastname);
+        }
+        if(password!=null){
+            if(!password.equals("")&&!password.equals("?"))memberFromDatabase.setPassword(password);
+        }
+        if(email!=null){
+            if(!email.equals("")&&!email.equals("?"))memberFromDatabase.setEmail(email);
+        }
+        if(role!=null){
+            if(!role.equals("")&&!role.equals("?"))memberFromDatabase.setRole(role);
+        }
+        return memberFromDatabase;
+    }
+
+    boolean checkIfLoginPassed(String login) {
+        if(login==null) return true;
+        if(login.equals("")||login.equals("?")) return true;
+        return false;
+    }
+
+  /*  private boolean checkIfValidEmail(String email){
+        if(email==null)return false;
+        return validator.validate(email);
+    }*/
+/*
+    private boolean checkIfValidLogin(String login){
+
+    }*/
+
+    private boolean checkIfAnyvaluePassed(Member member) {
+        String[] paramList = {member.getLogin(), member.getFirstName(),member.getLastName(), member.getEmail(),member.getPassword(),member.getRole()};
+        int nbElement=0;
+        for (String str: paramList
+             ) {
+            if (str != null) {
+                if (!str.equals("") && !str.equals("?")) nbElement++;
+            }
+        }
+        if(nbElement!=0)return true;
+        return false;
+    }
+
+   /* private String checkDetailsToUpdate(Member member) {
+        String firstname = member.getFirstName();
+        String lastname = member.getLastName();
+        String email = member.getEmail();
+        String password = member.getPassword();
+        String role = member.getRole();
+        //String[] params = {" firstname, lastname, email, password, role"};
+
+        return "";
+    }*/
+
+/*    private Member transfertMemberDetails(Member member) {
+
+    }*/
 
     @Override
     public String remove(int id) {

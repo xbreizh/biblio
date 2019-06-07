@@ -249,6 +249,14 @@
     <xsd:element name="MemberTypeIn">
         <xsd:complexType>
             <xsd:sequence>
+                <xsd:element name="Login">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:minLength value="5"/>
+                            <xsd:maxLength value="20"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
                 <xsd:element name="FirstName">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
@@ -262,14 +270,6 @@
                         <xsd:restriction base="xsd:string">
                             <xsd:minLength value="2"/>
                             <xsd:maxLength value="50"/>
-                        </xsd:restriction>
-                    </xsd:simpleType>
-                </xsd:element>
-                <xsd:element name="Login">
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:string">
-                            <xsd:minLength value="5"/>
-                            <xsd:maxLength value="20"/>
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>

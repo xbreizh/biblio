@@ -1,6 +1,7 @@
 package org.troparo.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,15 +10,13 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.EmailValidator;
-import org.troparo.business.contract.MemberManager;
-import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 import org.xml.sax.SAXException;
 
-import javax.inject.Inject;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,20 +27,23 @@ import static org.mockito.Mockito.*;
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
+//@ExtendWith(MockitoExtension.class)
 class MemberManagerImplTest {
 
-    @Inject
-    private MemberManager memberManager;
+
+    private MemberManagerImpl memberManager;
+    //@Mock
     private EmailValidator validator;
-    private MemberDAO memberDAO;
-    @Inject
-    private MemberDAO mDAO;
+    //@Mock
+    private MemberDAOImpl memberDAO;
+    /*@Inject
+    private MemberDAO mDAO;*/
 
 
     @BeforeEach
     void init() {
-        //memberManager = new MemberManagerImpl();
-        memberDAO = mock(MemberDAO.class);
+        memberManager = new MemberManagerImpl();
+        memberDAO = mock(MemberDAOImpl.class);
         memberManager.setMemberDAO(memberDAO);
         validator = mock(EmailValidator.class);
         memberManager.setValidator(validator);
@@ -69,12 +71,13 @@ class MemberManagerImplTest {
         member.setLastName("Jones");
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
-        when(memberManager.validateEmail(member)).thenReturn(true);
+        when(validator.validate(anyString())).thenReturn(true);
         when(memberDAO.existingLogin("tomoni")).thenReturn(false);
         assertEquals("", memberManager.addMember(member));
     }
 
     @Test
+    @DisplayName("should return member list")
     void getMembers() {
         List<Member> list = new ArrayList<>();
         when(memberDAO.getAllMembers()).thenReturn(list);
@@ -130,15 +133,152 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should update member")
+    @Disabled
     void updateMember() {
-      fail();
+        ///******  See Integration Testing  **********///
+        /*String login = "JpoliNo";
+        String oldFirstname = "JOHN";
+        String newFirstname = "PAUL";
+        Member memberFromDb = new Member();
+        memberFromDb.setLogin(login);
+        memberFromDb.setFirstName(oldFirstname);
+        Member newMember = new Member();
+        newMember.setLogin("lokoo");
+        newMember.setFirstName("Basile");
+        when(memberDAO.getMemberByLogin(login)).thenReturn(memberFromDb);
+        assertEquals(oldFirstname, memberFromDb.getFirstName());
+        memberManager.updateMember(newMember);
+        when(memberDAO.getMemberByLogin(login)).thenReturn(memberFromDb);
+        assertEquals(newFirstname, memberFromDb.getFirstName());*/
 
     }
 
     @Test
-    @DisplayName("should return error if param empty or null")
+    @DisplayName("should return \" No member passed \" when member is null")
+    void updateMember1() {
+
+        assertEquals("No member passed", memberManager.updateMember(null));
+
+    }
+
+    @Test
+    @DisplayName("should return \"No member found with that login\" when member is null")
+    void updateMember2() {
+        Member member = new Member();
+        member.setLogin("polonium");
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
+        assertEquals("No member found with that login", memberManager.updateMember(member));
+
+    }
+
+    @Test
+    @DisplayName("should return \"nothing to update\" when member is null")
+    void updateMember3() {
+        Member oldMember = new Member();
+        String lastname = "Margo";
+        oldMember.setLastName(lastname);
+        Member newMember = new Member();
+        newMember.setLogin("poliko");
+        newMember.setLastName(lastname);
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(oldMember);
+        assertEquals("nothing to update", memberManager.updateMember(newMember));
+
+    }
+
+
+    @Test
+    @DisplayName("should return \"No Login provided\" when no login passed")
+    void checkValidityOfParametersForUpdateMember() {
+        Member member = new Member();
+        assertEquals("No login provided", memberManager.checkValidityOfParametersForUpdateMember(member));
+    }
+
+    @Test
+    @DisplayName("should return \"There is no value to be updated\" when no legit value to update passed")
+    void checkValidityOfParametersForUpdateMember1() {
+        Member member = new Member();
+        member.setLogin("kolio");
+        member.setEmail("");
+        assertEquals("There is no value to be updated", memberManager.checkValidityOfParametersForUpdateMember(member));
+    }
+
+    @Test
+    @DisplayName("should return \"invalid email\" when email invalid")
+    void checkValidityOfParametersForUpdateMember2() {
+        Member member = new Member();
+        member.setLogin("kolio");
+        String email = "dede@fr";
+        member.setEmail(email);
+        assertEquals("Invalid Email: " + email, memberManager.checkValidityOfParametersForUpdateMember(member));
+    }
+
+    @Test
+    @DisplayName("should transfer data from member to dbMember if filled")
+    void transfertUpdatedDetails() {
+        Member newMember = new Member();
+        Member dbMember = new Member();
+        String oldFirstname = "Geoffrey";
+        String newFirstname = "Maurice";
+        dbMember.setFirstName(oldFirstname);
+        newMember.setFirstName(newFirstname);
+        assertEquals(newFirstname, memberManager.transfertUpdatedDetails(newMember, dbMember).getFirstName());
+    }
+
+    @Test
+    @DisplayName("should not transfer data from member to dbMember if not filled")
+    void transfertUpdatedDetails1() {
+        Member newMember = new Member();
+        Member dbMember = new Member();
+        String oldFirstname = "Geoffrey";
+        String newFirstname = "";
+        dbMember.setFirstName(oldFirstname);
+        newMember.setFirstName(newFirstname);
+        assertEquals(oldFirstname, memberManager.transfertUpdatedDetails(newMember, dbMember).getFirstName());
+    }
+
+    @Test
+    @DisplayName("should return an empty string if member valid")
+    void checkValidityOfParametersForMember() {
+        Member member = new Member();
+        member.setLogin("lokoo");
+        member.setFirstName("Basile");
+        member.setLastName("brokl");
+        member.setPassword("sdd");
+        member.setEmail("sw.ddd@dede.fr");
+        when(validator.validate(anyString())).thenReturn(true);
+        assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
+    }
+
+
+    @Test
+    @DisplayName("should return error if param null")
     void checkRequiredValuesNotNull() {
-        fail();
+        MemberManagerImpl memberManager = new MemberManagerImpl();
+        Member member = new Member();
+        assertEquals("login should be filled", memberManager.checkRequiredValuesNotNull(member));
+    }
+
+    @Test
+    @DisplayName("should return error if param empty")
+    void checkRequiredValuesNotNull1() {
+        MemberManagerImpl memberManager = new MemberManagerImpl();
+        Member member = new Member();
+        member.setLogin("?");
+        assertEquals("login should be filled", memberManager.checkRequiredValuesNotNull(member));
+    }
+
+    @Test
+    @DisplayName("should return empty string if params ok")
+    void checkRequiredValuesNotNull12() {
+        MemberManagerImpl memberManager = new MemberManagerImpl();
+        Member member = new Member();
+        member.setLogin("johnny");
+        member.setFirstName("bob");
+        member.setLastName("lastname");
+        member.setPassword("123");
+        member.setEmail("ded@dede.de");
+        member.setDateJoin(new Date());
+        assertEquals("", memberManager.checkRequiredValuesNotNull(member));
     }
 
     @Test
@@ -153,7 +293,7 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return \"No item found\" if member couldn't be found")
     void remove1() {
-        Member member = new Member();
+        //Member member = new Member();
         when(memberDAO.getMemberById(2)).thenReturn(null);
         assertEquals("No item found", memberManager.remove(2));
     }
@@ -174,7 +314,9 @@ class MemberManagerImplTest {
         String login = "lpl";
         String pwd = "lk";
         when(memberMgr.checkPassword(login, pwd)).thenReturn(false);*/
-        assertEquals("wrong login or pwd", memberManager.getToken("Jpolino", "pwd123"));
+        Member member = new Member();
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
+        assertEquals("wrong login or pwd", memberManager.getToken("Login", "anyPassword"));
     }
 
     @Test

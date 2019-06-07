@@ -14,10 +14,7 @@ import org.troparo.model.Loan;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Transactional
 @Named
@@ -32,6 +29,8 @@ public class LoanManagerImpl implements LoanManager {
     private int maxBooks;
     @Inject
     LoanDAO loanDAO;
+
+
 
     @Inject
     BookManager bookManager;
@@ -57,7 +56,7 @@ public class LoanManagerImpl implements LoanManager {
 
         // checks if loan is possible
         if (!bookManager.isAvailable(loan.getBook().getId())) {
-            return "\"book is not available: \" " + loan.getBook().getId();
+            return "book is not available: " + loan.getBook().getId();
         }
         // checks if borrower can borrow
         if (memberManager.getMemberById(loan.getBorrower().getId()).getLoanList().size() < maxBooks) {
@@ -92,16 +91,21 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
+        String[] validCriterias = {"LOGIN", "BOOKID", "STATUS"};
+        List<String> validCriteriasList = Arrays.asList(validCriterias);
         HashMap<String, String> criterias = new HashMap<>();
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
             if(entry.getKey()!=null && entry.getValue()!=null) {
                 if (!entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")) {
-                    criterias.put(entry.getKey(), entry.getValue());
+                    if(validCriteriasList.contains(entry.getKey().toUpperCase())) {
+                        criterias.put(entry.getKey(), entry.getValue());
+                    }
                 }
             }
 
         }
+        System.out.println("map: "+criterias);
         logger.info("map: " + map);
         logger.info("criterias: " + criterias);
         return loanDAO.getLoansByCriterias(criterias);
@@ -184,22 +188,28 @@ public class LoanManagerImpl implements LoanManager {
     public String getLoanStatus(int id) {
         Loan loan;
         logger.info("getting loan status");
-        Date today = new Date();
+        Date today = getTodayDate();
+        System.out.println("today: "+today);
         try {
             loan = loanDAO.getLoanById(id);
-            if (loan.getEndDate() == null && loan.getPlannedEndDate().before(today)) {
-                return "OVERDUE";
-            }
             if(loan.getEndDate()!=null){
                 return "TERMINATED";
             }
+            if (loan.getEndDate() == null && loan.getPlannedEndDate().before(today)) {
+                return "OVERDUE";
+            }
+
             else{
                 return "PROGRESS";
             }
         } catch (NullPointerException e) {
             logger.error("error while getting loan status");
+            return null;
         }
-        return null;
+    }
+
+    Date getTodayDate() {
+        return new Date();
     }
 
     @Override
@@ -217,5 +227,13 @@ public class LoanManagerImpl implements LoanManager {
 
     public int getMaxBooks() {
         return maxBooks;
+    }
+
+    public void setBookManager(BookManager bookManager) {
+        this.bookManager = bookManager;
+    }
+
+    public void setMemberManager(MemberManager memberManager) {
+        this.memberManager = memberManager;
     }
 }

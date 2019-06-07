@@ -4,16 +4,14 @@ package org.troparo.web.service;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.BookManager;
 import org.troparo.entities.book.*;
+import org.troparo.entities.member.MemberCriterias;
 import org.troparo.model.Book;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.bookservice.IBookService;
 
 import javax.inject.Inject;
 import javax.jws.WebService;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @WebService(serviceName = "BookService", endpointInterface = "org.troparo.services.bookservice.IBookService",
         targetNamespace = "http://troparo.org/services/BookService/", portName = "BookServicePort", name = "BookServiceImpl")
@@ -30,9 +28,9 @@ public class BookServiceImpl implements IBookService {
 
     private String exception = "";
     private List<Book> bookList = new ArrayList<>();
-    private org.troparo.entities.book.BookTypeOut bookTypeOut = null;
-    private org.troparo.entities.book.BookTypeIn bookTypeIn = null;
-    private org.troparo.entities.book.BookListType bookListType = new org.troparo.entities.book.BookListType();
+    private BookTypeOut bookTypeOut = null;
+    private BookTypeIn bookTypeIn = null;
+    private BookListType bookListType = new BookListType();
     private Book book = null;
 
     // Create
@@ -209,25 +207,52 @@ public class BookServiceImpl implements IBookService {
     // Get List By Criterias
     @Override
     public GetBookByCriteriasResponseType getBookByCriterias(GetBookByCriteriasRequestType parameters) throws BusinessExceptionBook {
+        GetBookByCriteriasResponseType getBookByCriteriasResponseType = new GetBookByCriteriasResponseType();
         checkAuthentication(parameters.getToken());
-
-        HashMap<String, String> map = new HashMap<>();
+       // String[] criteriasArray = {"ISBN", "Title", "Author"};
         BookCriterias criterias = parameters.getBookCriterias();
-        map.put("ISBN", criterias.getISBN().toUpperCase());
-        map.put("Title", criterias.getTitle().toUpperCase());
-        map.put("Author", criterias.getAuthor().toUpperCase());
-        logger.info("map: " + map);
+
+        HashMap<String, String> newMap = cleanCriteriasMap( criterias);
+
+        if(newMap.isEmpty())
+        //map.put("Title", criterias.getTitle().toUpperCase());
+        /*map.put("Author", criterias.getAuthor().toUpperCase());*/ {
+            logger.info("map: " + newMap);
+        }
+        System.out.println(newMap);
+        if(newMap.isEmpty()) {
+            getBookByCriteriasResponseType.setBookListType(bookListType);
+            return getBookByCriteriasResponseType;
+        }
         /*bookListType.getBookTypeOut().clear();*/
-        bookList = bookManager.getBooksByCriterias(map);
-        GetBookByCriteriasResponseType brt = new GetBookByCriteriasResponseType();
+        bookList = bookManager.getBooksByCriterias(newMap);
         logger.info("bookListType beg: " + bookListType.getBookTypeOut().size());
 
         convertBookIntoBookTypeOut();
         /*bookListType.getBookTypeOut().add(bookTypeOut); // add bookType to the movieListType*/
         logger.info("bookListType end: " + bookListType.getBookTypeOut().size());
-        brt.setBookListType(bookListType);
-       /* brt = removeDuplicates(brt);*/
-        return brt;
+        getBookByCriteriasResponseType.setBookListType(bookListType);
+       /* getBookByCriteriasResponseType = removeDuplicates(getBookByCriteriasResponseType);*/
+        return getBookByCriteriasResponseType;
+    }
+
+
+    HashMap<String, String> cleanCriteriasMap( BookCriterias criterias) {
+        HashMap<String, String> map = new HashMap<>();
+        if(criterias.getAuthor()!=null)map.put("Author", criterias.getAuthor().toUpperCase());
+        if(criterias.getTitle()!=null)map.put("Title", criterias.getTitle().toUpperCase());
+        if(criterias.getISBN()!=null)map.put("ISBN", criterias.getISBN().toUpperCase());
+        logger.info("map: " + map);
+
+        HashMap<String, String> newMap = new HashMap<>();
+        for (Map.Entry entry: map.entrySet()
+        ) {
+            if(!entry.getValue().equals("") && !entry.getValue().equals("?")){
+                newMap.put(entry.getKey().toString(), entry.getValue().toString());
+            }
+        }
+        System.out.println("newMap: "+newMap);
+        return newMap;
     }
 /*
     private GetBookByCriteriasResponseType removeDuplicates(GetBookByCriteriasResponseType brt) {

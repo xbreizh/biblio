@@ -37,7 +37,8 @@ class EmailValidatorTest {
                 "email@example.museum",
                 "email@example.co.jp",
                 "email@111.222.333.44444",
-                "firstname-lastname@example.com"
+                "firstname-lastname@example.com",
+                "sw.ddd@dede.fr"
         };
 
         List<String> list = Arrays.asList(mailListValid);

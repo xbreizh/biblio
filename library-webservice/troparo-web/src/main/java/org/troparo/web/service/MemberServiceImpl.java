@@ -263,25 +263,26 @@ public class MemberServiceImpl implements IMemberService {
     // Get List By Criterias
     @Override
     public GetMemberByCriteriasResponseType getMemberByCriterias(GetMemberByCriteriasRequestType parameters) throws BusinessExceptionMember {
-        HashMap<String, String> map = new HashMap<>();
+
         checkAuthentication(parameters.getToken());
         MemberCriterias criterias = parameters.getMemberCriterias();
-        HashMap<String, String> newMap = cleanCriteriasMap(map, criterias);
+        HashMap<String, String> newMap = cleanCriteriasMap( criterias);
 
 
         System.out.println("after: "+newMap.size());
         memberList = memberManager.getMembersByCriterias(newMap);
-        GetMemberByCriteriasResponseType brt = new GetMemberByCriteriasResponseType();
+        GetMemberByCriteriasResponseType getMemberByCriteriasResponseType = new GetMemberByCriteriasResponseType();
         logger.info("memberListType beg: " + memberListType.getMemberTypeOut().size());
 
         convertMemberIntoMemberTypeOut();
 
         logger.info("memberListType end: " + memberListType.getMemberTypeOut().size());
-        brt.setMemberListType(memberListType);
-        return brt;
+        getMemberByCriteriasResponseType.setMemberListType(memberListType);
+        return getMemberByCriteriasResponseType;
     }
 
-    HashMap<String, String> cleanCriteriasMap(HashMap<String, String> map, MemberCriterias criterias) {
+    HashMap<String, String> cleanCriteriasMap( MemberCriterias criterias) {
+        HashMap<String, String> map = new HashMap<>();
         if(criterias.getLogin()!=null)map.put("Login", criterias.getLogin().toUpperCase());
         if(criterias.getFirstName()!=null)map.put("FirstName", criterias.getFirstName().toUpperCase());
         if(criterias.getLastName()!=null)map.put("LastName", criterias.getLastName().toUpperCase());

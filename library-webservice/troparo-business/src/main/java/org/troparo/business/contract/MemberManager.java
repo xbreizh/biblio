@@ -50,6 +50,6 @@ public interface MemberManager {
 
     boolean checkAdmin(String token);
 
-    boolean validateEmail(Member member);
+   // boolean validateEmail(Member member);
 
 }
