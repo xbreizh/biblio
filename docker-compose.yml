@@ -43,7 +43,7 @@ services:
     container_name: library-webservice
     build: library-webservice/.
     ports:
-     - 8080:8080
+     - 8087:8080
     #volumes:
      # - logs:/usr/app/resources
     depends_on:

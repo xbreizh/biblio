@@ -18,15 +18,15 @@ import java.util.*;
 
 @Transactional
 @Named
-@PropertySource("classpath:config.properties")
+//@PropertySource("classpath:config.properties")
 public class LoanManagerImpl implements LoanManager {
-    @Value("${loanDuration}")
-    private String loanDurationString;
-    private int loanDuration;
-    @Value("${renewDuration}")
-    private int renewDuration;
-    @Value("${maxBooks}")
-    private int maxBooks;
+    //@Value("${loanDuration}")
+    //private String loanDurationString;
+    private int loanDuration=28;
+    //@Value("${renewDuration}")
+    private int renewDuration=28;
+    //@Value("${maxBooks}")
+    private int maxBooks=4;
     @Inject
     LoanDAO loanDAO;
 
@@ -143,7 +143,7 @@ public class LoanManagerImpl implements LoanManager {
     public boolean isRenewable(int id) {
         logger.info("checking if loan "+id+" is renewable");
         Loan loan = loanDAO.getLoanById(id);
-        System.out.println("renew duration: "+renewDuration);
+        System.out.println("renew duration: "+loanDuration);
 
         if (loan.getEndDate() != null) {
             System.out.println("endDate false");
@@ -152,12 +152,15 @@ public class LoanManagerImpl implements LoanManager {
 
         Date start = loan.getStartDate();
         Date end = loan.getPlannedEndDate();
-
+        //we get the number of days between the start and the planned end date
+        //if difference > loanDuration, it means the loan has already been renewed(return false)
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diff days is: " + diffInDays);
         System.out.println("diffDays: "+diffInDays);
-        return (diffInDays > renewDuration);
+        if(diffInDays > loanDuration)return false;
+        return true;
+        //return (diffInDays > loanDuration);
        /* if (diffInDays > renewDuration) {
             return false;
         } else {

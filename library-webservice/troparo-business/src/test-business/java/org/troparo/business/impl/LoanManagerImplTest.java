@@ -158,6 +158,7 @@ class LoanManagerImplTest {
         Loan loan = new Loan();
         loan.setEndDate(new Date());
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        System.out.println("loanDuration: "+loanManager.getLoanDuration());
         assertEquals("loan already terminated: "+loan.getEndDate(), loanManager.renewLoan(45));
     }
 
@@ -191,13 +192,25 @@ class LoanManagerImplTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("should return false if not renewable")
     void isRenewable() throws ParseException {
         Loan loan = new Loan();
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         loan.setStartDate(format.parse("01-01-2019"));
-        loan.setPlannedEndDate(format.parse("12-01-2019"));
+        loan.setPlannedEndDate(format.parse("12-02-2019"));
+        when(loanDAO.getLoanById(2)).thenReturn(loan);
+        assertFalse(loanManager.isRenewable(2));
+    }
+
+    @Test
+    @DisplayName("should return true if renewable")
+    void isRenewable1() throws ParseException {
+        Loan loan = new Loan();
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        loan.setStartDate(format.parse("01-01-2019"));
+        loan.setPlannedEndDate(format.parse("10-01-2019"));
         when(loanDAO.getLoanById(2)).thenReturn(loan);
         assertTrue(loanManager.isRenewable(2));
     }
