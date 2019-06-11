@@ -32,7 +32,6 @@ services:
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - "./db-init/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
-      #- pg-data:/var/lib/postgresql/data
     networks:
       - troparo
 
