@@ -1,4 +1,4 @@
-package org.library.contract;
+package org.library.business.contract;
 
 
 import org.library.model.Book;

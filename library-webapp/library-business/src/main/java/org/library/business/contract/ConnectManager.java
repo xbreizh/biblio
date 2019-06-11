@@ -1,4 +1,4 @@
-package org.library.contract;
+package org.library.business.contract;
 
 
 public interface ConnectManager {

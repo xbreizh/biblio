@@ -1,10 +1,10 @@
-package org.library.impl;
+package org.library.business.impl;
 
 
 import org.apache.log4j.Logger;
-import org.library.contract.BookManager;
-import org.library.contract.LoanManager;
-import org.library.contract.MemberManager;
+import org.library.business.contract.BookManager;
+import org.library.business.contract.LoanManager;
+import org.library.business.contract.MemberManager;
 import org.library.model.Book;
 import org.library.model.Loan;
 import org.library.model.Member;

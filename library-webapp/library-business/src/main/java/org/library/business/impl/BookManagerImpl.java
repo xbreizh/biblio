@@ -1,9 +1,8 @@
-package org.library.impl;
+package org.library.business.impl;
 
 import org.apache.log4j.Logger;
-import org.library.contract.BookManager;
+import org.library.business.contract.BookManager;
 import org.library.model.Book;
-import org.springframework.security.core.context.SecurityContext;
 import org.troparo.entities.book.*;
 import org.troparo.services.bookservice.BookService;
 import org.troparo.services.bookservice.BusinessExceptionBook;
@@ -11,7 +10,6 @@ import org.troparo.services.bookservice.BusinessExceptionBook;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 
 @Named
@@ -45,7 +43,7 @@ public class BookManagerImpl implements BookManager {
         return result;
     }
 
-    private List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
+    public List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
         List<Book> bookList = new ArrayList<>();
         for (BookTypeOut bookTypeOut: bookTypeOutList
              ) {

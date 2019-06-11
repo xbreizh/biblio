@@ -1,7 +1,7 @@
-package org.library.impl;
+package org.library.business.impl;
 
 import org.apache.log4j.Logger;
-import org.library.contract.MemberManager;
+import org.library.business.contract.MemberManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

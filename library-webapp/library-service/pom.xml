@@ -86,18 +86,56 @@
             <version>${log4j.version}</version>
         </dependency>
 
+        <!-- ===== Tests ===== -->
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.5.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>2.23.0</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
 
     <build>
         <plugins>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.22.1</version>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.3</version>
                 <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -145,22 +183,22 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>
-                                        https://raw.githubusercontent.com/xbreizh/troparo/e481ca9c19f78656678dfab01ca1a01f124c72e2/troparo-web/src/main/resources/org/troparo/web/services/MemberService.wsdl
+                                        https://raw.githubusercontent.com/xbreizh/biblio/8247ab1af29e6d5b885a90e20657496039e7bb3d/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/MemberService.wsdl?token=AAMU4PIBZIIRE23G2JRAIMC4763R2
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        https://raw.githubusercontent.com/xbreizh/troparo/e481ca9c19f78656678dfab01ca1a01f124c72e2/troparo-web/src/main/resources/org/troparo/web/services/LoanService.wsdl
+                                        https://raw.githubusercontent.com/xbreizh/biblio/8247ab1af29e6d5b885a90e20657496039e7bb3d/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/LoanService.wsdl?token=AAMU4PISCYL5S75YCVXTXUK4763TY
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        https://raw.githubusercontent.com/xbreizh/troparo/e481ca9c19f78656678dfab01ca1a01f124c72e2/troparo-web/src/main/resources/org/troparo/web/services/ConnectService.wsdl
+                                        https://raw.githubusercontent.com/xbreizh/biblio/8247ab1af29e6d5b885a90e20657496039e7bb3d/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/ConnectService.wsdl?token=AAMU4PPRTZTMKWIGBVNUMOK4763UU
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        https://raw.githubusercontent.com/xbreizh/troparo/e481ca9c19f78656678dfab01ca1a01f124c72e2/troparo-web/src/main/resources/org/troparo/web/services/BookService.wsdl
+                                        https://raw.githubusercontent.com/xbreizh/biblio/8247ab1af29e6d5b885a90e20657496039e7bb3d/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/BookService.wsdl?token=AAMU4PJ4NUKAWJXXA35FMUS4763G4
                                     </wsdl>
                                 </wsdlOption>
                             </wsdlOptions>

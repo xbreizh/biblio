@@ -1,8 +1,7 @@
-package org.library.contract;
+package org.library.business.contract;
 
 
 import org.library.model.Member;
-import org.springframework.security.core.context.SecurityContext;
 
 public interface MemberManager {
 
