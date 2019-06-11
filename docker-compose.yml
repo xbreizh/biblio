@@ -50,12 +50,12 @@ services:
     image: postgres:11.1-alpine
     container_name: library-dbtest
     ports:
-      - 5433:5432
+      - 5532:5432
     environment:
       POSTGRES_USER: ocp
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: troparo
-      POSTGRES_INITDB_ARGS: --data-checksums
+      POSTGRES_INITDB_ARGS: --data-checksums  
       PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - "./db-init/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d"
