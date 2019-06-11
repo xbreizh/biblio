@@ -145,7 +145,7 @@
     <wsdl:service name="ConnectService">
         <wsdl:port name="ConnectServicePort" binding="tns:ConnectServiceSOAPBinding">
             <soap:address
-             location="http://library-webservice:8080/troparo_app/services/connect/ConnectService"/>
+             location="http://webservice:8080/troparo_app/services/connect/ConnectService"/>
         </wsdl:port>
     </wsdl:service>
 

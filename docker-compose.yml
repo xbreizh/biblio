@@ -2,6 +2,33 @@
 version: '3'
 
 services:
+  sonarqube:
+    build:
+      context: sonarqube/
+    ports:
+      - 9000:9000
+      - 9092:9092
+    container_name: sonarqube
+    volumes:
+      - ./sonarqube/sonarqube_home:/opt/sonarqube/data
+    networks:
+      - troparo    
+  jenkins:
+    build:
+      context: jenkins/
+    privileged: true
+    user: root
+    ports:
+      - 8083:8080
+      - 4000:5000
+    container_name: jenkins
+    volumes:
+      - ./jenkins/jenkins_home:/var/jenkins_home #Remember that, the tmp directory is designed to be wiped on system reboot.
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - sonarqube
+    networks:
+      - troparo  
   # getting postgres DB
   db:
     image: postgres:11.1-alpine

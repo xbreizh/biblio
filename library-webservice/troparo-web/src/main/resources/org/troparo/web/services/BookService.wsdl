@@ -229,7 +229,7 @@
     <wsdl:service name="BookService">
         <wsdl:port name="BookServicePort" binding="tns:BookServiceSOAPBinding">
             <soap:address
-                    location="http://library-webservice:8080/troparo_app/services/book/BookService"/>
+                    location="http://webservice:8080/troparo_app/services/book/BookService"/>
         </wsdl:port>
     </wsdl:service>
 
