@@ -219,7 +219,7 @@
     <wsdl:service name="LoanService">
         <wsdl:port name="LoanServicePort" binding="tns:LoanServiceSOAPBinding">
             <soap:address
-                    location="http://webservice:8080/troparo_app/services/loan/LoanService"/>
+                    location="http://library-webservice:8080/troparo_app/services/loan/LoanService"/>
         </wsdl:port>
     </wsdl:service>
 
