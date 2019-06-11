@@ -183,4 +183,9 @@ class MemberTest {
                 "role='boss', token='bnjnj3222', email='bob@gmail.com', dateJoin=Fri Dec 31 00:00:00 CET 2010, " +
                 "dateConnect=Thu Dec 31 00:00:00 CET 2009, loanList=0}", member.toString());
     }
+
+    @Test
+    void testingpo(){
+        System.out.println("testing");
+    }
 }
