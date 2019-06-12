@@ -50,7 +50,7 @@ services:
     image: postgres:11.1-alpine
     container_name: library-dbtest
     ports:
-      - 5532:5432
+      - 5532:5532
     environment:
       POSTGRES_USER: ocp
       POSTGRES_PASSWORD: 123
@@ -64,13 +64,13 @@ services:
       - troparo
 
 
-  # getting library-webservice image
+  # getting webservice image
   webservice:
     image: troparo_app
     container_name: library-webservice
     build: library-webservice/.
     ports:
-     - 8087:8080
+     - 8080:8080
     #volumes:
      # - logs:/usr/app/resources
     depends_on:
@@ -78,7 +78,7 @@ services:
     networks:
       - troparo
 
-       # getting troparo image
+       # getting mailapp image
   mailapp:
     image: library_mailapp
     container_name: library_mailapp
@@ -93,7 +93,7 @@ services:
       - troparo
 
 
-    # getting troparo image
+    # getting webapp image
   webapp:
     image: library_webapp
     container_name: library_webapp
