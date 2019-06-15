@@ -27,3 +27,6 @@ target/
 generated/
 services/
 **/entities/
+jenkins/
+db-init/
+sonarqube/

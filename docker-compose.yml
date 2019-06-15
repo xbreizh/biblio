@@ -34,7 +34,7 @@ services:
     image: postgres:11.1-alpine
     container_name: library-db
     ports:
-      - 5432:5432
+      - 5532:5432
     environment:
       POSTGRES_USER: ocp
       POSTGRES_PASSWORD: 123
@@ -50,7 +50,7 @@ services:
     image: postgres:11.1-alpine
     container_name: library-dbtest
     ports:
-      - 5532:5532
+      - 5432:5432
     environment:
       POSTGRES_USER: ocp
       POSTGRES_PASSWORD: 123
