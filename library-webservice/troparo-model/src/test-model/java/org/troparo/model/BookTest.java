@@ -160,7 +160,7 @@ class BookTest {
         book.setKeywords("top, montagne, hiver");
         System.out.println(book);
 
-        assertEquals("Book{Id=123, isbn='AbG231', title='Le grand cirque', author='Marxo', insert_date=Thu Dec 31 00:00:00 CET 2009, " +
+        assertEquals("Book{Id=123, isbn='AbG231', title='Le grand cirque', author='Marxo', insert_date=Thu Dec 31 00:00:00 UTC 2009, " +
                 "publicationYear=1984, edition='maroko', nbPages=125, keywords='top, montagne, hiver', loanList=0}", book.toString());
     }
 }
