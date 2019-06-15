@@ -14,7 +14,7 @@ import org.troparo.web.service.ConnectServiceImpl;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-@ContextConfiguration("classpath:org/troparo/web/config/spring-hibernate-jax-ws.xml")
+@ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 public class ConnectServiceIntegrationTest {
