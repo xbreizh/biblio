@@ -10,43 +10,77 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>troparo-consumer</artifactId>
-<profiles>
-    <!-- Profile utilisé pour lancer les tests d'intégration de la couche Consumer -->
-    <profile>
-        <id>test-consumer</id>
-        <build>
-            <plugins>
-                <!-- Ajout du répertoire src/test-consumer/java en tant que source de test du module -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>build-helper-maven-plugin</artifactId>
-                    <executions>
-                        <execution>
-                            <id>add-test-source</id>
-                            <phase>generate-test-sources</phase>
-                            <goals>
-                                <goal>add-test-source</goal>
-                            </goals>
-                            <configuration>
-                                <sources>
-                                    <source>src/test-consumer/java</source>
-                                </sources>
-                            </configuration>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-            <testResources>
-                <testResource>
-                    <directory>src/main/resources</directory>
-                </testResource>
-                <testResource>
-                    <directory>src/test-consumer/resources</directory>
-                </testResource>
-            </testResources>
-        </build>
-    </profile>
-</profiles>
+    <profiles>
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Consumer -->
+        <profile>
+            <id>test-consumer</id>
+            <build>
+                <plugins>
+                    <!-- Ajout du répertoire src/test-consumer/java en tant que source de test du module -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test-consumer/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/test-consumer/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test-consumer/resources/docker</directory>
+                    </testResource>
+                </testResources>
+            </build>
+        </profile>
+        <profile>
+            <id>local-test-consumer</id>
+            <build>
+                <plugins>
+                    <!-- Ajout du répertoire src/test-consumer/java en tant que source de test du module -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test-consumer/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/main/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test-consumer/resources/local</directory>
+                    </testResource>
+                </testResources>
+            </build>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -120,33 +154,33 @@
         </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
-      <!--  <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.jupiter.version}</version>
-            <scope>test</scope>
-        </dependency>-->
+        <!--  <dependency>
+              <groupId>org.junit.jupiter</groupId>
+              <artifactId>junit-jupiter-api</artifactId>
+              <version>${junit.jupiter.version}</version>
+              <scope>test</scope>
+          </dependency>-->
 
         <!-- Pool de connexion -->
-      <!--  <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-dbcp2</artifactId>
-            <scope>test</scope>
-        </dependency>-->
+        <!--  <dependency>
+              <groupId>org.apache.commons</groupId>
+              <artifactId>commons-dbcp2</artifactId>
+              <scope>test</scope>
+          </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.dbunit/dbunit -->
-      <!--  <dependency>
-            <groupId>org.dbunit</groupId>
-            <artifactId>dbunit</artifactId>
-            <version>2.4.9</version>
-            <scope>test</scope>
-        </dependency>-->
+        <!--  <dependency>
+              <groupId>org.dbunit</groupId>
+              <artifactId>dbunit</artifactId>
+              <version>2.4.9</version>
+              <scope>test</scope>
+          </dependency>-->
 
-       <!-- <dependency>
-            <groupId>org.easymock</groupId>
-            <artifactId>easymock</artifactId>
-            <version>3.1</version>
-            <scope>test</scope>
-        </dependency>-->
+        <!-- <dependency>
+             <groupId>org.easymock</groupId>
+             <artifactId>easymock</artifactId>
+             <version>3.1</version>
+             <scope>test</scope>
+         </dependency>-->
 
         <dependency>
             <groupId>org.springframework.security</groupId>
@@ -163,18 +197,18 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
         </dependency>
-       <!-- <dependency>
-            <groupId>name.falgout.jeffrey.testing.junit5</groupId>
-            <artifactId>mockito-extension</artifactId>
-            <version>1.1.1</version>
-            <scope>test</scope>
-        </dependency>-->
-       <!-- <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-test</artifactId>
-            <version>1.4.3.RELEASE</version>
-            <scope>test</scope>
-        </dependency>-->
+        <!-- <dependency>
+             <groupId>name.falgout.jeffrey.testing.junit5</groupId>
+             <artifactId>mockito-extension</artifactId>
+             <version>1.1.1</version>
+             <scope>test</scope>
+         </dependency>-->
+        <!-- <dependency>
+             <groupId>org.springframework.boot</groupId>
+             <artifactId>spring-boot-test</artifactId>
+             <version>1.4.3.RELEASE</version>
+             <scope>test</scope>
+         </dependency>-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>

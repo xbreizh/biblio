@@ -11,7 +11,6 @@ public interface MailManager {
 
     List<Mail> getOverdueEmailList();
 
-    //List<Mail> createMailListfromLoans(List<Loan> loans);
 
     int calculateDaysBetweenDates(Date d1, Date d2);
 

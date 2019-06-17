@@ -13,11 +13,9 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
-import org.troparo.model.Member;
 
 import javax.inject.Inject;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,7 +31,7 @@ class LoanDAOImplTest {
     @Inject
     private BookDAO bookDAO;
 
-    @Sql({"classpath:/resetDb.sql"})
+    @Sql({"classpath:/src/main/resources/resetDb.sql"})
     @BeforeEach
     void reset(){
         logger.info("reset db");

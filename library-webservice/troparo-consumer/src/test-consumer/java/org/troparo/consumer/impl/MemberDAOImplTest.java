@@ -27,7 +27,7 @@ class MemberDAOImplTest {
     @Inject
     MemberDAO memberDAO;
 
-    @Sql({"classpath:/resetDb.sql"})
+    @Sql({"classpath:/src/main/resources/resetDb.sql"})
     @BeforeEach
     void reset(){
         logger.info("reset db");
