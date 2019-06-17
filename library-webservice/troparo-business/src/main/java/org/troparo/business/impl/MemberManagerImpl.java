@@ -87,6 +87,7 @@ public class MemberManagerImpl implements MemberManager {
         if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
             return "Password should have between 2 and 200 characters: " + member.getPassword();
         }
+        System.out.println("Email: "+member.getEmail());
         if (member.getEmail() == null || member.getEmail().equals("") || member.getEmail().equals("?"))
             return "No email provided";
         if (!validator.validate(member.getEmail())) return "Invalid Email: " + member.getEmail();
@@ -98,60 +99,52 @@ public class MemberManagerImpl implements MemberManager {
 
     String checkValidityOfParametersForUpdateMember(Member memberNewValues) {
         if (memberNewValues == null) return "no member provided";
-        int nbValuesToUpdate = 0;
+
         String login = memberNewValues.getLogin();
         logger.info("login: " + login);
         if (login == null || login.equals("") || login.equals("?")) return "No login provided";
         if (login.length() < 5 || login.length() > 20) {
             return "Login must be 5 or 20 characters: " + login;
         }
-        String firstname = memberNewValues.getFirstName();
-        if (firstname != null || !firstname.equals("") && !firstname.equals("?")) {
-            if (firstname.length() < 2 || firstname.length() > 50) {
-                return "FirstName should have between 2 and 200 characters: " + firstname;
-            } else {
-                nbValuesToUpdate++;
-            }
-
-        }
-        String lastname = memberNewValues.getLastName();
-        if (lastname != null || !lastname.equals("") && !lastname.equals("?")) {
-            if (lastname.length() < 2 || lastname.length() > 50) {
-                return "LastName should have between 2 and 200 characters: " + lastname;
-            } else {
-                nbValuesToUpdate++;
-            }
-
-        }
+        String firstName = memberNewValues.getFirstName();
+        String lastName = memberNewValues.getLastName();
         String password = encryptPassword(memberNewValues.getPassword());
-        if (password != null || !password.equals(encryptPassword("")) && !password.equals(encryptPassword("?"))) {
-            if (password.length() < 2 || password.length() > 200) {
-                return "Password should have between 2 and 200 characters: " + password;
-            } else {
-                nbValuesToUpdate++;
-            }
-
-        }
         String email = memberNewValues.getEmail();
-        if (email != null || !email.equals("") && !email.equals("?")) {
-            if (!validator.validate(email)) {
-                return "Invalid Email: " + email;
-            } else {
-                nbValuesToUpdate++;
-            }
-
-        }
         String role = memberNewValues.getRole();
-        if (role != null || !role.equals("") && !role.equals("?")) {
-            if (role.length() < 6 || role.length() > 10) {
-                return "Role should have between 6 and 10 characters: " + role;
-            } else {
-                nbValuesToUpdate++;
+
+
+            if (firstName != null ){
+                {
+                if (firstName.equals("") || firstName.equals("?") ||firstName.length() < 2 || firstName.length() > 50) {
+                    return "FirstName should have between 2 and 200 characters: " + firstName;
+                }
+            }
+            }
+            if (lastName != null ) {
+                if (lastName.equals("") || lastName.equals("?") || lastName.length() < 2 || lastName.length() > 50) {
+                    return "LastName should have between 2 and 200 characters: " + lastName;
+                }
+
+            }
+            if (password != null ) {
+                if (password.equals(encryptPassword("")) || password.equals(encryptPassword("?")) || password.length() < 2 || password.length() > 200) {
+                    return "Password should have between 2 and 200 characters: " + password;
+                }
+
+            }
+            if (email != null && !email.equals("") && !email.equals("?")) {
+                if (!validator.validate(email)) {
+                    return "Invalid Email: " + email;
+                }
+
+            }
+            if (role != null ) {
+                if (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10) {
+                    return "Role should have between 6 and 10 characters: " + role;
+                }
+
             }
 
-        }
-        logger.info("nb values: " + nbValuesToUpdate);
-        if (nbValuesToUpdate == 0) return "There is no value to be updated";
         return "";
     }
 

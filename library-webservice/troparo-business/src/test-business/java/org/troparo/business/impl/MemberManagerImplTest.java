@@ -63,8 +63,7 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return nothing when trying to insert a member")
-    void addMember2() throws IOException, SAXException {
-        String email = "rer.xax@gtgt.gt";
+    void addMember2()  {
         Member member = new Member();
         member.setLogin("tomoni");
         member.setFirstName("Tom");
@@ -193,14 +192,7 @@ class MemberManagerImplTest {
         assertEquals("No login provided", memberManager.checkValidityOfParametersForUpdateMember(member));
     }
 
-    @Test
-    @DisplayName("should return \"There is no value to be updated\" when no legit value to update passed")
-    void checkValidityOfParametersForUpdateMember1() {
-        Member member = new Member();
-        member.setLogin("kolio");
-        member.setEmail("");
-        assertEquals("There is no value to be updated", memberManager.checkValidityOfParametersForUpdateMember(member));
-    }
+
 
     @Test
     @DisplayName("should return \"invalid email\" when email invalid")
@@ -323,7 +315,7 @@ class MemberManagerImplTest {
     void checkToken() {
         String token = "123";
         when(memberDAO.checkToken(anyString())).thenReturn(true);
-        assertNotNull(memberManager.checkToken(anyString()));
+        assertTrue(memberManager.checkToken(anyString()));
     }
 
     @Test
