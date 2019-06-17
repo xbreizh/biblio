@@ -15,6 +15,7 @@ import java.util.*;
 public class MemberDAOImpl implements MemberDAO {
     private static final int MILLI_TO_HOUR = 1000 * 60 * 60;
     private static final int MAX_TIME_TOKEN_VALIDITY = 3;
+    private static String login = "login";
     private static Logger logger = Logger.getLogger(MemberDAOImpl.class.getName());
     private Class cl = Member.class;
     private String request;
@@ -52,7 +53,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public Member getMemberById(int id) {
-        logger.info("in the dao: " + id);
+        logger.info("id passed: " + id);
         request = "From Member where id = :id";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
@@ -67,7 +68,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public boolean existingLogin(String login) {
-        logger.info("in the dao: " + login);
+        logger.info("login passed " + login);
         login = login.toUpperCase();
         request = "From Member where login = :login";
 
@@ -117,8 +118,8 @@ public class MemberDAOImpl implements MemberDAO {
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
-        String[] authorizedCriterias = {"login", "firstname", "lastname", "role", "email"};
-        List<String> list = Arrays.asList(authorizedCriterias);
+        String[] authorizedCriteria = {"login", "firstname", "lastname", "role", "email"};
+        List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey())) map.remove(entry.getKey());
         }
@@ -151,7 +152,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public boolean checkToken(String token) {
-        logger.info("in the dao: " + token);
+        logger.info("token received: " + token);
         request = "From Member where token = :token";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
@@ -178,7 +179,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public boolean invalidateToken(String token) {
-        logger.info("in the dao: " + token);
+        logger.info("token received: " + token);
         try {
             Member m = getMemberByToken(token);
             if (m == null) return false;
@@ -211,7 +212,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public Member getMemberByToken(String token) {
-        logger.info("in the dao: " + token);
+        logger.info("token: " + token);
         request = "From Member where token = :token";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
