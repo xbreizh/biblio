@@ -274,7 +274,7 @@ public class LoanServiceImpl implements ILoanService {
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return xmlCalendar;
     }
@@ -283,7 +283,7 @@ public class LoanServiceImpl implements ILoanService {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new BusinessExceptionLoan("invalid token");
         }
     }

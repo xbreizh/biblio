@@ -40,7 +40,7 @@ public class ConnectServiceImpl implements IConnectService {
         try {
             checkToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error(e.getMessage());
             throw new BusinessExceptionConnect("invalid token");
         }
     }

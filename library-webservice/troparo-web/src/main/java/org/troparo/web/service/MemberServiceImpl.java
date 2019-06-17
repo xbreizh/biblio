@@ -375,7 +375,7 @@ public class MemberServiceImpl implements IMemberService {
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return xmlCalendar;
     }
@@ -388,7 +388,7 @@ public class MemberServiceImpl implements IMemberService {
         }
         /*try {
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new BusinessExceptionMember("invalid token");
         }*/
     }

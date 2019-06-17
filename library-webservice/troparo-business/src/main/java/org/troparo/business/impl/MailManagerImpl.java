@@ -57,7 +57,7 @@ public class MailManagerImpl implements MailManager {
                         try {
                             return new PasswordAuthentication(username, getPassword());
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e.getMessage());
                         }
                         return null;
                     }
@@ -89,7 +89,7 @@ public class MailManagerImpl implements MailManager {
                 try {
                     logger.info("mail content: "+message.getContent().toString());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
                  Transport.send(message);
 

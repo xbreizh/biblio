@@ -200,7 +200,7 @@ public class BookServiceImpl implements IBookService {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new BusinessExceptionBook("invalid token");
         }
     }
