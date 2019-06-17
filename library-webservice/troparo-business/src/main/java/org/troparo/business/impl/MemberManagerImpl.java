@@ -169,7 +169,7 @@ public class MemberManagerImpl implements MemberManager {
             if (login.equals("") || login.equals("?") ) {
                 return "login should be filled";
             }
-           // else return "login should be filled";
+
         }else return "login should be filled";
 
         if (member.getFirstName() != null) {
@@ -317,8 +317,7 @@ public class MemberManagerImpl implements MemberManager {
                 if (!str.equals("") && !str.equals("?")) nbElement++;
             }
         }
-       /* if(nbElement!=0)return true;
-        return false;*/
+
         return nbElement!=0;
     }
 
@@ -423,7 +422,7 @@ public class MemberManagerImpl implements MemberManager {
                 logger.info("member not null");
                 logger.info("email passed: " + m.getEmail());
                 m.setPassword(encryptPassword(password));
-               /* if (!memberDAO.updateMember(m)) return false;*/
+
                 return memberDAO.updateMember(m);
             }
 

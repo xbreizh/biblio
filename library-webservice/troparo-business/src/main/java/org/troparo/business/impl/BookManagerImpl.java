@@ -76,18 +76,14 @@ public class BookManagerImpl implements BookManager {
 
     boolean checkBookParamLength(String param) {
         if (param != null) {
-            if (param.length() > 2 && param.length() < 200) {
-                return true;
-            }
+            return param.length() > 2 && param.length() < 200;
+
         }
         return false;
     }
 
     private boolean checkIsbnLength(Book book) {
-        /*if (book.getIsbn().length() != 10 && book.getIsbn().length() != 13) {
-            return true;
-        }
-        return false;*/
+
         return book.getIsbn().length() != 10 && book.getIsbn().length() != 13;
     }
 

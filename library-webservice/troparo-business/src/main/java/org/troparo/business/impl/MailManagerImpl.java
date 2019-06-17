@@ -1,14 +1,17 @@
 package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
-import org.troparo.business.contract.MailManager;
 import org.troparo.business.contract.LoanManager;
+import org.troparo.business.contract.MailManager;
 import org.troparo.model.Loan;
 import org.troparo.model.Mail;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 /*@Component
 @Configuration
