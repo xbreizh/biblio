@@ -4,7 +4,6 @@ package org.troparo.web.service;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.BookManager;
 import org.troparo.entities.book.*;
-import org.troparo.entities.member.MemberCriterias;
 import org.troparo.model.Book;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.bookservice.IBookService;
@@ -19,7 +18,6 @@ import java.util.*;
         targetNamespace = "http://troparo.org/services/BookService/", portName = "BookServicePort", name = "BookServiceImpl")
 public class BookServiceImpl implements IBookService {
     private Logger logger = Logger.getLogger(this.getClass().getName());
-
 
 
     @Inject
@@ -66,13 +64,13 @@ public class BookServiceImpl implements IBookService {
         String keywords = bookTypeIn.getKeywords();
         int nbPages = bookTypeIn.getNbPages();
         int publicationYear = bookTypeIn.getPublicationYear();
-        if(isbn==null||title==null||author==null||edition==null||keywords==null)return false;
-        if(nbPages==0||nbPages==-1||publicationYear==0||publicationYear==-1)return false;
+        if (isbn == null || title == null || author == null || edition == null || keywords == null) return false;
+        if (nbPages == 0 || nbPages == -1 || publicationYear == 0 || publicationYear == -1) return false;
         String[] attributeArray = {isbn, title, author, edition, keywords};
-        List<String> attributeList = Arrays.asList(attributeArray);
-        for (String str: attributeList
-             ) {
-            if(str.equals("")||str.equals("?"))return false;
+
+        for (String str : attributeArray
+        ) {
+            if (str.equals("") || str.equals("?")) return false;
         }
         return true;
 
@@ -211,18 +209,18 @@ public class BookServiceImpl implements IBookService {
     public GetBookByCriteriasResponseType getBookByCriterias(GetBookByCriteriasRequestType parameters) throws BusinessExceptionBook {
         GetBookByCriteriasResponseType getBookByCriteriasResponseType = new GetBookByCriteriasResponseType();
         checkAuthentication(parameters.getToken());
-       // String[] criteriasArray = {"ISBN", "Title", "Author"};
+        // String[] criteriasArray = {"ISBN", "Title", "Author"};
         BookCriterias criterias = parameters.getBookCriterias();
 
-        HashMap<String, String> newMap = cleanCriteriasMap( criterias);
+        HashMap<String, String> newMap = cleanCriteriasMap(criterias);
 
-        if(newMap.isEmpty())
-        //map.put("Title", criterias.getTitle().toUpperCase());
-        /*map.put("Author", criterias.getAuthor().toUpperCase());*/ {
+        if (newMap.isEmpty())
+            //map.put("Title", criterias.getTitle().toUpperCase());
+            /*map.put("Author", criterias.getAuthor().toUpperCase());*/ {
             logger.info("map: " + newMap);
         }
         logger.info(newMap);
-        if(newMap.isEmpty()) {
+        if (newMap.isEmpty()) {
             getBookByCriteriasResponseType.setBookListType(bookListType);
             return getBookByCriteriasResponseType;
         }
@@ -234,26 +232,26 @@ public class BookServiceImpl implements IBookService {
         /*bookListType.getBookTypeOut().add(bookTypeOut); // add bookType to the movieListType*/
         logger.info("bookListType end: " + bookListType.getBookTypeOut().size());
         getBookByCriteriasResponseType.setBookListType(bookListType);
-       /* getBookByCriteriasResponseType = removeDuplicates(getBookByCriteriasResponseType);*/
+        /* getBookByCriteriasResponseType = removeDuplicates(getBookByCriteriasResponseType);*/
         return getBookByCriteriasResponseType;
     }
 
 
-    HashMap<String, String> cleanCriteriasMap( BookCriterias criterias) {
+    private HashMap<String, String> cleanCriteriasMap(BookCriterias criterias) {
         HashMap<String, String> map = new HashMap<>();
-        if(criterias.getAuthor()!=null)map.put("Author", criterias.getAuthor().toUpperCase());
-        if(criterias.getTitle()!=null)map.put("Title", criterias.getTitle().toUpperCase());
-        if(criterias.getISBN()!=null)map.put("ISBN", criterias.getISBN().toUpperCase());
+        if (criterias.getAuthor() != null) map.put("Author", criterias.getAuthor().toUpperCase());
+        if (criterias.getTitle() != null) map.put("Title", criterias.getTitle().toUpperCase());
+        if (criterias.getISBN() != null) map.put("ISBN", criterias.getISBN().toUpperCase());
         logger.info("map: " + map);
 
         HashMap<String, String> newMap = new HashMap<>();
-        for (Map.Entry entry: map.entrySet()
+        for (Map.Entry entry : map.entrySet()
         ) {
-            if(!entry.getValue().equals("") && !entry.getValue().equals("?")){
+            if (!entry.getValue().equals("") && !entry.getValue().equals("?")) {
                 newMap.put(entry.getKey().toString(), entry.getValue().toString());
             }
         }
-        logger.info("newMap: "+newMap);
+        logger.info("newMap: " + newMap);
         return newMap;
     }
 /*
@@ -328,11 +326,11 @@ public class BookServiceImpl implements IBookService {
         logger.info("bookListType end: " + bookListType.getBookTypeOut().size());
     }
 
-    public void setBookManager(BookManager bookManager) {
+    void setBookManager(BookManager bookManager) {
         this.bookManager = bookManager;
     }
 
-    public void setAuthentication(ConnectServiceImpl authentication) {
+    void setAuthentication(ConnectServiceImpl authentication) {
         this.authentication = authentication;
     }
 

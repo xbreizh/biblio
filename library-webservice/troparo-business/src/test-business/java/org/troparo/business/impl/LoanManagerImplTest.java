@@ -6,16 +6,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.business.contract.BookManager;
-import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
@@ -53,8 +47,8 @@ class LoanManagerImplTest {
     private int maxBooks;*/
 
     @BeforeAll
-    static void initAll(){
-      //  applicationContext.getBean("emailManagerImpl", MailManagerImpl.class);
+    static void initAll() {
+        //  applicationContext.getBean("emailManagerImpl", MailManagerImpl.class);
     }
 
     @BeforeEach
@@ -62,8 +56,8 @@ class LoanManagerImplTest {
         loanManager = new LoanManagerImpl();
         loanDAO = mock(LoanDAO.class);
         loanManager.setLoanDAO(loanDAO);
-        bookManager=mock(BookManagerImpl.class);
-        memberManager=mock(MemberManagerImpl.class);
+        bookManager = mock(BookManagerImpl.class);
+        memberManager = mock(MemberManagerImpl.class);
         loanManager.setBookManager(bookManager);
         loanManager.setMemberManager(memberManager);
 
@@ -95,7 +89,7 @@ class LoanManagerImplTest {
         book.setId(2);
         loan.setBook(book);
         when(bookManager.isAvailable(anyInt())).thenReturn(false);
-        assertEquals("book is not available: "+book.getId(), loanManager.addLoan(loan));
+        assertEquals("book is not available: " + book.getId(), loanManager.addLoan(loan));
     }
 
     @Test
@@ -138,7 +132,7 @@ class LoanManagerImplTest {
     @DisplayName("should return null")
     void getLoanById1() {
         when(loanDAO.getLoanById(2)).thenReturn(null);
-        assertEquals(null, loanManager.getLoanById(2));
+        assertNull( loanManager.getLoanById(2));
     }
 
     @Test
@@ -147,7 +141,7 @@ class LoanManagerImplTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("price", "3.4");
-       loanManager.getLoansByCriterias(map);
+        loanManager.getLoansByCriterias(map);
     }
 
     @Test
@@ -156,8 +150,8 @@ class LoanManagerImplTest {
         Loan loan = new Loan();
         loan.setEndDate(new Date());
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
-        logger.info("loanDuration: "+loanManager.getLoanDuration());
-        assertEquals("loan already terminated: "+loan.getEndDate(), loanManager.renewLoan(45));
+        logger.info("loanDuration: " + loanManager.getLoanDuration());
+        assertEquals("loan already terminated: " + loan.getEndDate(), loanManager.renewLoan(45));
     }
 
     @Test
@@ -288,7 +282,7 @@ class LoanManagerImplTest {
     @DisplayName("should return null if loan not found")
     void getLoanStatus4() {
         when(loanDAO.getLoanById(anyInt())).thenReturn(null);
-        assertEquals(null, loanManager.getLoanStatus(55));
+        assertNull( loanManager.getLoanStatus(55));
 
     }
 }

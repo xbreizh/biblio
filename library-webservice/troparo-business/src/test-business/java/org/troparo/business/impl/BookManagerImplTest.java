@@ -12,7 +12,6 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,11 +27,10 @@ import static org.mockito.Mockito.when;
 @Transactional
 class BookManagerImplTest {
 
+    private BookManagerImpl bookManager2 = new BookManagerImpl();
     //@Inject
     private BookManager bookManager;
     private BookDAO bookDAO;
-    BookManagerImpl bookManager2 = new BookManagerImpl();
-
 
     @BeforeEach
     void init() {
@@ -64,14 +62,14 @@ class BookManagerImplTest {
     void checkBookParamLength() {
         Book book = new Book();
         book.setTitle("m");
-        assertFalse( bookManager2.checkBookParamLength( book.getTitle()));
+        assertFalse(bookManager2.checkBookParamLength(book.getTitle()));
     }
 
     @Test
     @DisplayName("should return false if param is null")
     void checkBookParamLength1() {
         Book book = new Book();
-        assertFalse( bookManager2.checkBookParamLength( book.getAuthor()));
+        assertFalse(bookManager2.checkBookParamLength(book.getAuthor()));
     }
 
     @Test
@@ -79,7 +77,7 @@ class BookManagerImplTest {
     void checkBookParamLength2() {
         Book book = new Book();
         book.setEdition("momo");
-        assertTrue( bookManager2.checkBookParamLength( book.getEdition()));
+        assertTrue(bookManager2.checkBookParamLength(book.getEdition()));
     }
 
 
@@ -111,7 +109,7 @@ class BookManagerImplTest {
     void getBookById1() {
         Book book = new Book();
         when(bookDAO.getBookById(anyInt())).thenReturn(null);
-        assertNull( bookManager.getBookById(12));
+        assertNull(bookManager.getBookById(12));
     }
 
     @Test
@@ -143,8 +141,6 @@ class BookManagerImplTest {
     }
 
 
-
-
     @Test
     @DisplayName("should return a Null pointer exception if dao returns null")
     void updateBook() {
@@ -172,8 +168,6 @@ class BookManagerImplTest {
         when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
         assertEquals("No book to update", bookManager.updateBook(book));
     }
-
-
 
 
     @Test
@@ -265,6 +259,7 @@ class BookManagerImplTest {
         assertEquals(title, bookManager2.transferTitleToSimilarBooks(book, book2));
 
     }
+
     @Test
     @DisplayName("should transfer Author")
     void transferAuthorToSimilarBooks() {
@@ -275,6 +270,7 @@ class BookManagerImplTest {
         assertEquals(author, bookManager2.transferAuthorToSimilarBooks(book, book2));
 
     }
+
     @Test
     @DisplayName("should transfer Keywords")
     void transferKeywordsToSimilarBooks() {
@@ -285,6 +281,7 @@ class BookManagerImplTest {
         assertEquals(keywords, bookManager2.transferKeywordsToSimilarBooks(book, book2));
 
     }
+
     @Test
     @DisplayName("should transfer NbPages")
     void transferNbPagesToSimilarBooks() {
@@ -295,6 +292,7 @@ class BookManagerImplTest {
         assertEquals(nbPages, bookManager2.transferNbPagesToSimilarBooks(book, book2));
 
     }
+
     @Test
     @DisplayName("should transfer Publication Year")
     void transferPublicationYearToSimilarBooks() {
@@ -320,7 +318,7 @@ class BookManagerImplTest {
 
     @Test
     @DisplayName("shouls transfert data from a book to another if not empty")
-    void transferValuesToSimilarBooks(){
+    void transferValuesToSimilarBooks() {
         Book book2 = new Book();
         book2.setEdition("Maroni");
         book2.setNbPages(143);
@@ -336,8 +334,8 @@ class BookManagerImplTest {
                 () -> assertEquals("Roger Marc", bookManager2.transferValuesToSimilarBooks(book, book2).getAuthor()),
                 () -> assertEquals("Maroni", bookManager2.transferValuesToSimilarBooks(book, book2).getEdition()),
                 () -> assertEquals(1233, bookManager2.transferValuesToSimilarBooks(book, book2).getPublicationYear()),
-                () -> assertEquals(143,  bookManager2.transferValuesToSimilarBooks(book, book2).getNbPages()),
-                () -> assertEquals("Nemo",  bookManager2.transferValuesToSimilarBooks(book, book2).getTitle())
+                () -> assertEquals(143, bookManager2.transferValuesToSimilarBooks(book, book2).getNbPages()),
+                () -> assertEquals("Nemo", bookManager2.transferValuesToSimilarBooks(book, book2).getTitle())
         );
 
     }

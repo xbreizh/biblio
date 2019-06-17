@@ -14,8 +14,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @TestPropertySource("classpath:config.properties")
@@ -28,7 +30,7 @@ class MailManagerImplTest {
     private LoanManager loanManager;*/
 
     @BeforeEach
-    void init(){
+    void init() {
         /*mailManager = new MailManagerImpl();
         loanManager = spy(LoanManager.class);
         mailManager.setLoanManager(loanManager);*/
@@ -86,11 +88,9 @@ class MailManagerImplTest {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date date1 = simpleDateFormat.parse("2018-09-02");
-        Date date2= simpleDateFormat.parse("2018-09-09");
-        assertEquals(7, mailManager.calculateDaysBetweenDates(date1, date2) );
+        Date date2 = simpleDateFormat.parse("2018-09-09");
+        assertEquals(7, mailManager.calculateDaysBetweenDates(date1, date2));
     }
-
-
 
 
 }

@@ -3,7 +3,10 @@ package org.troparo.web.service;
 
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.MailManager;
-import org.troparo.entities.mail.*;
+import org.troparo.entities.mail.GetOverdueMailListRequest;
+import org.troparo.entities.mail.GetOverdueMailListResponse;
+import org.troparo.entities.mail.MailListType;
+import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
@@ -14,7 +17,10 @@ import javax.jws.WebService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.*;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 @Named
 @WebService(serviceName = "MailService", endpointInterface = "org.troparo.services.mailservice.IMailService",
         targetNamespace = "http://troparo.org/services/MailService/", portName = "MailServicePort", name = "MailServiceImpl")
@@ -27,7 +33,6 @@ public class MailServiceImpl implements IMailService {
 
     @Inject
     private ConnectServiceImpl authentication;
-
 
 
     /* private String exception = "";*/
@@ -47,11 +52,11 @@ public class MailServiceImpl implements IMailService {
     }
 
 
-    MailListType convertmailListIntoMailListType(List<Mail> mailList){
+    MailListType convertmailListIntoMailListType(List<Mail> mailList) {
         MailListType mlt = new MailListType();
 
 
-        for (Mail mail: mailList ) {
+        for (Mail mail : mailList) {
             MailTypeOut mout = new MailTypeOut();
             mout.setEmail(mail.getEmail());
             mout.setFirstName(mail.getFirstname());
@@ -92,11 +97,11 @@ public class MailServiceImpl implements IMailService {
         }
     }
 
-    public void setAuthentication(ConnectServiceImpl authentication) {
+    void setAuthentication(ConnectServiceImpl authentication) {
         this.authentication = authentication;
     }
 
-    public void setMailManager(MailManager mailManager) {
+    void setMailManager(MailManager mailManager) {
         this.mailManager = mailManager;
     }
 
@@ -263,7 +268,7 @@ public class MailServiceImpl implements IMailService {
         return rep;
     }*//*
 
-  *//*  @Override
+     *//*  @Override
     public InvalidateTokenResponseType invalidateToken(InvalidateTokenRequestType parameters) throws BusinessException {
         InvalidateTokenResponseType ar = new InvalidateTokenResponseType();
         ar.setReturn(mailManager.invalidateToken(parameters.getToken()));
@@ -273,7 +278,7 @@ public class MailServiceImpl implements IMailService {
 
 
 
-  *//*  @Override
+     *//*  @Override
     public GetTokenResponseType getToken(GetTokenRequestType parameters) throws BusinessException {
         GetTokenResponseType ar = new GetTokenResponseType();
         String token = mailManager.getToken(parameters.getLogin(), parameters.getPassword());

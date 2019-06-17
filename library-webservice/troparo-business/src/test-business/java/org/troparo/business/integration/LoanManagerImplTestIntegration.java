@@ -7,7 +7,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 
 import javax.inject.Inject;

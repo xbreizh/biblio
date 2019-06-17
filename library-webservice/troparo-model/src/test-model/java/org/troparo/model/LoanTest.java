@@ -8,14 +8,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LoanTest {
 
     private Loan loan;
 
     @BeforeEach
-    void init(){
+    void init() {
         loan = new Loan();
     }
 
@@ -37,7 +37,7 @@ class LoanTest {
     @DisplayName("should get start date")
     void getStartDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setStartDate(date);
         assertEquals(date, loan.getStartDate());
     }
@@ -46,7 +46,7 @@ class LoanTest {
     @DisplayName("should set start date")
     void setStartDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setStartDate(date);
         assertEquals(date, loan.getStartDate());
     }
@@ -55,7 +55,7 @@ class LoanTest {
     @DisplayName("should get planned end date")
     void getPlannedEndDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setPlannedEndDate(date);
         assertEquals(date, loan.getPlannedEndDate());
     }
@@ -64,7 +64,7 @@ class LoanTest {
     @DisplayName("should set planned end date")
     void setPlannedEndDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setPlannedEndDate(date);
         assertEquals(date, loan.getPlannedEndDate());
     }
@@ -73,7 +73,7 @@ class LoanTest {
     @DisplayName("should get end date")
     void getEndDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setEndDate(date);
         assertEquals(date, loan.getEndDate());
     }
@@ -82,7 +82,7 @@ class LoanTest {
     @DisplayName("should set end date")
     void setEndDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setEndDate(date);
         assertEquals(date, loan.getEndDate());
     }
@@ -130,10 +130,10 @@ class LoanTest {
         borrower.setLogin("Diego23");
         loan.setBorrower(borrower);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         loan.setStartDate(date);
-        loan.setPlannedEndDate(format.parse ( "2010-01-07" ));
-        loan.setEndDate(format.parse ( "2010-01-17" ));
+        loan.setPlannedEndDate(format.parse("2010-01-07"));
+        loan.setEndDate(format.parse("2010-01-17"));
         assertEquals("Loan{Id=123, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, " +
                 "endDate=Sun Jan 17 00:00:00 UTC 2010, borrower=Diego23, book=Captain Cook}", loan.toString());
     }

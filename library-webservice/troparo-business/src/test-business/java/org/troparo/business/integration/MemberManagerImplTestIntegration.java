@@ -7,7 +7,6 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.model.Member;
 
@@ -35,8 +34,8 @@ class MemberManagerImplTestIntegration {
 
     @Test
     @DisplayName("should update member")
-    void updateMember(){
-        String email= "trok.dede@dede.ded";
+    void updateMember() {
+        String email = "trok.dede@dede.ded";
         String login = "JpoliNo";
         Member member = memberManager.getMemberByLogin(login);
         member.setEmail(email);

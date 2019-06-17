@@ -75,12 +75,12 @@ class MailServiceImplTest {
         logger.info(dateGregorian);
 
         assertAll(
-                ()-> assertEquals(year, dateGregorian.getYear()),
-                ()-> assertEquals(month+1, dateGregorian.getMonth()),
-                ()-> assertEquals(day, dateGregorian.getDay()),
-                ()-> assertEquals(hour, dateGregorian.getHour()),
-                ()-> assertEquals(minute, dateGregorian.getMinute()),
-                ()-> assertEquals(second, dateGregorian.getSecond())
+                () -> assertEquals(year, dateGregorian.getYear()),
+                () -> assertEquals(month + 1, dateGregorian.getMonth()),
+                () -> assertEquals(day, dateGregorian.getDay()),
+                () -> assertEquals(hour, dateGregorian.getHour()),
+                () -> assertEquals(minute, dateGregorian.getMinute()),
+                () -> assertEquals(second, dateGregorian.getSecond())
         );
 
 
@@ -89,7 +89,7 @@ class MailServiceImplTest {
     @Test
     @DisplayName("should convert List into MailListType")
     void convertmailListIntoMailListType() {
-        MailListType listType = new MailListType();
+        MailListType listType;
         List<Mail> mailList = new ArrayList<>();
         Mail mail = new Mail();
         String isbn = "IBNHH091";
@@ -122,7 +122,7 @@ class MailServiceImplTest {
                 () -> assertEquals(title, mailTypeOut.getTitle()),
                 () -> assertEquals(isbn, mailTypeOut.getIsbn())
 
-                );
+        );
 
 
     }

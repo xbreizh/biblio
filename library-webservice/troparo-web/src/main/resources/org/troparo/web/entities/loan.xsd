@@ -79,8 +79,6 @@
     </xsd:element>
 
 
-
-
     <!-- Get Loan by Criterias Request Type -->
     <xsd:element name="getLoanByCriteriasRequestType">
         <xsd:complexType>

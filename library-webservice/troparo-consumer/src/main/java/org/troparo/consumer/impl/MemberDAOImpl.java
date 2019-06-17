@@ -41,7 +41,7 @@ public class MemberDAOImpl implements MemberDAO {
             logger.info(sessionFactory);
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
-            if(sessionFactory == null) logger.info("SessionFactory not initialized!");
+            if (sessionFactory == null) logger.info("SessionFactory not initialized!");
             logger.info(e.getMessage());
             return null;
         }
@@ -83,9 +83,9 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
-        if(map == null)return new ArrayList<>();
+        if (map == null) return new ArrayList<>();
         map = cleanInvaliMapEntries(map);
-        if(map.size()==0)return new ArrayList<>();
+        if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         String criterias = "";
         for (Map.Entry<String, String> entry : map.entrySet()
@@ -116,11 +116,11 @@ public class MemberDAOImpl implements MemberDAO {
         }
     }
 
-    private HashMap<String, String>  cleanInvaliMapEntries(HashMap<String, String> map) {
+    private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
         String[] authorizedCriterias = {"login", "firstname", "lastname", "role", "email"};
         List<String> list = Arrays.asList(authorizedCriterias);
-        for (Map.Entry<String, String> entry : map.entrySet()){
-            if (!list.contains(entry.getKey()))map.remove(entry.getKey());
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (!list.contains(entry.getKey())) map.remove(entry.getKey());
         }
         return map;
     }
@@ -158,7 +158,7 @@ public class MemberDAOImpl implements MemberDAO {
         query.setParameter("token", token);
         List<Member> memberList = query.getResultList();
         if (memberList.size() != 0) {
-            Member m =  memberList.get(0);
+            Member m = memberList.get(0);
             Date now = new Date();
             // calculating time since last connect
             int time = Math.toIntExact((now.getTime() - m.getDateConnect().getTime()) / MILLI_TO_HOUR);
@@ -181,7 +181,7 @@ public class MemberDAOImpl implements MemberDAO {
         logger.info("in the dao: " + token);
         try {
             Member m = getMemberByToken(token);
-            if(m==null)return false;
+            if (m == null) return false;
             m.setToken(null);
             updateMember(m);
         } catch (Exception e) {
@@ -196,12 +196,12 @@ public class MemberDAOImpl implements MemberDAO {
     public Member getMemberByLogin(String login) {
         List<Member> list = new ArrayList<>();
         logger.info("login received(from DAO): " + login);
-        logger.info("session: "+sessionFactory);
+        logger.info("session: " + sessionFactory);
         request = "From Member where login = :login";
-        logger.info("login received: "+login);
+        logger.info("login received: " + login);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("login", login);
-        logger.info("query: "+query);
+        logger.info("query: " + query);
         try {
             return (Member) query.getResultList().get(0);
         } catch (Exception e) {

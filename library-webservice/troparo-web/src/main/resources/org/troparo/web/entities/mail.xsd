@@ -4,7 +4,6 @@
             elementFormDefault="qualified">
 
 
-
     <!-- Get Mail by Criterias Request Type -->
     <xsd:element name="getOverdueMailListRequest">
         <xsd:complexType>
@@ -34,7 +33,6 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-
 
 
     <!-- Mail Type Out-->

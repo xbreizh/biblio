@@ -1,20 +1,13 @@
 package integration;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.troparo.entities.connect.GetTokenRequestType;
-import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.web.service.BookServiceImpl;
-import org.troparo.web.service.ConnectServiceImpl;
 
 import javax.inject.Inject;
-
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ContextConfiguration("classpath:org/troparo/web/config/spring-hibernate-jax-ws.xml")
 @TestPropertySource("classpath:config.properties")

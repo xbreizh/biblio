@@ -8,14 +8,14 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MailTest {
 
     private Mail mail;
 
     @BeforeEach
-    void init(){
+    void init() {
         mail = new Mail();
     }
 
@@ -65,7 +65,7 @@ class MailTest {
     @DisplayName("should get due date")
     void getDueDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         mail.setDueDate(date);
         assertEquals(date, mail.getDueDate());
     }
@@ -74,7 +74,7 @@ class MailTest {
     @DisplayName("should set due date")
     void setDueDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         mail.setDueDate(date);
         assertEquals(date, mail.getDueDate());
     }
@@ -158,7 +158,7 @@ class MailTest {
         mail.setIsbn("AER111");
         mail.setDiffdays(23);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         mail.setDueDate(date);
         mail.setFirstname("Jean");
         mail.setLastname("Maurice");

@@ -10,10 +10,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>troparo-model</artifactId>
-<properties>
-    <!-- ===== Version properties ===== -->
-    <junit.jupiter.version>5.4.0</junit.jupiter.version>
-</properties>
+    <properties>
+        <!-- ===== Version properties ===== -->
+        <junit.jupiter.version>5.4.0</junit.jupiter.version>
+    </properties>
 
     <profiles>
         <!-- Profile utilisé pour lancer les tests d'intégration de la couche Model -->

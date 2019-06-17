@@ -6,10 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.connect.CheckTokenRequestType;
 import org.troparo.entities.connect.GetTokenRequestType;
@@ -19,7 +15,6 @@ import org.troparo.services.connectservice.BusinessExceptionConnect;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 /*@ContextConfiguration("classpath:/org/troparo/web/config/spring-hibernate-jax-ws-test.xml")
@@ -80,7 +75,7 @@ class ConnectServiceImplTest {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("Lokii");
         parameters.setPassword("1243");
-        String error= "wrong login or pwd";
+        String error = "wrong login or pwd";
         when(memberManager.getToken(anyString(), anyString())).thenReturn(error);
         assertEquals(error, connectService.getToken(parameters).getReturn());
     }
@@ -97,7 +92,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return false when token invalid")
-    void checkToken() throws BusinessExceptionConnect {
+    void checkToken()  {
         CheckTokenRequestType parameters = new CheckTokenRequestType();
         parameters.setToken("dedede");
         when(memberManager.checkToken(anyString())).thenReturn(false);
@@ -107,7 +102,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return true when token valid")
-    void checkToken1() throws BusinessExceptionConnect {
+    void checkToken1()  {
         CheckTokenRequestType parameters = new CheckTokenRequestType();
         parameters.setToken("dedede");
         when(memberManager.checkToken(anyString())).thenReturn(true);

@@ -28,7 +28,7 @@ class BookDAOImplTest {
 
     @Sql({"classpath:/src/main/resources/resetDb.sql"})
     @BeforeEach
-    void reset(){
+    void reset() {
         logger.info("reset db");
     }
 

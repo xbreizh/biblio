@@ -22,14 +22,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @Transactional
 class MemberDAOImplTest {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
-
     @Inject
     MemberDAO memberDAO;
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Sql({"classpath:/src/main/resources/resetDb.sql"})
     @BeforeEach
-    void reset(){
+    void reset() {
         logger.info("reset db");
     }
 

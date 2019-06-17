@@ -54,11 +54,11 @@ public class BookManagerImpl implements BookManager {
 
     String checkInsertion(Book book) {
         if (checkIsbnLength(book)) return exception = "ISBN must be 10 or 13 characters: " + book.getIsbn();
-        if (!checkBookParamLength( book.getTitle()))
+        if (!checkBookParamLength(book.getTitle()))
             return exception = "Title should have between 2 and 200 characters: " + book.getTitle();
-        if (!checkBookParamLength( book.getAuthor()))
+        if (!checkBookParamLength(book.getAuthor()))
             return exception = "Author should have between 2 and 200 characters: " + book.getAuthor();
-        if (!checkBookParamLength( book.getEdition()))
+        if (!checkBookParamLength(book.getEdition()))
             return exception = "Edition should have between 2 and 200 characters: " + book.getEdition();
         if (book.getPublicationYear() < 1455 || book.getPublicationYear() > Calendar.getInstance().get(Calendar.YEAR)) {
             return exception = "Publication year should be between 1455 and current: " + book.getPublicationYear();
@@ -66,7 +66,7 @@ public class BookManagerImpl implements BookManager {
         if (book.getNbPages() < 1 || book.getNbPages() > 9999) {
             return exception = "NbPages should be between 1 and 9 999, please recheck: " + book.getNbPages();
         }
-        if (checkBookParamLength( book.getKeywords()))
+        if (checkBookParamLength(book.getKeywords()))
             return exception = "Keyword list should be between 2 and 200 characters: " + book.getKeywords();
         String keywords = replaceSeparatorWithWhiteSpace(book.getKeywords());
         book.setKeywords(keywords);

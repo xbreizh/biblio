@@ -11,13 +11,21 @@ import org.troparo.model.Member;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 @Transactional
 @Named
 public class MemberManagerImpl implements MemberManager {
     private final String pepper = "Tipiak";
-
+    @Inject
+    MemberDAO memberDAO;
+    @Inject
+    EmailValidator validator;
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private String exception = "";
 
     public void setMemberDAO(MemberDAO memberDAO) {
         this.memberDAO = memberDAO;
@@ -27,15 +35,6 @@ public class MemberManagerImpl implements MemberManager {
     public void setValidator(EmailValidator validator) {
         this.validator = validator;
     }
-
-    @Inject
-    MemberDAO memberDAO;
-
-
-    @Inject
-    EmailValidator validator;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String exception = "";
 
     @Override
     public String addMember(Member member) {
@@ -66,99 +65,99 @@ public class MemberManagerImpl implements MemberManager {
 
 
     String checkValidityOfParametersForInsertMember(Member member) {
-        if(member==null)return "no member provided";
+        if (member == null) return "no member provided";
 
-        if(member.getLogin()==null)return "No login provided";
-        if (member.getLogin().equals("")||member.getLogin().equals("?"))return "No login provided";
+        if (member.getLogin() == null) return "No login provided";
+        if (member.getLogin().equals("") || member.getLogin().equals("?")) return "No login provided";
         if (member.getLogin().length() < 5 || member.getLogin().length() > 20) {
-            return  "Login must be 5 or 20 characters: " + member.getLogin();
+            return "Login must be 5 or 20 characters: " + member.getLogin();
         }
-        if(member.getFirstName()==null)return "No firstname provided";
-        if (member.getFirstName().equals("")||member.getFirstName().equals("?"))return "No firstname provided";
+        if (member.getFirstName() == null) return "No firstname provided";
+        if (member.getFirstName().equals("") || member.getFirstName().equals("?")) return "No firstname provided";
         if (member.getFirstName().length() < 2 || member.getFirstName().length() > 50) {
-            return  "FirstName should have between 2 and 200 characters: " + member.getFirstName();
+            return "FirstName should have between 2 and 200 characters: " + member.getFirstName();
         }
-        if(member.getLastName()==null)return "No lastname provided";
-        if (member.getLastName().equals("")||member.getLastName().equals("?"))return "No lastname provided";
+        if (member.getLastName() == null) return "No lastname provided";
+        if (member.getLastName().equals("") || member.getLastName().equals("?")) return "No lastname provided";
         if (member.getLastName().length() < 2 || member.getLastName().length() > 50) {
             return "LastName should have between 2 and 200 characters: " + member.getLastName();
         }
-        if(member.getPassword()==null)return "No password provided";
-        if (member.getPassword().equals("")||member.getPassword().equals("?"))return "No password provided";
+        if (member.getPassword() == null) return "No password provided";
+        if (member.getPassword().equals("") || member.getPassword().equals("?")) return "No password provided";
         if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
-            return  "Password should have between 2 and 200 characters: " + member.getPassword();
+            return "Password should have between 2 and 200 characters: " + member.getPassword();
         }
-        if(member.getEmail()==null)return "No email provided";
-        if (member.getEmail().equals("")||member.getEmail().equals("?"))return "No email provided";
-        if (!validator.validate(member.getEmail())) return  "Invalid Email: " + member.getEmail();
+        if (member.getEmail() == null) return "No email provided";
+        if (member.getEmail().equals("") || member.getEmail().equals("?")) return "No email provided";
+        if (!validator.validate(member.getEmail())) return "Invalid Email: " + member.getEmail();
         //logger.info("email validation: "+member.getEmail());
 
         return "";
     }
 
 
-    String checkValidityOfParametersForUpdateMember( Member memberNewValues) {
-        if(memberNewValues==null)return "no member provided";
+    String checkValidityOfParametersForUpdateMember(Member memberNewValues) {
+        if (memberNewValues == null) return "no member provided";
         int nbValuesToUpdate = 0;
         String login = memberNewValues.getLogin();
-        logger.info("login: "+login);
-        if(login==null)return "No login provided";
-        if (login.equals("")||login.equals("?"))return "No login provided";
+        logger.info("login: " + login);
+        if (login == null) return "No login provided";
+        if (login.equals("") || login.equals("?")) return "No login provided";
         if (login.length() < 5 || login.length() > 20) {
-            return  "Login must be 5 or 20 characters: " +login;
+            return "Login must be 5 or 20 characters: " + login;
         }
         String firstname = memberNewValues.getFirstName();
-        if(firstname!=null){
-            if(!firstname.equals("")&&!firstname.equals("?")) {
+        if (firstname != null) {
+            if (!firstname.equals("") && !firstname.equals("?")) {
                 if (firstname.length() < 2 || firstname.length() > 50) {
                     return "FirstName should have between 2 and 200 characters: " + firstname;
-                }else{
+                } else {
                     nbValuesToUpdate++;
                 }
             }
-            }
+        }
         String lastname = memberNewValues.getLastName();
-        if(lastname!=null) {
-            if(!lastname.equals("")&&!lastname.equals("?")) {
+        if (lastname != null) {
+            if (!lastname.equals("") && !lastname.equals("?")) {
                 if (lastname.length() < 2 || lastname.length() > 50) {
                     return "LastName should have between 2 and 200 characters: " + lastname;
-                }else{
+                } else {
                     nbValuesToUpdate++;
                 }
             }
         }
         String password = encryptPassword(memberNewValues.getPassword());
-        if(password!=null) {
-            if(!password.equals(encryptPassword(""))&&!password.equals(encryptPassword("?"))) {
+        if (password != null) {
+            if (!password.equals(encryptPassword("")) && !password.equals(encryptPassword("?"))) {
                 if (password.length() < 2 || password.length() > 200) {
                     return "Password should have between 2 and 200 characters: " + password;
-                }else{
+                } else {
                     nbValuesToUpdate++;
                 }
             }
         }
         String email = memberNewValues.getEmail();
-        if(email!=null) {
+        if (email != null) {
             if (!email.equals("") && !email.equals("?")) {
-                if (!validator.validate(email)){
+                if (!validator.validate(email)) {
                     return "Invalid Email: " + email;
-                }else{
+                } else {
                     nbValuesToUpdate++;
                 }
             }
         }
         String role = memberNewValues.getRole();
-        if(role!=null){
-            if(!role.equals("")&&!role.equals("?")){
+        if (role != null) {
+            if (!role.equals("") && !role.equals("?")) {
                 if (role.length() < 6 || role.length() > 10) {
-                    return  "Role should have between 6 and 10 characters: " + role;
-                }else{
+                    return "Role should have between 6 and 10 characters: " + role;
+                } else {
                     nbValuesToUpdate++;
                 }
             }
         }
-        logger.info("nb values: "+nbValuesToUpdate);
-        if(nbValuesToUpdate==0)return "There is no value to be updated";
+        logger.info("nb values: " + nbValuesToUpdate);
+        if (nbValuesToUpdate == 0) return "There is no value to be updated";
         return "";
     }
 
@@ -166,11 +165,11 @@ public class MemberManagerImpl implements MemberManager {
     String checkRequiredValuesNotNull(Member member) {
         String login = member.getLogin();
         if (member.getLogin() != null) {
-            if (login.equals("") || login.equals("?") ) {
+            if (login.equals("") || login.equals("?")) {
                 return "login should be filled";
             }
 
-        }else return "login should be filled";
+        } else return "login should be filled";
 
         if (member.getFirstName() != null) {
             if (member.getFirstName().equals("") || member.getFirstName().equals("?")) {
@@ -208,7 +207,6 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-
     @Override
     public List<Member> getMembers() {
         return memberDAO.getAllMembers();
@@ -233,9 +231,9 @@ public class MemberManagerImpl implements MemberManager {
         logger.info("getting id (from business): " + login);
         login = login.toUpperCase();
         Member member = memberDAO.getMemberByLogin(login);
-        logger.info("member returned: "+member);
+        logger.info("member returned: " + member);
         if (member != null) {
-            logger.info("member: "+member);
+            logger.info("member: " + member);
             return member;
         } else {
             logger.info("member is probably null");
@@ -257,25 +255,24 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-
     @Override
     public String updateMember(Member member) {
         logger.info("entering");
         exception = "";
-        if(member==null)return "No member passed";
+        if (member == null) return "No member passed";
         String login = member.getLogin();
 
         Member memberFromDatabase = memberDAO.getMemberByLogin(login);
-        if(memberFromDatabase==null)return "No member found with that login";
+        if (memberFromDatabase == null) return "No member found with that login";
         logger.info("reaching here");
         exception = checkValidityOfParametersForUpdateMember(member);
         if (!exception.equals("")) {
-            logger.info("ex "+exception);
+            logger.info("ex " + exception);
             return exception;
         }
         Member memberToTestIfAnyChange = memberFromDatabase;
         memberFromDatabase = transfertUpdatedDetails(member, memberFromDatabase);
-        if(memberFromDatabase==memberToTestIfAnyChange)return "nothing to update";
+        if (memberFromDatabase == memberToTestIfAnyChange) return "nothing to update";
 
         memberDAO.updateMember(memberFromDatabase);
         logger.info("updated: " + memberFromDatabase.getId());
@@ -288,39 +285,38 @@ public class MemberManagerImpl implements MemberManager {
         String password = encryptPassword(newMember.getPassword());
         String email = newMember.getEmail();
         String role = newMember.getRole();
-        if(firstName!=null){
-            if(!firstName.equals("")&&!firstName.equals("?"))memberFromDatabase.setFirstName(firstName);
+        if (firstName != null) {
+            if (!firstName.equals("") && !firstName.equals("?")) memberFromDatabase.setFirstName(firstName);
         }
-        if(lastName!=null){
-            if(!lastName.equals("")&&!lastName.equals("?"))memberFromDatabase.setLastName(lastName);
+        if (lastName != null) {
+            if (!lastName.equals("") && !lastName.equals("?")) memberFromDatabase.setLastName(lastName);
         }
-        if(password!=null){
-            if(!password.equals(encryptPassword(""))&&!password.equals(encryptPassword("?")))memberFromDatabase.setPassword(password);
+        if (password != null) {
+            if (!password.equals(encryptPassword("")) && !password.equals(encryptPassword("?")))
+                memberFromDatabase.setPassword(password);
         }
-        if(email!=null){
-            if(!email.equals("")&&!email.equals("?"))memberFromDatabase.setEmail(email);
+        if (email != null) {
+            if (!email.equals("") && !email.equals("?")) memberFromDatabase.setEmail(email);
         }
-        if(role!=null){
-            if(!role.equals("")&&!role.equals("?"))memberFromDatabase.setRole(role);
+        if (role != null) {
+            if (!role.equals("") && !role.equals("?")) memberFromDatabase.setRole(role);
         }
         return memberFromDatabase;
     }
 
 
-
     private boolean checkIfAnyvaluePassed(Member member) {
-        String[] paramList = {member.getLogin(), member.getFirstName(),member.getLastName(), member.getEmail(),member.getPassword(),member.getRole()};
-        int nbElement=0;
-        for (String str: paramList
-             ) {
+        String[] paramList = {member.getLogin(), member.getFirstName(), member.getLastName(), member.getEmail(), member.getPassword(), member.getRole()};
+        int nbElement = 0;
+        for (String str : paramList
+        ) {
             if (str != null) {
                 if (!str.equals("") && !str.equals("?")) nbElement++;
             }
         }
 
-        return nbElement!=0;
+        return nbElement != 0;
     }
-
 
 
     @Override
@@ -336,10 +332,6 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-
-
-
-
     // Login
     @Override
     public String getToken(String login, String password) {
@@ -348,7 +340,7 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("trying to get token from business");
             m = getMemberByLogin(login.toUpperCase());
             // checking password match
-            logger.info("member found: "+m);
+            logger.info("member found: " + m);
             logger.info(login);
             logger.info(password);
             if (m != null) {
@@ -362,7 +354,7 @@ public class MemberManagerImpl implements MemberManager {
                 } else {
                     logger.info("no token");
                 }
-            }else{
+            } else {
                 logger.info("member is null");
             }
         } catch (NullPointerException e) {

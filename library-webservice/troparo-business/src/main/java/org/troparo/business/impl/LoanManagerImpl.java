@@ -2,9 +2,6 @@ package org.troparo.business.impl;
 
 
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
@@ -19,24 +16,22 @@ import java.util.*;
 @Transactional
 @Named
 public class LoanManagerImpl implements LoanManager {
-    //@Value("${loanDuration}")
-    //private String loanDurationString;
-    private int loanDuration=28;
-    //@Value("${renewDuration}")
-    private int renewDuration=28;
-    //@Value("${maxBooks}")
-    private int maxBooks=4;
     @Inject
     LoanDAO loanDAO;
-
-
-
     @Inject
     BookManager bookManager;
     @Inject
     MemberManager memberManager;
+    //@Value("${loanDuration}")
+    //private String loanDurationString;
+    private int loanDuration = 28;
+    //@Value("${renewDuration}")
+    private int renewDuration = 28;
+    //@Value("${maxBooks}")
+    private int maxBooks = 4;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private String exception = "";
+
     @Override
     public String addLoan(Loan loan) {
 
@@ -44,7 +39,7 @@ public class LoanManagerImpl implements LoanManager {
         loan.setStartDate(new Date());
         Calendar cal = Calendar.getInstance();
         cal.setTime(loan.getStartDate());
-        cal.add(Calendar.DATE,loanDuration);
+        cal.add(Calendar.DATE, loanDuration);
         loan.setPlannedEndDate(cal.getTime());
         if (loan.getBorrower() == null) {
             return "invalid member";
@@ -87,16 +82,16 @@ public class LoanManagerImpl implements LoanManager {
         HashMap<String, String> criterias = new HashMap<>();
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
-            if(entry.getKey()!=null && entry.getValue()!=null) {
+            if (entry.getKey() != null && entry.getValue() != null) {
                 if (!entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")) {
-                    if(validCriteriasList.contains(entry.getKey().toUpperCase())) {
+                    if (validCriteriasList.contains(entry.getKey().toUpperCase())) {
                         criterias.put(entry.getKey(), entry.getValue());
                     }
                 }
             }
 
         }
-        logger.info("map: "+criterias);
+        logger.info("map: " + criterias);
         logger.info("map: " + map);
         logger.info("criterias: " + criterias);
         return loanDAO.getLoansByCriterias(criterias);
@@ -129,12 +124,11 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
-
     @Override
     public boolean isRenewable(int id) {
-        logger.info("checking if loan "+id+" is renewable");
+        logger.info("checking if loan " + id + " is renewable");
         Loan loan = loanDAO.getLoanById(id);
-        logger.info("renew duration: "+loanDuration);
+        logger.info("renew duration: " + loanDuration);
 
         if (loan.getEndDate() != null) {
             logger.info("endDate false");
@@ -148,9 +142,9 @@ public class LoanManagerImpl implements LoanManager {
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diff days is: " + diffInDays);
-        logger.info("diffDays: "+diffInDays);
-        if(diffInDays > loanDuration)return false;
-        return true;
+        logger.info("diffDays: " + diffInDays);
+
+        return diffInDays > loanDuration;
 
     }
 
@@ -176,17 +170,15 @@ public class LoanManagerImpl implements LoanManager {
         Loan loan;
         logger.info("getting loan status");
         Date today = getTodayDate();
-        logger.info("today: "+today);
+        logger.info("today: " + today);
         try {
             loan = loanDAO.getLoanById(id);
-            if(loan.getEndDate()!=null){
+            if (loan.getEndDate() != null) {
                 return "TERMINATED";
             }
-            if (loan.getEndDate() == null && loan.getPlannedEndDate().before(today)) {
+            if ( loan.getPlannedEndDate().before(today)) {
                 return "OVERDUE";
-            }
-
-            else{
+            } else {
                 return "PROGRESS";
             }
         } catch (NullPointerException e) {

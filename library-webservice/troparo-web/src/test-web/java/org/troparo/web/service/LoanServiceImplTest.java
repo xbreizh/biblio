@@ -9,8 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.BookManagerImpl;
-import org.troparo.business.impl.MemberManagerImpl;
-import org.troparo.entities.book.IsAvailableRequestType;
 import org.troparo.entities.loan.*;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
@@ -23,7 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -59,7 +58,7 @@ class LoanServiceImplTest {
         loanTypeIn.setLogin("Bobb");
         parameters.setLoanTypeIn(loanTypeIn);
         when(loanManager.addLoan(any(Loan.class))).thenReturn("");
-        assertDoesNotThrow(()->loanService.addLoan(parameters));
+        assertDoesNotThrow(() -> loanService.addLoan(parameters));
 
     }
 
@@ -73,10 +72,9 @@ class LoanServiceImplTest {
         parameters.setLoanTypeIn(loanTypeIn);
         String exception = "exception";
         when(loanManager.addLoan(any(Loan.class))).thenReturn(exception);
-       assertThrows(BusinessExceptionLoan.class,()-> loanService.addLoan(parameters));
+        assertThrows(BusinessExceptionLoan.class, () -> loanService.addLoan(parameters));
 
     }
-
 
 
     @Test
@@ -110,7 +108,7 @@ class LoanServiceImplTest {
     void getAllLoans() {
         LoanListRequestType parameters = new LoanListRequestType();
         parameters.setToken("token123");
-        assertDoesNotThrow(()->loanService.getAllLoans(parameters));
+        assertDoesNotThrow(() -> loanService.getAllLoans(parameters));
     }
 
     @Test
@@ -120,7 +118,7 @@ class LoanServiceImplTest {
         parameters.setToken("token123");
         parameters.setLoanCriterias(null);
 
-        assertDoesNotThrow(()->loanService.getLoanByCriterias(parameters));
+        assertDoesNotThrow(() -> loanService.getLoanByCriterias(parameters));
     }
 
     @Test
@@ -150,7 +148,6 @@ class LoanServiceImplTest {
         map.put("invalid.criteria", "invalid");
         assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
     }
-
 
 
     @Test
@@ -185,7 +182,6 @@ class LoanServiceImplTest {
     }
 
 
-
     @Test
     void renewLoan() throws BusinessExceptionLoan {
         RenewLoanRequestType parameters = new RenewLoanRequestType();
@@ -199,12 +195,12 @@ class LoanServiceImplTest {
 
     @Test
     void terminateLoan() throws BusinessExceptionLoan {
-       TerminateLoanRequestType parameters = new TerminateLoanRequestType();
-       parameters.setToken("tok123");
-       parameters.setId(3);
+        TerminateLoanRequestType parameters = new TerminateLoanRequestType();
+        parameters.setToken("tok123");
+        parameters.setId(3);
         String stringFromManager = "feedback from manager";
-       when(loanManager.terminate(anyInt())).thenReturn(stringFromManager);
-       assertEquals(stringFromManager, loanService.terminateLoan(parameters).getReturn());
+        when(loanManager.terminate(anyInt())).thenReturn(stringFromManager);
+        assertEquals(stringFromManager, loanService.terminateLoan(parameters).getReturn());
     }
     /*  @Test
       void isAvailable(){

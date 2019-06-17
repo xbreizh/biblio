@@ -33,6 +33,7 @@ class MemberServiceImplTest {
     private ConnectServiceImpl connectService;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @BeforeEach
     void init() {
         memberService = new MemberServiceImpl();
@@ -82,7 +83,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should add member with no exception")
-    void addMember1() throws Exception {
+    void addMember1()  {
         when(connectService.checkToken("tchok")).thenReturn(true);
         AddMemberRequestType parameters = new AddMemberRequestType();
         parameters.setToken("tchok");
@@ -224,7 +225,7 @@ class MemberServiceImplTest {
         List<Member> list = new ArrayList<>();
         Member member = new Member();
         list.add(member);*/
-       // when(memberManager.getMembersByCriterias(map)).thenReturn(list);
+        // when(memberManager.getMembersByCriterias(map)).thenReturn(list);
         assertThrows(BusinessExceptionMember.class, () -> memberService.getMemberByCriterias(parameters));
     }
 

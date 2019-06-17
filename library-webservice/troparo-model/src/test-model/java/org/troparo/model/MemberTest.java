@@ -9,15 +9,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MemberTest {
 
     private Member member;
 
     @BeforeEach
-    void init(){
-    member = new Member();
+    void init() {
+        member = new Member();
     }
 
     @Test
@@ -120,7 +120,7 @@ class MemberTest {
     @Test
     void getDateJoin() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         member.setDateJoin(date);
         assertEquals(date, member.getDateJoin());
     }
@@ -128,7 +128,7 @@ class MemberTest {
     @Test
     void setDateJoin() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         member.setDateJoin(date);
         assertEquals(date, member.getDateJoin());
     }
@@ -136,7 +136,7 @@ class MemberTest {
     @Test
     void getDateConnect() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         member.setDateConnect(date);
         assertEquals(date, member.getDateConnect());
     }
@@ -144,7 +144,7 @@ class MemberTest {
     @Test
     void setDateConnect() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         member.setDateConnect(date);
         assertEquals(date, member.getDateConnect());
     }
@@ -168,9 +168,9 @@ class MemberTest {
         List<Loan> loanList = new ArrayList<>();
         member.setLoanList(loanList);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
-        member.setDateConnect(format.parse ( "2009-12-31" ));
-        member.setDateJoin(format.parse ( "2010-12-31" ));
+        Date date = format.parse("2009-12-31");
+        member.setDateConnect(format.parse("2009-12-31"));
+        member.setDateJoin(format.parse("2010-12-31"));
         member.setEmail("bob@gmail.com");
         member.setToken("bnjnj3222");
         member.setRole("boss");
@@ -181,11 +181,8 @@ class MemberTest {
         member.setId(123);
         assertEquals("Member{Id=123, login='koko', firstName='Paul', lastName='Boki', password='bhbh222', " +
                 "role='boss', token='bnjnj3222', email='bob@gmail.com', dateJoin=Fri Dec 31 00:00:00 UTC 2010, " +
-                    "dateConnect=Thu Dec 31 00:00:00 UTC 2009, loanList=0}", member.toString());
+                "dateConnect=Thu Dec 31 00:00:00 UTC 2009, loanList=0}", member.toString());
     }
 
-    @Test
-    void testingpo(){
-        System.out.println("testing");
-    }
+
 }

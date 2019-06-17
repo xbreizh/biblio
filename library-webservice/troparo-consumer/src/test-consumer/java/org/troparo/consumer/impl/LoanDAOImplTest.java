@@ -15,10 +15,10 @@ import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
 import javax.inject.Inject;
-
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
+
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
@@ -33,7 +33,7 @@ class LoanDAOImplTest {
 
     @Sql({"classpath:/src/main/resources/resetDb.sql"})
     @BeforeEach
-    void reset(){
+    void reset() {
         logger.info("reset db");
     }
 
@@ -87,7 +87,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("shoult return empty list if ISBN is null")
     void getLoanByIsbn2() {
-        assertNull( loanDAO.getLoanByIsbn(null));
+        assertNull(loanDAO.getLoanByIsbn(null));
     }
 
     @Test

@@ -81,9 +81,9 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public List<Book> getBooksByCriterias(HashMap<String, String> map) {
         logger.info("map received in DAO: " + map);
-        if(map == null)return new ArrayList<>();
-        map =cleanInvaliMapEntries(map);
-        if(map.size()==0)return new ArrayList<>();
+        if (map == null) return new ArrayList<>();
+        map = cleanInvaliMapEntries(map);
+        if (map.size() == 0) return new ArrayList<>();
         String criterias = "";
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
@@ -114,15 +114,15 @@ public class BookDAOImpl implements BookDAO {
         }
     }
 
-    private HashMap<String, String>  cleanInvaliMapEntries(HashMap<String, String> map) {
+    private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
         String[] authorizedCriterias = {"isbn", "author", "title"};
         List<String> list = Arrays.asList(authorizedCriterias);
-        for (Map.Entry<String, String> entry : map.entrySet()){
-            if (!list.contains(entry.getKey())){ ;
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (!list.contains(entry.getKey())) {
                 map.remove(entry.getKey());
             }
         }
-        logger.info("map truc: "+map);
+        logger.info("map truc: " + map);
         return map;
     }
 
@@ -145,7 +145,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             sessionFactory.getCurrentSession().delete(book);
         } catch (Exception e) {
-           logger.error("error while removing: " + e.getMessage());
+            logger.error("error while removing: " + e.getMessage());
             return false;
         }
         return true;

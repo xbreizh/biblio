@@ -1,8 +1,6 @@
 package org.troparo.web.service;
 
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,9 +8,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.impl.BookManagerImpl;
 import org.troparo.entities.book.*;
-import org.troparo.entities.member.MemberTypeUpdate;
-import org.troparo.entities.member.RemoveMemberRequestType;
-import org.troparo.entities.member.UpdateMemberRequestType;
 import org.troparo.model.Book;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 
@@ -57,25 +52,25 @@ class BookServiceImplTest {
 
     @Test
     @DisplayName("should throw exception if missing bookTypeIn attribute")
-    void addBook()  {
+    void addBook() {
         AddBookRequestType parameters = new AddBookRequestType();
         parameters.setToken("tok123");
         BookTypeIn bookTypeIn = new BookTypeIn();
         parameters.setBookTypeIn(bookTypeIn);
-        assertThrows(BusinessExceptionBook.class, ()->bookService.addBook(parameters));
+        assertThrows(BusinessExceptionBook.class, () -> bookService.addBook(parameters));
     }
 
     @Test
     @DisplayName("should not throw exception is bookTypeIn is legit")
-    void addBook1() throws BusinessExceptionBook {
+    void addBook1()  {
         AddBookRequestType parameters = new AddBookRequestType();
         parameters.setToken("tok123");
         BookTypeIn bookTypeIn = new BookTypeIn();
-        String title="title";
+        String title = "title";
         String author = "author";
         int nbPages = 123;
-        int publicationYear=1982;
-        String edition ="edition";
+        int publicationYear = 1982;
+        String edition = "edition";
         String keywords = "ocean, beach, sea";
         String isbn = "isbn233";
         bookTypeIn.setTitle(title);
@@ -87,7 +82,7 @@ class BookServiceImplTest {
         bookTypeIn.setKeywords(keywords);
         parameters.setBookTypeIn(bookTypeIn);
         when(bookManager.addBook(any(Book.class))).thenReturn("");
-        assertDoesNotThrow( ()->bookService.addBook(parameters));
+        assertDoesNotThrow(() -> bookService.addBook(parameters));
     }
 
     @Test
@@ -96,11 +91,11 @@ class BookServiceImplTest {
         AddBookRequestType parameters = new AddBookRequestType();
         parameters.setToken("tok123");
         BookTypeIn bookTypeIn = new BookTypeIn();
-        String title="title";
+        String title = "title";
         String author = "author";
         int nbPages = 123;
-        int publicationYear=1982;
-        String edition ="edition";
+        int publicationYear = 1982;
+        String edition = "edition";
         String keywords = "ocean, beach, sea";
         String isbn = "isbn233";
         bookTypeIn.setTitle(title);
@@ -112,20 +107,20 @@ class BookServiceImplTest {
         bookTypeIn.setKeywords(keywords);
         parameters.setBookTypeIn(bookTypeIn);
         when(bookManager.addBook(any(Book.class))).thenReturn("exception");
-        assertThrows(BusinessExceptionBook.class, ()->bookService.addBook(parameters));
+        assertThrows(BusinessExceptionBook.class, () -> bookService.addBook(parameters));
     }
 
     @Test
     @DisplayName("should return an exception if any exception from manager")
-    void updateBook(){
+    void updateBook() {
         UpdateBookRequestType parameters = new UpdateBookRequestType();
         parameters.setToken("tok123");
         BookTypeUpdate bookTypeUpdate = new BookTypeUpdate();
-        String title="title";
+        String title = "title";
         String author = "author";
         int nbPages = 123;
-        int publicationYear=1982;
-        String edition ="edition";
+        int publicationYear = 1982;
+        String edition = "edition";
         String keywords = "ocean, beach, sea";
         String isbn = "isbn233";
         bookTypeUpdate.setTitle(title);
@@ -136,22 +131,22 @@ class BookServiceImplTest {
         bookTypeUpdate.setEdition(edition);
         bookTypeUpdate.setKeywords(keywords);
         parameters.setBookTypeUpdate(bookTypeUpdate);
-        String exception= "exception from manager";
+        String exception = "exception from manager";
         when(bookManager.updateBook(any(Book.class))).thenReturn(exception);
-        assertThrows(BusinessExceptionBook.class,()-> bookService.updateBook(parameters));
+        assertThrows(BusinessExceptionBook.class, () -> bookService.updateBook(parameters));
     }
 
     @Test
     @DisplayName("should not return an exception if no exception from manager")
-    void updateBook1(){
+    void updateBook1() {
         UpdateBookRequestType parameters = new UpdateBookRequestType();
         parameters.setToken("tok123");
         BookTypeUpdate bookTypeUpdate = new BookTypeUpdate();
-        String title="title";
+        String title = "title";
         String author = "author";
         int nbPages = 123;
-        int publicationYear=1982;
-        String edition ="edition";
+        int publicationYear = 1982;
+        String edition = "edition";
         String keywords = "ocean, beach, sea";
         String isbn = "isbn233";
         bookTypeUpdate.setTitle(title);
@@ -162,9 +157,9 @@ class BookServiceImplTest {
         bookTypeUpdate.setEdition(edition);
         bookTypeUpdate.setKeywords(keywords);
         parameters.setBookTypeUpdate(bookTypeUpdate);
-        String exception= "";
+        String exception = "";
         when(bookManager.updateBook(any(Book.class))).thenReturn(exception);
-        assertDoesNotThrow(()-> bookService.updateBook(parameters));
+        assertDoesNotThrow(() -> bookService.updateBook(parameters));
     }
 
     @Test
@@ -175,7 +170,7 @@ class BookServiceImplTest {
         parameters.setISBN("isbn12");
         parameters.setNbCopies(3);
         when(bookManager.addCopy(anyString(), anyInt())).thenReturn("");
-        assertDoesNotThrow(()->bookService.addCopy(parameters));
+        assertDoesNotThrow(() -> bookService.addCopy(parameters));
     }
 
     @Test
@@ -186,7 +181,7 @@ class BookServiceImplTest {
         parameters.setISBN("isbn12");
         parameters.setNbCopies(3);
         when(bookManager.addCopy(anyString(), anyInt())).thenReturn("exception");
-        assertThrows(BusinessExceptionBook.class, ()->bookService.addCopy(parameters));
+        assertThrows(BusinessExceptionBook.class, () -> bookService.addCopy(parameters));
     }
 
     @Test
@@ -206,12 +201,12 @@ class BookServiceImplTest {
         parameters.setToken("tok23");
         parameters.setId(3);
         Book book = new Book();
-        String title="title";
+        String title = "title";
         String author = "author";
         int nbPages = 123;
-        int publicationYear=1982;
+        int publicationYear = 1982;
         int id = 45;
-        String edition ="edition";
+        String edition = "edition";
         String keywords = "ocean, beach, sea";
         String isbn = "isbn233";
         book.setTitle(title);
@@ -226,13 +221,13 @@ class BookServiceImplTest {
         BookTypeOut bookTypeOut = bookService.getBookById(parameters).getBookTypeOut();
 
         assertAll(
-                ()->assertEquals(isbn, bookTypeOut.getISBN()),
-                ()->assertEquals(id, bookTypeOut.getId()),
-                ()->assertEquals(author, bookTypeOut.getAuthor()),
-                ()->assertEquals(title, bookTypeOut.getTitle()),
-                ()->assertEquals(edition, bookTypeOut.getEdition()),
-                ()->assertEquals(nbPages, bookTypeOut.getNbPages()),
-                ()->assertEquals(keywords, bookTypeOut.getKeywords())
+                () -> assertEquals(isbn, bookTypeOut.getISBN()),
+                () -> assertEquals(id, bookTypeOut.getId()),
+                () -> assertEquals(author, bookTypeOut.getAuthor()),
+                () -> assertEquals(title, bookTypeOut.getTitle()),
+                () -> assertEquals(edition, bookTypeOut.getEdition()),
+                () -> assertEquals(nbPages, bookTypeOut.getNbPages()),
+                () -> assertEquals(keywords, bookTypeOut.getKeywords())
         );
     }
 
@@ -300,7 +295,7 @@ class BookServiceImplTest {
         parameters.setToken("tok123");
         parameters.setId(33);
         when(bookManager.remove(anyInt())).thenReturn("exception from manager");
-        assertThrows(BusinessExceptionBook.class, ()-> bookService.removeBook(parameters));
+        assertThrows(BusinessExceptionBook.class, () -> bookService.removeBook(parameters));
 
     }
 
@@ -312,24 +307,24 @@ class BookServiceImplTest {
         parameters.setToken("tok123");
         parameters.setId(33);
         when(bookManager.remove(anyInt())).thenReturn("");
-        assertDoesNotThrow(()-> bookService.removeBook(parameters));
+        assertDoesNotThrow(() -> bookService.removeBook(parameters));
 
     }
 
     @Test
     @DisplayName("should return true if manager says true")
     void getAvailable() throws BusinessExceptionBook {
-       IsAvailableRequestType parameters  = new IsAvailableRequestType();
-       parameters.setToken("tok123");
-       parameters.setId(3);
-       when(bookManager.isAvailable(anyInt())).thenReturn(true);
-       assertTrue(bookService.isAvailable(parameters).isReturn());
+        IsAvailableRequestType parameters = new IsAvailableRequestType();
+        parameters.setToken("tok123");
+        parameters.setId(3);
+        when(bookManager.isAvailable(anyInt())).thenReturn(true);
+        assertTrue(bookService.isAvailable(parameters).isReturn());
     }
 
     @Test
     @DisplayName("should return false if manager says false")
     void getAvailable1() throws BusinessExceptionBook {
-        IsAvailableRequestType parameters  = new IsAvailableRequestType();
+        IsAvailableRequestType parameters = new IsAvailableRequestType();
         parameters.setToken("tok123");
         parameters.setId(3);
         when(bookManager.isAvailable(anyInt())).thenReturn(false);

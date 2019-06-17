@@ -40,20 +40,20 @@ public class ConnectServiceImpl implements IConnectService {
         try {
             checkToken(token);
         } catch (Exception e) {
-           logger.error(e.getMessage());
+            logger.error(e.getMessage());
             throw new BusinessExceptionConnect("invalid token");
         }
     }
 
     @Override
-    public InvalidateTokenResponseType invalidateToken(InvalidateTokenRequestType parameters) throws BusinessExceptionConnect {
+    public InvalidateTokenResponseType invalidateToken(InvalidateTokenRequestType parameters)  {
         InvalidateTokenResponseType ar = new InvalidateTokenResponseType();
         ar.setReturn(memberManager.invalidateToken(parameters.getToken()));
         return ar;
     }
 
     @Override
-    public GetTokenResponseType getToken(GetTokenRequestType parameters) throws BusinessExceptionConnect {
+    public GetTokenResponseType getToken(GetTokenRequestType parameters)   {
         GetTokenResponseType ar = new GetTokenResponseType();
         logger.info("entering get token method");
         logger.info("login: " + parameters.getLogin());
@@ -79,7 +79,7 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
     @Override
-    public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters) throws BusinessExceptionConnect {
+    public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters)  {
         ResetPasswordResponseType ar = new ResetPasswordResponseType();
         boolean result;
         logger.info("trying to reset pwd");
@@ -95,19 +95,11 @@ public class ConnectServiceImpl implements IConnectService {
 
 
     boolean checkToken(String token) {
-        if (!memberManager.checkToken(token)) {
-            return false;
-        }
-        return true;
+
+        return memberManager.checkToken(token);
     }
 
-  /*  boolean checkAdmin(String token) throws Exception {
-        checkToken(token);
-        if (!memberManager.checkAdmin(token)) {
-            throw new Exception("insufficient rights");
-        }
-        return true;
-    }*/
+
 
     public void setMemberManager(MemberManager memberManager) {
         this.memberManager = memberManager;

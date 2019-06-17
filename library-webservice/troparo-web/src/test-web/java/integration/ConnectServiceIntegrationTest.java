@@ -15,10 +15,11 @@ import org.troparo.web.service.ConnectServiceImpl;
 import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
-public class ConnectServiceIntegrationTest {
+class ConnectServiceIntegrationTest {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     @Inject
     private ConnectServiceImpl connectService;
@@ -43,7 +44,7 @@ public class ConnectServiceIntegrationTest {
         parameters.setLogin("LOKII");
         parameters.setPassword("123");
         String token = connectService.getToken(parameters).getReturn();
-        logger.info("token returned: "+token);
-        assertNotEquals("wrong login or pwd",token);
+        logger.info("token returned: " + token);
+        assertNotEquals("wrong login or pwd", token);
     }
 }

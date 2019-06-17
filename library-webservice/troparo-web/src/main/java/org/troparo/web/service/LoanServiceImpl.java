@@ -25,7 +25,6 @@ public class LoanServiceImpl implements ILoanService {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
 
-
     @Inject
     private LoanManager loanManager;
     @Inject
@@ -113,7 +112,6 @@ public class LoanServiceImpl implements ILoanService {
     }
 
 
-
     // Get List By Criterias
     @Override
     public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
@@ -123,15 +121,16 @@ public class LoanServiceImpl implements ILoanService {
         checkAuthentication(parameters.getToken());
         logger.info("troko");
         HashMap<String, String> map = new HashMap<>();
-        if(parameters.getLoanCriterias()==null) {
+        if (parameters.getLoanCriterias() == null) {
             responseType.setLoanListType(loanListType);
             return responseType;
         }
-        if(parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin()==null && parameters.getLoanCriterias().getStatus() ==null)return null;
+        if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null)
+            return null;
         //LoanCriterias criterias = parameters.getLoanCriterias();
         //logger.info(parameters.getLoanCriterias());
-        if(parameters.getLoanCriterias().getLogin()!=null){
-            if(!parameters.getLoanCriterias().getLogin().equals("")||!parameters.getLoanCriterias().getLogin().equals("?")){
+        if (parameters.getLoanCriterias().getLogin() != null) {
+            if (!parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
                 map.put("borrower.login", parameters.getLoanCriterias().getLogin().toUpperCase());
             }
         }
@@ -288,11 +287,11 @@ public class LoanServiceImpl implements ILoanService {
         }
     }
 
-    public void setLoanManager(LoanManager loanManager) {
+    void setLoanManager(LoanManager loanManager) {
         this.loanManager = loanManager;
     }
 
-    public void setBookManager(BookManager bookManager) {
+    void setBookManager(BookManager bookManager) {
         this.bookManager = bookManager;
     }
 
@@ -300,7 +299,7 @@ public class LoanServiceImpl implements ILoanService {
         this.memberManager = memberManager;
     }
 
-    public void setAuthentication(ConnectServiceImpl authentication) {
+    void setAuthentication(ConnectServiceImpl authentication) {
         this.authentication = authentication;
     }
 

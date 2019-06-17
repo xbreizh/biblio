@@ -19,10 +19,9 @@ import java.util.List;
 @PropertySource("classpath:mail.properties")*/
 @Named
 public class MailManagerImpl implements MailManager {
-    private Logger logger = Logger.getLogger(MailManagerImpl.class);
-
     @Inject
     LoanManager loanManager;
+    private Logger logger = Logger.getLogger(MailManagerImpl.class);
 
 
    /* @Value("${sender}")
@@ -104,8 +103,6 @@ public class MailManagerImpl implements MailManager {
             throw new RuntimeException(e);
         }
     }*/
-
-
 
 
     //Method to replace the values for keys
@@ -195,14 +192,14 @@ public class MailManagerImpl implements MailManager {
         return b;
     }*/
 
-  /*  private List<Loan> getOverdueList(){
-        HashMap<String, String> criterias = new HashMap<>();
-        criterias.put("status", "OVERDUE");
-        logger.info("getting overdue list");
-        return loanManager.getLoansByCriterias(criterias);
-    }*/
+    /*  private List<Loan> getOverdueList(){
+          HashMap<String, String> criterias = new HashMap<>();
+          criterias.put("status", "OVERDUE");
+          logger.info("getting overdue list");
+          return loanManager.getLoansByCriterias(criterias);
+      }*/
     @Override
-    public int calculateDaysBetweenDates(Date d1, Date d2){/*
+    public int calculateDaysBetweenDates(Date d1, Date d2) {/*
         String format = "MM/dd/yyyy hh:mm a";
         SimpleDateFormat sdf = new SimpleDateFormat(format);*/
         long diff = d2.getTime() - d1.getTime();
@@ -232,26 +229,26 @@ public class MailManagerImpl implements MailManager {
     }*/
 
 
-  /*  private String getPassword() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        String tempkey = "";
-        String password = "";
-        Properties prop = new Properties();
-        InputStream input = null;
-        input = new FileInputStream(fileLocation);
-        // load a properties file
-        prop.load(input);
-        tempkey = prop.getProperty("Key");
-        password = prop.getProperty("Encrypted_Password");
+    /*  private String getPassword() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+          String tempkey = "";
+          String password = "";
+          Properties prop = new Properties();
+          InputStream input = null;
+          input = new FileInputStream(fileLocation);
+          // load a properties file
+          prop.load(input);
+          tempkey = prop.getProperty("Key");
+          password = prop.getProperty("Encrypted_Password");
 
-        byte[] bytekey = hexStringToByteArray(tempkey);
-        SecretKeySpec sks = new SecretKeySpec(bytekey, AES);
-        Cipher cipher = Cipher.getInstance(AES);
-        cipher.init(Cipher.DECRYPT_MODE, sks);
-        byte[] decrypted = cipher.doFinal(hexStringToByteArray(password));
-        String OriginalPassword = new String(decrypted);
+          byte[] bytekey = hexStringToByteArray(tempkey);
+          SecretKeySpec sks = new SecretKeySpec(bytekey, AES);
+          Cipher cipher = Cipher.getInstance(AES);
+          cipher.init(Cipher.DECRYPT_MODE, sks);
+          byte[] decrypted = cipher.doFinal(hexStringToByteArray(password));
+          String OriginalPassword = new String(decrypted);
 
-        return OriginalPassword;
-    }*/
+          return OriginalPassword;
+      }*/
     @Override
     public List<Mail> getOverdueEmailList() {
         HashMap<String, String> criterias = new HashMap<>();
@@ -259,9 +256,9 @@ public class MailManagerImpl implements MailManager {
         logger.info("getting overdue list");
         List<Loan> loans = loanManager.getLoansByCriterias(criterias);
         /*List<Mail> mailList = new ArrayList<>();*/
-        logger.info("loans: "+loans.size());
+        logger.info("loans: " + loans.size());
         List<Mail> mailList = new ArrayList<>();
-        for (Loan loan: loans
+        for (Loan loan : loans
         ) {
             Mail mail = new Mail();
             mail.setEmail(loan.getBorrower().getEmail());
@@ -279,7 +276,7 @@ public class MailManagerImpl implements MailManager {
         return mailList;
     }
 
-    Date getTodaySDate(){
+    Date getTodaySDate() {
         return new Date();
     }
 
