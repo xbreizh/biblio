@@ -127,9 +127,9 @@ public class MemberManagerImpl implements MemberManager {
                 }
             }
         }
-        String password = memberNewValues.getPassword();
+        String password = encryptPassword(memberNewValues.getPassword());
         if(password!=null) {
-            if(!password.equals("")&&!password.equals("?")) {
+            if(!password.equals(encryptPassword(""))&&!password.equals(encryptPassword("?"))) {
                 if (password.length() < 2 || password.length() > 200) {
                     return "Password should have between 2 and 200 characters: " + password;
                 }else{
@@ -166,10 +166,10 @@ public class MemberManagerImpl implements MemberManager {
     String checkRequiredValuesNotNull(Member member) {
         String login = member.getLogin();
         if (member.getLogin() != null) {
-            if (!login.equals("") && !login.equals("?") ) {
-
+            if (login.equals("") || login.equals("?") ) {
+                return "login should be filled";
             }
-            else return "login should be filled";
+           // else return "login should be filled";
         }else return "login should be filled";
 
         if (member.getFirstName() != null) {
@@ -283,19 +283,19 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
-        String firstname = newMember.getFirstName();
-        String lastname = newMember.getLastName();
-        String password = newMember.getPassword();
+        String firstName = newMember.getFirstName();
+        String lastName = newMember.getLastName();
+        String password = encryptPassword(newMember.getPassword());
         String email = newMember.getEmail();
         String role = newMember.getRole();
-        if(firstname!=null){
-            if(!firstname.equals("")&&!firstname.equals("?"))memberFromDatabase.setFirstName(firstname);
+        if(firstName!=null){
+            if(!firstName.equals("")&&!firstName.equals("?"))memberFromDatabase.setFirstName(firstName);
         }
-        if(lastname!=null){
-            if(!lastname.equals("")&&!lastname.equals("?"))memberFromDatabase.setLastName(lastname);
+        if(lastName!=null){
+            if(!lastName.equals("")&&!lastName.equals("?"))memberFromDatabase.setLastName(lastName);
         }
         if(password!=null){
-            if(!password.equals("")&&!password.equals("?"))memberFromDatabase.setPassword(password);
+            if(!password.equals(encryptPassword(""))&&!password.equals(encryptPassword("?")))memberFromDatabase.setPassword(password);
         }
         if(email!=null){
             if(!email.equals("")&&!email.equals("?"))memberFromDatabase.setEmail(email);
@@ -317,8 +317,9 @@ public class MemberManagerImpl implements MemberManager {
                 if (!str.equals("") && !str.equals("?")) nbElement++;
             }
         }
-        if(nbElement!=0)return true;
-        return false;
+       /* if(nbElement!=0)return true;
+        return false;*/
+        return nbElement!=0;
     }
 
 
@@ -422,8 +423,8 @@ public class MemberManagerImpl implements MemberManager {
                 logger.info("member not null");
                 logger.info("email passed: " + m.getEmail());
                 m.setPassword(encryptPassword(password));
-                if (!memberDAO.updateMember(m)) return false;
-                return true;
+               /* if (!memberDAO.updateMember(m)) return false;*/
+                return memberDAO.updateMember(m);
             }
 
         } else {
