@@ -1,9 +1,11 @@
 package org.troparo.consumer.impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.BookDAO;
@@ -27,6 +29,12 @@ class LoanDAOImplTest {
     private LoanDAO loanDAO;
     @Inject
     private BookDAO bookDAO;
+
+    @Sql({"classpath:/resetDb.sql"})
+    @BeforeEach
+    void reset(){
+        System.out.println("reset db");
+    }
 
     @Test
     @DisplayName("should return list of loans")
