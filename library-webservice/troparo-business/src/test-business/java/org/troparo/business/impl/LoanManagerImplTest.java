@@ -132,7 +132,7 @@ class LoanManagerImplTest {
     @DisplayName("should return null")
     void getLoanById1() {
         when(loanDAO.getLoanById(2)).thenReturn(null);
-        assertNull( loanManager.getLoanById(2));
+        assertNull(loanManager.getLoanById(2));
     }
 
     @Test
@@ -282,7 +282,7 @@ class LoanManagerImplTest {
     @DisplayName("should return null if loan not found")
     void getLoanStatus4() {
         when(loanDAO.getLoanById(anyInt())).thenReturn(null);
-        assertNull( loanManager.getLoanStatus(55));
+        assertNull(loanManager.getLoanStatus(55));
 
     }
 }

@@ -92,7 +92,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return false when token invalid")
-    void checkToken()  {
+    void checkToken() {
         CheckTokenRequestType parameters = new CheckTokenRequestType();
         parameters.setToken("dedede");
         when(memberManager.checkToken(anyString())).thenReturn(false);
@@ -102,7 +102,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return true when token valid")
-    void checkToken1()  {
+    void checkToken1() {
         CheckTokenRequestType parameters = new CheckTokenRequestType();
         parameters.setToken("dedede");
         when(memberManager.checkToken(anyString())).thenReturn(true);

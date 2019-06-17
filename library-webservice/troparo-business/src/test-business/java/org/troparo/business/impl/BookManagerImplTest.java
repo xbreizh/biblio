@@ -241,6 +241,14 @@ class BookManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return false if book ISBN equals to \"?\" ")
+    void checksThatBookHasAnISBN3() {
+        //Book book = new Book();
+        // book.setIsbn("?");
+        assertEquals("You must provide an ISBN", bookManager2.checksThatBookHasAnISBN(null));
+    }
+
+    @Test
     @DisplayName("should return book by ISBN")
     void getBookByIsbn() {
         Book book = new Book();

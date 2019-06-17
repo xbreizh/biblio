@@ -62,7 +62,7 @@ class BookServiceImplTest {
 
     @Test
     @DisplayName("should not throw exception is bookTypeIn is legit")
-    void addBook1()  {
+    void addBook1() {
         AddBookRequestType parameters = new AddBookRequestType();
         parameters.setToken("tok123");
         BookTypeIn bookTypeIn = new BookTypeIn();

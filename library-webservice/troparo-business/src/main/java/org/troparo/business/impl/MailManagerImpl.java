@@ -25,7 +25,6 @@ public class MailManagerImpl implements MailManager {
 
 
    /* @Value("${sender}")
-    private String mailFrom;
     @Value("${fileLocation}")
     private String fileLocation;
     @Value("${subject}")

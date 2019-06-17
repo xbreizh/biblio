@@ -23,19 +23,16 @@ public class LoanManagerImpl implements LoanManager {
     @Inject
     MemberManager memberManager;
     //@Value("${loanDuration}")
-    //private String loanDurationString;
     private int loanDuration = 28;
     //@Value("${renewDuration}")
     private int renewDuration = 28;
     //@Value("${maxBooks}")
     private int maxBooks = 4;
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String exception = "";
 
     @Override
     public String addLoan(Loan loan) {
 
-        exception = "";
         loan.setStartDate(new Date());
         Calendar cal = Calendar.getInstance();
         cal.setTime(loan.getStartDate());
@@ -58,7 +55,7 @@ public class LoanManagerImpl implements LoanManager {
         } else {
             return "max number of books rented reached";
         }
-        return exception;
+        return "";
 
     }
 
@@ -82,12 +79,14 @@ public class LoanManagerImpl implements LoanManager {
         HashMap<String, String> criterias = new HashMap<>();
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
-            if (entry.getKey() != null && entry.getValue() != null) {
-                if (!entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")) {
-                    if (validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                        criterias.put(entry.getKey(), entry.getValue());
-                    }
-                }
+            if (entry.getKey() != null && entry.getValue() != null &&
+                    !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
+                    && validCriteriasList.contains(entry.getKey().toUpperCase())) {
+                /*if () {*/
+                /*if (validCriteriasList.contains(entry.getKey().toUpperCase())) {*/
+                criterias.put(entry.getKey(), entry.getValue());
+                /* }*/
+                /* }*/
             }
 
         }
@@ -99,7 +98,6 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String renewLoan(int id) {
-        /*exception = "";*/
         Loan loan = loanDAO.getLoanById(id);
 
         if (loan.getEndDate() != null) {
@@ -176,7 +174,7 @@ public class LoanManagerImpl implements LoanManager {
             if (loan.getEndDate() != null) {
                 return "TERMINATED";
             }
-            if ( loan.getPlannedEndDate().before(today)) {
+            if (loan.getPlannedEndDate().before(today)) {
                 return "OVERDUE";
             } else {
                 return "PROGRESS";

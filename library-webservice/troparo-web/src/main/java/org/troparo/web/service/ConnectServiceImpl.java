@@ -46,14 +46,14 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
     @Override
-    public InvalidateTokenResponseType invalidateToken(InvalidateTokenRequestType parameters)  {
+    public InvalidateTokenResponseType invalidateToken(InvalidateTokenRequestType parameters) {
         InvalidateTokenResponseType ar = new InvalidateTokenResponseType();
         ar.setReturn(memberManager.invalidateToken(parameters.getToken()));
         return ar;
     }
 
     @Override
-    public GetTokenResponseType getToken(GetTokenRequestType parameters)   {
+    public GetTokenResponseType getToken(GetTokenRequestType parameters) {
         GetTokenResponseType ar = new GetTokenResponseType();
         logger.info("entering get token method");
         logger.info("login: " + parameters.getLogin());
@@ -79,7 +79,7 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
     @Override
-    public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters)  {
+    public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters) {
         ResetPasswordResponseType ar = new ResetPasswordResponseType();
         boolean result;
         logger.info("trying to reset pwd");
@@ -98,7 +98,6 @@ public class ConnectServiceImpl implements IConnectService {
 
         return memberManager.checkToken(token);
     }
-
 
 
     public void setMemberManager(MemberManager memberManager) {

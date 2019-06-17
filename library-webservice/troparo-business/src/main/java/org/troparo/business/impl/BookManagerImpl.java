@@ -152,11 +152,10 @@ public class BookManagerImpl implements BookManager {
         List<String> possibleCriteriasList = Arrays.asList(possibleCriterias);
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
-            if (possibleCriteriasList.contains(entry.getKey())) {
-                if (!entry.getValue().equals("?") && !entry.getValue().equals("")) {
-                    criterias.put(entry.getKey(), entry.getValue());
-                }
+            if (possibleCriteriasList.contains(entry.getKey()) && !entry.getValue().equals("?") && !entry.getValue().equals("")) {
+                criterias.put(entry.getKey(), entry.getValue());
             }
+
         }
         return criterias;
     }
@@ -199,11 +198,10 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferKeywordsToSimilarBooks(Book book, Book b) {
-        if (book.getKeywords() != null) {
-            if (!book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
-                b.setKeywords(book.getKeywords());
-            }
+        if (book.getKeywords() != null && !book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
+            b.setKeywords(book.getKeywords());
         }
+
         return b.getKeywords();
     }
 
@@ -223,38 +221,39 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferEditionToSimilarBooks(Book book, Book b) {
-        if (book.getEdition() != null) {
-            if (!book.getEdition().equals("") && !book.getEdition().equals("?")) {
-                logger.info("got you");
-                b.setEdition(book.getEdition());
-            }
+        if (book.getEdition() != null && !book.getEdition().equals("") && !book.getEdition().equals("?")) {
+            logger.info("got you");
+            b.setEdition(book.getEdition());
         }
+
         return b.getEdition();
     }
 
     String transferAuthorToSimilarBooks(Book book, Book b) {
-        if (book.getAuthor() != null) {
-            if (!book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
-                b.setAuthor(book.getAuthor());
-            }
+        if (book.getAuthor() != null && !book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
+            b.setAuthor(book.getAuthor());
         }
+
         return b.getAuthor();
     }
 
     String transferTitleToSimilarBooks(Book book, Book b) {
-        if (book.getTitle() != null) {
-            if (!book.getTitle().equals("") && !book.getTitle().equals("?")) {
+        if (book != null) {
+            if (book.getTitle() != null && !book.getTitle().equals("") && !book.getTitle().equals("?")) {
                 b.setTitle(book.getTitle());
             }
+        } else {
+            return null;
         }
+
         return b.getTitle();
     }
 
 
     protected String checksThatBookHasAnISBN(Book book) {
         String str = "You must provide an ISBN";
-        if (book.getIsbn() == null) return str;
-        if (book.getIsbn().equals("") || book.getIsbn().equals("?")) {
+        if (book == null) return str;
+        if (book.getIsbn() == null || book.getIsbn().equals("") || book.getIsbn().equals("?")) {
             return str;
         } else {
             logger.info(book.getTitle());

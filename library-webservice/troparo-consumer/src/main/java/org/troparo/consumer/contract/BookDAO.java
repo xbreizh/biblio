@@ -28,5 +28,4 @@ public interface BookDAO {
 
     boolean isAvailable(int id);
 
-    /* boolean addCopies(String isbn, int copies);*/
 }

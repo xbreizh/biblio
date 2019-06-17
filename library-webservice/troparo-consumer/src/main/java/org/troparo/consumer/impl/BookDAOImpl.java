@@ -17,7 +17,6 @@ import static java.lang.Math.toIntExact;
 public class BookDAOImpl implements BookDAO {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private Class cl = Book.class;
-    private String request;
 
     @Inject
     private SessionFactory sessionFactory;
@@ -26,10 +25,11 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public List<Book> getBooks() {
         logger.info("getting in dao");
+        List<Book> bookList = new ArrayList<>();
         try {
-            return sessionFactory.getCurrentSession().createQuery("from Book", cl).getResultList();
+            return sessionFactory.getCurrentSession().createQuery("From Book", cl).getResultList();
         } catch (Exception e) {
-            return null;
+            return bookList;
         }
 
     }
@@ -40,7 +40,7 @@ public class BookDAOImpl implements BookDAO {
         try {
             sessionFactory.getCurrentSession().persist(book);
         } catch (Exception e) {
-            System.err.println("error while persisting: " + e.getMessage());
+            logger.error("error while persisting: " + e.getMessage());
             return false;
         }
         return true;
@@ -48,6 +48,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public Book getBookById(int id) {
+        String request;
         logger.info("in the dao: " + id);
         request = "From Book where id = :id";
 
@@ -64,12 +65,13 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public boolean existingISBN(String isbn) {
         logger.info("in the dao: " + isbn);
+        String request;
         isbn = isbn.toUpperCase();
         request = "From Book where isbn = :isbn";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("isbn", isbn);
-        if (query.getResultList().size() != 0) {
+        if (!query.getResultList().isEmpty()) {
             logger.info("records found: " + query.getResultList().size());
             return true;
         } else {
@@ -80,10 +82,12 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public List<Book> getBooksByCriterias(HashMap<String, String> map) {
+        String request;
         logger.info("map received in DAO: " + map);
+        List<Book> bookList = new ArrayList<>();
         if (map == null) return new ArrayList<>();
         map = cleanInvaliMapEntries(map);
-        if (map.size() == 0) return new ArrayList<>();
+        if (map.isEmpty()) return new ArrayList<>();
         String criterias = "";
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
@@ -96,7 +100,7 @@ public class BookDAOImpl implements BookDAO {
         }
         request = "SELECT DISTINCT ON (isbn ) *  From Book ";
         request += criterias;
-        /*request += "group by ISBN";*/
+
         logger.info("request: " + request);
         sessionFactory.getCurrentSession().flush();
         sessionFactory.getCurrentSession().clear();
@@ -110,7 +114,7 @@ public class BookDAOImpl implements BookDAO {
             logger.info("list with criterias size: " + query.getResultList().size());
             return query.getResultList();
         } catch (Exception e) {
-            return null;
+            return bookList;
         }
     }
 
@@ -173,20 +177,13 @@ public class BookDAOImpl implements BookDAO {
         Query query1 = sessionFactory.getCurrentSession().createQuery(request1);
         query1.setParameter("id", id);
         return query1.getResultList().size() <= 0;// if not currently borrowed, then available
-        /*
-        String request2 = "From Book where id = :id and id not in(select book.id from Loan where endDate is not null)";
-        logger.info("request: " + request);
-        Query query = sessionFactory.getCurrentSession().createQuery(request);
-        query.setParameter("id", id);
-        logger.info("is available: "+query.getSingleResult());
 
-        return query.getSingleResult() != null;*/
     }
 
     @Override
     public Book getBookByIsbn(String isbn) {
+        String request;
         isbn = isbn.toUpperCase();
-        List<Book> list = new ArrayList<>();
         request = "From Book where isbn = :isbn";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);

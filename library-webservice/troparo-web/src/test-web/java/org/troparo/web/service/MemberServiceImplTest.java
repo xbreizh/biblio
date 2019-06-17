@@ -83,7 +83,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should add member with no exception")
-    void addMember1()  {
+    void addMember1() {
         when(connectService.checkToken("tchok")).thenReturn(true);
         AddMemberRequestType parameters = new AddMemberRequestType();
         parameters.setToken("tchok");

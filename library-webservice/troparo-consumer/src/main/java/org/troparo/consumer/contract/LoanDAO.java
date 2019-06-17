@@ -24,8 +24,4 @@ public interface LoanDAO {
     List<Loan> getLoansByCriterias(HashMap<String, String> map);
 
 
-    /*boolean renew(int id);
-
-    boolean terminate(Loan loan);*/
-
 }
