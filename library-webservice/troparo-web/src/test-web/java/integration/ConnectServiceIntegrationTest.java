@@ -1,5 +1,6 @@
 package integration;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 public class ConnectServiceIntegrationTest {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     @Inject
     private ConnectServiceImpl connectService;
    /* @Inject
@@ -41,7 +43,7 @@ public class ConnectServiceIntegrationTest {
         parameters.setLogin("LOKII");
         parameters.setPassword("123");
         String token = connectService.getToken(parameters).getReturn();
-        System.out.println("token returned: "+token);
+        logger.info("token returned: "+token);
         assertNotEquals("wrong login or pwd",token);
     }
 }

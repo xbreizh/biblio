@@ -221,7 +221,7 @@ public class BookServiceImpl implements IBookService {
         /*map.put("Author", criterias.getAuthor().toUpperCase());*/ {
             logger.info("map: " + newMap);
         }
-        System.out.println(newMap);
+        logger.info(newMap);
         if(newMap.isEmpty()) {
             getBookByCriteriasResponseType.setBookListType(bookListType);
             return getBookByCriteriasResponseType;
@@ -253,7 +253,7 @@ public class BookServiceImpl implements IBookService {
                 newMap.put(entry.getKey().toString(), entry.getValue().toString());
             }
         }
-        System.out.println("newMap: "+newMap);
+        logger.info("newMap: "+newMap);
         return newMap;
     }
 /*

@@ -1,5 +1,6 @@
 package org.troparo.consumer.impl;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @Transactional
 class BookDAOImplTest {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Inject
     private BookDAO bookDAO;
@@ -27,7 +29,7 @@ class BookDAOImplTest {
     @Sql({"classpath:/resetDb.sql"})
     @BeforeEach
     void reset(){
-        System.out.println("reset db");
+        logger.info("reset db");
     }
 
     @Test
@@ -49,7 +51,7 @@ class BookDAOImplTest {
     @DisplayName("should return book if id valid")
     void getBookById() {
         Book book = bookDAO.getBookById(3);
-        System.out.println(book);
+        logger.info(book);
         assertAll(
                 () -> assertEquals("MAURICE MOSS", book.getAuthor()),
                 () -> assertEquals("GALLIMARD", book.getEdition()),

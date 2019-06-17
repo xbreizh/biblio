@@ -1,5 +1,6 @@
 package org.troparo.consumer.impl;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @Transactional
 class MemberDAOImplTest {
-
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Inject
     MemberDAO memberDAO;
@@ -29,7 +30,7 @@ class MemberDAOImplTest {
     @Sql({"classpath:/resetDb.sql"})
     @BeforeEach
     void reset(){
-        System.out.println("reset db");
+        logger.info("reset db");
     }
 
 

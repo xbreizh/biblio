@@ -1,5 +1,6 @@
 package org.troparo.business.impl;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,10 +36,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 class LoanManagerImplTest {
 
-    /*private static ConfigurableApplicationContext applicationContext = new ClassPathXmlApplicationContext(
-            "application-context.xml");*/
-
-    //@Inject
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private LoanManagerImpl loanManager;
     @Inject
     private LoanDAO loanDAO;
@@ -158,7 +156,7 @@ class LoanManagerImplTest {
         Loan loan = new Loan();
         loan.setEndDate(new Date());
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
-        System.out.println("loanDuration: "+loanManager.getLoanDuration());
+        logger.info("loanDuration: "+loanManager.getLoanDuration());
         assertEquals("loan already terminated: "+loan.getEndDate(), loanManager.renewLoan(45));
     }
 

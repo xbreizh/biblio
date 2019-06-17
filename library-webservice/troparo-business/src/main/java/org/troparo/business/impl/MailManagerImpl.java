@@ -95,7 +95,7 @@ public class MailManagerImpl implements MailManager {
 
             }
 
-            System.out.println("Done");
+            logger.info("Done");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -256,7 +256,7 @@ public class MailManagerImpl implements MailManager {
         logger.info("getting overdue list");
         List<Loan> loans = loanManager.getLoansByCriterias(criterias);
         /*List<Mail> mailList = new ArrayList<>();*/
-        System.out.println("loans: "+loans.size());
+        logger.info("loans: "+loans.size());
         List<Mail> mailList = new ArrayList<>();
         for (Loan loan: loans
         ) {

@@ -49,10 +49,10 @@ public class MemberServiceImpl implements IMemberService {
         this.member = convertMemberTypeInIntoMember(memberTypeIn);
         logger.info("memberManager: " + memberManager);
         exception = memberManager.addMember(member);
-        System.out.println("exception: ");
+        logger.info("exception: ");
         if (!exception.equals("")) {
             logger.info(exception);
-            System.out.println("exx: "+exception);
+            logger.info("exx: "+exception);
             throw new BusinessExceptionMember(exception);
         }
 
@@ -62,7 +62,7 @@ public class MemberServiceImpl implements IMemberService {
     // Converts Input into Member for business
     Member convertMemberTypeInIntoMember(MemberTypeIn memberTypeIn) {
         member = new Member();
-        System.out.println(memberTypeIn);
+        logger.info(memberTypeIn);
         member.setLogin(memberTypeIn.getLogin().toUpperCase());
         member.setFirstName(memberTypeIn.getFirstName().toUpperCase());
         member.setLastName(memberTypeIn.getLastName().toUpperCase());
@@ -271,7 +271,7 @@ public class MemberServiceImpl implements IMemberService {
         HashMap<String, String> newMap = cleanCriteriasMap( criterias);
 
 
-        System.out.println("after: "+newMap.size());
+        logger.info("after: "+newMap.size());
         memberList = memberManager.getMembersByCriterias(newMap);
         GetMemberByCriteriasResponseType getMemberByCriteriasResponseType = new GetMemberByCriteriasResponseType();
         logger.info("memberListType beg: " + memberListType.getMemberTypeOut().size());
@@ -369,7 +369,7 @@ public class MemberServiceImpl implements IMemberService {
         // converting Date into XML date
         if(date==null)return null;
         GregorianCalendar cal = new GregorianCalendar();
-        System.out.println(date);
+        logger.info(date);
         cal.setTime(date);
         XMLGregorianCalendar xmlCalendar = null;
         try {
@@ -380,10 +380,10 @@ public class MemberServiceImpl implements IMemberService {
         return xmlCalendar;
     }
     void checkAuthentication(String token) throws BusinessExceptionMember {
-        System.out.println("tok tok token");
+        logger.info("tok tok token");
 
         if(token ==null || !authentication.checkToken(token)){
-            System.out.println("bam exception");
+            logger.info("bam exception");
             throw new BusinessExceptionMember("invalid token");
         }
         /*try {

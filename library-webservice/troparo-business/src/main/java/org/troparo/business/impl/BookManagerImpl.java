@@ -1,7 +1,6 @@
 package org.troparo.business.impl;
 
 
-import com.google.common.annotations.VisibleForTesting;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.BookManager;
 import org.troparo.consumer.contract.BookDAO;
@@ -55,11 +54,11 @@ public class BookManagerImpl implements BookManager {
 
     String checkInsertion(Book book) {
         if (checkIsbnLength(book)) return exception = "ISBN must be 10 or 13 characters: " + book.getIsbn();
-        if (!checkBookParamLength(book, book.getTitle()))
+        if (!checkBookParamLength( book.getTitle()))
             return exception = "Title should have between 2 and 200 characters: " + book.getTitle();
-        if (!checkBookParamLength(book, book.getAuthor()))
+        if (!checkBookParamLength( book.getAuthor()))
             return exception = "Author should have between 2 and 200 characters: " + book.getAuthor();
-        if (!checkBookParamLength(book, book.getEdition()))
+        if (!checkBookParamLength( book.getEdition()))
             return exception = "Edition should have between 2 and 200 characters: " + book.getEdition();
         if (book.getPublicationYear() < 1455 || book.getPublicationYear() > Calendar.getInstance().get(Calendar.YEAR)) {
             return exception = "Publication year should be between 1455 and current: " + book.getPublicationYear();
@@ -67,7 +66,7 @@ public class BookManagerImpl implements BookManager {
         if (book.getNbPages() < 1 || book.getNbPages() > 9999) {
             return exception = "NbPages should be between 1 and 9 999, please recheck: " + book.getNbPages();
         }
-        if (checkBookParamLength(book, book.getKeywords()))
+        if (checkBookParamLength( book.getKeywords()))
             return exception = "Keyword list should be between 2 and 200 characters: " + book.getKeywords();
         String keywords = replaceSeparatorWithWhiteSpace(book.getKeywords());
         book.setKeywords(keywords);
@@ -75,7 +74,7 @@ public class BookManagerImpl implements BookManager {
         return exception;
     }
 
-    boolean checkBookParamLength(Book book, String param) {
+    boolean checkBookParamLength(String param) {
         if (param != null) {
             if (param.length() > 2 && param.length() < 200) {
                 return true;
@@ -85,14 +84,15 @@ public class BookManagerImpl implements BookManager {
     }
 
     private boolean checkIsbnLength(Book book) {
-        if (book.getIsbn().length() != 10 && book.getIsbn().length() != 13) {
+        /*if (book.getIsbn().length() != 10 && book.getIsbn().length() != 13) {
             return true;
         }
-        return false;
+        return false;*/
+        return book.getIsbn().length() != 10 && book.getIsbn().length() != 13;
     }
 
     String replaceSeparatorWithWhiteSpace(String string) {
-        System.out.println("trying to replace: " + string);
+        logger.info("trying to replace: " + string);
         String[] separators = {";", ",", "/", "\\",};
         for (String sep : separators
         ) {
@@ -139,14 +139,7 @@ public class BookManagerImpl implements BookManager {
     public Book getBookById(int id) {
         logger.info("getting id (from business): " + id);
         return bookDAO.getBookById(id);
-        /*Book book = bookDAO.getBookById(id);
-        if (book != null) {
-            logger.info("book");
-            return book;
-        } else {
-            logger.info("book is probably null");
-            return null;
-        }*/
+
     }
 
     @Override
@@ -175,30 +168,23 @@ public class BookManagerImpl implements BookManager {
     @Override
     public String updateBook(Book book) {
         if (book == null) return "No book provided!";
-        if(!checksThatBookHasAnISBN(book).equals(""))return checksThatBookHasAnISBN(book);
+        if (!checksThatBookHasAnISBN(book).equals("")) return checksThatBookHasAnISBN(book);
         List<Book> bookList;
 
-
-        //List<Book> bookList = getBookListForISBN(book.getIsbn());
-        /*if (bookList != null) *//*{*//*
-         *//*if (bookList.size() == 0) {*//*
-                return "No Item found with that ISBN";
-            *//*}*//*
-         *//*}*/
 
         HashMap<String, String> map = new HashMap<>();
         map.put("ISBN", book.getIsbn().toUpperCase());
         bookList = bookDAO.getBooksByCriterias(map);
         if (bookList == null) return "No Item found with that ISBN";
         logger.info("getting list. Size: " + bookList.size());
-        if (bookList.size()==0)return "No book to update";
+        if (bookList.isEmpty()) return "No book to update";
         // updates each book from the list when values from book are provided
         for (Book b : bookList
         ) {
             transferValuesToSimilarBooks(book, b);
             logger.info(b.getAuthor());
             logger.info(b.getTitle());
-            if(!bookDAO.updateBook(b))return "Issue while updating";
+            if (!bookDAO.updateBook(b)) return "Issue while updating";
             logger.info("updated: " + b.getId());
         }
 
@@ -243,7 +229,7 @@ public class BookManagerImpl implements BookManager {
     String transferEditionToSimilarBooks(Book book, Book b) {
         if (book.getEdition() != null) {
             if (!book.getEdition().equals("") && !book.getEdition().equals("?")) {
-                System.out.println("got you");
+                logger.info("got you");
                 b.setEdition(book.getEdition());
             }
         }
@@ -259,7 +245,7 @@ public class BookManagerImpl implements BookManager {
         return b.getAuthor();
     }
 
-    String  transferTitleToSimilarBooks(Book book, Book b) {
+    String transferTitleToSimilarBooks(Book book, Book b) {
         if (book.getTitle() != null) {
             if (!book.getTitle().equals("") && !book.getTitle().equals("?")) {
                 b.setTitle(book.getTitle());
@@ -337,12 +323,7 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public boolean isAvailable(int id) {
-       /* //check if exists
-        if (bookDAO.getBookById(id) != null) {
-            return bookDAO.isAvailable(id);
-        } else {
-            return false;
-        }*/
+
         return bookDAO.isAvailable(id);
     }
 
