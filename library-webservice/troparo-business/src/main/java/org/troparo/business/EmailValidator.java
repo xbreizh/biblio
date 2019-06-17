@@ -14,7 +14,6 @@ public class EmailValidator {
                             "){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\" +
                             "[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
     private Pattern pattern;
-    private Matcher matcher;
 
     public EmailValidator() {
         pattern = Pattern.compile(EMAIL_PATTERN);
@@ -27,8 +26,7 @@ public class EmailValidator {
      * @return true valid hex, false invalid hex
      */
     public boolean validate(final String hex) {
-        System.out.println("getting here");
-        matcher = pattern.matcher(hex);
+        Matcher matcher = pattern.matcher(hex);
         return matcher.matches();
 
     }

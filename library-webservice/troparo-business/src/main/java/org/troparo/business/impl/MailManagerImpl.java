@@ -57,7 +57,7 @@ public class MailManagerImpl implements MailManager {
                         try {
                             return new PasswordAuthentication(username, getPassword());
                         } catch (Exception e) {
-                            e.printStackTrace();
+                            logger.error(e.getMessage());
                         }
                         return null;
                     }
@@ -89,13 +89,13 @@ public class MailManagerImpl implements MailManager {
                 try {
                     logger.info("mail content: "+message.getContent().toString());
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.error(e.getMessage());
                 }
                  Transport.send(message);
 
             }
 
-            System.out.println("Done");
+            logger.info("Done");
 
         } catch (MessagingException e) {
             throw new RuntimeException(e);
@@ -256,7 +256,7 @@ public class MailManagerImpl implements MailManager {
         logger.info("getting overdue list");
         List<Loan> loans = loanManager.getLoansByCriterias(criterias);
         /*List<Mail> mailList = new ArrayList<>();*/
-        System.out.println("loans: "+loans.size());
+        logger.info("loans: "+loans.size());
         List<Mail> mailList = new ArrayList<>();
         for (Loan loan: loans
         ) {

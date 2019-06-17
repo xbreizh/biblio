@@ -42,7 +42,41 @@
                         <directory>src/main/resources</directory>
                     </testResource>
                     <testResource>
-                        <directory>src/test-business/resources</directory>
+                        <directory>src/test-business/resources/docker</directory>
+                    </testResource>
+                </testResources>
+            </build>
+        </profile>
+        <profile>
+            <id>local-test-business</id>
+            <build>
+                <plugins>
+                    <!-- Ajout du répertoire src/test-business/java en tant que source de test du module -->
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>add-test-source</id>
+                                <phase>generate-test-sources</phase>
+                                <goals>
+                                    <goal>add-test-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/test-business/java</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/main/resources</directory>
+                    </testResource>
+                    <testResource>
+                        <directory>src/test-business/resources/local</directory>
                     </testResource>
                 </testResources>
             </build>
@@ -149,12 +183,6 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-engine</artifactId>
-            <version>5.4.0</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>2.8.9</version>
@@ -184,17 +212,17 @@
 
     <build>
         <plugins>
-        <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>2.19.1</version>
-            <dependencies>
-                <dependency>
-                    <groupId>org.junit.platform</groupId>
-                    <artifactId>junit-platform-surefire-provider</artifactId>
-                    <version>1.0.1</version>
-                </dependency>
-            </dependencies>
-        </plugin>
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.19.1</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.junit.platform</groupId>
+                        <artifactId>junit-platform-surefire-provider</artifactId>
+                        <version>1.0.1</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -202,6 +230,25 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.7.201606060606</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

@@ -38,11 +38,11 @@ public class MemberDAOImpl implements MemberDAO {
     public List<Member> getAllMembers() {
         logger.info("getting in dao");
         try {
-            System.out.println(sessionFactory);
+            logger.info(sessionFactory);
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
-            if(sessionFactory == null) System.out.println("SessionFactory not initialized!");
-            System.out.println(e.getMessage());
+            if(sessionFactory == null) logger.info("SessionFactory not initialized!");
+            logger.info(e.getMessage());
             return null;
         }
 
@@ -162,7 +162,7 @@ public class MemberDAOImpl implements MemberDAO {
             Date now = new Date();
             // calculating time since last connect
             int time = Math.toIntExact((now.getTime() - m.getDateConnect().getTime()) / MILLI_TO_HOUR);
-            System.out.println("time since last connect: " + time);
+            logger.info("time since last connect: " + time);
             if (getMemberByToken(token) != null && time > maxTimeTokenValidity) {
                 logger.info("invalid token");
                 invalidateToken(token);
@@ -196,12 +196,12 @@ public class MemberDAOImpl implements MemberDAO {
     public Member getMemberByLogin(String login) {
         List<Member> list = new ArrayList<>();
         logger.info("login received(from DAO): " + login);
-        System.out.println("session: "+sessionFactory);
+        logger.info("session: "+sessionFactory);
         request = "From Member where login = :login";
-        System.out.println("login received: "+login);
+        logger.info("login received: "+login);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("login", login);
-        System.out.println("query: "+query);
+        logger.info("query: "+query);
         try {
             return (Member) query.getResultList().get(0);
         } catch (Exception e) {

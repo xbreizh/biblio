@@ -1,20 +1,21 @@
 package org.troparo.consumer.impl;
 
+import org.apache.log4j.Logger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
-import org.troparo.model.Member;
 
 import javax.inject.Inject;
 
-import java.util.Date;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -23,10 +24,18 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class LoanDAOImplTest {
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     @Inject
     private LoanDAO loanDAO;
     @Inject
     private BookDAO bookDAO;
+
+    @Sql({"classpath:/src/main/resources/resetDb.sql"})
+    @BeforeEach
+    void reset(){
+        logger.info("reset db");
+    }
 
     @Test
     @DisplayName("should return list of loans")

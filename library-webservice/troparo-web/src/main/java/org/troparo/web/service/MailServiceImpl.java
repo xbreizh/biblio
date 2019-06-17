@@ -78,7 +78,7 @@ public class MailServiceImpl implements IMailService {
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return xmlCalendar;
     }
@@ -87,7 +87,7 @@ public class MailServiceImpl implements IMailService {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new BusinessExceptionMail("invalid token");
         }
     }

@@ -64,14 +64,14 @@ class BookManagerImplTest {
     void checkBookParamLength() {
         Book book = new Book();
         book.setTitle("m");
-        assertEquals(false, bookManager2.checkBookParamLength(book, book.getTitle()));
+        assertFalse( bookManager2.checkBookParamLength( book.getTitle()));
     }
 
     @Test
     @DisplayName("should return false if param is null")
     void checkBookParamLength1() {
         Book book = new Book();
-        assertEquals(false, bookManager2.checkBookParamLength(book, book.getAuthor()));
+        assertFalse( bookManager2.checkBookParamLength( book.getAuthor()));
     }
 
     @Test
@@ -79,7 +79,7 @@ class BookManagerImplTest {
     void checkBookParamLength2() {
         Book book = new Book();
         book.setEdition("momo");
-        assertEquals(true, bookManager2.checkBookParamLength(book, book.getEdition()));
+        assertTrue( bookManager2.checkBookParamLength( book.getEdition()));
     }
 
 
@@ -111,7 +111,7 @@ class BookManagerImplTest {
     void getBookById1() {
         Book book = new Book();
         when(bookDAO.getBookById(anyInt())).thenReturn(null);
-        assertEquals(null, bookManager.getBookById(12));
+        assertNull( bookManager.getBookById(12));
     }
 
     @Test

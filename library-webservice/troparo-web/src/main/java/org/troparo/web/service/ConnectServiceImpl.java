@@ -40,7 +40,7 @@ public class ConnectServiceImpl implements IConnectService {
         try {
             checkToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+           logger.error(e.getMessage());
             throw new BusinessExceptionConnect("invalid token");
         }
     }
@@ -58,7 +58,7 @@ public class ConnectServiceImpl implements IConnectService {
         logger.info("entering get token method");
         logger.info("login: " + parameters.getLogin());
         logger.info("password: " + parameters.getPassword());
-        System.out.println("mgr: " + memberManager);
+        logger.info("mgr: " + memberManager);
         String token = memberManager.getToken(parameters.getLogin(), parameters.getPassword());
         logger.info("token returned: " + token);
         if (token == null) {
@@ -82,7 +82,7 @@ public class ConnectServiceImpl implements IConnectService {
     public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters) throws BusinessExceptionConnect {
         ResetPasswordResponseType ar = new ResetPasswordResponseType();
         boolean result;
-        System.out.println("trying to reset pwd");
+        logger.info("trying to reset pwd");
         logger.info("trying to reset pwd for: " + parameters.getLogin());
         String login = parameters.getLogin();
         String password = parameters.getPassword();

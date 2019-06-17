@@ -1,5 +1,6 @@
 package org.troparo.web.service;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -31,7 +32,7 @@ class MemberServiceImplTest {
     @Mock
     private ConnectServiceImpl connectService;
 
-
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     @BeforeEach
     void init() {
         memberService = new MemberServiceImpl();
@@ -200,7 +201,7 @@ class MemberServiceImplTest {
         parameters.setMemberCriterias(memberCriterias);
         HashMap<String, String> map = new HashMap<>();
         map.put("Login", "BOBB");
-        System.out.println(map.size());
+        logger.info(map.size());
         List<Member> list = new ArrayList<>();
         Member member = new Member();
         list.add(member);
@@ -219,7 +220,7 @@ class MemberServiceImplTest {
         parameters.setMemberCriterias(memberCriterias);*/
        /* HashMap<String, String> map = new HashMap<>();
         map.put("login", "bobb");*/
-        /*System.out.println(map.size());
+        /*logger.info(map.size());
         List<Member> list = new ArrayList<>();
         Member member = new Member();
         list.add(member);*/

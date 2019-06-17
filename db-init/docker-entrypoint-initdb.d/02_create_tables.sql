@@ -1,12 +1,21 @@
--- Drop table
---DROP TABLE IF EXISTS public.loan;
---DROP TABLE IF EXISTS public.member;
---DROP TABLE IF EXISTS public.book;
 
---DROP SEQUENCE hibernate_sequence;
---DROP SEQUENCE loan_id_seq cascade;
---DROP SEQUENCE member_id_seq cascade;
---DROP SEQUENCE book_id_seq cascade;
+
+
+-- Drop table
+
+DROP TABLE IF EXISTS public.loan;
+DROP TABLE IF EXISTS public.member;
+DROP TABLE IF EXISTS public.book;
+
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+DROP SEQUENCE IF EXISTS loan_id_seq cascade;
+DROP SEQUENCE IF EXISTS member_id_seq cascade;
+DROP SEQUENCE IF EXISTS book_id_seq cascade;
+
+
+
+-- Specify timezone
+SET TIME ZONE 'CET';
 
 CREATE TABLE public."member" (
         id SERIAL,

@@ -121,7 +121,7 @@ public class LoanServiceImpl implements ILoanService {
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
         String[] validCriterias = {"borrower.login", "book.bookId", "status"};
         checkAuthentication(parameters.getToken());
-        System.out.println("troko");
+        logger.info("troko");
         HashMap<String, String> map = new HashMap<>();
         if(parameters.getLoanCriterias()==null) {
             responseType.setLoanListType(loanListType);
@@ -129,7 +129,7 @@ public class LoanServiceImpl implements ILoanService {
         }
         if(parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin()==null && parameters.getLoanCriterias().getStatus() ==null)return null;
         //LoanCriterias criterias = parameters.getLoanCriterias();
-        //System.out.println(parameters.getLoanCriterias());
+        //logger.info(parameters.getLoanCriterias());
         if(parameters.getLoanCriterias().getLogin()!=null){
             if(!parameters.getLoanCriterias().getLogin().equals("")||!parameters.getLoanCriterias().getLogin().equals("?")){
                 map.put("borrower.login", parameters.getLoanCriterias().getLogin().toUpperCase());
@@ -144,18 +144,18 @@ public class LoanServiceImpl implements ILoanService {
             }
         }
         logger.info("map: " + map);
-        System.out.println(map);
+        logger.info(map);
 
         loanList = loanManager.getLoansByCriterias(map);
-        System.out.println("stuff");
+        logger.info("stuff");
 
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
-        System.out.println(loanList);
+        logger.info(loanList);
         if (loanList != null) {
             if (loanList.size() > 0) {
                 convertLoanIntoLoanTypeOut();
             } /*else {
-                System.out.println("stuff");
+                logger.info("stuff");
                 return null;
             }*/
         }/* else {
@@ -256,7 +256,7 @@ public class LoanServiceImpl implements ILoanService {
 
     // Converts Input into Loan for business
     private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
-        System.out.println(loanTypeIn);
+        logger.info(loanTypeIn);
         loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
         loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
@@ -274,7 +274,7 @@ public class LoanServiceImpl implements ILoanService {
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
         return xmlCalendar;
     }
@@ -283,7 +283,7 @@ public class LoanServiceImpl implements ILoanService {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
             throw new BusinessExceptionLoan("invalid token");
         }
     }

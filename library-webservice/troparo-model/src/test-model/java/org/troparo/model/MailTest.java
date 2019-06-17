@@ -162,7 +162,7 @@ class MailTest {
         mail.setDueDate(date);
         mail.setFirstname("Jean");
         mail.setLastname("Maurice");
-        assertEquals("Mail{email='null', firstname='Jean', lastname='Maurice', dueDate=Thu Dec 31 00:00:00 CET 2009, diffdays=23, " +
+        assertEquals("Mail{email='null', firstname='Jean', lastname='Maurice', dueDate=Thu Dec 31 00:00:00 UTC 2009, diffdays=23, " +
                 "isbn='AER111', title='la grande traverse', author='James Block', edition='Potirron'}", mail.toString());
     }
 }

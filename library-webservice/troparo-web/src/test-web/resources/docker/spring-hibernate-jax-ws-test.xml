@@ -10,11 +10,11 @@ http://www.springframework.org/schema/context ">
     <context:annotation-config/>
 
     <!-- scans packages to find and register beans within the application context -->
-
-    <context:component-scan base-package="org.troparo.model"/>
+    <context:component-scan base-package="org.troparo.web"/>
     <context:component-scan base-package="org.troparo.business"/>
+    <context:component-scan base-package="org.troparo.model"/>
     <context:component-scan base-package="org.troparo.consumer"/>
-    <!-- <context:component-scan base-package="org.troparo.technical"/>-->
+   <!-- <context:component-scan base-package="org.troparo.technical"/>-->
     <context:component-scan base-package="org.troparo"/>
 
     <!-- turn on spring transaction annotation -->
@@ -52,8 +52,8 @@ http://www.springframework.org/schema/context ">
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://localhost:5433/troparo"/>
-        <!--<property name="url" value="jdbc:postgresql://db:5432/troparo"/>-->
+       <!-- <property name="url" value="jdbc:postgresql://127.0.0.1:5432/troparo"/>-->
+        <property name="url" value="jdbc:postgresql://dbtest:5432/troparo"/>
         <!-- <property name="username" value="postgres"/>-->
         <property name="username" value="ocp"/>
         <property name="password" value="123"/>

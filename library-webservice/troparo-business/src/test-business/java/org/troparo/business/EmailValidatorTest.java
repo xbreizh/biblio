@@ -1,5 +1,6 @@
 package org.troparo.business;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class EmailValidatorTest {
 
     private EmailValidator emailValidator;
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @BeforeEach
     void init() {
@@ -71,7 +73,7 @@ class EmailValidatorTest {
         List<String> list = Arrays.asList(mailListInvalid);
         for (String mail : list
         ) {
-            System.out.println(mail);
+            logger.info(mail);
             assertFalse(emailValidator.validate(mail));
         }
     }

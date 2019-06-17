@@ -74,7 +74,7 @@ public class LoanDAOImpl implements LoanDAO {
         if(isbn==null)return null;
         isbn = isbn.toUpperCase();
         logger.info("in the dao: " + isbn);
-        System.out.println(isbn);
+        logger.info(isbn);
         request = "From Loan where book.isbn = :isbn";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
@@ -96,7 +96,7 @@ public class LoanDAOImpl implements LoanDAO {
         query.setParameter("login", login);
         try {
             List<Loan> list = query.getResultList();
-            System.out.println("size of list: "+list.size());
+            logger.info("size of list: "+list.size());
             return  query.getResultList();
         } catch (Exception e) {
             return null;
@@ -114,7 +114,7 @@ public class LoanDAOImpl implements LoanDAO {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().toUpperCase().equals("STATUS")) {
-                System.out.println("yoyoyoyy");
+                logger.info("yoyoyoyy");
                 if (!criterias.equals("")) {
                     criterias += " and ";
                 } else {
@@ -139,11 +139,11 @@ public class LoanDAOImpl implements LoanDAO {
 
         request = "From Loan ";
         request += criterias;
-        System.out.println("criterias: "+criterias);
+        logger.info("criterias: "+criterias);
         addStatusToRequest(status, map.size());
         logger.info("request: " + request);
         Query query = sessionFactory.getCurrentSession().createQuery(request, Loan.class);
-        System.out.println("map again: "+map);
+        logger.info("map again: "+map);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().toUpperCase().equals("STATUS")) {
@@ -159,12 +159,12 @@ public class LoanDAOImpl implements LoanDAO {
                 }
             }
         }
-        System.out.println("map: "+request);
+        logger.info("map: "+request);
         try {
             //logger.info("list with criterias size: " + query.getResultList().size());
             return query.getResultList();
         } catch (Exception e) {
-            System.out.println("bam l erreur");
+            logger.info("bam l erreur");
             return null;
         }
 
@@ -183,7 +183,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private void addStatusToRequest(String status, int i) {
-        System.out.println("size: "+i);
+        logger.info("size: "+i);
         if(i > 1){
             request += " and";
         }else if(i==0){

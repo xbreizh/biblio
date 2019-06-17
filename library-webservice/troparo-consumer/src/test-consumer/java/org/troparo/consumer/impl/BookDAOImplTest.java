@@ -1,9 +1,12 @@
 package org.troparo.consumer.impl;
 
+import org.apache.log4j.Logger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.BookDAO;
@@ -18,9 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @Transactional
 class BookDAOImplTest {
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Inject
     private BookDAO bookDAO;
+
+    @Sql({"classpath:/src/main/resources/resetDb.sql"})
+    @BeforeEach
+    void reset(){
+        logger.info("reset db");
+    }
 
     @Test
     @DisplayName("should return the books from db (checking the number)")
@@ -41,7 +51,7 @@ class BookDAOImplTest {
     @DisplayName("should return book if id valid")
     void getBookById() {
         Book book = bookDAO.getBookById(3);
-        System.out.println(book);
+        logger.info(book);
         assertAll(
                 () -> assertEquals("MAURICE MOSS", book.getAuthor()),
                 () -> assertEquals("GALLIMARD", book.getEdition()),

@@ -1,5 +1,6 @@
 package org.troparo.web.service;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,6 +30,7 @@ import static org.mockito.Mockito.when;
 class MailServiceImplTest {
 
     private MailServiceImpl mailService;
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     @Mock
     private MailManagerImpl mailManager;
     @Mock
@@ -69,8 +71,8 @@ class MailServiceImplTest {
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
         XMLGregorianCalendar dateGregorian = mailService.convertDateIntoXmlDate(date);
-        System.out.println(date);
-        System.out.println(dateGregorian);
+        logger.info(date);
+        logger.info(dateGregorian);
 
         assertAll(
                 ()-> assertEquals(year, dateGregorian.getYear()),
