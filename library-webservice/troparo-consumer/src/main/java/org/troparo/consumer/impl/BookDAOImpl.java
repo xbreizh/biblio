@@ -15,7 +15,7 @@ import static java.lang.Math.toIntExact;
 
 @Named("bookDAO")
 public class BookDAOImpl implements BookDAO {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static Logger logger = Logger.getLogger(BookDAOImpl.class.getName());
     private Class cl = Book.class;
 
     @Inject

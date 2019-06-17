@@ -82,11 +82,9 @@ public class LoanManagerImpl implements LoanManager {
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                /*if () {*/
-                /*if (validCriteriasList.contains(entry.getKey().toUpperCase())) {*/
+
                 criterias.put(entry.getKey(), entry.getValue());
-                /* }*/
-                /* }*/
+
             }
 
         }

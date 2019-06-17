@@ -13,9 +13,9 @@ import java.util.*;
 
 @Named("memberDAO")
 public class MemberDAOImpl implements MemberDAO {
-    private final static int MILLI_TO_HOUR = 1000 * 60 * 60;
-    private final static int MAX_TIME_TOKEN_VALIDITY = 3;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static final int MILLI_TO_HOUR = 1000 * 60 * 60;
+    private static final int MAX_TIME_TOKEN_VALIDITY = 3;
+    private static Logger logger = Logger.getLogger(MemberDAOImpl.class.getName());
     private Class cl = Member.class;
     private String request;
     @Inject

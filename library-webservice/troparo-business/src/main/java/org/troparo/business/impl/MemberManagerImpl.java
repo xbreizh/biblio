@@ -87,7 +87,6 @@ public class MemberManagerImpl implements MemberManager {
         if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
             return "Password should have between 2 and 200 characters: " + member.getPassword();
         }
-        System.out.println("Email: "+member.getEmail());
         if (member.getEmail() == null || member.getEmail().equals("") || member.getEmail().equals("?"))
             return "No email provided";
         if (!validator.validate(member.getEmail())) return "Invalid Email: " + member.getEmail();
@@ -113,37 +112,32 @@ public class MemberManagerImpl implements MemberManager {
         String role = memberNewValues.getRole();
 
 
-            if (firstName != null ){
-                {
-                if (firstName.equals("") || firstName.equals("?") ||firstName.length() < 2 || firstName.length() > 50) {
+            if (firstName != null && (firstName.equals("") || firstName.equals("?") ||firstName.length() < 2 || firstName.length() > 50) ){
                     return "FirstName should have between 2 and 200 characters: " + firstName;
-                }
+
+
             }
-            }
-            if (lastName != null ) {
-                if (lastName.equals("") || lastName.equals("?") || lastName.length() < 2 || lastName.length() > 50) {
+            if (lastName != null &&( lastName.equals("") || lastName.equals("?") || lastName.length() < 2 || lastName.length() > 50) ){
                     return "LastName should have between 2 and 200 characters: " + lastName;
                 }
 
-            }
-            if (password != null ) {
-                if (password.equals(encryptPassword("")) || password.equals(encryptPassword("?")) || password.length() < 2 || password.length() > 200) {
+
+            if (password != null &&(password.equals(encryptPassword("")) || password.equals(encryptPassword("?")) || password.length() < 2 || password.length() > 200)) {
                     return "Password should have between 2 and 200 characters: " + password;
-                }
+
 
             }
-            if (email != null && !email.equals("") && !email.equals("?")) {
-                if (!validator.validate(email)) {
+            if (email != null && !email.equals("") && !email.equals("?") && !validator.validate(email)) {
+
                     return "Invalid Email: " + email;
-                }
+
 
             }
-            if (role != null ) {
-                if (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10) {
+            if (role != null && (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10)) {
                     return "Role should have between 6 and 10 characters: " + role;
                 }
 
-            }
+
 
         return "";
     }

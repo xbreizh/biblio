@@ -199,6 +199,7 @@ class MemberManagerImplTest {
     void checkValidityOfParametersForUpdateMember2() {
         Member member = new Member();
         member.setLogin("kolio");
+        member.setLastName("parollier");
         String email = "dede@fr";
         member.setEmail(email);
         assertEquals("Invalid Email: " + email, memberManager.checkValidityOfParametersForUpdateMember(member));

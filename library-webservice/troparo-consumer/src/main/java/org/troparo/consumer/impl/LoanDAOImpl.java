@@ -13,14 +13,14 @@ import java.util.*;
 
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
     private Class cl = Loan.class;
     private String request;
-    private static String STATUS = "STATUS";
-    private static String ISBN = "ISBN";
-    private static String BOOK_ID = "BOOK_ID";
-    private static String LOGIN = "LOGIN";
-    private static String ID = "ID";
+    private static String status = "status";
+    private static String isbn = "isbn";
+    private static String bookId = "bookId";
+    private static String login = "login";
+
 
     @Inject
     private SessionFactory sessionFactory;
@@ -83,7 +83,7 @@ public class LoanDAOImpl implements LoanDAO {
         request = "From Loan where book.isbn = :isbn";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter(ISBN.toLowerCase(), isbn);
+        query.setParameter(LoanDAOImpl.isbn.toLowerCase(), isbn);
         try {
             return query.getResultList();
         } catch (Exception e) {
@@ -99,7 +99,7 @@ public class LoanDAOImpl implements LoanDAO {
         request = "From Loan where borrower.login = :login";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter("login", login);
+        query.setParameter(login, login);
         try {
             List<Loan> list = query.getResultList();
             logger.info("size of list: " + list.size());
@@ -116,25 +116,24 @@ public class LoanDAOImpl implements LoanDAO {
         map = cleanInvaliMapEntries(map);
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
-        String criterias = "";
-        String status = "";
+        String criteria = "";
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getKey().equalsIgnoreCase(STATUS)) {
-                if (!criterias.equals("")) {
-                    criterias += " and ";
+            if (!entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
+                if (!criteria.equals("")) {
+                    criteria += " and ";
                 } else {
-                    criterias += "where ";
+                    criteria += "where ";
                 }
-                criterias += entry.getKey() + " = :";
-                if (entry.getKey().equalsIgnoreCase(BOOK_ID)) {
-                    criterias += "BOOK_ID";
+                criteria += entry.getKey() + " = :";
+                if (entry.getKey().equalsIgnoreCase(bookId)) {
+                    criteria += "BOOK_ID";
                 }
-                if (entry.getKey().equalsIgnoreCase(LOGIN)) {
-                    criterias += "LOGIN";
+                if (entry.getKey().equalsIgnoreCase(login)) {
+                    criteria += "LOGIN";
                 }
-                if (entry.getKey().equalsIgnoreCase(STATUS)) {
-                    criterias += "STATUS";
+                if (entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
+                    criteria += "STATUS";
                 }
             } else {
                 status = entry.getValue();
@@ -144,30 +143,30 @@ public class LoanDAOImpl implements LoanDAO {
         }
 
         request = "From Loan ";
-        request += criterias;
-        logger.info("criterias: " + criterias);
+        request += criteria;
+        logger.info("criteria: " + criteria);
         addStatusToRequest(status, map.size());
         logger.info("request: " + request);
         Query query = sessionFactory.getCurrentSession().createQuery(request, Loan.class);
         logger.info("map again: " + map);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getKey().equalsIgnoreCase(STATUS)) {
+            if (!entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
                 logger.info("criteria: " + entry.getValue());
-                if (entry.getKey().toUpperCase().contains(ISBN)) {
-                    query.setParameter(ISBN, "%" + entry.getValue() + "%");
+                if (entry.getKey().toUpperCase().contains(isbn)) {
+                    query.setParameter(isbn, "%" + entry.getValue() + "%");
                 }
-                if (entry.getKey().toUpperCase().contains(LOGIN)) {
-                    query.setParameter(LOGIN, "%" + entry.getValue() + "%");
+                if (entry.getKey().toUpperCase().contains(login)) {
+                    query.setParameter(login, "%" + entry.getValue() + "%");
                 }
-                if (entry.getKey().toUpperCase().contains(BOOK_ID)) {
-                    query.setParameter(BOOK_ID, +Integer.parseInt(entry.getValue()));
+                if (entry.getKey().toUpperCase().contains(bookId)) {
+                    query.setParameter(bookId, +Integer.parseInt(entry.getValue()));
                 }
             }
         }
         logger.info("map: " + request);
         try {
-            logger.info("list with criterias size: " + query.getResultList().size());
+            logger.info("list with criteria size: " + query.getResultList().size());
             return query.getResultList();
         } catch (Exception e) {
             logger.info("bam l erreur");
@@ -177,7 +176,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
-        String[] authorizedCriterias = {"status", "book_id", "login"};
+        String[] authorizedCriterias = {status, bookId, login};
         List<String> list = Arrays.asList(authorizedCriterias);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey())) {
