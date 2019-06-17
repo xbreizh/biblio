@@ -285,21 +285,16 @@ public class MemberManagerImpl implements MemberManager {
         String password = encryptPassword(newMember.getPassword());
         String email = newMember.getEmail();
         String role = newMember.getRole();
-        if (firstName != null) {
-            if (!firstName.equals("") && !firstName.equals("?")) memberFromDatabase.setFirstName(firstName);
+        if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {memberFromDatabase.setFirstName(firstName);
         }
-        if (lastName != null) {
-            if (!lastName.equals("") && !lastName.equals("?")) memberFromDatabase.setLastName(lastName);
+        if (lastName != null && !lastName.equals("") && !lastName.equals("?")) { memberFromDatabase.setLastName(lastName);
         }
-        if (password != null) {
-            if (!password.equals(encryptPassword("")) && !password.equals(encryptPassword("?")))
+        if (password != null && !password.equals(encryptPassword("")) && !password.equals(encryptPassword("?"))) {
                 memberFromDatabase.setPassword(password);
         }
-        if (email != null) {
-            if (!email.equals("") && !email.equals("?")) memberFromDatabase.setEmail(email);
+        if (email != null && !email.equals("") && !email.equals("?")) {memberFromDatabase.setEmail(email);
         }
-        if (role != null) {
-            if (!role.equals("") && !role.equals("?")) memberFromDatabase.setRole(role);
+        if (role != null && !role.equals("") && !role.equals("?")) { memberFromDatabase.setRole(role);
         }
         return memberFromDatabase;
     }
@@ -310,8 +305,8 @@ public class MemberManagerImpl implements MemberManager {
         int nbElement = 0;
         for (String str : paramList
         ) {
-            if (str != null) {
-                if (!str.equals("") && !str.equals("?")) nbElement++;
+            if (str != null && !str.equals("") && !str.equals("?")) {
+               nbElement++;
             }
         }
 
