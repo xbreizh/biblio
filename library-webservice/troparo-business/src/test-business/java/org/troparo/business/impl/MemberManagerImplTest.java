@@ -63,7 +63,7 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return nothing when trying to insert a member")
-    void addMember2()  {
+    void addMember2() {
         Member member = new Member();
         member.setLogin("tomoni");
         member.setFirstName("Tom");
@@ -191,7 +191,6 @@ class MemberManagerImplTest {
         Member member = new Member();
         assertEquals("No login provided", memberManager.checkValidityOfParametersForUpdateMember(member));
     }
-
 
 
     @Test

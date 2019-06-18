@@ -1,6 +1,7 @@
 package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
 import org.troparo.model.Loan;
@@ -15,6 +16,7 @@ import java.util.List;
 
 
 @Named
+@Transactional
 public class MailManagerImpl implements MailManager {
     @Inject
     LoanManager loanManager;

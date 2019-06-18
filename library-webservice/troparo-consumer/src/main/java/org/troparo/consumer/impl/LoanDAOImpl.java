@@ -14,14 +14,12 @@ import java.util.*;
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
-    private Class cl = Loan.class;
-    private String request;
     private static String status = "status";
     private static String isbn = "isbn";
     private static String bookId = "bookId";
+    private Class cl = Loan.class;
+    private String request;
     //private static String login = "login";
-
-
     @Inject
     private SessionFactory sessionFactory;
 
@@ -165,7 +163,7 @@ public class LoanDAOImpl implements LoanDAO {
                 }
             }
         }
-        System.out.println("query: "+query.getQueryString());
+        System.out.println("query: " + query.getQueryString());
         logger.info("map: " + request);
         try {
             logger.info("list with criteria size: " + query.getResultList().size());

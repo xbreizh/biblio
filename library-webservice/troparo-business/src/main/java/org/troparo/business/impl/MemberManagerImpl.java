@@ -112,31 +112,30 @@ public class MemberManagerImpl implements MemberManager {
         String role = memberNewValues.getRole();
 
 
-            if (firstName != null && (firstName.equals("") || firstName.equals("?") ||firstName.length() < 2 || firstName.length() > 50) ){
-                    return "FirstName should have between 2 and 200 characters: " + firstName;
+        if (firstName != null && (firstName.equals("") || firstName.equals("?") || firstName.length() < 2 || firstName.length() > 50)) {
+            return "FirstName should have between 2 and 200 characters: " + firstName;
 
 
-            }
-            if (lastName != null &&( lastName.equals("") || lastName.equals("?") || lastName.length() < 2 || lastName.length() > 50) ){
-                    return "LastName should have between 2 and 200 characters: " + lastName;
-                }
+        }
+        if (lastName != null && (lastName.equals("") || lastName.equals("?") || lastName.length() < 2 || lastName.length() > 50)) {
+            return "LastName should have between 2 and 200 characters: " + lastName;
+        }
 
 
-            if (password != null &&(password.equals(encryptPassword("")) || password.equals(encryptPassword("?")) || password.length() < 2 || password.length() > 200)) {
-                    return "Password should have between 2 and 200 characters: " + password;
+        if (password != null && (password.equals(encryptPassword("")) || password.equals(encryptPassword("?")) || password.length() < 2 || password.length() > 200)) {
+            return "Password should have between 2 and 200 characters: " + password;
 
 
-            }
-            if (email != null && !email.equals("") && !email.equals("?") && !validator.validate(email)) {
+        }
+        if (email != null && !email.equals("") && !email.equals("?") && !validator.validate(email)) {
 
-                    return "Invalid Email: " + email;
+            return "Invalid Email: " + email;
 
 
-            }
-            if (role != null && (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10)) {
-                    return "Role should have between 6 and 10 characters: " + role;
-                }
-
+        }
+        if (role != null && (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10)) {
+            return "Role should have between 6 and 10 characters: " + role;
+        }
 
 
         return "";
