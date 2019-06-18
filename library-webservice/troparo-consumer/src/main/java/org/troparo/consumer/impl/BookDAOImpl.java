@@ -108,7 +108,7 @@ public class BookDAOImpl implements BookDAO {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             logger.info("criteria: " + entry.getValue());
-            query.setParameter(entry.getKey(), "%" + entry.getValue() + "%");
+            query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
         }
         try {
             logger.info("list with criterias size: " + query.getResultList().size());
@@ -121,8 +121,9 @@ public class BookDAOImpl implements BookDAO {
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
         String[] authorizedCriterias = {"isbn", "author", "title"};
         List<String> list = Arrays.asList(authorizedCriterias);
+        System.out.println("cleaning");
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (!list.contains(entry.getKey())) {
+            if (!list.contains(entry.getKey().toLowerCase())) {
                 map.remove(entry.getKey());
             }
         }

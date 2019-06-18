@@ -104,6 +104,15 @@ class BookDAOImplTest {
     }
 
     @Test
+    @DisplayName("should ignore cases")
+    void getBooksByCriterias3() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Title", "grande");
+        assertEquals(1, bookDAO.getBooksByCriterias(map).size());
+
+    }
+
+    @Test
     @DisplayName("should update book author")
     void updateBook() {
         Book book = bookDAO.getBookById(2);

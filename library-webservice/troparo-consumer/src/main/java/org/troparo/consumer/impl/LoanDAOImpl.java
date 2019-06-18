@@ -152,10 +152,10 @@ public class LoanDAOImpl implements LoanDAO {
             if (!entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
                 logger.info("criteria: " + entry.getValue());
                 if (entry.getKey().toUpperCase().contains(isbn)) {
-                    query.setParameter(isbn, "%" + entry.getValue() + "%");
+                    query.setParameter(isbn, "%" + entry.getValue().toUpperCase() + "%");
                 }
                 if (entry.getKey().toUpperCase().contains("login")) {
-                    query.setParameter("login", "%" + entry.getValue() + "%");
+                    query.setParameter("login", "%" + entry.getValue().toUpperCase() + "%");
                 }
                 if (entry.getKey().toUpperCase().contains("BOOK_ID")) {
                     query.setParameter("BOOK_ID", +Integer.parseInt(entry.getValue()));

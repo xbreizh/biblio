@@ -46,6 +46,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should add a loan")
     void addLoan() {
+        System.out.println("size: "+loanDAO.getLoans().size());
         loanDAO.addLoan(new Loan());
         assertEquals(6, loanDAO.getLoans().size());
     }
@@ -123,4 +124,6 @@ class LoanDAOImplTest {
     void getLoansByCriterias2() {
         assertEquals(0, loanDAO.getLoansByCriterias(null).size());
     }
+
+
 }

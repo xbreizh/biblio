@@ -107,7 +107,7 @@ public class MemberDAOImpl implements MemberDAO {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             logger.info("criteria: " + entry.getValue());
-            query.setParameter(entry.getKey(), "%" + entry.getValue() + "%");
+            query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
         }
         try {
             logger.info("list with criterias size: " + query.getResultList().size());
