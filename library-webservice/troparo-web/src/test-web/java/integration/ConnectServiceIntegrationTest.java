@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 class ConnectServiceIntegrationTest {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(ConnectServiceIntegrationTest.class.getName());
     @Inject
     private ConnectServiceImpl connectService;
    /* @Inject

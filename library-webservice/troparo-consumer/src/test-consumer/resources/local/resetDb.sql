@@ -9,7 +9,9 @@ DROP SEQUENCE IF EXISTS loan_id_seq cascade;
 DROP SEQUENCE IF EXISTS member_id_seq cascade;
 DROP SEQUENCE IF EXISTS book_id_seq cascade;
 
+DROP SCHEMA IF EXISTS TROPARO;
 
+CREATE SCHEMA TROPARO;
 -- Specify timezone
 SET TIME ZONE 'CET';
 

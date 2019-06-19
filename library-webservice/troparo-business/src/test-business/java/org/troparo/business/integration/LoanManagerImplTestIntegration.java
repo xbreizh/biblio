@@ -11,6 +11,9 @@ import org.troparo.business.contract.LoanManager;
 
 import javax.inject.Inject;
 
+import java.util.HashMap;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
@@ -27,8 +30,24 @@ class LoanManagerImplTestIntegration {
     @Test
     @DisplayName("should return loans from database")
     void getLoans() {
-        assertNotNull(loanManager.getLoans());
+        assertEquals(5, loanManager.getLoans().size());
     }
 
+    @Test
+    @DisplayName("should return 4")
+    void getLoansByCriterias1() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("login", "JPOLINO");
+        assertEquals(4,loanManager.getLoansByCriterias(map).size());
+    }
+
+
+    @Test
+    @DisplayName("should return 1")
+    void getLoansByCriterias2() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("book_id", "5");
+        assertEquals(1,loanManager.getLoansByCriterias(map).size());
+    }
 
 }

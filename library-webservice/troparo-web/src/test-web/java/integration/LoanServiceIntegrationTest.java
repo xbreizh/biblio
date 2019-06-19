@@ -1,32 +1,62 @@
 package integration;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.troparo.entities.connect.GetTokenRequestType;
+import org.troparo.entities.loan.GetLoanByCriteriasRequestType;
+import org.troparo.entities.loan.LoanCriterias;
+import org.troparo.entities.loan.LoanListRequestType;
+import org.troparo.services.loanservice.BusinessExceptionLoan;
+import org.troparo.web.service.ConnectServiceImpl;
 import org.troparo.web.service.LoanServiceImpl;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @ContextConfiguration("classpath:org/troparo/web/config/spring-hibernate-jax-ws.xml")
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
-public class LoanServiceIntegrationTest {
+class LoanServiceIntegrationTest {
+    private Logger logger = Logger.getLogger(LoanServiceIntegrationTest.class.getName());
     @Inject
     private LoanServiceImpl loanService;
-   /* @Inject
-    private MemberManager memberManager;
-*/
+    @Inject
+    private ConnectServiceImpl connectService;
+    private String token="";
 
     @BeforeEach
-    void init() {
-        //connectService = new ConnectServiceImpl();
-        //memberManager = new MemberManagerImpl();
-        //MemberDAO memberDAO = new MemberDAOImpl();
-        //memberManager.setMemberDAO(memberDAO);
-        //connectService.setMemberManager(memberManager);
+    void getToken(){
+        GetTokenRequestType parameters = new GetTokenRequestType();
+        parameters.setLogin("LOKII");
+        parameters.setPassword("123");
+        token = connectService.getToken(parameters).getReturn();
 
+    }
+
+    @Test
+    @DisplayName("should return list of Loans")
+    void getLoans() throws BusinessExceptionLoan {
+        LoanListRequestType loanListRequestType = new LoanListRequestType();
+        loanListRequestType.setToken(token);
+        assertEquals(5, loanService.getAllLoans(loanListRequestType).getLoanListType().getLoanTypeOut().size());
+    }
+
+    @Test
+    @DisplayName("should return loans for a member")
+    void getLoansByCriterias() throws BusinessExceptionLoan {
+        GetLoanByCriteriasRequestType loanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
+        loanByCriteriasRequestType.setToken(token);
+        LoanCriterias loanCriterias = new LoanCriterias();
+        loanCriterias.setLogin("jpolino");
+        loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
+        assertEquals(4, loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
     }
 }
 

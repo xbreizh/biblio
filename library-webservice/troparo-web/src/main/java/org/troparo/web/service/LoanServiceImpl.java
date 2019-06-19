@@ -36,7 +36,7 @@ public class LoanServiceImpl implements ILoanService {
     private ConnectServiceImpl authentication;
 
     private String exception = "";
-    private List<Loan> loanList = new ArrayList<>();
+    //private List<Loan> loanList = new ArrayList<>();
     private LoanTypeOut loanTypeOut = null;
     private LoanTypeIn loanTypeIn = null;
 
@@ -98,13 +98,14 @@ public class LoanServiceImpl implements ILoanService {
     public LoanListResponseType getAllLoans(LoanListRequestType parameters) throws BusinessExceptionLoan {
         LoanListType loanListType = new LoanListType();
         checkAuthentication(parameters.getToken());
+        List<Loan> loanList = new ArrayList<>();
         loanList = loanManager.getLoans();
 
         logger.info("size list: " + loanList.size());
 
         LoanListResponseType loanListResponseType = new LoanListResponseType();
 
-        convertLoanIntoLoanTypeOut();
+        loanListType = convertLoanIntoLoanTypeOut(loanList);
         // add loanType to the movieListType
 
         loanListResponseType.setLoanListType(loanListType);
@@ -115,9 +116,10 @@ public class LoanServiceImpl implements ILoanService {
     // Get List By Criterias
     @Override
     public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
+        List<Loan> loanList = new ArrayList<>();
         LoanListType loanListType = new LoanListType();
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
-        String[] validCriterias = {"borrower.login", "book.bookId", "status"};
+        //String[] validCriterias = {"borrower.login", "book.bookId", "status"};
         checkAuthentication(parameters.getToken());
         logger.info("troko");
         HashMap<String, String> map = new HashMap<>();
@@ -152,7 +154,7 @@ public class LoanServiceImpl implements ILoanService {
         logger.info(loanList);
         if (loanList != null) {
             if (loanList.size() > 0) {
-                convertLoanIntoLoanTypeOut();
+                loanListType = convertLoanIntoLoanTypeOut(loanList);
             } /*else {
                 logger.info("stuff");
                 return null;
@@ -214,7 +216,7 @@ public class LoanServiceImpl implements ILoanService {
 
 
     // Converts Loan from Business into output
-    private void convertLoanIntoLoanTypeOut() {
+    private LoanListType convertLoanIntoLoanTypeOut(List<Loan> loanList) {
         LoanListType loanListType = new LoanListType();
         loanListType.getLoanTypeOut().clear();
 
@@ -250,6 +252,7 @@ public class LoanServiceImpl implements ILoanService {
         }
 
         logger.info("loanListType end: " + loanListType.getLoanTypeOut().size());
+        return loanListType;
     }
 
 

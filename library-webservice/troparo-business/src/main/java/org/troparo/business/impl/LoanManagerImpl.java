@@ -74,23 +74,42 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
-        String[] validCriterias = {"LOGIN", "BOOKID", "STATUS"};
+        String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS"};
         List<String> validCriteriasList = Arrays.asList(validCriterias);
         HashMap<String, String> criterias = new HashMap<>();
+        System.out.println("mappp: "+map);
+
+        if(map.entrySet().contains("login")) System.out.println("contains");
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
+           // if(entry.getKey().equalsIgnoreCase("Login"))isLogin=true;
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-
                 criterias.put(entry.getKey(), entry.getValue());
 
             }
 
         }
+      /*  if(isLogin) System.out.println("is login");
+        if(isLogin) {
+            String login = "";
+            for (HashMap.Entry<String, String> entry : criterias.entrySet()
+            ) {
+                if (entry.getKey().equalsIgnoreCase("Login")) {
+                    login = entry.getValue();
+                    criterias.entrySet().remove(entry);
+                    System.out.println("removed");
+                }
+                criterias.put("borrower.login", login);
+                System.out.println("size: "+criterias.size());
+            }
+        }*/
+
         logger.info("map: " + criterias);
         logger.info("map: " + map);
         logger.info("criterias: " + criterias);
+        System.out.println("loan dao: "+loanDAO);
         return loanDAO.getLoansByCriterias(criterias);
     }
 

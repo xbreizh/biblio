@@ -136,13 +136,15 @@ class LoanManagerImplTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("should return an empty list")
     void getLoansByCriterias() {
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("price", "3.4");
-        loanManager.getLoansByCriterias(map);
+        assertEquals(0,loanManager.getLoansByCriterias(map).size());
     }
+
+
 
     @Test
     @DisplayName("should return \"loan already terminated\"")
