@@ -130,7 +130,7 @@ class LoanServiceImplTest {
         loanCriterias.setLogin("kolio");
         parameters.setLoanCriterias(loanCriterias);
         HashMap<String, String> map = new HashMap<>();
-        map.put("borrower.login", "KOLIO");
+        map.put("login", "KOLIO");
         List<Loan> loanList = new ArrayList<>();
         when(loanManager.getLoansByCriterias(map)).thenReturn(loanList);
         assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
