@@ -15,10 +15,14 @@ import java.util.*;
 public class MemberDAOImpl implements MemberDAO {
     private static final int MILLI_TO_HOUR = 1000 * 60 * 60;
     private static final int MAX_TIME_TOKEN_VALIDITY = 3;
-    private static String login = "login";
     private static Logger logger = Logger.getLogger(MemberDAOImpl.class.getName());
     private Class cl = Member.class;
     private String request;
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Inject
     private SessionFactory sessionFactory;
 

@@ -56,6 +56,14 @@ class MemberDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return an exception is sessionFactory is null")
+    void getAllMembers1() {
+        MemberDAOImpl memberDAO1 = new MemberDAOImpl();
+        memberDAO1.setSessionFactory(null);
+        assertEquals(0, memberDAO1.getAllMembers().size());
+    }
+
+    @Test
     @DisplayName("should return a member")
     void getMemberById() {
         final Member member = memberDAO.getMemberById(1);
