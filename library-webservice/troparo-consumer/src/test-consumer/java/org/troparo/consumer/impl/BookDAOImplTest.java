@@ -39,12 +39,34 @@ class BookDAOImplTest {
     }
 
     @Test
-    @DisplayName("")
+    @DisplayName("should return an exception is sessionFactory is null")
+    void getBooks1() {
+        BookDAOImpl bookDAO1 = new BookDAOImpl();
+        bookDAO1.setSessionFactory(null);
+        assertEquals(0, bookDAO1.getBooks().size());
+    }
+
+    @Test
+    @DisplayName("should return true")
     void addBook() {
         Book book = new Book();
-        assertEquals(5, bookDAO.getBooks().size());
-        bookDAO.addBook(book);
-        assertEquals(6, bookDAO.getBooks().size());
+        assertAll(
+                () -> assertEquals(5, bookDAO.getBooks().size()),
+                () -> assertTrue(bookDAO.addBook(book)),
+                () -> assertEquals(6, bookDAO.getBooks().size())
+        );
+
+
+    }
+
+    @Test
+    @DisplayName("should return false")
+    void addBook1() {
+        Book book = new Book();
+        BookDAOImpl bookDAO1 = new BookDAOImpl();
+        bookDAO1.setSessionFactory(null);
+       // assertEquals(5, bookDAO1.getBooks().size());
+        assertFalse(bookDAO1.addBook(book));
     }
 
     @Test
@@ -116,20 +138,37 @@ class BookDAOImplTest {
     @DisplayName("should update book author")
     void updateBook() {
         Book book = bookDAO.getBookById(2);
-        String newAuthor = "Jean Pialat";
+
         assertEquals("TEST", book.getAuthor());
+        String newAuthor = "Jean Pialat";
         book.setAuthor(newAuthor);
-        bookDAO.updateBook(book);
-        assertEquals(newAuthor, bookDAO.getBookById(2).getAuthor());
+                assertAll(
+                ()->assertTrue(bookDAO.updateBook(book)),
+                ()->assertEquals(newAuthor, bookDAO.getBookById(2).getAuthor())
+        );
+
+    }
+
+    @Test
+    @DisplayName("should return an exception")
+    void updateBook1(){
+        Book book = new Book();
+        BookDAOImpl bookDAO1 = new BookDAOImpl();
+        bookDAO1.setSessionFactory(null);
+        // assertEquals(5, bookDAO1.getBooks().size());
+        assertFalse(bookDAO1.updateBook(book));
     }
 
     @Test
     @DisplayName("should remove a book if existing")
     void remove() {
         Book book = bookDAO.getBookById(5);
-        assertNotNull(book);
-        bookDAO.remove(book);
-        assertNull(bookDAO.getBookById(5));
+        assertAll(
+                ()-> assertNotNull(book),
+                ()->assertTrue(bookDAO.remove(book)),
+                ()->assertNull(bookDAO.getBookById(5))
+        );
+
     }
 
     @Test
@@ -139,14 +178,36 @@ class BookDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return false when removing book")
+    void remove2(){
+        Book book = new Book();
+        BookDAOImpl bookDAO1 = new BookDAOImpl();
+        bookDAO1.setSessionFactory(null);
+        // assertEquals(5, bookDAO1.getBooks().size());
+        assertFalse(bookDAO1.remove(book));
+    }
+
+    @Test
+    @DisplayName("should return the number of books available")
+    void getAvailable1(){
+        assertAll(
+                ()-> assertEquals(0, bookDAO.getAvailable("1234567824")),
+                ()-> assertEquals(3, bookDAO.getAvailable("12345678OK")),
+                ()-> assertEquals(0, bookDAO.getAvailable("fr"))
+
+        );
+
+    }
+
+    @Test
     @DisplayName("should return false if book not available")
-    void getAvailable() {
+    void isAvailable() {
         assertFalse(bookDAO.isAvailable(5));
     }
 
     @Test
     @DisplayName("should return true if book available")
-    void isAvailable() {
+    void isAvailable1() {
         assertTrue(bookDAO.isAvailable(9));
     }
 

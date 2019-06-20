@@ -18,13 +18,16 @@ public class BookDAOImpl implements BookDAO {
     private static Logger logger = Logger.getLogger(BookDAOImpl.class.getName());
     private Class cl = Book.class;
 
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
     @Inject
     private SessionFactory sessionFactory;
 
 
     @Override
     public List<Book> getBooks() {
-        logger.info("getting in dao");
         List<Book> bookList = new ArrayList<>();
         try {
             return sessionFactory.getCurrentSession().createQuery("From Book", cl).getResultList();
@@ -36,7 +39,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public boolean addBook(Book book) {
-        logger.info("Book from dao: " + book);
+        logger.info("Book: " + book);
         try {
             sessionFactory.getCurrentSession().persist(book);
         } catch (Exception e) {
@@ -49,7 +52,7 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public Book getBookById(int id) {
         String request;
-        logger.info("in the dao: " + id);
+        logger.info("id: " + id);
         request = "From Book where id = :id";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
@@ -64,7 +67,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public boolean existingISBN(String isbn) {
-        logger.info("in the dao: " + isbn);
+        logger.info("ISBN: " + isbn);
         String request;
         isbn = isbn.toUpperCase();
         request = "From Book where isbn = :isbn";
@@ -83,20 +86,20 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public List<Book> getBooksByCriterias(HashMap<String, String> map) {
         String request;
-        logger.info("map received in DAO: " + map);
+        StringBuilder criterias = new StringBuilder();
+        logger.info("map: " + map);
         List<Book> bookList = new ArrayList<>();
-        if (map == null) return new ArrayList<>();
-        map = cleanInvaliMapEntries(map);
-        if (map.isEmpty()) return new ArrayList<>();
-        String criterias = "";
+        if (map == null) return bookList;
+        /*map = */cleanInvaliMapEntries(map);
+        if (map.isEmpty()) return bookList;
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!criterias.equals("")) {
-                criterias += " and ";
+            if (!criterias.toString().isEmpty()) {
+                criterias.append("and ");
             } else {
-                criterias += "where ";
+                criterias.append("where ");
             }
-            criterias += entry.getKey() + " like :" + entry.getKey();
+            criterias.append(entry.getKey() + " like :" + entry.getKey());
         }
         request = "SELECT DISTINCT ON (isbn ) *  From Book ";
         request += criterias;
@@ -121,7 +124,6 @@ public class BookDAOImpl implements BookDAO {
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
         String[] authorizedCriterias = {"isbn", "author", "title"};
         List<String> list = Arrays.asList(authorizedCriterias);
-        System.out.println("cleaning");
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
                 map.remove(entry.getKey());
@@ -133,8 +135,8 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public boolean updateBook(Book book) {
-        logger.info("Book from dao: " + book.getTitle());
-        logger.info("Book from dao: " + book.getAuthor());
+        logger.info("Book title: " + book.getTitle()+
+                "\nBook author: " + book.getAuthor());
         try {
             sessionFactory.getCurrentSession().update(book);
         } catch (Exception e) {
@@ -177,7 +179,7 @@ public class BookDAOImpl implements BookDAO {
         String request1 = "select book.id from Loan where endDate is null and book.id = :id";
         Query query1 = sessionFactory.getCurrentSession().createQuery(request1);
         query1.setParameter("id", id);
-        return query1.getResultList().size() <= 0;// if not currently borrowed, then available
+        return query1.getResultList().isEmpty();// if not currently borrowed, then available
 
     }
 

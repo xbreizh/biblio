@@ -47,8 +47,8 @@ public class MemberDAOImpl implements MemberDAO {
             logger.info(sessionFactory);
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
-            if (sessionFactory == null) logger.info("SessionFactory not initialized!");
-            logger.info(e.getMessage());
+            if (sessionFactory == null)
+            logger.info("SessionFactory not initialized!");
             return memberList;
         }
 
@@ -91,18 +91,18 @@ public class MemberDAOImpl implements MemberDAO {
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
         List<Member> memberList = new ArrayList<>();
         if (map == null) return new ArrayList<>();
-        map = cleanInvaliMapEntries(map);
+        cleanInvaliMapEntries(map);
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
-        String criterias = "";
+        StringBuilder criterias = new StringBuilder();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!criterias.equals("")) {
-                criterias += " and ";
+            if (!criterias.toString().equals("")) {
+                criterias.append(" and ");
             } else {
-                criterias += "where ";
+                criterias.append("where ");
             }
-            criterias += entry.getKey() + " like :" + entry.getKey();
+            criterias.append(entry.getKey() + " like :" + entry.getKey());
         }
         request = "From Member ";
         request += criterias;
