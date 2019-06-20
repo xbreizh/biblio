@@ -133,7 +133,7 @@ public class LoanServiceImpl implements ILoanService {
         //logger.info(parameters.getLoanCriterias());
         if (parameters.getLoanCriterias().getLogin() != null) {
             if (!parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
-                map.put("borrower.login", parameters.getLoanCriterias().getLogin().toUpperCase());
+                map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
             }
         }
         if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
