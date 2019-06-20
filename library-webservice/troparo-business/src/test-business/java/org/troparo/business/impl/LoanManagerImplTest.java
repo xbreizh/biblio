@@ -146,6 +146,8 @@ class LoanManagerImplTest {
 
 
 
+
+
     @Test
     @DisplayName("should return \"loan already terminated\"")
     void renewLoan() {
@@ -192,7 +194,7 @@ class LoanManagerImplTest {
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         loan.setStartDate(format.parse("01-01-2019"));
-        loan.setPlannedEndDate(format.parse("12-02-2019"));
+        loan.setPlannedEndDate(format.parse("12-03-2019"));
         when(loanDAO.getLoanById(2)).thenReturn(loan);
         assertFalse(loanManager.isRenewable(2));
     }

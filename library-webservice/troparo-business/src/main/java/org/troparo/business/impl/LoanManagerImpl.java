@@ -79,14 +79,25 @@ public class LoanManagerImpl implements LoanManager {
         HashMap<String, String> criterias = new HashMap<>();
         System.out.println("mappp: "+map);
 
-        if(map.entrySet().contains("login")) System.out.println("contains");
+        String[] validStatus = {"terminated", "progress", "overdue"};
+        List<String> validStatuslist = Arrays.asList(validStatus);
+
+        List<Loan> loanList = new ArrayList<>();
+
+        //if(map.entrySet().contains("login")) System.out.println("contains");
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
            // if(entry.getKey().equalsIgnoreCase("Login"))isLogin=true;
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                criterias.put(entry.getKey(), entry.getValue());
+                System.out.println("mako: "+entry.getKey());
+                System.out.println("mako: "+entry.getValue());
+                if(entry.getKey().equalsIgnoreCase("status")&& !validStatuslist.contains(entry.getValue().toLowerCase())){
+                    System.out.println("here");
+                    return loanList;
+                }
+                    criterias.put(entry.getKey(), entry.getValue());
 
             }
 
@@ -156,10 +167,10 @@ public class LoanManagerImpl implements LoanManager {
         //if difference > loanDuration, it means the loan has already been renewed(return false)
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
-        logger.info("diff days is: " + diffInDays);
         logger.info("diffDays: " + diffInDays);
-
-        return diffInDays > loanDuration;
+        if(diffInDays > (loanDuration+renewDuration))return false;
+        return true;
+       // return diffInDays > (loanDuration+renewDuration);
 
     }
 

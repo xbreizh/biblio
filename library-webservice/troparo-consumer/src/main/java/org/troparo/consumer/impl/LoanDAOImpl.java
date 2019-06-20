@@ -14,11 +14,11 @@ import java.util.*;
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
-    private static String status = "status";
+    //private static String status = "status";
     private static String isbn = "isbn";
     private static String bookId = "bookId";
     private Class cl = Loan.class;
-    private String request;
+    //private String request;
     //private static String login = "login";
     @Inject
     private SessionFactory sessionFactory;
@@ -59,6 +59,7 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public Loan getLoanById(int id) {
+        String request;
         logger.info("in the dao: " + id);
         request = "From Loan where id = :id";
 
@@ -73,6 +74,7 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public List<Loan> getLoanByIsbn(String isbn) {
+        String request;
         List<Loan> loanList = new ArrayList<>();
         if (isbn == null) return null;
         isbn = isbn.toUpperCase();
@@ -91,6 +93,7 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public List<Loan> getLoanByLogin(String login) {
+        String request;
         List<Loan> loanList = new ArrayList<>();
         logger.info("in the dao: " + login);
         login = login.toUpperCase();
@@ -109,17 +112,21 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
+        String request;
+        String status = "";
         System.out.println("in the dao");
+        String criteria = "";
+        boolean statusPassed=false;
         List<Loan> loanList = new ArrayList<>();
         if (map == null || map.isEmpty()) return new ArrayList<>();
         map = cleanInvaliMapEntries(map);
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
-        String criteria = "";
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
-                String field="";
+            System.out.println("entry key: "+entry.getKey());
+            if (!entry.getKey().equalsIgnoreCase("status")) {
+                String field;
                 if (!criteria.equals("")) {
                     criteria += " and ";
                 } else {
@@ -127,19 +134,22 @@ public class LoanDAOImpl implements LoanDAO {
                 }
                 if(entry.getKey().equalsIgnoreCase("login")){
                     field = "borrower.login";
+                    criteria += field + " = :"+"login";
                 }
-                criteria += field + " = :";
                 if (entry.getKey().equalsIgnoreCase("BOOK_ID")) {
-                    criteria += "BOOK_ID";
+                    criteria += "book_id";
+                    System.out.println("getting here: "+criteria);
+                    criteria +=  " = :"+entry.getKey();
                 }
-                if (entry.getKey().equalsIgnoreCase("LOGIN")) {
+               /* if (entry.getKey().equalsIgnoreCase("LOGIN")) {
                     criteria += "LOGIN";
-                }
-                if (entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
+                }*/
+                if (entry.getKey().equalsIgnoreCase(status)) {
                     criteria += "STATUS";
                 }
             } else {
                 status = entry.getValue();
+                statusPassed=true;
                 logger.info("status has been passed: " + status);
             }
 
@@ -148,32 +158,36 @@ public class LoanDAOImpl implements LoanDAO {
         request = "From Loan ";
         request += criteria;
         logger.info("criteria: " + criteria);
-        addStatusToRequest(status, map.size());
+        System.out.println("any status? "+status);
         logger.info("request: " + request);
-        System.out.println("session: "+sessionFactory.getCurrentSession());
+
        // String request1 = "FROM Loan where borrower.login= :LOGIN";
+        if(statusPassed)request+=addStatusToRequest(status, map.size());
+        System.out.println("req req: "+request);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         logger.info("map again: " + map);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getKey().equalsIgnoreCase(LoanDAOImpl.status)) {
+            if (!entry.getKey().equalsIgnoreCase(status)) {
                 logger.info("criteria: " + entry.getValue());
                 if (entry.getKey().toUpperCase().contains(isbn)) {
                     query.setParameter(isbn, "%" + entry.getValue().toUpperCase() + "%");
                 }
-                System.out.println("boko: "+entry.getKey());
                 if (entry.getKey().toUpperCase().contains("LOGIN")) {
-                    query.setParameter("LOGIN", "%" + entry.getValue().toUpperCase() + "%");
+                    query.setParameter("login",   entry.getValue().toUpperCase() );
 
                 }
                 if (entry.getKey().toUpperCase().contains("BOOK_ID")) {
-                    query.setParameter("BOOK_ID", +Integer.parseInt(entry.getValue()));
+                    query.setParameter("book_id", +Integer.parseInt(entry.getValue()));
                 }
+
             }
         }
-       query.setParameter("LOGIN", "JPOLINO");
-        System.out.println("query: " + query.getQueryString());
+
+      // query.setParameter("LOGIN", "JPOLINO");
+        //System.out.println("query: " + query.getQueryString());
         logger.info("map: " + request);
+        //System.out.println("full query: "+query.);
         try {
             logger.info("list with criteria size: " + query.getResultList().size());
             return query.getResultList();
@@ -185,7 +199,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
-        String[] authorizedCriterias = {status, "book_id", "login"};
+        String[] authorizedCriterias = {"status", "book_id", "login"};
         List<String> list = Arrays.asList(authorizedCriterias);
         System.out.println("map size: "+map.size());
         System.out.println(map);
@@ -199,29 +213,51 @@ public class LoanDAOImpl implements LoanDAO {
         return map;
     }
 
-    private void addStatusToRequest(String status, int i) {
+    private String addStatusToRequest(String status, int i) {
+        String request="";
         logger.info("size: " + i);
-        if (i > 1) {
-            request += " and";
-        } else if (i == 0) {
-            request += " where";
-        }
-        if (!status.equals("")) {
-            switch (status) {
-                case "PROGRESS":
-                    request += "  endDate is null";
-                    break;
-                case "TERMINATED":
-                    request += "  endDate is not null";
-                    break;
-                case "OVERDUE":
-                    request += "  endDate is null and plannedEndDate < current_date";
-                    break;
-                default:
-                    logger.info("nothing to add");
-                    break;
+        System.out.println("request status: "+request);
+        System.out.println("receiving status: "+status);
+        String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};
+        List<String> authorizedList = Arrays.asList(authorized);
+        if(!status.isEmpty()) {
+            if (i > 1) {
+                request += " and";
+            } else/* if (i == 0)*/ {
+                request += " where";
+            }
+            status = status.toUpperCase();
+            if (authorizedList.contains(status)) {
+
+                if (!status.equals("")) {
+                    switch (status) {
+                        case "PROGRESS":
+                            request += " endDate is null";
+                            break;
+                        case "TERMINATED":
+                            request += " endDate is not null";
+                            break;
+                        case "OVERDUE":
+                            request += " endDate is null and plannedEndDate < current_date";
+                            break;
+                        default:
+                            logger.info("nothing to add");
+                            break;
+                    }
+                }
+            }
+            else {
+           /* if (i > 1) {
+                request += " and";
+            } else *//*if (i == 0)*//* {
+                request += " where";
+            }*/
+                System.out.println("get herer yopui");
+                request += " endDate > current_date";
             }
         }
+        System.out.println("request from status: "+request);
+        return request;
     }
 
 

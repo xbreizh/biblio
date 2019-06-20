@@ -2,6 +2,7 @@ package org.troparo.consumer.impl;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -113,7 +114,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias1() {
+    void getLoansByCriterias_bookId() {
         HashMap<String, String> map = new HashMap<>();
         map.put("book_id", "5");
         assertEquals(1, loanDAO.getLoansByCriterias(map).size());
@@ -123,6 +124,30 @@ class LoanDAOImplTest {
     @DisplayName("should return empty list of loans if criterias null")
     void getLoansByCriterias2() {
         assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+    }
+
+    @Test
+    @DisplayName("should return list of loans if valid criteria and result")
+    void getLoansByCriterias_login() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("login", "lokii");
+        assertEquals(1, loanDAO.getLoansByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return list of loans if valid criteria and result")
+    void getLoansByCriterias_Status() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "terminated");
+        assertEquals(3, loanDAO.getLoansByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return empty list if loan status invalid")
+    void getLoansByCriterias_Status1() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "wrongOne");
+        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
 
 
