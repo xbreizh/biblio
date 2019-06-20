@@ -92,13 +92,12 @@ public class BookDAOImpl implements BookDAO {
         if (map==null ||map.isEmpty()) return bookList;
         int mapSizeBeforeCleaning = map.size();
         cleanInvaliMapEntries(map);
-        int mapSizeAfterClaening = map.size();
-        if(mapSizeBeforeCleaning!=mapSizeAfterClaening)return bookList;
+        int mapSizeAfterCleaning = map.size();
+        if(mapSizeBeforeCleaning!=mapSizeAfterCleaning)return bookList;
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!criterias.toString().isEmpty()) {
-                criterias.append("and ");
-            } else {
+            System.out.println("popolopopo");
+            if (criterias.toString().isEmpty()) {
                 criterias.append("where ");
             }
             criterias.append(entry.getKey() + " like :" + entry.getKey());
@@ -118,10 +117,11 @@ public class BookDAOImpl implements BookDAO {
 
 
             logger.info("list with criterias size: " + query.getResultList().size());
-            return query.getResultList();
+            if(query.getResultList()!=null)return query.getResultList();
         } catch (Exception e) {
             return bookList;
         }
+        return bookList;
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
