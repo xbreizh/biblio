@@ -89,9 +89,11 @@ public class BookDAOImpl implements BookDAO {
         StringBuilder criterias = new StringBuilder();
         logger.info("map: " + map);
         List<Book> bookList = new ArrayList<>();
-        if (map == null) return bookList;
-        /*map = */cleanInvaliMapEntries(map);
-        if (map.isEmpty()) return bookList;
+        if (map==null ||map.isEmpty()) return bookList;
+        int mapSizeBeforeCleaning = map.size();
+        cleanInvaliMapEntries(map);
+        int mapSizeAfterClaening = map.size();
+        if(mapSizeBeforeCleaning!=mapSizeAfterClaening)return bookList;
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!criterias.toString().isEmpty()) {
@@ -103,7 +105,7 @@ public class BookDAOImpl implements BookDAO {
         }
         request = "SELECT DISTINCT ON (isbn ) *  From Book ";
         request += criterias;
-
+        try {
         logger.info("request: " + request);
         sessionFactory.getCurrentSession().flush();
         sessionFactory.getCurrentSession().clear();
@@ -113,7 +115,8 @@ public class BookDAOImpl implements BookDAO {
             logger.info("criteria: " + entry.getValue());
             query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
         }
-        try {
+
+
             logger.info("list with criterias size: " + query.getResultList().size());
             return query.getResultList();
         } catch (Exception e) {

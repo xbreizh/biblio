@@ -135,6 +135,24 @@ class BookDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return empty list if no criteria")
+    void getBooksByCriterias4() {
+        HashMap<String, String> map = new HashMap<>();
+        assertEquals(0, bookDAO.getBooksByCriterias(map).size());
+
+    }
+
+    @Test
+    @DisplayName("should return empty list if any issue")
+    void getBooksByCriterias5(){
+        BookDAOImpl bookDAO1 = new BookDAOImpl();
+        bookDAO1.setSessionFactory(null);
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Title", "grande");
+        assertEquals(0, bookDAO1.getBooksByCriterias(map).size());
+    }
+
+    @Test
     @DisplayName("should update book author")
     void updateBook() {
         Book book = bookDAO.getBookById(2);
