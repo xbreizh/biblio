@@ -192,7 +192,7 @@ class LoanDAOImplTest {
     @DisplayName("should return empty list of loans if empty map passed")
     void getLoansByCriterias4() {
         HashMap<String, String> map = new HashMap<>();
-        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
 
     @Test
@@ -292,6 +292,45 @@ class LoanDAOImplTest {
         HashMap<String, String> map = new HashMap<>();
         assertEquals("",loanDAO.extractStatusFromMap(map));
     }
+
+    @Test
+    @DisplayName("should return terminated if passed in status")
+    void extractStatusFromMap2(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "terminated");
+        assertEquals("TERMINATED",loanDAO.extractStatusFromMap(map));
+    }
+
+    @Test
+    @DisplayName("should return empty string if passed in status is incorrect")
+    void extractStatusFromMap3(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("bassine", "terminated");
+        assertEquals("",loanDAO.extractStatusFromMap(map));
+    }
+
+    @Test
+    @DisplayName("should return string for 1 criteria")
+    void createRequestFromMap(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("login", "bob");
+        assertEquals("where borrower.login = :login",loanDAO.createRequestFromMap(map));
+    }
+
+    @Test
+    @DisplayName("should return string for 2 criteria")
+    void createRequestFromMap2(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("login", "bob");
+        map.put("book_id", "ob");
+        assertEquals("where book_id = :book_id and borrower.login = :login",loanDAO.createRequestFromMap(map));
+    }
+
+
 
 
 }

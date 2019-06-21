@@ -119,7 +119,6 @@ public class LoanDAOImpl implements LoanDAO {
         List<Loan> loanList = new ArrayList<>();
         if (map == null || map.isEmpty()) return new ArrayList<>();
         if (!checkValidMapEntries(map)) return loanList;
-        System.out.println("here");
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         request.append("From Loan ");
@@ -132,7 +131,6 @@ public class LoanDAOImpl implements LoanDAO {
         }
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
-            System.out.println("getting params");
             addingParametersToCriteriasQuery(map, query);
             logger.info("map again: " + map);
 
@@ -148,7 +146,6 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private void addingParametersToCriteriasQuery(HashMap<String, String> map, Query query) {
-        System.out.println("mapmap: "+map);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
@@ -165,7 +162,7 @@ public class LoanDAOImpl implements LoanDAO {
         }
     }
 
-    private String createRequestFromMap(HashMap<String, String> map) {
+    String createRequestFromMap(HashMap<String, String> map) {
         StringBuilder criteria = new StringBuilder();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
@@ -197,7 +194,6 @@ public class LoanDAOImpl implements LoanDAO {
     private boolean checkValidMapEntries(HashMap<String, String> map) {
         String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
         List<String> list = Arrays.asList(authorizedCriteria);
-        System.out.println("map: "+map);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
                 return false;
@@ -233,14 +229,14 @@ public class LoanDAOImpl implements LoanDAO {
 
 
             switch (status) {
-                case "PROGRESS":
-                    request += " endDate is null";
-                    break;
                 case "TERMINATED":
                     request += " endDate is not null";
                     break;
                 case "OVERDUE":
                     request += " endDate is null and plannedEndDate < current_date";
+                    break;
+                default: //progress
+                    request += " endDate is null";
                     break;
 
             }
@@ -251,15 +247,16 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     String extractStatusFromMap(HashMap<String, String> map) {
-        if(map==null )return "";
-        if(!map.isEmpty()) {
+        if (map == null) return "";
+        if (!map.isEmpty()) {
             for (Map.Entry<String, String> entry : map.entrySet()) {
                 if (entry.getKey().equalsIgnoreCase(STATUS)) {
                     return entry.getValue().toUpperCase();
                 }
 
             }
-        }return "";
+        }
+        return "";
     }
 
 }
