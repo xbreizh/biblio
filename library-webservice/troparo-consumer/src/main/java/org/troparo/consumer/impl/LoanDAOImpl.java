@@ -14,10 +14,10 @@ import java.util.*;
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
-    private static String STATUS = "status";
-    private static String ISBN = "isbn";
-    private static String BOOK_ID = "book_id";
-    private static String LOGIN = "login";
+    private static final String STATUS = "status";
+    private static final String ISBN = "isbn";
+    private static final String BOOK_ID = "book_id";
+    private static final String LOGIN = "login";
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -130,7 +130,8 @@ public class LoanDAOImpl implements LoanDAO {
         logger.info("criteria: " + criteria);
         logger.info("request: " + request);
 
-        if(map.containsKey("status"))request+=addStatusToRequest(status, map.size());
+        if(map.containsKey(STATUS))request+=addStatusToRequest(status, map.size());
+        try {
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         logger.info("map again: " + map);
         for (Map.Entry<String, String> entry : map.entrySet()
@@ -152,7 +153,7 @@ public class LoanDAOImpl implements LoanDAO {
         }
 
         logger.info("map: " + request);
-        try {
+
             logger.info("list with criteria size: " + query.getResultList().size());
             return query.getResultList();
         } catch (Exception e) {
@@ -165,7 +166,7 @@ public class LoanDAOImpl implements LoanDAO {
     private String createRequestFromMap(HashMap<String, String> map, StringBuilder criteria, String status) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getKey().equalsIgnoreCase("status")) {
+            if (!entry.getKey().equalsIgnoreCase(STATUS)) {
                 if (!criteria.toString().equals("")) {
                     criteria.append(" and ");
                 } else {
@@ -194,8 +195,8 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
-        String[] authorizedCriterias = {STATUS, BOOK_ID, LOGIN};
-        List<String> list = Arrays.asList(authorizedCriterias);
+        String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
+        List<String> list = Arrays.asList(authorizedCriteria);
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
@@ -206,7 +207,7 @@ public class LoanDAOImpl implements LoanDAO {
         return map;
     }
 
-    private String addStatusToRequest(String status, int i) {
+    String addStatusToRequest(String status, int i) {
         String request="";
         logger.info("size: " + i);
         String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};

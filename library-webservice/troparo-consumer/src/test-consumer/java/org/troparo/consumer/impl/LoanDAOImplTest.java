@@ -202,5 +202,24 @@ class LoanDAOImplTest {
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
 
+    @Test
+    @DisplayName("should return empty list if loan is null")
+    void getLoansByCriterias_Status2() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "wrongOne");
+        LoanDAOImpl loanDAO1 = new LoanDAOImpl();
+        loanDAO1.setSessionFactory(null);
+        assertEquals(0, loanDAO1.getLoansByCriterias(map).size());
+    }
+
+
+    @Test
+    @DisplayName("should return \"and endDate > current_date\" string if invalid criteria")
+    void addStatusToRequest(){
+       LoanDAOImpl loanDAO = new LoanDAOImpl();
+       loanDAO.addStatusToRequest("dede", 3);
+
+       assertEquals(" and endDate > current_date", loanDAO.addStatusToRequest("dede", 3));
+    }
 
 }

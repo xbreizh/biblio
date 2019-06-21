@@ -185,7 +185,6 @@ class BookDAOImplTest {
         Book book = new Book();
         BookDAOImpl bookDAO1 = new BookDAOImpl();
         bookDAO1.setSessionFactory(null);
-        // assertEquals(5, bookDAO1.getBooks().size());
         assertFalse(bookDAO1.updateBook(book));
     }
 
