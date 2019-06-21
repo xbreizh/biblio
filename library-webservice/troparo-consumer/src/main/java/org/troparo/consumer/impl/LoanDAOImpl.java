@@ -117,8 +117,8 @@ public class LoanDAOImpl implements LoanDAO {
     public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
-        if (map == null ) return loanList;
-        if(map.isEmpty())return loanList;
+        if (map == null) return loanList;
+        if (map.isEmpty()) return loanList;
         if (!checkValidMapEntries(map)) return loanList;
         logger.info("map received in DAO: " + map);
         request.append("From Loan ");
@@ -219,27 +219,28 @@ public class LoanDAOImpl implements LoanDAO {
 
         String request = "";
         logger.info("size: " + map.size());
-        if (!checkValidStatus(status)) return request;
-            if (map.size() - 1 > 1) {
-                request += " and";
-            } else {
-                request += " where";
-            }
+        if (!checkValidStatus(status)) {
+            return request;
+        }
+        if (map.size() - 1 > 1) {
+            request += " and";
+        } else {
+            request += " where";
+        }
 
 
-            switch (status) {
-                case "TERMINATED":
-                    request += " endDate is not null";
-                    break;
-                case "OVERDUE":
-                    request += " endDate is null and plannedEndDate < current_date";
-                    break;
-                default: //progress
-                    request += " endDate is null";
-                    break;
+        switch (status) {
+            case "TERMINATED":
+                request += " endDate is not null";
+                break;
+            case "OVERDUE":
+                request += " endDate is null and plannedEndDate < current_date";
+                break;
+            default: //progress
+                request += " endDate is null";
+                break;
 
-            }
-
+        }
 
 
         return request;

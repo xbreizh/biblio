@@ -297,6 +297,15 @@ class LoanDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return nothing if empty map")
+    void addStatusToRequest6(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        assertEquals("", loanDAO.addStatusToRequest(map));
+    }
+
+
+    @Test
     @DisplayName("should return an empty string when map null")
     void extractStatusFromMap(){
         LoanDAOImpl loanDAO = new LoanDAOImpl();
