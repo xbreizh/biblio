@@ -303,7 +303,8 @@ class LoanDAOImplTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         map.put("login", "bob");
-        assertEquals(" where endDate is not null", loanDAO.addStatusToRequest(map));
+        map.put("book_id", "15");
+        assertEquals(" and endDate is not null", loanDAO.addStatusToRequest(map));
     }
 
 
