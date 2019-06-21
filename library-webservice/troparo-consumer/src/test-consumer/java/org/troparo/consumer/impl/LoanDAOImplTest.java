@@ -44,22 +44,57 @@ class LoanDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return empty list if session is null")
+    void getLoans1() {
+        LoanDAOImpl loanDAO1 = new LoanDAOImpl();
+        loanDAO1.setSessionFactory(null);
+        assertEquals(0, loanDAO1.getLoans().size());
+    }
+
+
+    @Test
     @DisplayName("should add a loan")
     void addLoan() {
-        System.out.println("size: " + loanDAO.getLoans().size());
-        loanDAO.addLoan(new Loan());
-        assertEquals(6, loanDAO.getLoans().size());
+        assertAll(
+                () -> assertTrue(loanDAO.addLoan(new Loan())),
+                () -> assertEquals(6, loanDAO.getLoans().size())
+
+        );
+
     }
+
+    @Test
+    @DisplayName("should add a loan")
+    void addLoan1() {
+        LoanDAOImpl loanDAO1 = new LoanDAOImpl();
+        loanDAO1.setSessionFactory(null);
+        assertFalse(loanDAO1.addLoan(new Loan()));
+    }
+
 
     @Test
     @DisplayName("should update loan")
     void updateLoan() {
         Loan loan = loanDAO.getLoanById(4);
         Book newBook = bookDAO.getBookById(1);
-        assertNotEquals(newBook, loan.getBook());
+        assertNotEquals(newBook, loanDAO.getLoanById(4).getBook());
         loan.setBook(newBook);
-        assertEquals(newBook, loan.getBook());
+        assertAll(
+                () -> assertTrue(loanDAO.updateLoan(loan)),
+                () -> assertEquals(newBook, loanDAO.getLoanById(4).getBook())
+
+        );
+
     }
+
+    @Test
+    @DisplayName("should update loan")
+    void updateLoan1() {
+        LoanDAOImpl loanDAO1 = new LoanDAOImpl();
+        loanDAO1.setSessionFactory(null);
+        assertFalse(loanDAO1.updateLoan(new Loan()));
+    }
+
 
     @Test
     @DisplayName("should return loan if existing id")
@@ -88,8 +123,18 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("shoult return empty list if ISBN is null")
     void getLoanByIsbn2() {
-        assertNull(loanDAO.getLoanByIsbn(null));
+        assertEquals(0,loanDAO.getLoanByIsbn(null).size());
     }
+
+    @Test
+    @DisplayName("shoult return empty list if ISBN is null")
+    void getLoanByIsbn3() {
+        LoanDAOImpl loanDAO1 = new LoanDAOImpl();
+        loanDAO1.setSessionFactory(null);
+        assertEquals(0, loanDAO1.getLoanByIsbn("ded").size());
+    }
+
+
 
     @Test
     @DisplayName("should return not empty list if existing loan for a login")
@@ -100,6 +145,14 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return  empty list if none-existing loan for a login")
     void getLoanByLogin1() {
+        assertEquals(0, loanDAO.getLoanByLogin("Jpoline").size());
+    }
+
+    @Test
+    @DisplayName("should return  empty list if session is null")
+    void getLoanByLogin2() {
+        LoanDAOImpl loanDAO1 = new LoanDAOImpl();
+        loanDAO1.setSessionFactory(null);
         assertEquals(0, loanDAO.getLoanByLogin("Jpoline").size());
     }
 
