@@ -101,10 +101,10 @@ public class LoanDAOImpl implements LoanDAO {
         logger.info("Login received: " + login);
         login = login.toUpperCase();
         request = "From Loan where borrower.login = :login";
-
+        try {
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter(LOGIN, login);
-        try {
+
             List<Loan> list = query.getResultList();
             logger.info("size of list: " + list.size());
             return query.getResultList();
@@ -134,6 +134,20 @@ public class LoanDAOImpl implements LoanDAO {
         try {
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         logger.info("map again: " + map);
+            addingParametersToCriteriasQuery(map, status, query);
+
+            logger.info("map: " + request);
+
+            logger.info("list with criteria size: " + query.getResultList().size());
+            return query.getResultList();
+        } catch (Exception e) {
+            logger.info("bam l erreur");
+            return loanList;
+        }
+
+    }
+
+    private void addingParametersToCriteriasQuery(HashMap<String, String> map, String status, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(status)) {
@@ -151,16 +165,6 @@ public class LoanDAOImpl implements LoanDAO {
 
             }
         }
-
-        logger.info("map: " + request);
-
-            logger.info("list with criteria size: " + query.getResultList().size());
-            return query.getResultList();
-        } catch (Exception e) {
-            logger.info("bam l erreur");
-            return loanList;
-        }
-
     }
 
     private String createRequestFromMap(HashMap<String, String> map, StringBuilder criteria, String status) {
@@ -215,7 +219,7 @@ public class LoanDAOImpl implements LoanDAO {
         if(!status.isEmpty()) {
             if (i > 1) {
                 request += " and";
-            } else/* if (i == 0)*/ {
+            } else {
                 request += " where";
             }
             status = status.toUpperCase();
@@ -233,7 +237,6 @@ public class LoanDAOImpl implements LoanDAO {
                             request += " endDate is null and plannedEndDate < current_date";
                             break;
                         default:
-                            logger.info("nothing to add");
                             break;
                     }
                 }

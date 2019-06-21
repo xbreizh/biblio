@@ -153,8 +153,10 @@ class LoanDAOImplTest {
     void getLoanByLogin2() {
         LoanDAOImpl loanDAO1 = new LoanDAOImpl();
         loanDAO1.setSessionFactory(null);
-        assertEquals(0, loanDAO.getLoanByLogin("Jpoline").size());
+        assertEquals(0, loanDAO1.getLoanByLogin("Jpoline").size());
     }
+
+
 
     @Test
     @DisplayName("should return empty list if invalid criteria")
@@ -206,7 +208,6 @@ class LoanDAOImplTest {
     @DisplayName("should return empty list if loan is null")
     void getLoansByCriterias_Status2() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("status", "wrongOne");
         LoanDAOImpl loanDAO1 = new LoanDAOImpl();
         loanDAO1.setSessionFactory(null);
         assertEquals(0, loanDAO1.getLoansByCriterias(map).size());
@@ -214,12 +215,44 @@ class LoanDAOImplTest {
 
 
     @Test
+    @DisplayName("should return list if several valid criterias")
+    void getLoansByCriterias_Status3() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "terminated");
+        map.put("book_id", "5");
+        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+    }
+
+    @Test
     @DisplayName("should return \"and endDate > current_date\" string if invalid criteria")
     void addStatusToRequest(){
        LoanDAOImpl loanDAO = new LoanDAOImpl();
-       loanDAO.addStatusToRequest("dede", 3);
 
        assertEquals(" and endDate > current_date", loanDAO.addStatusToRequest("dede", 3));
+    }
+
+    @Test
+    @DisplayName("should return \"where endDate > current_date\" string if invalid criteria")
+    void addStatusToRequest1(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+
+        assertEquals(" where endDate > current_date", loanDAO.addStatusToRequest("dede", 1));
+    }
+
+    @Test
+    @DisplayName("should return \" endDate is null\" string if progress")
+    void addStatusToRequest2(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+
+        assertEquals(" and endDate is null", loanDAO.addStatusToRequest("progress", 3));
+    }
+
+    @Test
+    @DisplayName("should return \"endDate is null and plannedEndDate < current_date\" string if overdue")
+    void addStatusToRequest3(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+
+        assertEquals(" and endDate is null and plannedEndDate < current_date", loanDAO.addStatusToRequest("overdue", 3));
     }
 
 }
