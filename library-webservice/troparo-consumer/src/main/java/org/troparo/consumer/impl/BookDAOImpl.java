@@ -86,7 +86,7 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public List<Book> getBooksByCriterias(HashMap<String, String> map) {
         String request;
-        StringBuilder criterias = new StringBuilder();
+        StringBuilder criteria = new StringBuilder();
         logger.info("map: " + map);
         List<Book> bookList = new ArrayList<>();
         if (map == null || map.isEmpty()) return bookList;
@@ -94,15 +94,9 @@ public class BookDAOImpl implements BookDAO {
         cleanInvaliMapEntries(map);
         int mapSizeAfterCleaning = map.size();
         if (mapSizeBeforeCleaning != mapSizeAfterCleaning) return bookList;
-        for (Map.Entry<String, String> entry : map.entrySet()
-        ) {
-            if (criterias.toString().isEmpty()) {
-                criterias.append("where ");
-            }
-            criterias.append(entry.getKey() + " like :" + entry.getKey());
-        }
+        createRequestFromMap(map, criteria);
         request = "SELECT DISTINCT ON (isbn ) *  From Book ";
-        request += criterias;
+        request += criteria;
         Query query;
         try {
             logger.info("request: " + request);
@@ -116,16 +110,30 @@ public class BookDAOImpl implements BookDAO {
             }
 
 
-            logger.info("list with criterias size: " + query.getResultList().size());
+            logger.info("list with criteria size: " + query.getResultList().size());
         } catch (Exception e) {
             return bookList;
         }
         return query.getResultList();
     }
 
+    static void createRequestFromMap(HashMap<String, String> map, StringBuilder criteria) {
+        for (Map.Entry<String, String> entry : map.entrySet()
+        ) {
+            if (!criteria.toString().equals("")) {
+                criteria.append(" and ");
+            } else {
+                criteria.append("where ");
+            }
+            criteria.append(entry.getKey());
+            criteria.append(" like :");
+            criteria.append(entry.getKey());
+        }
+    }
+
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
-        String[] authorizedCriterias = {"isbn", "author", "title"};
-        List<String> list = Arrays.asList(authorizedCriterias);
+        String[] authorizedCriteria = {"isbn", "author", "title"};
+        List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
                 map.remove(entry.getKey());

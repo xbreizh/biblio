@@ -100,17 +100,7 @@ public class MemberDAOImpl implements MemberDAO {
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         StringBuilder criteria = new StringBuilder();
-        for (Map.Entry<String, String> entry : map.entrySet()
-        ) {
-            if (!criteria.toString().equals("")) {
-                criteria.append(" and ");
-            } else {
-                criteria.append("where ");
-            }
-            criteria.append(entry.getKey());
-            criteria.append(" like :");
-            criteria.append(entry.getKey());
-        }
+        BookDAOImpl.createRequestFromMap(map, criteria);
         request = "From Member ";
         request += criteria;
         logger.info("request: " + request);

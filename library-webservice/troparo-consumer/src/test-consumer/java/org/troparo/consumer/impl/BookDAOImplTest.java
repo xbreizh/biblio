@@ -155,7 +155,14 @@ class BookDAOImplTest {
         assertEquals(0, bookDAO1.getBooksByCriterias(map).size());
     }
 
-
+    @Test
+    @DisplayName("should return empty list if any issue")
+    void getBooksByCriterias6(){
+        HashMap<String, String> map = new HashMap<>();
+        map.put("Title", "e");
+        map.put("author", "e");
+        assertEquals(2, bookDAO.getBooksByCriterias(map).size());
+    }
 
     @Test
     @DisplayName("should update book author")
