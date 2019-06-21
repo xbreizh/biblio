@@ -96,7 +96,9 @@ public class MemberDAOImpl implements MemberDAO {
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
         List<Member> memberList = new ArrayList<>();
         if (map == null) return new ArrayList<>();
+        System.out.println("map size: "+map.size());
         cleanInvaliMapEntries(map);
+        System.out.println("map size: "+map.size());
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         StringBuilder criterias = new StringBuilder();
@@ -107,7 +109,9 @@ public class MemberDAOImpl implements MemberDAO {
             } else {
                 criterias.append("where ");
             }
-            criterias.append(entry.getKey() + " like :" + entry.getKey());
+            criterias.append(entry.getKey());
+            criterias.append(" like :");
+            criterias.append(entry.getKey());
         }
         request = "From Member ";
         request += criterias;
@@ -130,7 +134,8 @@ public class MemberDAOImpl implements MemberDAO {
         String[] authorizedCriteria = {LOGIN, FIRSTNAME, LASTNAME, ROLE, EMAIL};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (!list.contains(entry.getKey())) map.remove(entry.getKey());
+            if (!list.contains(entry.getKey().toLowerCase()))
+                map.remove(entry.getKey());
         }
         return map;
     }
@@ -225,7 +230,7 @@ public class MemberDAOImpl implements MemberDAO {
         request = "From Member where token = :token";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter("token", token);
+        query.setParameter(TOKEN, token);
         try {
             return (Member) query.getSingleResult();
         } catch (Exception e) {

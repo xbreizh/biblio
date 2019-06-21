@@ -10,9 +10,12 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.MemberDAO;
+import org.troparo.model.Book;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -111,6 +114,7 @@ class MemberDAOImplTest {
         assertEquals(0, memberDAO.getMembersByCriterias(map).size());
     }
 
+
     @Test
     @DisplayName("should return empty list if map is null")
     void getMembersByCriterias2() {
@@ -118,6 +122,21 @@ class MemberDAOImplTest {
         assertEquals(0, memberDAO.getMembersByCriterias(null).size());
     }
 
+    @Test
+    @DisplayName("should return members")
+    void getMembersByCriterias3() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("LOGIN", "jpolino");
+        assertEquals(1, memberDAO.getMembersByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return members")
+    void getMembersByCriterias4() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("role", "admin");
+        assertEquals(1, memberDAO.getMembersByCriterias(map).size());
+    }
 
     @Test
     @DisplayName("should update member")
@@ -172,6 +191,19 @@ class MemberDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return false if token expired")
+    void checkToken2() throws ParseException {
+        Member member = memberDAO.getMemberByToken("62751f44-b7db-49f5-a19c-5b98edef50db");
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date = simpleDateFormat.parse("2018-09-09");
+        member.setDateConnect(date); // setting last connectDate to now
+        memberDAO.updateMember(member);
+        assertFalse(memberDAO.checkToken("62751f44-b7db-49f5-a19c-5b98edef50db"));
+    }
+
+    @Test
     @DisplayName("should invalidate token")
     void invalidateToken() {
         String token = "62751f44-b7db-49f5-a19c-5b98edef50db";
@@ -192,6 +224,16 @@ class MemberDAOImplTest {
         String token = "62751f44-b7db-49f5-a1dd9c-5b98edef50db";
         assertFalse(memberDAO.invalidateToken(token));
         assertFalse(memberDAO.checkToken(token));
+    }
+
+    @Test
+    @DisplayName("return false if token doesn't exist")
+    void invalidateToken2() {
+        MemberDAOImpl memberDAO1 = new MemberDAOImpl();
+        memberDAO1.setSessionFactory(null);
+        // assertEquals(5, bookDAO1.getBooks().size());
+        String token = "62751f44-b7db-49f5-a1dd9c-5b98edef50db";
+        assertFalse(memberDAO.invalidateToken(token));
     }
 
     @Test

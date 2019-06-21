@@ -2,7 +2,6 @@ package org.troparo.consumer.impl;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -47,7 +46,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should add a loan")
     void addLoan() {
-        System.out.println("size: "+loanDAO.getLoans().size());
+        System.out.println("size: " + loanDAO.getLoans().size());
         loanDAO.addLoan(new Loan());
         assertEquals(6, loanDAO.getLoans().size());
     }
