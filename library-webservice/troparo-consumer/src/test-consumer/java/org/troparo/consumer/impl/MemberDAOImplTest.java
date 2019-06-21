@@ -130,6 +130,14 @@ class MemberDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return false if session null")
+    void updateMember1(){
+        MemberDAOImpl memberDAO1 = new MemberDAOImpl();
+        memberDAO1.setSessionFactory(null);
+        assertFalse( memberDAO1.updateMember(new Member()));
+    }
+
+    @Test
     @DisplayName("should remove member")
     void remove() {
         Member member = memberDAO.getMemberById(1);
@@ -137,6 +145,16 @@ class MemberDAOImplTest {
         assertNull(memberDAO.getMemberById(1));
 
     }
+
+    @Test
+    @DisplayName("should remove member")
+    void remove1() {
+        MemberDAOImpl memberDAO1 = new MemberDAOImpl();
+        memberDAO1.setSessionFactory(null);
+        assertFalse( memberDAO1.remove(new Member()));
+
+    }
+
 
     @Test
     @DisplayName("should return true if token valid")

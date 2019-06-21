@@ -20,7 +20,7 @@ import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@ContextConfiguration("classpath:org/troparo/web/config/spring-hibernate-jax-ws.xml")
+@ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 class LoanServiceIntegrationTest {

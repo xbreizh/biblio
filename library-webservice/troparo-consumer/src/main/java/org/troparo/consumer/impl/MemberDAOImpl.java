@@ -15,6 +15,12 @@ import java.util.*;
 public class MemberDAOImpl implements MemberDAO {
     private static final int MILLI_TO_HOUR = 1000 * 60 * 60;
     private static final int MAX_TIME_TOKEN_VALIDITY = 3;
+    private static final String LOGIN = "login";
+    private static final String FIRSTNAME = "firstname";
+    private static final String LASTNAME = "lastname";
+    private static final String ROLE = "role";
+    private static final String EMAIL = "email";
+    private static final String TOKEN = "token";
     private static Logger logger = Logger.getLogger(MemberDAOImpl.class.getName());
     private Class cl = Member.class;
     private String request;
@@ -47,10 +53,9 @@ public class MemberDAOImpl implements MemberDAO {
             logger.info(sessionFactory);
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
-            if (sessionFactory == null)
-            logger.info("SessionFactory not initialized!");
-            return memberList;
+                logger.error("SessionFactory possibly not initialized!");
         }
+        return memberList;
 
     }
 
@@ -77,7 +82,7 @@ public class MemberDAOImpl implements MemberDAO {
         request = "From Member where login = :login";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter("login", login);
+        query.setParameter(LOGIN, login);
         if (!query.getResultList().isEmpty()) {
             logger.info("records found: " + query.getResultList().size());
             return true;
@@ -122,7 +127,7 @@ public class MemberDAOImpl implements MemberDAO {
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
-        String[] authorizedCriteria = {"login", "firstname", "lastname", "role", "email"};
+        String[] authorizedCriteria = {LOGIN, FIRSTNAME, LASTNAME, ROLE, EMAIL};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey())) map.remove(entry.getKey());
@@ -160,7 +165,7 @@ public class MemberDAOImpl implements MemberDAO {
         request = "From Member where token = :token";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter("token", token);
+        query.setParameter(TOKEN, token);
         List<Member> memberList = query.getResultList();
         if (!memberList.isEmpty()) {
             Member m = memberList.get(0);
@@ -204,7 +209,7 @@ public class MemberDAOImpl implements MemberDAO {
         request = "From Member where login = :login";
         logger.info("login received: " + login);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter("login", login);
+        query.setParameter(LOGIN, login);
         logger.info("query: " + query);
         try {
             return (Member) query.getResultList().get(0);

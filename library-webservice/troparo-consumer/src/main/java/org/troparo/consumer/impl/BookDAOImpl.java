@@ -89,14 +89,13 @@ public class BookDAOImpl implements BookDAO {
         StringBuilder criterias = new StringBuilder();
         logger.info("map: " + map);
         List<Book> bookList = new ArrayList<>();
-        if (map==null ||map.isEmpty()) return bookList;
+        if (map == null || map.isEmpty()) return bookList;
         int mapSizeBeforeCleaning = map.size();
         cleanInvaliMapEntries(map);
         int mapSizeAfterCleaning = map.size();
-        if(mapSizeBeforeCleaning!=mapSizeAfterCleaning)return bookList;
+        if (mapSizeBeforeCleaning != mapSizeAfterCleaning) return bookList;
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            System.out.println("popolopopo");
             if (criterias.toString().isEmpty()) {
                 criterias.append("where ");
             }
@@ -104,24 +103,24 @@ public class BookDAOImpl implements BookDAO {
         }
         request = "SELECT DISTINCT ON (isbn ) *  From Book ";
         request += criterias;
+        Query query;
         try {
-        logger.info("request: " + request);
-        sessionFactory.getCurrentSession().flush();
-        sessionFactory.getCurrentSession().clear();
-        Query query = sessionFactory.getCurrentSession().createNativeQuery(request, Book.class);
-        for (Map.Entry<String, String> entry : map.entrySet()
-        ) {
-            logger.info("criteria: " + entry.getValue());
-            query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
-        }
+            logger.info("request: " + request);
+            sessionFactory.getCurrentSession().flush();
+            sessionFactory.getCurrentSession().clear();
+            query = sessionFactory.getCurrentSession().createNativeQuery(request, Book.class);
+            for (Map.Entry<String, String> entry : map.entrySet()
+            ) {
+                logger.info("criteria: " + entry.getValue());
+                query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
+            }
 
 
             logger.info("list with criterias size: " + query.getResultList().size());
-            if(query.getResultList()!=null)return query.getResultList();
         } catch (Exception e) {
             return bookList;
         }
-        return bookList;
+        return query.getResultList();
     }
 
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {

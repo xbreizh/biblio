@@ -1,6 +1,7 @@
 package org.troparo.consumer.impl;
 
 import org.apache.log4j.Logger;
+import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +17,8 @@ import javax.inject.Inject;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
+/*import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;*/
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
@@ -151,6 +154,8 @@ class BookDAOImplTest {
         map.put("Title", "grande");
         assertEquals(0, bookDAO1.getBooksByCriterias(map).size());
     }
+
+
 
     @Test
     @DisplayName("should update book author")
