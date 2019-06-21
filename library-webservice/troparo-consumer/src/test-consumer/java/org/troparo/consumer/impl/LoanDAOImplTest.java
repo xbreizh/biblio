@@ -181,10 +181,17 @@ class LoanDAOImplTest {
     }
 
     @Test
-    @DisplayName("should return empty list of loans if criterias null")
+    @DisplayName("should return empty list of loans if criterias value is empty")
     void getLoansByCriterias3() {
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "");
+        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+    }
+
+    @Test
+    @DisplayName("should return empty list of loans if empty map passed")
+    void getLoansByCriterias4() {
+        HashMap<String, String> map = new HashMap<>();
         assertEquals(0, loanDAO.getLoansByCriterias(null).size());
     }
 
@@ -194,6 +201,22 @@ class LoanDAOImplTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "lokii");
         assertEquals(1, loanDAO.getLoansByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return list of loans if valid criteria and result")
+    void getLoansByCriterias_login1() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "");
+        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return list of loans if valid criteria and result")
+    void getLoansByCriterias_Isbn() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("isbn", "dede8de7e");
+        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
 
     @Test
@@ -234,20 +257,13 @@ class LoanDAOImplTest {
     }
 
     @Test
-    @DisplayName("should return \"and endDate > current_date\" string if invalid criteria")
+    @DisplayName("should return nothing if invalid status")
     void addStatusToRequest(){
        LoanDAOImpl loanDAO = new LoanDAOImpl();
 
-       assertEquals(" and endDate > current_date", loanDAO.addStatusToRequest("dede", 3));
+       assertEquals("", loanDAO.addStatusToRequest("dede", 3));
     }
 
-    @Test
-    @DisplayName("should return \"where endDate > current_date\" string if invalid criteria")
-    void addStatusToRequest1(){
-        LoanDAOImpl loanDAO = new LoanDAOImpl();
-
-        assertEquals(" where endDate > current_date", loanDAO.addStatusToRequest("dede", 1));
-    }
 
     @Test
     @DisplayName("should return \" endDate is null\" string if progress")

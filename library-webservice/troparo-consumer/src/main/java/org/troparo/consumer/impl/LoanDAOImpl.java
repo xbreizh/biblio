@@ -120,7 +120,8 @@ public class LoanDAOImpl implements LoanDAO {
         String status = "";
         List<Loan> loanList = new ArrayList<>();
         if (map == null || map.isEmpty()) return new ArrayList<>();
-        cleanInvaliMapEntries(map);
+        if(!checkValiMapEntries(map))return loanList;
+        System.out.println("got herer");
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         status = createRequestFromMap(map, criteria, status);
@@ -134,7 +135,7 @@ public class LoanDAOImpl implements LoanDAO {
         try {
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         logger.info("map again: " + map);
-            addingParametersToCriteriasQuery(map, status, query);
+            addingParametersToCriteriasQuery(map,  query);
 
             logger.info("map: " + request);
 
@@ -147,10 +148,11 @@ public class LoanDAOImpl implements LoanDAO {
 
     }
 
-    private void addingParametersToCriteriasQuery(HashMap<String, String> map, String status, Query query) {
+    private void addingParametersToCriteriasQuery(HashMap<String, String> map,  Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!entry.getKey().equalsIgnoreCase(status)) {
+            if (!entry.getKey().equalsIgnoreCase(STATUS)) {
+                System.out.println("croko");
                 logger.info("criteria: " + entry.getValue());
                 if (entry.getKey().toLowerCase().contains(ISBN)) {
                     query.setParameter(ISBN, "%" + entry.getValue().toUpperCase() + "%");
@@ -163,6 +165,8 @@ public class LoanDAOImpl implements LoanDAO {
                     query.setParameter(BOOK_ID, +Integer.parseInt(entry.getValue()));
                 }
 
+            }else{
+                System.out.println("craka");
             }
         }
     }
@@ -196,24 +200,34 @@ public class LoanDAOImpl implements LoanDAO {
         return status;
     }
 
-    private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
+    private boolean checkValiMapEntries(HashMap<String, String> map) {
         String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
         List<String> list = Arrays.asList(authorizedCriteria);
-
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
-                map.remove(entry.getKey());
+                return false;
+            }else{
+                if(entry.getKey().equalsIgnoreCase(STATUS)){
+                    if(!checkValidStatus(entry.getValue()))return false;
+                }
             }
+
         }
-        logger.info("map truc: " + map);
-        return map;
+
+        return true;
+    }
+
+    private boolean checkValidStatus(String status) {
+        String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};
+        List<String> authorizedList = Arrays.asList(authorized);
+        return authorizedList.contains(status.toUpperCase());
     }
 
     String addStatusToRequest(String status, int i) {
         String request="";
         logger.info("size: " + i);
-        String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};
-        List<String> authorizedList = Arrays.asList(authorized);
+       if(!checkValidStatus(status))return request;
+        System.out.println("bako");
         if(!status.isEmpty()) {
             if (i > 1) {
                 request += " and";
@@ -221,7 +235,6 @@ public class LoanDAOImpl implements LoanDAO {
                 request += " where";
             }
             status = status.toUpperCase();
-            if (authorizedList.contains(status)) {
 
                 if (!status.equals("")) {
                     switch (status) {
@@ -235,15 +248,11 @@ public class LoanDAOImpl implements LoanDAO {
                             request += " endDate is null and plannedEndDate < current_date";
                             break;
                         default:
-                            break;
+                            request += " endDate > current_date";
                     }
                 }
             }
-            else {
 
-                request += " endDate > current_date";
-            }
-        }
         return request;
     }
 
