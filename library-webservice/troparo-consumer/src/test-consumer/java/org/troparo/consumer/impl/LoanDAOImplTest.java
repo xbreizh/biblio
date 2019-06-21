@@ -181,6 +181,14 @@ class LoanDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return empty list of loans if criterias null")
+    void getLoansByCriterias3() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "");
+        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+    }
+
+    @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_login() {
         HashMap<String, String> map = new HashMap<>();
@@ -208,6 +216,8 @@ class LoanDAOImplTest {
     @DisplayName("should return empty list if loan is null")
     void getLoansByCriterias_Status2() {
         HashMap<String, String> map = new HashMap<>();
+        map.put("status", "terminated");
+        map.put("book_id", "5");
         LoanDAOImpl loanDAO1 = new LoanDAOImpl();
         loanDAO1.setSessionFactory(null);
         assertEquals(0, loanDAO1.getLoansByCriterias(map).size());
@@ -254,5 +264,6 @@ class LoanDAOImplTest {
 
         assertEquals(" and endDate is null and plannedEndDate < current_date", loanDAO.addStatusToRequest("overdue", 3));
     }
+
 
 }

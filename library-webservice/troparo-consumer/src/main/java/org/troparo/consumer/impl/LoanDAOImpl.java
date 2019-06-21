@@ -186,9 +186,7 @@ public class LoanDAOImpl implements LoanDAO {
                     criteria.append(" = :");
                     criteria.append(entry.getKey());
                 }
-                if (entry.getKey().equalsIgnoreCase(status)) {
-                    criteria.append(status);
-                }
+
             } else {
                 status = entry.getValue();
                 logger.info("status has been passed: " + status);
