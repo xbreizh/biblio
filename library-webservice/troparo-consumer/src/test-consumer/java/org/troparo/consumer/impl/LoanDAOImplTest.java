@@ -297,11 +297,13 @@ class LoanDAOImplTest {
     }
 
     @Test
-    @DisplayName("should return nothing if empty map")
+    @DisplayName("should return \"where endDate is not null\" if empty map")
     void addStatusToRequest6(){
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
-        assertEquals("", loanDAO.addStatusToRequest(map));
+        map.put("status", "terminated");
+        map.put("login", "bob");
+        assertEquals(" where endDate is not null", loanDAO.addStatusToRequest(map));
     }
 
 
