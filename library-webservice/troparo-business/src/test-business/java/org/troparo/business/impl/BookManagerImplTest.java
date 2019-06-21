@@ -10,6 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.consumer.contract.BookDAO;
+import org.troparo.consumer.impl.BookDAOImpl;
 import org.troparo.model.Book;
 
 import java.util.ArrayList;
@@ -106,7 +107,6 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should return null")
     void getBookById1() {
-        Book book = new Book();
         when(bookDAO.getBookById(anyInt())).thenReturn(null);
         assertNull(bookManager.getBookById(12));
     }
@@ -257,8 +257,21 @@ class BookManagerImplTest {
 
 
     @Test
-    @DisplayName("should transfer Title")
+    @DisplayName("should return null if first book is null")
     void transferTitleToSimilarBooks() {
+        assertAll(
+                ()->  assertNull(bookManager2.transferTitleToSimilarBooks(null, new Book())),
+                ()->  assertNull(bookManager2.transferTitleToSimilarBooks(new Book(), null))
+        );
+
+
+    }
+
+
+
+    @Test
+    @DisplayName("should transfer Title")
+    void transferTitleToSimilarBooks2() {
         String title = "Nemo";
         Book book = new Book();
         Book book2 = new Book();
@@ -270,11 +283,12 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should transfer Author")
     void transferAuthorToSimilarBooks() {
+        BookManagerImpl bookManager = new BookManagerImpl();
         String author = "Paul Jackson";
         Book book = new Book();
         Book book2 = new Book();
         book.setAuthor(author);
-        assertEquals(author, bookManager2.transferAuthorToSimilarBooks(book, book2));
+        assertEquals(author, bookManager.transferAuthorToSimilarBooks(book, book2));
 
     }
 
@@ -285,6 +299,7 @@ class BookManagerImplTest {
         Book book = new Book();
         Book book2 = new Book();
         book.setKeywords(keywords);
+        bookManager2.setBookDAO(bookDAO);
         assertEquals(keywords, bookManager2.transferKeywordsToSimilarBooks(book, book2));
 
     }
@@ -324,7 +339,17 @@ class BookManagerImplTest {
     }
 
     @Test
-    @DisplayName("shouls transfert data from a book to another if not empty")
+    @DisplayName("should return null if any book is null")
+    void transferPublicationEditionToSimilarBooks1() {
+        assertAll(
+                () -> assertNull(bookManager2.transferEditionToSimilarBooks(null, new Book())),
+                () -> assertNull(bookManager2.transferEditionToSimilarBooks(new Book(), null))
+        );
+
+    }
+
+    @Test
+    @DisplayName("should transfert data from a book to another if not empty")
     void transferValuesToSimilarBooks() {
         Book book2 = new Book();
         book2.setEdition("Maroni");
@@ -408,5 +433,29 @@ class BookManagerImplTest {
     void isAvailable1() {
         when(bookDAO.isAvailable(anyInt())).thenReturn(false);
         assertFalse(bookManager.isAvailable(12));
+    }
+
+    @Test
+    @DisplayName("should return error is isbn not filled")
+    void checkRequiredValuesNotNull(){
+        BookManagerImpl bookManager1 = new BookManagerImpl();
+        Book book = new Book();
+        assertEquals("isbn should be filled", bookManager1.checkRequiredValuesNotNull(book));
+    }
+    @Test
+    @DisplayName("should return error is isbn not filled")
+    void checkRequiredValuesNotNull1(){
+        BookManagerImpl bookManager1 = new BookManagerImpl();
+        Book book = new Book();
+        book.setIsbn("");
+        assertEquals("isbn should be filled", bookManager1.checkRequiredValuesNotNull(book));
+    }
+    @Test
+    @DisplayName("should return error is isbn not filled")
+    void checkRequiredValuesNotNull2(){
+        BookManagerImpl bookManager1 = new BookManagerImpl();
+        Book book = new Book();
+        book.setIsbn("?");
+        assertEquals("isbn should be filled", bookManager1.checkRequiredValuesNotNull(book));
     }
 }

@@ -72,11 +72,5 @@ public class MailManagerImpl implements MailManager {
     public LoanManager getLoanManager() {
         return loanManager;
     }
-   /* public LoanManager getLoanManager() {
-        return loanManager;
-    }
 
-    public void setLoanManager(LoanManager loanManager) {
-        this.loanManager = loanManager;
-    }*/
 }

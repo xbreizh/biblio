@@ -100,30 +100,26 @@ public class BookManagerImpl implements BookManager {
     }
 
 
-    private String checkRequiredValuesNotNull(Book book) {
+    String checkRequiredValuesNotNull(Book book) {
+        if(book==null)return "book is null";
 
-        if (book.getIsbn().equals("") || book.getIsbn().equals("?")) {
-            return "isbn should be filled";
-        }
-        if (book.getTitle().equals("") || book.getTitle().equals("?")) {
-            return "Title should be filled";
-        }
-        if (book.getAuthor().equals("") || book.getAuthor().equals("?")) {
-            return "Author should be filled";
-        }
+        if (checkValidParamString(book.getIsbn())) return "isbn should be filled";
+        if (checkValidParamString(book.getTitle())) return "Title should be filled";
+        if (checkValidParamString(book.getAuthor())) return "Author should be filled";
+        if (checkValidParamString(book.getKeywords())) return "keywords should be filled";
         if (book.getPublicationYear() == 0) {
             return "Publication should be filled";
         }
-        if (book.getEdition().equals("") || book.getEdition().equals("?")) {
-            return "Edition should be filled";
-        }
+        if (checkValidParamString(book.getEdition())) return "Edition should be filled";
         if (book.getNbPages() == 0) {
             return "NbPages should be filled";
         }
-        if (book.getKeywords().equals("") || book.getKeywords().equals("?")) {
-            return "keywords should be filled";
-        }
         return "";
+    }
+
+    private boolean checkValidParamString(String isbn) {
+
+        return isbn == null || isbn.equals("") || isbn.equals("?");
     }
 
     @Override
@@ -205,7 +201,6 @@ public class BookManagerImpl implements BookManager {
         return b.getKeywords();
     }
 
-    //@VisibleForTesting()
     int transferNbPagesToSimilarBooks(Book book, Book b) {
         if (book.getNbPages() != 0) {
             b.setNbPages(book.getNbPages());
@@ -221,12 +216,14 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferEditionToSimilarBooks(Book book, Book b) {
-        if (book.getEdition() != null && !book.getEdition().equals("") && !book.getEdition().equals("?")) {
-            logger.info("got you");
-            b.setEdition(book.getEdition());
-        }
+        if (book != null && b!=null ) {
+            if (book.getEdition() != null && !book.getEdition().equals("") && !book.getEdition().equals("?")) {
+                logger.info("got you");
+                b.setEdition(book.getEdition());
+            }
 
-        return b.getEdition();
+            return b.getEdition();
+        }return null;
     }
 
     String transferAuthorToSimilarBooks(Book book, Book b) {
@@ -238,7 +235,7 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferTitleToSimilarBooks(Book book, Book b) {
-        if (book != null) {
+        if (book != null && b!=null ) {
             if (book.getTitle() != null && !book.getTitle().equals("") && !book.getTitle().equals("?")) {
                 b.setTitle(book.getTitle());
             }
@@ -273,7 +270,7 @@ public class BookManagerImpl implements BookManager {
         Book book = bookDAO.getBookById(id);
 
         if (book == null) {
-            return exception = "No item found";
+            return "No item found";
         } else {
             bookDAO.remove(book);
         }
