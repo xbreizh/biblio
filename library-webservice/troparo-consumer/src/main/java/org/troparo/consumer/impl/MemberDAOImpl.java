@@ -96,34 +96,33 @@ public class MemberDAOImpl implements MemberDAO {
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
         List<Member> memberList = new ArrayList<>();
         if (map == null) return new ArrayList<>();
-        System.out.println("map size: "+map.size());
         cleanInvaliMapEntries(map);
-        System.out.println("map size: "+map.size());
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
-        StringBuilder criterias = new StringBuilder();
+        StringBuilder criteria = new StringBuilder();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (!criterias.toString().equals("")) {
-                criterias.append(" and ");
+            if (!criteria.toString().equals("")) {
+                criteria.append(" and ");
             } else {
-                criterias.append("where ");
+                criteria.append("where ");
             }
-            criterias.append(entry.getKey());
-            criterias.append(" like :");
-            criterias.append(entry.getKey());
+            criteria.append(entry.getKey());
+            criteria.append(" like :");
+            criteria.append(entry.getKey());
         }
         request = "From Member ";
-        request += criterias;
+        request += criteria;
         logger.info("request: " + request);
+        try {
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             logger.info("criteria: " + entry.getValue());
             query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
         }
-        try {
-            logger.info("list with criterias size: " + query.getResultList().size());
+
+            logger.info("list with criteria size: " + query.getResultList().size());
             return query.getResultList();
         } catch (Exception e) {
             return memberList;
@@ -178,7 +177,7 @@ public class MemberDAOImpl implements MemberDAO {
             // calculating time since last connect
             int time = Math.toIntExact((now.getTime() - m.getDateConnect().getTime()) / MILLI_TO_HOUR);
             logger.info("time since last connect: " + time);
-            if (getMemberByToken(token) != null && time > MAX_TIME_TOKEN_VALIDITY) {
+            if (time > MAX_TIME_TOKEN_VALIDITY) {
                 logger.info("invalid token");
                 invalidateToken(token);
                 return false;
@@ -200,6 +199,7 @@ public class MemberDAOImpl implements MemberDAO {
             m.setToken(null);
             updateMember(m);
         } catch (Exception e) {
+            System.out.println("bam erreur");
             logger.error("issue while invalidating the token");
             return false;
         }

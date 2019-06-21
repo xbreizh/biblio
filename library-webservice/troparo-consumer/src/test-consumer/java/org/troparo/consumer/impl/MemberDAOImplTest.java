@@ -134,9 +134,30 @@ class MemberDAOImplTest {
     @DisplayName("should return members")
     void getMembersByCriterias4() {
         HashMap<String, String> map = new HashMap<>();
+        map.put("login", "o");
+        map.put("email", "@");
+        assertEquals(2, memberDAO.getMembersByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return members when using several criterias")
+    void getMembersByCriterias5() {
+        HashMap<String, String> map = new HashMap<>();
         map.put("role", "admin");
         assertEquals(1, memberDAO.getMembersByCriterias(map).size());
     }
+
+
+    @Test
+    @DisplayName("should return members")
+    void getMembersByCriterias6() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("role", "admin");
+        MemberDAOImpl memberDAO1 = new MemberDAOImpl();
+        memberDAO1.setSessionFactory(null);
+        assertEquals(0, memberDAO1.getMembersByCriterias(map).size());
+    }
+
 
     @Test
     @DisplayName("should update member")
@@ -227,13 +248,12 @@ class MemberDAOImplTest {
     }
 
     @Test
-    @DisplayName("return false if token doesn't exist")
+    @DisplayName("return false if session null")
     void invalidateToken2() {
         MemberDAOImpl memberDAO1 = new MemberDAOImpl();
         memberDAO1.setSessionFactory(null);
-        // assertEquals(5, bookDAO1.getBooks().size());
         String token = "62751f44-b7db-49f5-a1dd9c-5b98edef50db";
-        assertFalse(memberDAO.invalidateToken(token));
+        assertFalse(memberDAO1.invalidateToken(token));
     }
 
     @Test
