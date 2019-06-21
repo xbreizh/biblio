@@ -221,6 +221,14 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
+    void getLoansByCriterias_Isbn1() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("isbn", "");
+        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_Status() {
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "terminated");
@@ -260,8 +268,9 @@ class LoanDAOImplTest {
     @DisplayName("should return nothing if invalid status")
     void addStatusToRequest(){
        LoanDAOImpl loanDAO = new LoanDAOImpl();
-
-       assertEquals("", loanDAO.addStatusToRequest("dede", 3));
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "dede");
+       assertEquals("", loanDAO.addStatusToRequest(map));
     }
 
 
@@ -269,16 +278,18 @@ class LoanDAOImplTest {
     @DisplayName("should return \" endDate is null\" string if progress")
     void addStatusToRequest2(){
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-
-        assertEquals(" and endDate is null", loanDAO.addStatusToRequest("progress", 3));
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "progress");
+        assertEquals(" where endDate is null", loanDAO.addStatusToRequest(map));
     }
 
     @Test
     @DisplayName("should return \"endDate is null and plannedEndDate < current_date\" string if overdue")
     void addStatusToRequest3(){
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-
-        assertEquals(" and endDate is null and plannedEndDate < current_date", loanDAO.addStatusToRequest("overdue", 3));
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "overdue");
+        assertEquals(" where endDate is null and plannedEndDate < current_date", loanDAO.addStatusToRequest(map));
     }
 
 

@@ -85,8 +85,8 @@ public class LoanDAOImpl implements LoanDAO {
         logger.info(isbn);
         request = "From Loan where book.isbn = :isbn";
         try {
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter(ISBN, isbn);
+            Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+            query.setParameter(ISBN, isbn);
 
             return query.getResultList();
         } catch (Exception e) {
@@ -102,8 +102,8 @@ public class LoanDAOImpl implements LoanDAO {
         login = login.toUpperCase();
         request = "From Loan where borrower.login = :login";
         try {
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter(LOGIN, login);
+            Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+            query.setParameter(LOGIN, login);
 
             List<Loan> list = query.getResultList();
             logger.info("size of list: " + list.size());
@@ -115,27 +115,24 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
-        String request;
-        StringBuilder criteria = new StringBuilder();
-        String status = "";
+        StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
         if (map == null || map.isEmpty()) return new ArrayList<>();
-        if(!checkValiMapEntries(map))return loanList;
-        System.out.println("got herer");
+        if (!checkValiMapEntries(map)) return loanList;
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
-        status = createRequestFromMap(map, criteria, status);
+        request.append("From Loan ");
+        request.append(createRequestFromMap(map));
 
-        request = "From Loan ";
-        request += criteria;
-        logger.info("criteria: " + criteria);
         logger.info("request: " + request);
 
-        if(map.containsKey(STATUS))request+=addStatusToRequest(status, map.size());
+        if (map.containsKey(STATUS)) {
+            request.append(addStatusToRequest(map));
+        }
         try {
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        logger.info("map again: " + map);
-            addingParametersToCriteriasQuery(map,  query);
+            Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
+            logger.info("map again: " + map);
+            addingParametersToCriteriasQuery(map, query);
 
             logger.info("map: " + request);
 
@@ -148,30 +145,28 @@ public class LoanDAOImpl implements LoanDAO {
 
     }
 
-    private void addingParametersToCriteriasQuery(HashMap<String, String> map,  Query query) {
+    private void addingParametersToCriteriasQuery(HashMap<String, String> map, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
-                System.out.println("croko");
                 logger.info("criteria: " + entry.getValue());
                 if (entry.getKey().toLowerCase().contains(ISBN)) {
                     query.setParameter(ISBN, "%" + entry.getValue().toUpperCase() + "%");
                 }
                 if (entry.getKey().toLowerCase().contains(LOGIN)) {
-                    query.setParameter(LOGIN,   entry.getValue().toUpperCase() );
+                    query.setParameter(LOGIN, entry.getValue().toUpperCase());
 
                 }
                 if (entry.getKey().toLowerCase().contains(BOOK_ID)) {
                     query.setParameter(BOOK_ID, +Integer.parseInt(entry.getValue()));
                 }
 
-            }else{
-                System.out.println("craka");
             }
         }
     }
 
-    private String createRequestFromMap(HashMap<String, String> map, StringBuilder criteria, String status) {
+    private String createRequestFromMap(HashMap<String, String> map) {
+        StringBuilder criteria = new StringBuilder();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
@@ -180,7 +175,7 @@ public class LoanDAOImpl implements LoanDAO {
                 } else {
                     criteria.append("where ");
                 }
-                if(entry.getKey().equalsIgnoreCase(LOGIN)){
+                if (entry.getKey().equalsIgnoreCase(LOGIN)) {
                     criteria.append("borrower.login");
                     criteria.append(" = :");
                     criteria.append(LOGIN);
@@ -192,12 +187,11 @@ public class LoanDAOImpl implements LoanDAO {
                 }
 
             } else {
-                status = entry.getValue();
-                logger.info("status has been passed: " + status);
+                logger.info("status has been passed: " + entry.getValue());
             }
 
         }
-        return status;
+        return criteria.toString();
     }
 
     private boolean checkValiMapEntries(HashMap<String, String> map) {
@@ -206,9 +200,9 @@ public class LoanDAOImpl implements LoanDAO {
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
                 return false;
-            }else{
-                if(entry.getKey().equalsIgnoreCase(STATUS)){
-                    if(!checkValidStatus(entry.getValue()))return false;
+            } else {
+                if (entry.getKey().equalsIgnoreCase(STATUS)) {
+                    if (!checkValidStatus(entry.getValue())) return false;
                 }
             }
 
@@ -223,38 +217,49 @@ public class LoanDAOImpl implements LoanDAO {
         return authorizedList.contains(status.toUpperCase());
     }
 
-    String addStatusToRequest(String status, int i) {
-        String request="";
-        logger.info("size: " + i);
-       if(!checkValidStatus(status))return request;
-        System.out.println("bako");
-        if(!status.isEmpty()) {
-            if (i > 1) {
+    String addStatusToRequest(HashMap<String, String> map) {
+
+        String status = extractStatusFromMap(map);
+
+        String request = "";
+        logger.info("size: " + map.size());
+        if (!checkValidStatus(status)) return request;
+        if (!status.isEmpty()) {
+            if (map.size()-1 > 1) {
                 request += " and";
             } else {
                 request += " where";
             }
-            status = status.toUpperCase();
 
-                if (!status.equals("")) {
-                    switch (status) {
-                        case "PROGRESS":
-                            request += " endDate is null";
-                            break;
-                        case "TERMINATED":
-                            request += " endDate is not null";
-                            break;
-                        case "OVERDUE":
-                            request += " endDate is null and plannedEndDate < current_date";
-                            break;
-                        default:
-                            request += " endDate > current_date";
-                    }
-                }
+
+            switch (status) {
+                case "PROGRESS":
+                    request += " endDate is null";
+                    break;
+                case "TERMINATED":
+                    request += " endDate is not null";
+                    break;
+                case "OVERDUE":
+                    request += " endDate is null and plannedEndDate < current_date";
+                    break;
+                default:
+                    request += " endDate > current_date";
             }
+
+        }
 
         return request;
     }
 
+    private String extractStatusFromMap(HashMap<String, String> map) {
+
+        for (Map.Entry<String, String> entry : map.entrySet()) {
+            if (entry.getKey().equalsIgnoreCase(STATUS)) {
+                return entry.getValue().toUpperCase();
+            }
+
+        }
+        return "";
+    }
 
 }
