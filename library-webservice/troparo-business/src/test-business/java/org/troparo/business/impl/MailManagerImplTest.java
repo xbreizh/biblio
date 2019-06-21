@@ -7,6 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
 
 import javax.inject.Inject;
@@ -26,60 +27,34 @@ class MailManagerImplTest {
 
     @Inject
     private MailManager mailManager;
-    /*@Inject
-    private LoanManager loanManager;*/
 
     @BeforeEach
     void init() {
-        /*mailManager = new MailManagerImpl();
-        loanManager = spy(LoanManager.class);
-        mailManager.setLoanManager(loanManager);*/
 
     }
 
-  /*  @Test
-    @DisplayName("should return the overdue list")
-    void getOverdueEmailList() throws ParseException {
-        HashMap<String, String> criterias = new HashMap<>();
-        criterias.put("status", "OVERDUE");
-        List<Loan> loanList = new ArrayList<>();
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Member member = new Member();
-        member.setEmail("test@test.test");
-        member.setFirstName("Bob");
-        Loan loan = new Loan();
-        loan.setBorrower(member);
-        Book book = new Book();
-        book.setTitle("Boravo");
-        book.setIsbn("ISBN123");
-        loan.setBook(book);
-        Date startDate = simpleDateFormat.parse("2018-09-01");
-        loan.setStartDate(startDate);
-        Date plannedEndDate = simpleDateFormat.parse("2018-09-10");
-        loan.setPlannedEndDate(plannedEndDate);
-        loan.setId(2);
-        loanList.add(loan);
-        when(loanManager.getLoansByCriterias(criterias)).thenReturn(loanList);
-        assertAll(
-                ()->assertNotNull(mailManager.getOverdueEmailList()),
-                ()-> assertEquals(1, mailManager.getOverdueEmailList().size()),
-                ()->assertEquals("Bob", mailManager.getOverdueEmailList().get(0).getFirstname()),
-                ()->assertEquals("Boravo", mailManager.getOverdueEmailList().get(0).getTitle()),
-                ()->assertEquals(plannedEndDate, mailManager.getOverdueEmailList().get(0).getDueDate()),
-                ()->assertEquals("ISBN123", mailManager.getOverdueEmailList().get(0).getIsbn())
-        );
-    }*/
+    @Test
+    @DisplayName("should set loanmanager")
+    void setLoanManager(){
+        LoanManager loanManager = new LoanManagerImpl();
+        mailManager.setLoanManager(loanManager);
+        assertEquals(loanManager, mailManager.getLoanManager());
+    }
+
+    @Test
+    @DisplayName("should return date")
+    void getTodaySDate(){
+        MailManagerImpl mailManager = new MailManagerImpl();
+        assertEquals(new Date(), mailManager.getTodaySDate());
+    }
+
+
 
     @Test
     @DisplayName("should return the overdue mailing list")
-    void getOverdueEmailList1() throws ParseException {
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date date1 = simpleDateFormat.parse("2018-09-02");
-        MailManagerImpl emailManager = mock(MailManagerImpl.class);
-        when(emailManager.getTodaySDate()).thenReturn(date1);
-        assertNotNull(emailManager.getOverdueEmailList());
+    void getOverdueEmailList1() {
+
+        assertNotNull(mailManager.getOverdueEmailList());
     }
 
     @Test

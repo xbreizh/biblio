@@ -20,14 +20,16 @@ import java.util.List;
 public class MailManagerImpl implements MailManager {
     @Inject
     LoanManager loanManager;
-    private Logger logger = Logger.getLogger(MailManagerImpl.class);
 
+    private Logger logger = Logger.getLogger(MailManagerImpl.class);
 
     @Override
     public int calculateDaysBetweenDates(Date d1, Date d2) {
         long diff = d2.getTime() - d1.getTime();
         return (int) diff / (24 * 60 * 60 * 1000);
     }
+
+
 
 
     @Override
@@ -61,8 +63,20 @@ public class MailManagerImpl implements MailManager {
         return new Date();
     }
 
-
+    @Override
     public void setLoanManager(LoanManager loanManager) {
         this.loanManager = loanManager;
     }
+
+    @Override
+    public LoanManager getLoanManager() {
+        return loanManager;
+    }
+   /* public LoanManager getLoanManager() {
+        return loanManager;
+    }
+
+    public void setLoanManager(LoanManager loanManager) {
+        this.loanManager = loanManager;
+    }*/
 }

@@ -1,5 +1,6 @@
 package org.troparo.business.contract;
 
+import org.troparo.business.impl.LoanManagerImpl;
 import org.troparo.model.Mail;
 
 import java.util.Date;
@@ -15,4 +16,5 @@ public interface MailManager {
 
     void setLoanManager(LoanManager loanManager);
 
+    LoanManager getLoanManager();
 }

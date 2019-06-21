@@ -30,7 +30,7 @@ import static org.mockito.Mockito.*;
 @ExtendWith(SpringExtension.class)
 class LoanManagerImplTest {
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+
     private LoanManagerImpl loanManager;
     @Inject
     private LoanDAO loanDAO;
@@ -154,7 +154,7 @@ class LoanManagerImplTest {
         Loan loan = new Loan();
         loan.setEndDate(new Date());
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
-        logger.info("loanDuration: " + loanManager.getLoanDuration());
+        //logger.info("loanDuration: " + loanManager.getLoanDuration());
         assertEquals("loan already terminated: " + loan.getEndDate(), loanManager.renewLoan(45));
     }
 

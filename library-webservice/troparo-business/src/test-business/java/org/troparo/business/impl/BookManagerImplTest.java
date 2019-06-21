@@ -28,7 +28,6 @@ import static org.mockito.Mockito.when;
 class BookManagerImplTest {
 
     private BookManagerImpl bookManager2 = new BookManagerImpl();
-    //@Inject
     private BookManager bookManager;
     private BookDAO bookDAO;
 
