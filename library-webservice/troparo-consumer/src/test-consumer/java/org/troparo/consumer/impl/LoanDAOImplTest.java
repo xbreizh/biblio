@@ -279,6 +279,24 @@ class LoanDAOImplTest {
     }
 
     @Test
+    @DisplayName("should return nothing if invalid status")
+    void addStatusToRequest4(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "dede");
+        assertEquals("", loanDAO.addStatusToRequest(map));
+    }
+
+    @Test
+    @DisplayName("should return nothing if invalid status")
+    void addStatusToRequest5(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        HashMap<String, String> map = new HashMap<>();
+        map.put("status", "");
+        assertEquals("", loanDAO.addStatusToRequest(map));
+    }
+
+    @Test
     @DisplayName("should return an empty string when map null")
     void extractStatusFromMap(){
         LoanDAOImpl loanDAO = new LoanDAOImpl();
@@ -329,6 +347,22 @@ class LoanDAOImplTest {
         map.put("book_id", "ob");
         assertEquals("where book_id = :book_id and borrower.login = :login",loanDAO.createRequestFromMap(map));
     }
+
+
+    @Test
+    @DisplayName("should return true")
+    void checkValidStatus(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        assertTrue(loanDAO.checkValidStatus("terminated"));
+    }
+
+    @Test
+    @DisplayName("should return false")
+    void checkValidStatus1(){
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
+        assertFalse(loanDAO.checkValidStatus("fini"));
+    }
+
 
 
 

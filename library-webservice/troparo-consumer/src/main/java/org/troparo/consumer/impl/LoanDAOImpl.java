@@ -117,9 +117,9 @@ public class LoanDAOImpl implements LoanDAO {
     public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
-        if (map == null || map.isEmpty()) return new ArrayList<>();
+        if (map == null ) return loanList;
+        if(map.isEmpty())return loanList;
         if (!checkValidMapEntries(map)) return loanList;
-        if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         request.append("From Loan ");
         request.append(createRequestFromMap(map));
@@ -207,7 +207,7 @@ public class LoanDAOImpl implements LoanDAO {
         return true;
     }
 
-    private boolean checkValidStatus(String status) {
+    boolean checkValidStatus(String status) {
         String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};
         List<String> authorizedList = Arrays.asList(authorized);
         return authorizedList.contains(status.toUpperCase());
@@ -220,7 +220,6 @@ public class LoanDAOImpl implements LoanDAO {
         String request = "";
         logger.info("size: " + map.size());
         if (!checkValidStatus(status)) return request;
-        if (!status.isEmpty()) {
             if (map.size() - 1 > 1) {
                 request += " and";
             } else {
@@ -241,7 +240,7 @@ public class LoanDAOImpl implements LoanDAO {
 
             }
 
-        }
+
 
         return request;
     }
