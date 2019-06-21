@@ -118,7 +118,8 @@ public class LoanDAOImpl implements LoanDAO {
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
         if (map == null || map.isEmpty()) return new ArrayList<>();
-        if (!checkValiMapEntries(map)) return loanList;
+        if (!checkValidMapEntries(map)) return loanList;
+        System.out.println("here");
         if (map.size() == 0) return new ArrayList<>();
         logger.info("map received in DAO: " + map);
         request.append("From Loan ");
@@ -131,8 +132,9 @@ public class LoanDAOImpl implements LoanDAO {
         }
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
-            logger.info("map again: " + map);
+            System.out.println("getting params");
             addingParametersToCriteriasQuery(map, query);
+            logger.info("map again: " + map);
 
             logger.info("map: " + request);
 
@@ -146,13 +148,11 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private void addingParametersToCriteriasQuery(HashMap<String, String> map, Query query) {
+        System.out.println("mapmap: "+map);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
                 logger.info("criteria: " + entry.getValue());
-                if (entry.getKey().toLowerCase().contains(ISBN)) {
-                    query.setParameter(ISBN, "%" + entry.getValue().toUpperCase() + "%");
-                }
                 if (entry.getKey().toLowerCase().contains(LOGIN)) {
                     query.setParameter(LOGIN, entry.getValue().toUpperCase());
 
@@ -194,16 +194,16 @@ public class LoanDAOImpl implements LoanDAO {
         return criteria.toString();
     }
 
-    private boolean checkValiMapEntries(HashMap<String, String> map) {
+    private boolean checkValidMapEntries(HashMap<String, String> map) {
         String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
         List<String> list = Arrays.asList(authorizedCriteria);
+        System.out.println("map: "+map);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
                 return false;
             } else {
-                if (entry.getKey().equalsIgnoreCase(STATUS)) {
-                    if (!checkValidStatus(entry.getValue())) return false;
-                }
+                if (entry.getKey().equalsIgnoreCase(STATUS) && !checkValidStatus(entry.getValue())) return false;
+
             }
 
         }
@@ -225,7 +225,7 @@ public class LoanDAOImpl implements LoanDAO {
         logger.info("size: " + map.size());
         if (!checkValidStatus(status)) return request;
         if (!status.isEmpty()) {
-            if (map.size()-1 > 1) {
+            if (map.size() - 1 > 1) {
                 request += " and";
             } else {
                 request += " where";
@@ -242,8 +242,7 @@ public class LoanDAOImpl implements LoanDAO {
                 case "OVERDUE":
                     request += " endDate is null and plannedEndDate < current_date";
                     break;
-                default:
-                    request += " endDate > current_date";
+
             }
 
         }
@@ -251,15 +250,16 @@ public class LoanDAOImpl implements LoanDAO {
         return request;
     }
 
-    private String extractStatusFromMap(HashMap<String, String> map) {
+    String extractStatusFromMap(HashMap<String, String> map) {
+        if(map==null )return "";
+        if(!map.isEmpty()) {
+            for (Map.Entry<String, String> entry : map.entrySet()) {
+                if (entry.getKey().equalsIgnoreCase(STATUS)) {
+                    return entry.getValue().toUpperCase();
+                }
 
-        for (Map.Entry<String, String> entry : map.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase(STATUS)) {
-                return entry.getValue().toUpperCase();
             }
-
-        }
-        return "";
+        }return "";
     }
 
 }
