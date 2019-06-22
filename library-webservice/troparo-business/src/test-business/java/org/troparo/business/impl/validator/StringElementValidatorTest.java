@@ -23,11 +23,11 @@ class StringElementValidatorTest {
     @Test
     @DisplayName("should not validate")
     void validate() {
-        String[] wrongLogins= {null,"?", "","2", "ed.","frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?"};
-        for (String login: wrongLogins
+        String[] wrongLoginList= {null,"?", "","2", "ed.","frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?"};
+        for (String login: wrongLoginList
         ) {
             System.out.println("Login: "+login);
-            assertFalse(stringElementValidator.validate(login, "login"));
+            assertFalse(stringElementValidator.validateLogin(login));
         }
     }
 
@@ -35,11 +35,11 @@ class StringElementValidatorTest {
     @Test
     @DisplayName("should validate")
     void validate1() {
-        String[] wrongLogins= {"bastien34", "rokoko", "M2345"};
-        for (String login: wrongLogins
+        String[] validLoginList= {"bastien34", "rokoko", "M2345"};
+        for (String login: validLoginList
              ) {
             System.out.println("Login: "+login);
-            assertTrue(stringElementValidator.validate(login, "login"));
+            assertTrue(stringElementValidator.validateLogin(login));
         }
     }
 

@@ -20,7 +20,7 @@ import java.util.UUID;
 @Named
 public class MemberManagerImpl implements MemberManager {
     private static final String PEPPER = "TIPIAK";
-    private static final String LOGIN = "login";
+    //private static final String LOGIN = "login";
     private static final String FIRSTNAME = "firstName";
     private static final String LASTNAME = "lastName";
     private static final String EMAIL = "email";
@@ -32,12 +32,10 @@ public class MemberManagerImpl implements MemberManager {
     @Inject
     StringElementValidator stringValidator;
 
-    public void setStringElementValidator(StringElementValidator stringElementValidator) {
-        this.stringElementValidator = stringElementValidator;
-    }
 
-    @Inject
-    StringElementValidator stringElementValidator;
+
+    /*@Inject
+    StringElementValidator stringElementValidator;*/
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public void setMemberDAO(MemberDAO memberDAO) {
@@ -93,7 +91,7 @@ public class MemberManagerImpl implements MemberManager {
             return "Login must be 5 or 20 characters: " + member.getLogin();
         }*/
         System.out.println("log: " + member.getLogin());
-        if (!stringElementValidator.validate(member.getLogin(), LOGIN))return "Login must be between 5 or 20 characters: " + member.getLogin();
+        if (!stringValidator.validateLogin(member.getLogin()))return "Login must be between 5 or 20 characters: " + member.getLogin();
         logger.info("login validation: " + member.getLogin());
 
         if (member.getFirstName() == null || member.getFirstName().equals("") || member.getFirstName().equals("?"))

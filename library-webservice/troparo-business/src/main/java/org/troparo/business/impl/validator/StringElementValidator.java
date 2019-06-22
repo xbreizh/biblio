@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 
 @Named
 public class StringElementValidator {
-    private static final Pattern LOGIN_PATTERN = Pattern.compile("^[A-z0-9_-]{5,20}$");
+   // private static final Pattern LOGIN_PATTERN = Pattern.compile("^[A-z0-9_-]{5,20}$");
     private static final Pattern FIRSTNAME_PATTERN = Pattern.compile("^[A-z0-9_-]{5,20}$");
     private static final Pattern LASTNAME_PATTERN = Pattern.compile("^[A-z0-9_-]{5,20}$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^[A-z0-9_-]{5,20}$");
@@ -27,16 +27,29 @@ public class StringElementValidator {
      * @param hex hex for validation
      * @return true valid hex, false invalid hex
      */
+    public boolean validateLogin(final String hex) {
+        if(hex==null) {
+            return false;
+        }
+
+        Matcher matcher = Pattern.compile("^[A-z0-9_-]{5,20}$").matcher(hex);
+        return matcher.matches();
+
+    }
+
+
+
+
     public boolean validate(final String hex, String type) {
         if(hex==null) {
             return false;
         }
         switch (type) {
 
-            case "login":
+            /*case "login":
                 System.out.println("checking "+type);
                 pattern = LOGIN_PATTERN;
-                break;
+                break;*/
             case "firstName":
                 pattern = FIRSTNAME_PATTERN;
                 break;
