@@ -10,11 +10,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 
 import javax.inject.Inject;
-
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @TestPropertySource("classpath:config.properties")
@@ -38,7 +36,7 @@ class LoanManagerImplTestIntegration {
     void getLoansByCriterias1() {
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "JPOLINO");
-        assertEquals(4,loanManager.getLoansByCriterias(map).size());
+        assertEquals(4, loanManager.getLoansByCriterias(map).size());
     }
 
     @Test
@@ -46,7 +44,7 @@ class LoanManagerImplTestIntegration {
     void getLoansByCriterias2() {
         HashMap<String, String> map = new HashMap<>();
         map.put("book_id", "5");
-        assertEquals(1,loanManager.getLoansByCriterias(map).size());
+        assertEquals(1, loanManager.getLoansByCriterias(map).size());
     }
 
     @Test
@@ -55,7 +53,7 @@ class LoanManagerImplTestIntegration {
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("status", "termindeated");
-        assertEquals(0,loanManager.getLoansByCriterias(map).size());
+        assertEquals(0, loanManager.getLoansByCriterias(map).size());
     }
 
 }

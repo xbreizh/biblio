@@ -48,7 +48,7 @@ class MemberManagerImplTestIntegration {
     void addMember() {
         Member member = new Member();
 
-        assertEquals("Login must be 5 or 20 characters: null", memberManager.addMember(member));
+        assertEquals("Login must be between 5 or 20 characters: null", memberManager.addMember(member));
     }
 
 

@@ -2,6 +2,8 @@ package org.troparo.business.impl;
 
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
@@ -22,17 +24,18 @@ public class LoanManagerImpl implements LoanManager {
     BookManager bookManager;
     @Inject
     MemberManager memberManager;
-    //@Value("${loanDuration}")
-    private int loanDuration = 28;
-    //@Value("${renewDuration}")
-    private int renewDuration = 28;
-    //@Value("${maxBooks}")
-    private int maxBooks = 4;
+    @Value("${loanDuration}")
+    private int loanDuration;
+    @Value("${renewDuration}")
+    private int renewDuration;
+    @Value("${maxBooks}")
+    private int maxBooks;
+    @Value("${testString}")
+    private String testString;
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Override
     public String addLoan(Loan loan) {
-
         loan.setStartDate(new Date());
         Calendar cal = Calendar.getInstance();
         cal.setTime(loan.getStartDate());
