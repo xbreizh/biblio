@@ -10,7 +10,7 @@ import java.util.List;
 @Table(name = "MEMBER")
 public class Member {
 
-    // member variables
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")

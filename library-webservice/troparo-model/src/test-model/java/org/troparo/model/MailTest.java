@@ -36,29 +36,29 @@ class MailTest {
     @Test
     @DisplayName("should get firstname")
     void getFirstname() {
-        mail.setFirstname("Bobby");
-        assertEquals("Bobby", mail.getFirstname());
+        mail.setFirstName("Bobby");
+        assertEquals("Bobby", mail.getFirstName());
     }
 
     @Test
     @DisplayName("should set firstname")
     void setFirstname() {
-        mail.setFirstname("Bobby");
-        assertEquals("Bobby", mail.getFirstname());
+        mail.setFirstName("Bobby");
+        assertEquals("Bobby", mail.getFirstName());
     }
 
     @Test
     @DisplayName("should get lastname")
     void getLastname() {
-        mail.setLastname("Sand");
-        assertEquals("Sand", mail.getLastname());
+        mail.setLastName("Sand");
+        assertEquals("Sand", mail.getLastName());
     }
 
     @Test
     @DisplayName("should set lastname")
     void setLastname() {
-        mail.setLastname("Sand");
-        assertEquals("Sand", mail.getLastname());
+        mail.setLastName("Sand");
+        assertEquals("Sand", mail.getLastName());
     }
 
     @Test
@@ -82,15 +82,15 @@ class MailTest {
     @Test
     @DisplayName("should get diffDays")
     void getDiffdays() {
-        mail.setDiffdays(14);
-        assertEquals(14, mail.getDiffdays());
+        mail.setDiffDays(14);
+        assertEquals(14, mail.getDiffDays());
     }
 
     @Test
     @DisplayName("should set diffDays")
     void setDiffdays() {
-        mail.setDiffdays(14);
-        assertEquals(14, mail.getDiffdays());
+        mail.setDiffDays(14);
+        assertEquals(14, mail.getDiffDays());
     }
 
     @Test
@@ -156,13 +156,13 @@ class MailTest {
         mail.setAuthor("James Block");
         mail.setTitle("la grande traverse");
         mail.setIsbn("AER111");
-        mail.setDiffdays(23);
+        mail.setDiffDays(23);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date = format.parse("2009-12-31");
         mail.setDueDate(date);
-        mail.setFirstname("Jean");
-        mail.setLastname("Maurice");
-        assertEquals("Mail{email='null', firstname='Jean', lastname='Maurice', dueDate=Thu Dec 31 00:00:00 UTC 2009, diffdays=23, " +
+        mail.setFirstName("Jean");
+        mail.setLastName("Maurice");
+        assertEquals("Mail{email='null', firstName='Jean', lastName='Maurice', dueDate=Thu Dec 31 00:00:00 UTC 2009, diffDays=23, " +
                 "isbn='AER111', title='la grande traverse', author='James Block', edition='Potirron'}", mail.toString());
     }
 }

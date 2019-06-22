@@ -189,7 +189,6 @@ public class MemberDAOImpl implements MemberDAO {
             m.setToken(null);
             updateMember(m);
         } catch (Exception e) {
-            System.out.println("bam erreur");
             logger.error("issue while invalidating the token");
             return false;
         }

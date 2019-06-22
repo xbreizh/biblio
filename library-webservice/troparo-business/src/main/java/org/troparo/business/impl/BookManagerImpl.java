@@ -44,7 +44,7 @@ public class BookManagerImpl implements BookManager {
             return exception;
         }
         // adding insertion date
-        book.setInsert_date(new Date());
+        book.setInsertDate(new Date());
         book.setIsbn(book.getIsbn().toUpperCase());
         bookDAO.addBook(book);
         logger.info("exception: " + exception);
@@ -53,25 +53,25 @@ public class BookManagerImpl implements BookManager {
 
 
     String checkInsertion(Book book) {
-        if (checkIsbnLength(book)) return exception = "ISBN must be 10 or 13 characters: " + book.getIsbn();
+        if (checkIsbnLength(book)) return  "ISBN must be 10 or 13 characters: " + book.getIsbn();
         if (!checkBookParamLength(book.getTitle()))
-            return exception = "Title should have between 2 and 200 characters: " + book.getTitle();
+            return  "Title should have between 2 and 200 characters: " + book.getTitle();
         if (!checkBookParamLength(book.getAuthor()))
-            return exception = "Author should have between 2 and 200 characters: " + book.getAuthor();
+            return  "Author should have between 2 and 200 characters: " + book.getAuthor();
         if (!checkBookParamLength(book.getEdition()))
-            return exception = "Edition should have between 2 and 200 characters: " + book.getEdition();
+            return  "Edition should have between 2 and 200 characters: " + book.getEdition();
         if (book.getPublicationYear() < 1455 || book.getPublicationYear() > Calendar.getInstance().get(Calendar.YEAR)) {
-            return exception = "Publication year should be between 1455 and current: " + book.getPublicationYear();
+            return  "Publication year should be between 1455 and current: " + book.getPublicationYear();
         }
         if (book.getNbPages() < 1 || book.getNbPages() > 9999) {
-            return exception = "NbPages should be between 1 and 9 999, please recheck: " + book.getNbPages();
+            return "NbPages should be between 1 and 9 999, please recheck: " + book.getNbPages();
         }
         if (checkBookParamLength(book.getKeywords()))
-            return exception = "Keyword list should be between 2 and 200 characters: " + book.getKeywords();
+            return  "Keyword list should be between 2 and 200 characters: " + book.getKeywords();
         String keywords = replaceSeparatorWithWhiteSpace(book.getKeywords());
         book.setKeywords(keywords);
 
-        return exception;
+        return "";
     }
 
     boolean checkBookParamLength(String param) {
@@ -301,7 +301,7 @@ public class BookManagerImpl implements BookManager {
                 b2.setNbPages(b.getNbPages());
                 b2.setEdition(b.getEdition());
                 b2.setKeywords(b.getKeywords());
-                b2.setInsert_date(new Date());
+                b2.setInsertDate(new Date());
                 logger.info("new Book: " + b2);
                 if (!bookDAO.addBook(b2)) {
                     exception = "Issue while adding copies for: " + isbn;

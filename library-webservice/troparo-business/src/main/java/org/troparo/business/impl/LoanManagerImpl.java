@@ -77,24 +77,19 @@ public class LoanManagerImpl implements LoanManager {
         String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS"};
         List<String> validCriteriasList = Arrays.asList(validCriterias);
         HashMap<String, String> criterias = new HashMap<>();
-        System.out.println("mappp: "+map);
 
         String[] validStatus = {"terminated", "progress", "overdue"};
         List<String> validStatuslist = Arrays.asList(validStatus);
 
         List<Loan> loanList = new ArrayList<>();
 
-        //if(map.entrySet().contains("login")) System.out.println("contains");
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
-           // if(entry.getKey().equalsIgnoreCase("Login"))isLogin=true;
+
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                System.out.println("mako: "+entry.getKey());
-                System.out.println("mako: "+entry.getValue());
                 if(entry.getKey().equalsIgnoreCase("status")&& !validStatuslist.contains(entry.getValue().toLowerCase())){
-                    System.out.println("here");
                     return loanList;
                 }
                     criterias.put(entry.getKey(), entry.getValue());
@@ -102,25 +97,11 @@ public class LoanManagerImpl implements LoanManager {
             }
 
         }
-      /*  if(isLogin) System.out.println("is login");
-        if(isLogin) {
-            String login = "";
-            for (HashMap.Entry<String, String> entry : criterias.entrySet()
-            ) {
-                if (entry.getKey().equalsIgnoreCase("Login")) {
-                    login = entry.getValue();
-                    criterias.entrySet().remove(entry);
-                    System.out.println("removed");
-                }
-                criterias.put("borrower.login", login);
-                System.out.println("size: "+criterias.size());
-            }
-        }*/
+
 
         logger.info("map: " + criterias);
         logger.info("map: " + map);
         logger.info("criterias: " + criterias);
-        System.out.println("loan dao: "+loanDAO);
         return loanDAO.getLoansByCriterias(criterias);
     }
 
@@ -168,9 +149,7 @@ public class LoanManagerImpl implements LoanManager {
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diffDays: " + diffInDays);
-        if(diffInDays > (loanDuration+renewDuration))return false;
-        return true;
-       // return diffInDays > (loanDuration+renewDuration);
+        return diffInDays < (loanDuration+renewDuration);
 
     }
 
@@ -226,13 +205,7 @@ public class LoanManagerImpl implements LoanManager {
         return loanDuration;
     }
 
-    public int getRenewDuration() {
-        return renewDuration;
-    }
 
-    public int getMaxBooks() {
-        return maxBooks;
-    }
 
     public void setBookManager(BookManager bookManager) {
         this.bookManager = bookManager;

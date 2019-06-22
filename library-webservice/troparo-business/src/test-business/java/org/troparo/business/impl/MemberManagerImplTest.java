@@ -130,27 +130,7 @@ class MemberManagerImplTest {
         assertNull(memberManager.getMembersByCriterias(map));
     }
 
-    @Test
-    @DisplayName("should update member")
-    @Disabled
-    void updateMember() {
-        ///******  See Integration Testing  **********///
-        /*String login = "JpoliNo";
-        String oldFirstname = "JOHN";
-        String newFirstname = "PAUL";
-        Member memberFromDb = new Member();
-        memberFromDb.setLogin(login);
-        memberFromDb.setFirstName(oldFirstname);
-        Member newMember = new Member();
-        newMember.setLogin("lokoo");
-        newMember.setFirstName("Basile");
-        when(memberDAO.getMemberByLogin(login)).thenReturn(memberFromDb);
-        assertEquals(oldFirstname, memberFromDb.getFirstName());
-        memberManager.updateMember(newMember);
-        when(memberDAO.getMemberByLogin(login)).thenReturn(memberFromDb);
-        assertEquals(newFirstname, memberFromDb.getFirstName());*/
 
-    }
 
     @Test
     @DisplayName("should return \" No member passed \" when member is null")

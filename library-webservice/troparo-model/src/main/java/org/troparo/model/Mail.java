@@ -5,10 +5,10 @@ import java.util.Date;
 public class Mail {
 
     private String email;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private Date dueDate;
-    private int diffdays;
+    private int diffDays;
     private String isbn;
     private String title;
     private String author;
@@ -23,20 +23,20 @@ public class Mail {
         this.email = email;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
     }
 
     public Date getDueDate() {
@@ -47,12 +47,12 @@ public class Mail {
         this.dueDate = dueDate;
     }
 
-    public int getDiffdays() {
-        return diffdays;
+    public int getDiffDays() {
+        return diffDays;
     }
 
-    public void setDiffdays(int diffdays) {
-        this.diffdays = diffdays;
+    public void setDiffDays(int diffDays) {
+        this.diffDays = diffDays;
     }
 
     public String getIsbn() {
@@ -91,10 +91,10 @@ public class Mail {
     public String toString() {
         return "Mail{" +
                 "email='" + email + '\'' +
-                ", firstname='" + firstname + '\'' +
-                ", lastname='" + lastname + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
                 ", dueDate=" + dueDate +
-                ", diffdays=" + diffdays +
+                ", diffDays=" + diffDays +
                 ", isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +

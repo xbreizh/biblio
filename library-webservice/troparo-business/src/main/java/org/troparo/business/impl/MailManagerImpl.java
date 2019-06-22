@@ -45,15 +45,15 @@ public class MailManagerImpl implements MailManager {
         ) {
             Mail mail = new Mail();
             mail.setEmail(loan.getBorrower().getEmail());
-            mail.setFirstname(loan.getBorrower().getFirstName());
-            mail.setLastname(loan.getBorrower().getLastName());
+            mail.setFirstName(loan.getBorrower().getFirstName());
+            mail.setLastName(loan.getBorrower().getLastName());
             mail.setIsbn(loan.getBook().getIsbn());
             mail.setTitle(loan.getBook().getTitle());
             mail.setAuthor(loan.getBook().getAuthor());
             mail.setEdition(loan.getBook().getEdition());
             mail.setDueDate(loan.getPlannedEndDate());
             int overDays = calculateDaysBetweenDates(getTodaySDate(), loan.getPlannedEndDate());
-            mail.setDiffdays(overDays);
+            mail.setDiffDays(overDays);
             mailList.add(mail);
         }
         return mailList;

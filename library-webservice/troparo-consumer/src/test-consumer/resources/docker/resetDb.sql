@@ -21,8 +21,8 @@ CREATE TABLE public."member"
     dateconnect timestamp    NULL,
     datejoin    timestamp    NULL,
     email       varchar(255) NULL,
-    firstname   varchar(255) NULL,
-    lastname    varchar(255) NULL,
+    firstName   varchar(255) NULL,
+    lastName    varchar(255) NULL,
     login       varchar(255) NULL,
     "password"  varchar(255) NULL,
     "role"      varchar(255) NULL,
@@ -63,7 +63,7 @@ CREATE TABLE public.loan
 );
 
 
-INSERT INTO public."member" (dateconnect, datejoin, email, firstname, lastname, login, "password", "role", "token")
+INSERT INTO public."member" (dateconnect, datejoin, email, firstName, lastName, login, "password", "role", "token")
 VALUES (current_timestamp, '2019-01-17 17:22:58.013', 'POLI@KOL.FR', 'JOHN', 'POLI', 'JPOLINO',
         '$2a$10$h0swcQCaOyuJ2CffLkVRn.vj.L2VaAqXCH2rRFGhGArN0YjVGktFK', 'USER', '62751f44-b7db-49f5-a19c-5b98edef50db')
      , ('2019-05-27 13:24:46.270', '2019-01-16 18:58:19.604', 'LOKI@LOKI.LOKII', 'JEAN', 'MOKOTI', 'LOKII',

@@ -8,7 +8,7 @@ import java.util.Date;
 @Table(name = "LOAN")
 public class Loan {
 
-    // member variables
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")

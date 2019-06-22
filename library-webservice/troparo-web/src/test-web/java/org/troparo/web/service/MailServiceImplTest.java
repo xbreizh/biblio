@@ -97,11 +97,11 @@ class MailServiceImplTest {
         String author = "Bobby Sand";
         mail.setAuthor(author);
         String firstname = "Jean";
-        mail.setFirstname(firstname);
+        mail.setFirstName(firstname);
         String lastname = "Valjo";
-        mail.setLastname(lastname);
+        mail.setLastName(lastname);
         int diffdays = 23;
-        mail.setDiffdays(diffdays);
+        mail.setDiffDays(diffdays);
         Date dueDate = new Date();
         mail.setDueDate(dueDate);
         String edition = "polono";

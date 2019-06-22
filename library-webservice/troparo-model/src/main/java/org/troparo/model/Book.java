@@ -10,11 +10,11 @@ import java.util.List;
 @Table(name = "BOOK")
 public class Book {
 
-    // member variables
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")
-    private int Id;
+    private int id;
 
     @Column(name = "ISBN")
     private String isbn;
@@ -26,7 +26,7 @@ public class Book {
     private String author;
 
     @Column(name = "INSERT_DATE")
-    private Date insert_date;
+    private Date insertDate;
 
     @Column(name = "PUBLICATIONYEAR")
     private int publicationYear;
@@ -46,11 +46,11 @@ public class Book {
     // getters & setters
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getIsbn() {
@@ -77,12 +77,12 @@ public class Book {
         this.author = author;
     }
 
-    public Date getInsert_date() {
-        return insert_date;
+    public Date getInsertDate() {
+        return insertDate;
     }
 
-    public void setInsert_date(Date insert_date) {
-        this.insert_date = insert_date;
+    public void setInsertDate(Date insert_date) {
+        this.insertDate = insert_date;
     }
 
     public int getPublicationYear() {
@@ -128,11 +128,11 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", insert_date=" + insert_date +
+                ", insert_date=" + insertDate +
                 ", publicationYear=" + publicationYear +
                 ", edition='" + edition + '\'' +
                 ", nbPages=" + nbPages +

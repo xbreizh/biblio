@@ -59,10 +59,10 @@ public class MailServiceImpl implements IMailService {
         for (Mail mail : mailList) {
             MailTypeOut mout = new MailTypeOut();
             mout.setEmail(mail.getEmail());
-            mout.setFirstName(mail.getFirstname());
-            mout.setLastName(mail.getLastname());
+            mout.setFirstName(mail.getFirstName());
+            mout.setLastName(mail.getLastName());
             mout.setDueDate(convertDateIntoXmlDate(mail.getDueDate()));
-            mout.setDiffDays(mail.getDiffdays());
+            mout.setDiffDays(mail.getDiffDays());
             mout.setIsbn(mail.getIsbn());
             mout.setTitle(mail.getTitle());
             mout.setAuthor(mail.getAuthor());
