@@ -3,8 +3,8 @@ package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.troparo.business.EmailValidator;
 import org.troparo.business.contract.MemberManager;
+import org.troparo.business.impl.validator.StringElementValidator;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
@@ -20,27 +20,40 @@ import java.util.UUID;
 @Named
 public class MemberManagerImpl implements MemberManager {
     private static final String PEPPER = "TIPIAK";
+    private static final String LOGIN = "login";
+    private static final String FIRSTNAME = "firstName";
+    private static final String LASTNAME = "lastName";
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
+
+
     @Inject
     MemberDAO memberDAO;
     @Inject
-    EmailValidator validator;
+    StringElementValidator stringValidator;
+
+    public void setStringElementValidator(StringElementValidator stringElementValidator) {
+        this.stringElementValidator = stringElementValidator;
+    }
+
+    @Inject
+    StringElementValidator stringElementValidator;
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String exception = "";
 
     public void setMemberDAO(MemberDAO memberDAO) {
         this.memberDAO = memberDAO;
     }
 
     @Override
-    public void setValidator(EmailValidator validator) {
-        this.validator = validator;
+    public void setStringValidator(StringElementValidator stringValidator) {
+        this.stringValidator = stringValidator;
     }
 
     @Override
     public String addMember(Member member) {
-        exception = "";
+        String exception;
         // checking if already existing
-        if (memberDAO.existingLogin(member.getLogin())) {
+       /* if (memberDAO.existingLogin(member.getLogin())) {
             exception = "Login already existing";
             return exception;
         }
@@ -48,11 +61,17 @@ public class MemberManagerImpl implements MemberManager {
         exception = checkRequiredValuesNotNull(member);
         if (!exception.equals("")) {
             return exception;
-        }
-
+        }*/
+        System.out.println("member received: "+member);
         // checking that all values are valid
         exception = checkValidityOfParametersForInsertMember(member);
+        System.out.println("exception: "+exception);
         if (!exception.equals("")) {
+            System.out.println("returning exception ");
+            return exception;
+        }
+        if (memberDAO.existingLogin(member.getLogin())) {
+            exception = "Login already existing";
             return exception;
         }
         member.setPassword(encryptPassword(member.getPassword())); // encrypting password
@@ -65,13 +84,18 @@ public class MemberManagerImpl implements MemberManager {
 
 
     String checkValidityOfParametersForInsertMember(Member member) {
+
         if (member == null) return "no member provided";
 
-        if (member.getLogin() == null || member.getLogin().equals("") || member.getLogin().equals("?"))
-            return "No login provided";
-        if (member.getLogin().length() < 5 || member.getLogin().length() > 20) {
+        /*if (member.getLogin() == null || member.getLogin().equals("") || member.getLogin().equals("?"))
+            return "No login provided";*/
+       /* if (member.getLogin().length() < 5 || member.getLogin().length() > 20) {
             return "Login must be 5 or 20 characters: " + member.getLogin();
-        }
+        }*/
+        System.out.println("log: " + member.getLogin());
+        if (!stringElementValidator.validate(member.getLogin(), LOGIN))return "Login must be between 5 or 20 characters: " + member.getLogin();
+        logger.info("login validation: " + member.getLogin());
+
         if (member.getFirstName() == null || member.getFirstName().equals("") || member.getFirstName().equals("?"))
             return "No firstname provided";
         if (member.getFirstName().length() < 2 || member.getFirstName().length() > 50) {
@@ -89,7 +113,7 @@ public class MemberManagerImpl implements MemberManager {
         }
         if (member.getEmail() == null || member.getEmail().equals("") || member.getEmail().equals("?"))
             return "No email provided";
-        if (!validator.validate(member.getEmail())) return "Invalid Email: " + member.getEmail();
+        if (!stringValidator.validate(member.getEmail(), EMAIL)) return "Invalid Email: " + member.getEmail();
         logger.info("email validation: " + member.getEmail());
 
         return "";
@@ -127,7 +151,7 @@ public class MemberManagerImpl implements MemberManager {
 
 
         }
-        if (email != null && !email.equals("") && !email.equals("?") && !validator.validate(email)) {
+        if (email != null && !email.equals("") && !email.equals("?") && !stringValidator.validate(email, EMAIL)) {
 
             return "Invalid Email: " + email;
 
@@ -238,7 +262,7 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public String updateMember(Member member) {
         logger.info("entering");
-        exception = "";
+        String exception;
         if (member == null) return "No member passed";
         String login = member.getLogin();
 

@@ -1,4 +1,5 @@
-package org.troparo.business;
+/*
+package org.troparo.business.impl.validator;
 
 import javax.inject.Named;
 import java.util.regex.Matcher;
@@ -19,15 +20,17 @@ public class EmailValidator {
         pattern = Pattern.compile(EMAIL_PATTERN);
     }
 
-    /**
+    */
+/**
      * Validate hex with regular expression
      *
      * @param hex hex for validation
      * @return true valid hex, false invalid hex
-     */
+     *//*
+
     public boolean validate(final String hex) {
         Matcher matcher = pattern.matcher(hex);
         return matcher.matches();
 
     }
-}
+}*/

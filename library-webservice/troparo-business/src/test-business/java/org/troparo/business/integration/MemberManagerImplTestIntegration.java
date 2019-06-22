@@ -43,5 +43,15 @@ class MemberManagerImplTestIntegration {
         assertEquals(email, memberManager.getMemberByLogin(login).getEmail());
     }
 
+    @Test
+    @DisplayName("should return invalid login when add member with no login")
+    void addMember() {
+        Member member = new Member();
+
+        assertEquals("Login must be 5 or 20 characters: null", memberManager.addMember(member));
+    }
+
+
+
 
 }

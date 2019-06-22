@@ -1,25 +1,28 @@
-package org.troparo.business;
+/*
+package org.troparo.business.impl.validator;
 
-import org.apache.log4j.Logger;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.troparo.business.impl.validator.EmailValidator;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+@ContextConfiguration("classpath:/application-context-test.xml")
+@ExtendWith(SpringExtension.class)
 class EmailValidatorTest {
 
+    @Inject
     private EmailValidator emailValidator;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    @BeforeEach
-    void init() {
-        emailValidator = new EmailValidator();
-    }
+
 
     @Test
     @DisplayName("should return true when email valide")
@@ -73,8 +76,8 @@ class EmailValidatorTest {
         List<String> list = Arrays.asList(mailListInvalid);
         for (String mail : list
         ) {
-            logger.info(mail);
+
             assertFalse(emailValidator.validate(mail));
         }
     }
-}
+}*/

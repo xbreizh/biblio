@@ -1,6 +1,6 @@
 package org.troparo.business.contract;
 
-import org.troparo.business.EmailValidator;
+import org.troparo.business.impl.validator.StringElementValidator;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
@@ -35,7 +35,7 @@ public interface MemberManager {
 
     void setMemberDAO(MemberDAO memberDao);
 
-    void setValidator(EmailValidator validator);
+    void setStringValidator(StringElementValidator stringValidator);
 
     String encryptPassword(String password);
 

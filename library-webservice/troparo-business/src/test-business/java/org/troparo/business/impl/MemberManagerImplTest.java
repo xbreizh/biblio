@@ -1,7 +1,6 @@
 package org.troparo.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,12 +8,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.EmailValidator;
+import org.troparo.business.impl.validator.StringElementValidator;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
-import org.xml.sax.SAXException;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,13 +24,13 @@ import static org.mockito.Mockito.*;
 @TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
-//@ExtendWith(MockitoExtension.class)
 class MemberManagerImplTest {
 
 
     private MemberManagerImpl memberManager;
     //@Mock
-    private EmailValidator validator;
+    // private EmailValidator emailValidator;
+    private StringElementValidator stringElementValidator;
     //@Mock
     private MemberDAOImpl memberDAO;
     /*@Inject
@@ -45,20 +42,13 @@ class MemberManagerImplTest {
         memberManager = new MemberManagerImpl();
         memberDAO = mock(MemberDAOImpl.class);
         memberManager.setMemberDAO(memberDAO);
-        validator = mock(EmailValidator.class);
-        memberManager.setValidator(validator);
+        //emailValidator = mock(EmailValidator.class);
+        stringElementValidator = mock(StringElementValidator.class);
+        //memberManager.setStringValidator(emailValidator);
+        memberManager.setStringElementValidator(stringElementValidator);
     }
 
-    @Test
-    @DisplayName("should say that the login already exist")
-    void addMember() {
-        when(memberDAO.existingLogin("tomoni")).thenReturn(true);
-        Member member = new Member();
-        member.setLogin("tomoni");
-        member.setFirstName("");
-        assertEquals("Login already existing", memberManager.addMember(member));
 
-    }
 
 
     @Test
@@ -70,7 +60,8 @@ class MemberManagerImplTest {
         member.setLastName("Jones");
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
-        when(validator.validate(anyString())).thenReturn(true);
+        //when(emailValidator.validate(anyString())).thenReturn(true);
+        when(stringElementValidator.validate(anyString(), anyString())).thenReturn(true);
         when(memberDAO.existingLogin("tomoni")).thenReturn(false);
         assertEquals("", memberManager.addMember(member));
     }
@@ -129,7 +120,6 @@ class MemberManagerImplTest {
         when(memberDAO.getMembersByCriterias(map)).thenReturn(null);
         assertNull(memberManager.getMembersByCriterias(map));
     }
-
 
 
     @Test
@@ -217,7 +207,7 @@ class MemberManagerImplTest {
         member.setLastName("brokl");
         member.setPassword("sdd");
         member.setEmail("sw.ddd@dede.fr");
-        when(validator.validate(anyString())).thenReturn(true);
+        when(stringElementValidator.validate(anyString(), anyString())).thenReturn(true);
         assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
     }
 
@@ -265,7 +255,6 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return \"No item found\" if member couldn't be found")
     void remove1() {
-        //Member member = new Member();
         when(memberDAO.getMemberById(2)).thenReturn(null);
         assertEquals("No item found", memberManager.remove(2));
     }
@@ -282,10 +271,6 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return wrong login or password if credentials are wrong")
     void getToken() {
-      /*  MemberManager memberMgr = spy(memberManager);
-        String login = "lpl";
-        String pwd = "lk";
-        when(memberMgr.checkPassword(login, pwd)).thenReturn(false);*/
         Member member = new Member();
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
         assertEquals("wrong login or pwd", memberManager.getToken("Login", "anyPassword"));
@@ -293,7 +278,6 @@ class MemberManagerImplTest {
 
     @Test
     void checkToken() {
-        String token = "123";
         when(memberDAO.checkToken(anyString())).thenReturn(true);
         assertTrue(memberManager.checkToken(anyString()));
     }
