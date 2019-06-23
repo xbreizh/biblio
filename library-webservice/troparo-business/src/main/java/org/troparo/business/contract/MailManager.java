@@ -14,7 +14,7 @@ public interface MailManager {
 
     int calculateDaysBetweenDates(Date d1, Date d2);
 
-    void setLoanManager(LoanManager loanManager);
-
     LoanManager getLoanManager();
+
+    void setLoanManager(LoanManager loanManager);
 }

@@ -77,12 +77,12 @@ public class Book {
         this.author = author;
     }
 
-    public Date getInsertDate() {
+    Date getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(Date insert_date) {
-        this.insertDate = insert_date;
+    public void setInsertDate(Date insertDate) {
+        this.insertDate = insertDate;
     }
 
     public int getPublicationYear() {

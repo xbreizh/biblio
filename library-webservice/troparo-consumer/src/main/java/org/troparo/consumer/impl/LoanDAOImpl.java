@@ -13,20 +13,18 @@ import java.util.*;
 
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
-    private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
     private static final String STATUS = "status";
     private static final String ISBN = "isbn";
     private static final String BOOK_ID = "book_id";
     private static final String LOGIN = "login";
-
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
+    private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
     @Inject
     private SessionFactory sessionFactory;
     private Class cl = Loan.class;
 
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
 
     @Override
     public List<Loan> getLoans() {

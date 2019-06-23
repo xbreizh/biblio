@@ -123,7 +123,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("shoult return empty list if ISBN is null")
     void getLoanByIsbn2() {
-        assertEquals(0,loanDAO.getLoanByIsbn(null).size());
+        assertEquals(0, loanDAO.getLoanByIsbn(null).size());
     }
 
     @Test
@@ -133,7 +133,6 @@ class LoanDAOImplTest {
         loanDAO1.setSessionFactory(null);
         assertEquals(0, loanDAO1.getLoanByIsbn("ded").size());
     }
-
 
 
     @Test
@@ -155,7 +154,6 @@ class LoanDAOImplTest {
         loanDAO1.setSessionFactory(null);
         assertEquals(0, loanDAO1.getLoanByLogin("Jpoline").size());
     }
-
 
 
     @Test
@@ -212,7 +210,6 @@ class LoanDAOImplTest {
     }
 
 
-
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_Status() {
@@ -252,17 +249,17 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return nothing if invalid status")
-    void addStatusToRequest(){
-       LoanDAOImpl loanDAO = new LoanDAOImpl();
+    void addStatusToRequest() {
+        LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "dede");
-       assertEquals("", loanDAO.addStatusToRequest(map));
+        assertEquals("", loanDAO.addStatusToRequest(map));
     }
 
 
     @Test
     @DisplayName("should return \" endDate is null\" string if progress")
-    void addStatusToRequest2(){
+    void addStatusToRequest2() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "progress");
@@ -271,7 +268,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return \"endDate is null and plannedEndDate < current_date\" string if overdue")
-    void addStatusToRequest3(){
+    void addStatusToRequest3() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "overdue");
@@ -280,7 +277,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return nothing if invalid status")
-    void addStatusToRequest4(){
+    void addStatusToRequest4() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "dede");
@@ -289,7 +286,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return nothing if invalid status")
-    void addStatusToRequest5(){
+    void addStatusToRequest5() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "");
@@ -298,7 +295,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return \"where endDate is not null\" if empty map")
-    void addStatusToRequest6(){
+    void addStatusToRequest6() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "terminated");
@@ -310,73 +307,70 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return an empty string when map null")
-    void extractStatusFromMap(){
+    void extractStatusFromMap() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        assertEquals("",loanDAO.extractStatusFromMap(null));
+        assertEquals("", loanDAO.extractStatusFromMap(null));
     }
 
     @Test
     @DisplayName("should return an empty string when map empty")
-    void extractStatusFromMap1(){
+    void extractStatusFromMap1() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
-        assertEquals("",loanDAO.extractStatusFromMap(map));
+        assertEquals("", loanDAO.extractStatusFromMap(map));
     }
 
     @Test
     @DisplayName("should return terminated if passed in status")
-    void extractStatusFromMap2(){
+    void extractStatusFromMap2() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("status", "terminated");
-        assertEquals("TERMINATED",loanDAO.extractStatusFromMap(map));
+        assertEquals("TERMINATED", loanDAO.extractStatusFromMap(map));
     }
 
     @Test
     @DisplayName("should return empty string if passed in status is incorrect")
-    void extractStatusFromMap3(){
+    void extractStatusFromMap3() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("bassine", "terminated");
-        assertEquals("",loanDAO.extractStatusFromMap(map));
+        assertEquals("", loanDAO.extractStatusFromMap(map));
     }
 
     @Test
     @DisplayName("should return string for 1 criteria")
-    void createRequestFromMap(){
+    void createRequestFromMap() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "bob");
-        assertEquals("where borrower.login = :login",loanDAO.createRequestFromMap(map));
+        assertEquals("where borrower.login = :login", loanDAO.createRequestFromMap(map));
     }
 
     @Test
     @DisplayName("should return string for 2 criteria")
-    void createRequestFromMap2(){
+    void createRequestFromMap2() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "bob");
         map.put("book_id", "ob");
-        assertEquals("where book_id = :book_id and borrower.login = :login",loanDAO.createRequestFromMap(map));
+        assertEquals("where book_id = :book_id and borrower.login = :login", loanDAO.createRequestFromMap(map));
     }
 
 
     @Test
     @DisplayName("should return true")
-    void checkValidStatus(){
+    void checkValidStatus() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         assertTrue(loanDAO.checkValidStatus("terminated"));
     }
 
     @Test
     @DisplayName("should return false")
-    void checkValidStatus1(){
+    void checkValidStatus1() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         assertFalse(loanDAO.checkValidStatus("fini"));
     }
-
-
-
 
 
 }

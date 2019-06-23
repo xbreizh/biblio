@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
@@ -38,7 +37,7 @@ class ConnectServiceIntegrationTest {
 
     @Test
     @Disabled("should return a token")
-    void getToken() throws BusinessExceptionConnect {
+    void getToken() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("LOKII");
         parameters.setPassword("123");

@@ -30,8 +30,6 @@ public class MailManagerImpl implements MailManager {
     }
 
 
-
-
     @Override
     public List<Mail> getOverdueEmailList() {
         HashMap<String, String> criterias = new HashMap<>();
@@ -64,13 +62,13 @@ public class MailManagerImpl implements MailManager {
     }
 
     @Override
-    public void setLoanManager(LoanManager loanManager) {
-        this.loanManager = loanManager;
+    public LoanManager getLoanManager() {
+        return loanManager;
     }
 
     @Override
-    public LoanManager getLoanManager() {
-        return loanManager;
+    public void setLoanManager(LoanManager loanManager) {
+        this.loanManager = loanManager;
     }
 
 }

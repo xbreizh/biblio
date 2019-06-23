@@ -143,11 +143,8 @@ class LoanManagerImplTest {
         HashMap<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("price", "3.4");
-        assertEquals(0,loanManager.getLoansByCriterias(map).size());
+        assertEquals(0, loanManager.getLoansByCriterias(map).size());
     }
-
-
-
 
 
     @Test

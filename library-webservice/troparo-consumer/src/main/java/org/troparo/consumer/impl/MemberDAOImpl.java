@@ -24,13 +24,12 @@ public class MemberDAOImpl implements MemberDAO {
     private static Logger logger = Logger.getLogger(MemberDAOImpl.class.getName());
     private Class cl = Member.class;
     private String request;
+    @Inject
+    private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
-    @Inject
-    private SessionFactory sessionFactory;
 
     @Override
     public boolean addMember(Member member) {
@@ -53,7 +52,7 @@ public class MemberDAOImpl implements MemberDAO {
             logger.info(sessionFactory);
             return sessionFactory.getCurrentSession().createQuery("from Member", cl).getResultList();
         } catch (Exception e) {
-                logger.error("SessionFactory possibly not initialized!");
+            logger.error("SessionFactory possibly not initialized!");
         }
         return memberList;
 
@@ -105,12 +104,12 @@ public class MemberDAOImpl implements MemberDAO {
         request += criteria;
         logger.info("request: " + request);
         try {
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        for (Map.Entry<String, String> entry : map.entrySet()
-        ) {
-            logger.info("criteria: " + entry.getValue());
-            query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
-        }
+            Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+            for (Map.Entry<String, String> entry : map.entrySet()
+            ) {
+                logger.info("criteria: " + entry.getValue());
+                query.setParameter(entry.getKey(), "%" + entry.getValue().toUpperCase() + "%");
+            }
 
             logger.info("list with criteria size: " + query.getResultList().size());
             return query.getResultList();

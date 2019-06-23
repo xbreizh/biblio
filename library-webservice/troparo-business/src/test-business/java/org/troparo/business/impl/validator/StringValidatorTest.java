@@ -8,7 +8,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 class StringValidatorTest {
@@ -16,14 +18,13 @@ class StringValidatorTest {
     private StringValidator stringValidator;
 
 
-
     @Test
     @DisplayName("should not validateExpression")
     void validate() {
-        String[] wrongLoginList= {null,"?", "","2", "ed.","frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?", "ba"};
-        for (String login: wrongLoginList
+        String[] wrongLoginList = {null, "?", "", "2", "ed.", "frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?", "ba"};
+        for (String login : wrongLoginList
         ) {
-            System.out.println("Login: "+login);
+            System.out.println("Login: " + login);
             assertFalse(stringValidator.validateExpression("login", login));
         }
     }
@@ -32,11 +33,11 @@ class StringValidatorTest {
     @Test
     @DisplayName("should validateExpression")
     void validate1() {
-        String[] validLoginList= {"bastien34", "rokoko", "M2345"};
-        for (String login: validLoginList
-             ) {
-            System.out.println("Login: "+login);
-            assertTrue(stringValidator.validateExpression( "login", login));
+        String[] validLoginList = {"bastien34", "rokoko", "M2345"};
+        for (String login : validLoginList
+        ) {
+            System.out.println("Login: " + login);
+            assertTrue(stringValidator.validateExpression("login", login));
         }
     }
 
@@ -63,7 +64,7 @@ class StringValidatorTest {
         };
         for (String mail : mailListValid
         ) {
-            assertTrue(stringValidator.validateExpression( "email", mail));
+            assertTrue(stringValidator.validateExpression("email", mail));
         }
     }
 
@@ -91,7 +92,7 @@ class StringValidatorTest {
         for (String mail : mailListInvalid
         ) {
 
-            assertFalse(stringValidator.validateExpression( "email", mail));
+            assertFalse(stringValidator.validateExpression("email", mail));
         }
     }
 }

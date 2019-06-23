@@ -7,11 +7,7 @@ import java.util.regex.Pattern;
 @Named
 public class StringValidator {
 
-
-    public StringValidator() {
-
-    }
-
+    private static final String LOGIN="login";
     /**
      * Validate hex with regular expression
      *
@@ -28,7 +24,7 @@ public class StringValidator {
         }
         switch (type) {
 
-            case "login":
+            case LOGIN:
                 pattern = RegularExpression.LOGIN.getPattern();
                 break;
             case "email":
@@ -47,19 +43,20 @@ public class StringValidator {
     }
 
     public boolean validateForUpdateMember(String type, String hex) {
-        if (type.equals("login") && hex == null) return false;
-        if (hex != null) {
+        if (type.equals(LOGIN) && hex == null) return false;
+        if (hex != null ) {
             if (!hex.equals("?") && !hex.equals("")) {
                 return validateExpression(type, hex);
             }
         }
+
         return true;
 
     }
 
     public String getException(String param) {
         switch (param) {
-            case "login":
+            case LOGIN:
                 return "Login must be between 5 or 10 characters: ";
             case "firstName":
                 return "FirstName must be between 5 or 20 characters: ";

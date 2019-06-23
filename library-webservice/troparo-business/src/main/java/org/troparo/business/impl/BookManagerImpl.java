@@ -53,21 +53,21 @@ public class BookManagerImpl implements BookManager {
 
 
     String checkInsertion(Book book) {
-        if (checkIsbnLength(book)) return  "ISBN must be 10 or 13 characters: " + book.getIsbn();
+        if (checkIsbnLength(book)) return "ISBN must be 10 or 13 characters: " + book.getIsbn();
         if (!checkBookParamLength(book.getTitle()))
-            return  "Title should have between 2 and 200 characters: " + book.getTitle();
+            return "Title should have between 2 and 200 characters: " + book.getTitle();
         if (!checkBookParamLength(book.getAuthor()))
-            return  "Author should have between 2 and 200 characters: " + book.getAuthor();
+            return "Author should have between 2 and 200 characters: " + book.getAuthor();
         if (!checkBookParamLength(book.getEdition()))
-            return  "Edition should have between 2 and 200 characters: " + book.getEdition();
+            return "Edition should have between 2 and 200 characters: " + book.getEdition();
         if (book.getPublicationYear() < 1455 || book.getPublicationYear() > Calendar.getInstance().get(Calendar.YEAR)) {
-            return  "Publication year should be between 1455 and current: " + book.getPublicationYear();
+            return "Publication year should be between 1455 and current: " + book.getPublicationYear();
         }
         if (book.getNbPages() < 1 || book.getNbPages() > 9999) {
             return "NbPages should be between 1 and 9 999, please recheck: " + book.getNbPages();
         }
         if (checkBookParamLength(book.getKeywords()))
-            return  "Keyword list should be between 2 and 200 characters: " + book.getKeywords();
+            return "Keyword list should be between 2 and 200 characters: " + book.getKeywords();
         String keywords = replaceSeparatorWithWhiteSpace(book.getKeywords());
         book.setKeywords(keywords);
 
@@ -101,7 +101,7 @@ public class BookManagerImpl implements BookManager {
 
 
     String checkRequiredValuesNotNull(Book book) {
-        if(book==null)return "book is null";
+        if (book == null) return "book is null";
 
         if (checkValidParamString(book.getIsbn())) return "isbn should be filled";
         if (checkValidParamString(book.getTitle())) return "Title should be filled";
@@ -216,14 +216,15 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferEditionToSimilarBooks(Book book, Book b) {
-        if (book != null && b!=null ) {
+        if (book != null && b != null) {
             if (book.getEdition() != null && !book.getEdition().equals("") && !book.getEdition().equals("?")) {
                 logger.info("got you");
                 b.setEdition(book.getEdition());
             }
 
             return b.getEdition();
-        }return null;
+        }
+        return null;
     }
 
     String transferAuthorToSimilarBooks(Book book, Book b) {
@@ -235,7 +236,7 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferTitleToSimilarBooks(Book book, Book b) {
-        if (book != null && b!=null ) {
+        if (book != null && b != null) {
             if (book.getTitle() != null && !book.getTitle().equals("") && !book.getTitle().equals("?")) {
                 b.setTitle(book.getTitle());
             }

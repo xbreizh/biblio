@@ -34,7 +34,7 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should set loanmanager")
-    void setLoanManager(){
+    void setLoanManager() {
         LoanManager loanManager = new LoanManagerImpl();
         mailManager.setLoanManager(loanManager);
         assertEquals(loanManager, mailManager.getLoanManager());
@@ -42,11 +42,10 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should return date")
-    void getTodaySDate(){
+    void getTodaySDate() {
         MailManagerImpl mailManager = new MailManagerImpl();
         assertEquals(new Date(), mailManager.getTodaySDate());
     }
-
 
 
     @Test

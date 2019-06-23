@@ -259,13 +259,12 @@ class BookManagerImplTest {
     @DisplayName("should return null if first book is null")
     void transferTitleToSimilarBooks() {
         assertAll(
-                ()->  assertNull(bookManager2.transferTitleToSimilarBooks(null, new Book())),
-                ()->  assertNull(bookManager2.transferTitleToSimilarBooks(new Book(), null))
+                () -> assertNull(bookManager2.transferTitleToSimilarBooks(null, new Book())),
+                () -> assertNull(bookManager2.transferTitleToSimilarBooks(new Book(), null))
         );
 
 
     }
-
 
 
     @Test
@@ -436,22 +435,24 @@ class BookManagerImplTest {
 
     @Test
     @DisplayName("should return error is isbn not filled")
-    void checkRequiredValuesNotNull(){
+    void checkRequiredValuesNotNull() {
         BookManagerImpl bookManager1 = new BookManagerImpl();
         Book book = new Book();
         assertEquals("isbn should be filled", bookManager1.checkRequiredValuesNotNull(book));
     }
+
     @Test
     @DisplayName("should return error is isbn not filled")
-    void checkRequiredValuesNotNull1(){
+    void checkRequiredValuesNotNull1() {
         BookManagerImpl bookManager1 = new BookManagerImpl();
         Book book = new Book();
         book.setIsbn("");
         assertEquals("isbn should be filled", bookManager1.checkRequiredValuesNotNull(book));
     }
+
     @Test
     @DisplayName("should return error is isbn not filled")
-    void checkRequiredValuesNotNull2(){
+    void checkRequiredValuesNotNull2() {
         BookManagerImpl bookManager1 = new BookManagerImpl();
         Book book = new Book();
         book.setIsbn("?");

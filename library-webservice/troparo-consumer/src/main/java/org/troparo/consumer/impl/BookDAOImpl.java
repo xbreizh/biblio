@@ -17,14 +17,26 @@ import static java.lang.Math.toIntExact;
 public class BookDAOImpl implements BookDAO {
     private static Logger logger = Logger.getLogger(BookDAOImpl.class.getName());
     private Class cl = Book.class;
+    @Inject
+    private SessionFactory sessionFactory;
+
+    static void createRequestFromMap(HashMap<String, String> map, StringBuilder criteria) {
+        for (Map.Entry<String, String> entry : map.entrySet()
+        ) {
+            if (!criteria.toString().equals("")) {
+                criteria.append(" and ");
+            } else {
+                criteria.append("where ");
+            }
+            criteria.append(entry.getKey());
+            criteria.append(" like :");
+            criteria.append(entry.getKey());
+        }
+    }
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
-
-    @Inject
-    private SessionFactory sessionFactory;
-
 
     @Override
     public List<Book> getBooks() {
@@ -63,7 +75,6 @@ public class BookDAOImpl implements BookDAO {
             return null;
         }
     }
-
 
     @Override
     public boolean existingISBN(String isbn) {
@@ -117,20 +128,6 @@ public class BookDAOImpl implements BookDAO {
         return query.getResultList();
     }
 
-    static void createRequestFromMap(HashMap<String, String> map, StringBuilder criteria) {
-        for (Map.Entry<String, String> entry : map.entrySet()
-        ) {
-            if (!criteria.toString().equals("")) {
-                criteria.append(" and ");
-            } else {
-                criteria.append("where ");
-            }
-            criteria.append(entry.getKey());
-            criteria.append(" like :");
-            criteria.append(entry.getKey());
-        }
-    }
-
     private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
         String[] authorizedCriteria = {"isbn", "author", "title"};
         List<String> list = Arrays.asList(authorizedCriteria);
@@ -145,7 +142,7 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public boolean updateBook(Book book) {
-        logger.info("Book title: " + book.getTitle()+
+        logger.info("Book title: " + book.getTitle() +
                 "\nBook author: " + book.getAuthor());
         try {
             sessionFactory.getCurrentSession().update(book);

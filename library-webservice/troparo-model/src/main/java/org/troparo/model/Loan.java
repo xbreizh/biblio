@@ -12,7 +12,7 @@ public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")
-    private int Id;
+    private int id;
 
     @Column(name = "START_DATE")
     private Date startDate;
@@ -34,11 +34,11 @@ public class Loan {
 
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public Date getStartDate() {
@@ -86,7 +86,7 @@ public class Loan {
     @Override
     public String toString() {
         return "Loan{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", startDate=" + startDate +
                 ", plannedEndDate=" + plannedEndDate +
                 ", endDate=" + endDate +

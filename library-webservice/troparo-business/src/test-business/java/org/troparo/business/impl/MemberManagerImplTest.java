@@ -48,8 +48,6 @@ class MemberManagerImplTest {
     }
 
 
-
-
     @Test
     @DisplayName("should return nothing when trying to insert a member")
     void addMember2() {

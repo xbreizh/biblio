@@ -1,7 +1,6 @@
 package org.troparo.consumer.impl;
 
 import org.apache.log4j.Logger;
-import org.hibernate.SessionFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -68,7 +67,7 @@ class BookDAOImplTest {
         Book book = new Book();
         BookDAOImpl bookDAO1 = new BookDAOImpl();
         bookDAO1.setSessionFactory(null);
-       // assertEquals(5, bookDAO1.getBooks().size());
+        // assertEquals(5, bookDAO1.getBooks().size());
         assertFalse(bookDAO1.addBook(book));
     }
 
@@ -147,7 +146,7 @@ class BookDAOImplTest {
 
     @Test
     @DisplayName("should return empty list if any issue")
-    void getBooksByCriterias5(){
+    void getBooksByCriterias5() {
         BookDAOImpl bookDAO1 = new BookDAOImpl();
         bookDAO1.setSessionFactory(null);
         HashMap<String, String> map = new HashMap<>();
@@ -157,7 +156,7 @@ class BookDAOImplTest {
 
     @Test
     @DisplayName("should return empty list if any issue")
-    void getBooksByCriterias6(){
+    void getBooksByCriterias6() {
         HashMap<String, String> map = new HashMap<>();
         map.put("Title", "e");
         map.put("author", "e");
@@ -172,16 +171,16 @@ class BookDAOImplTest {
         assertEquals("TEST", book.getAuthor());
         String newAuthor = "Jean Pialat";
         book.setAuthor(newAuthor);
-                assertAll(
-                ()->assertTrue(bookDAO.updateBook(book)),
-                ()->assertEquals(newAuthor, bookDAO.getBookById(2).getAuthor())
+        assertAll(
+                () -> assertTrue(bookDAO.updateBook(book)),
+                () -> assertEquals(newAuthor, bookDAO.getBookById(2).getAuthor())
         );
 
     }
 
     @Test
     @DisplayName("should return an exception")
-    void updateBook1(){
+    void updateBook1() {
         Book book = new Book();
         BookDAOImpl bookDAO1 = new BookDAOImpl();
         bookDAO1.setSessionFactory(null);
@@ -193,9 +192,9 @@ class BookDAOImplTest {
     void remove() {
         Book book = bookDAO.getBookById(5);
         assertAll(
-                ()-> assertNotNull(book),
-                ()->assertTrue(bookDAO.remove(book)),
-                ()->assertNull(bookDAO.getBookById(5))
+                () -> assertNotNull(book),
+                () -> assertTrue(bookDAO.remove(book)),
+                () -> assertNull(bookDAO.getBookById(5))
         );
 
     }
@@ -208,7 +207,7 @@ class BookDAOImplTest {
 
     @Test
     @DisplayName("should return false when removing book")
-    void remove2(){
+    void remove2() {
         Book book = new Book();
         BookDAOImpl bookDAO1 = new BookDAOImpl();
         bookDAO1.setSessionFactory(null);
@@ -218,11 +217,11 @@ class BookDAOImplTest {
 
     @Test
     @DisplayName("should return the number of books available")
-    void getAvailable1(){
+    void getAvailable1() {
         assertAll(
-                ()-> assertEquals(0, bookDAO.getAvailable("1234567824")),
-                ()-> assertEquals(3, bookDAO.getAvailable("12345678OK")),
-                ()-> assertEquals(0, bookDAO.getAvailable("fr"))
+                () -> assertEquals(0, bookDAO.getAvailable("1234567824")),
+                () -> assertEquals(3, bookDAO.getAvailable("12345678OK")),
+                () -> assertEquals(0, bookDAO.getAvailable("fr"))
 
         );
 

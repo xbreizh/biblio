@@ -21,7 +21,7 @@ import java.util.UUID;
 @Named
 public class MemberManagerImpl implements MemberManager {
     @Value("${pepper}")
-    private static String PEPPER;
+    private static String pepper;
 
 
     @Inject
@@ -63,46 +63,17 @@ public class MemberManagerImpl implements MemberManager {
     public String checkValidityOfParametersForInsertMember(Member member) {
         if (member == null) return "no member provided";
 
-        String[][] memberParameters={{"login", member.getLogin()},
+        String[][] memberParameters = {{"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
                 {"lastName", member.getLastName()},
                 {"password", member.getPassword()},
                 {"email", member.getEmail()}};
 
-        for (String[] param: memberParameters) {
-            if(!stringValidator.validateExpression(param[0], param[1])){
-                return stringValidator.getException(param[0])+param[1];
+        for (String[] param : memberParameters) {
+            if (!stringValidator.validateExpression(param[0], param[1])) {
+                return stringValidator.getException(param[0]) + param[1];
             }
         }
-
-/*
-
-
-
-        System.out.println("log: " + member.getLogin());
-        if (!stringValidator.validateExpression(member.getLogin(), "login"))
-            return "Login must be between 5 or 20 characters: " + member.getLogin();
-        logger.info("login validation: " + member.getLogin());
-
-        if (member.getFirstName() == null || member.getFirstName().equals("") || member.getFirstName().equals("?"))
-            return "No firstname provided";
-        if (member.getFirstName().length() < 2 || member.getFirstName().length() > 50) {
-            return "FirstName should have between 2 and 200 characters: " + member.getFirstName();
-        }
-        if (member.getLastName() == null || member.getLastName().equals("") || member.getLastName().equals("?"))
-            return "No lastname provided";
-        if (member.getLastName().length() < 2 || member.getLastName().length() > 50) {
-            return "LastName should have between 2 and 200 characters: " + member.getLastName();
-        }
-        if (member.getPassword() == null || member.getPassword().equals("") || member.getPassword().equals("?"))
-            return "No password provided";
-        if (member.getPassword().length() < 2 || member.getPassword().length() > 200) {
-            return "Password should have between 2 and 200 characters: " + member.getPassword();
-        }
-        if (member.getEmail() == null || member.getEmail().equals("") || member.getEmail().equals("?"))
-            return "No email provided";
-        if (!stringValidator.validateExpression(member.getEmail(), EMAIL)) return "Invalid Email: " + member.getEmail();
-        logger.info("email validation: " + member.getEmail());*/
 
         return "";
     }
@@ -112,112 +83,21 @@ public class MemberManagerImpl implements MemberManager {
 
         if (member == null) return "no member provided";
 
-        String[][] memberParameters={{"login", member.getLogin()},
+        String[][] memberParameters = {{"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
                 {"lastName", member.getLastName()},
                 {"password", member.getPassword()},
                 {"email", member.getEmail()}};
 
-        for (String[] param: memberParameters) {
-            /*System.out.println("param: "+param[0]+" / "+param[1]);
-            if(param[1]!=null|| param[0].equals("login")) {*/
-                    if (!stringValidator.validateForUpdateMember(param[0], param[1])) {
-                        return stringValidator.getException(param[0]) + param[1];
-                    }
+        for (String[] param : memberParameters) {
 
-           /* }*/
+            if (!stringValidator.validateForUpdateMember(param[0], param[1])) {
+                return stringValidator.getException(param[0]) + param[1];
+            }
         }
-
-
-
-        /*if (memberNewValues == null) return "no member provided";
-
-        String login = memberNewValues.getLogin();
-        logger.info("login: " + login);
-        if (login == null || login.equals("") || login.equals("?")) return "No login provided";
-        if (login.length() < 5 || login.length() > 20) {
-            return "Login must be 5 or 20 characters: " + login;
-        }
-        String firstName = memberNewValues.getFirstName();
-        String lastName = memberNewValues.getLastName();
-        String password = encryptPassword(memberNewValues.getPassword());
-        String email = memberNewValues.getEmail();
-        String role = memberNewValues.getRole();
-
-
-        if (firstName != null && (firstName.equals("") || firstName.equals("?") || firstName.length() < 2 || firstName.length() > 50)) {
-            return "FirstName should have between 2 and 200 characters: " + firstName;
-
-
-        }
-        if (lastName != null && (lastName.equals("") || lastName.equals("?") || lastName.length() < 2 || lastName.length() > 50)) {
-            return "LastName should have between 2 and 200 characters: " + lastName;
-        }
-
-
-        if (password != null && (password.equals(encryptPassword("")) || password.equals(encryptPassword("?")) || password.length() < 2 || password.length() > 200)) {
-            return "Password should have between 2 and 200 characters: " + password;
-
-
-        }
-        if (email != null && !email.equals("") && !email.equals("?") && !stringValidator.validateExpression(email, EMAIL)) {
-
-            return "Invalid Email: " + email;
-
-
-        }
-        if (role != null && (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10)) {
-            return "Role should have between 6 and 10 characters: " + role;
-        }*/
-
 
         return "";
     }
-
-
-/*    String checkRequiredValuesNotNull(Member member) {
-        String login = member.getLogin();
-        if (member.getLogin() != null) {
-            if (login.equals("") || login.equals("?")) {
-                return "login should be filled";
-            }
-
-        } else return "login should be filled";
-
-        if (member.getFirstName() != null) {
-            if (member.getFirstName().equals("") || member.getFirstName().equals("?")) {
-                return "FirstName should be filled";
-            }
-        } else {
-            return "FirstName should be filled";
-        }
-
-        if (member.getLastName() != null) {
-            if (member.getLastName().equals("") || member.getLastName().equals("?") || member.getLastName().isEmpty()) {
-                return "LastName should be filled";
-            }
-        } else {
-            return "LastName should be filled";
-        }
-        if (member.getEmail() != null) {
-            if (member.getEmail().equals("") || member.getEmail().equals("?") || member.getEmail().isEmpty()) {
-                return "Email should be filled";
-            }
-        } else {
-            return "Email should be filled";
-        }
-
-        if (member.getPassword() != null) {
-            if (member.getPassword().equals("") || member.getPassword().equals("?") || member.getPassword().isEmpty()) {
-                return "Password should be filled";
-            }
-        } else {
-            return "Password should be filled";
-        }
-
-
-        return "";
-    }*/
 
 
     @Override
@@ -385,7 +265,7 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public String encryptPassword(String password) {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        String pwd = bcrypt.encode(password + PEPPER);
+        String pwd = bcrypt.encode(password + pepper);
         logger.info("hashed pwd: " + pwd);
         return pwd;
     }
@@ -393,7 +273,7 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public boolean checkPassword(String pwd1, String pwd2) {
         BCryptPasswordEncoder bcrypt = new BCryptPasswordEncoder();
-        return bcrypt.matches(pwd1 + PEPPER, pwd2);
+        return bcrypt.matches(pwd1 + pepper, pwd2);
     }
 
     // Update Password
