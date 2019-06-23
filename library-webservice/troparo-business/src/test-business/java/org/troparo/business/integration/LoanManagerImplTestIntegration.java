@@ -15,7 +15,6 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
-@TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
 class LoanManagerImplTestIntegration {

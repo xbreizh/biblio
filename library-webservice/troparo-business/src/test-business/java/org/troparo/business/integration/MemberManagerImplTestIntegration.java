@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:application-context-test.xml")
-@TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
 class MemberManagerImplTestIntegration {

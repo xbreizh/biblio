@@ -14,10 +14,9 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
-@TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
-public class MailManagerImplTestIntegration {
+class MailManagerImplTestIntegration {
 
 
     @Inject

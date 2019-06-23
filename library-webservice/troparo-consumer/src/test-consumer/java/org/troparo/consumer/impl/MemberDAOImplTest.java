@@ -10,7 +10,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.MemberDAO;
-import org.troparo.model.Book;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -171,10 +170,10 @@ class MemberDAOImplTest {
 
     @Test
     @DisplayName("should return false if session null")
-    void updateMember1(){
+    void updateMember1() {
         MemberDAOImpl memberDAO1 = new MemberDAOImpl();
         memberDAO1.setSessionFactory(null);
-        assertFalse( memberDAO1.updateMember(new Member()));
+        assertFalse(memberDAO1.updateMember(new Member()));
     }
 
     @Test
@@ -191,7 +190,7 @@ class MemberDAOImplTest {
     void remove1() {
         MemberDAOImpl memberDAO1 = new MemberDAOImpl();
         memberDAO1.setSessionFactory(null);
-        assertFalse( memberDAO1.remove(new Member()));
+        assertFalse(memberDAO1.remove(new Member()));
 
     }
 

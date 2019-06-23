@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.impl.validator.StringElementValidator;
@@ -21,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
-@TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 @Transactional
 class MemberManagerImplTest {
@@ -47,8 +45,6 @@ class MemberManagerImplTest {
         //memberManager.setStringValidator(emailValidator);
         memberManager.setStringValidator(stringElementValidator);
     }
-
-
 
 
     @Test

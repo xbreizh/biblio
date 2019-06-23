@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
-@TestPropertySource("classpath:config.properties")
 @ExtendWith(SpringExtension.class)
 class ConnectServiceIntegrationTest {
     private Logger logger = Logger.getLogger(ConnectServiceIntegrationTest.class.getName());

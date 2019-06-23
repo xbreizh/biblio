@@ -2,6 +2,7 @@ package org.troparo.business.impl;
 
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.validator.StringElementValidator;
@@ -19,12 +20,18 @@ import java.util.UUID;
 @Transactional
 @Named
 public class MemberManagerImpl implements MemberManager {
-    private static final String PEPPER = "TIPIAK";
-    //private static final String LOGIN = "login";
-    private static final String FIRSTNAME = "firstName";
-    private static final String LASTNAME = "lastName";
-    private static final String EMAIL = "email";
-    private static final String PASSWORD = "password";
+    @Value("${pepper}")
+    private String PEPPER;
+    @Value("${login}")
+    private String LOGIN = "login";
+    @Value("${firstName}")
+    private String FIRSTNAME = "firstName";
+    @Value("${lastName}")
+    private String LASTNAME = "lastName";
+    @Value("${email}")
+    private String EMAIL = "email";
+    @Value("${password}")
+    private String PASSWORD = "password";
 
 
     @Inject
