@@ -60,7 +60,7 @@ class MemberManagerImplTest {
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
         //when(emailValidator.validate(anyString())).thenReturn(true);
-        when(stringElementValidator.validate(anyString(), "login")).thenReturn(true);
+        //when(stringElementValidator.validate(anyString(), "login")).thenReturn(true);
         when(stringElementValidator.validate(anyString(), anyString())).thenReturn(true);
         when(memberDAO.existingLogin("tomoni")).thenReturn(false);
         assertEquals("", memberManager.addMember(member));
@@ -207,7 +207,7 @@ class MemberManagerImplTest {
         member.setLastName("brokl");
         member.setPassword("sdd");
         member.setEmail("sw.ddd@dede.fr");
-        when(stringElementValidator.validate(anyString(), "login")).thenReturn(true);
+        //when(stringElementValidator.validate(anyString(), "login")).thenReturn(true);
         when(stringElementValidator.validate(anyString(), anyString())).thenReturn(true);
         assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
     }
