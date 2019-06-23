@@ -72,7 +72,7 @@ public class MemberManagerImpl implements MemberManager {
 
 
         System.out.println("log: " + member.getLogin());
-        if (!stringValidator.validateLogin(member.getLogin()))
+        if (!stringValidator.validate(member.getLogin(), "login"))
             return "Login must be between 5 or 20 characters: " + member.getLogin();
         logger.info("login validation: " + member.getLogin());
 

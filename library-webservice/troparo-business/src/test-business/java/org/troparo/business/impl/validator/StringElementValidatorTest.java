@@ -28,7 +28,7 @@ class StringElementValidatorTest {
         for (String login: wrongLoginList
         ) {
             System.out.println("Login: "+login);
-            assertFalse(stringElementValidator.validateLogin(login));
+            assertFalse(stringElementValidator.validate(login, "login"));
         }
     }
 
