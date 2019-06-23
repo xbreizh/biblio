@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 @Named
 public class StringElementValidator {
-    @Value("${LOGIN_PATTERN}")
+    /*@Value("${LOGIN_PATTERN}")
     private String LOGIN_PATTERN;
     @Value("${FIRSTNAME_PATTERN}")
     private String FIRSTNAME_PATTERN;
@@ -18,7 +18,7 @@ public class StringElementValidator {
     @Value("${PASSWORD_PATTERN}")
     private String PASSWORD_PATTERN;
     @Value("${EMAIL_PATTERN}")
-    private String EMAIL_PATTERN;
+    private String EMAIL_PATTERN;*/
     private Pattern pattern;
     public enum VerifExpression
     {
@@ -27,14 +27,14 @@ public class StringElementValidator {
         FIRSTNAME("^[A-z0-9_-]{5,20}$"),
         LASTNAME("^[A-z0-9_-]{5,20}$"),
         EMAIL("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])");
-        private final String  regex;
+        private final Pattern  pattern;
 
-        VerifExpression(String regex){
-            this.regex=regex;
+        VerifExpression(final String regex){
+            this.pattern=Pattern.compile(regex);
         }
 
-        public String getRegex(){
-            return this.regex;
+        public Pattern getPattern(){
+            return this.pattern;
         }
     }
 
@@ -69,19 +69,19 @@ public class StringElementValidator {
         switch (type) {
 
             case "login":
-                pattern = Pattern.compile(VerifExpression.LOGIN.getRegex());
+                pattern = VerifExpression.LOGIN.getPattern();
                 break;
             case "firstName":
-                pattern = Pattern.compile(VerifExpression.FIRSTNAME.getRegex());
+                pattern = VerifExpression.FIRSTNAME.getPattern();
                 break;
             case "lastName":
-                pattern = Pattern.compile(VerifExpression.LASTNAME.getRegex());
+                pattern = VerifExpression.LASTNAME.getPattern();
                 break;
             case "email":
-                pattern = Pattern.compile(VerifExpression.EMAIL.getRegex());
+                pattern = VerifExpression.EMAIL.getPattern();
                 break;
             case "password":
-                pattern = Pattern.compile(VerifExpression.PASSWORD.getRegex());
+                pattern = VerifExpression.PASSWORD.getPattern();
                 break;
             default:
 
