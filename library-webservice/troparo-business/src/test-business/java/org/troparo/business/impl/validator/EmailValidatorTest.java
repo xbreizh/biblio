@@ -26,7 +26,7 @@ class EmailValidatorTest {
 
     @Test
     @DisplayName("should return true when email valide")
-    void validate() {
+    void validateExpression() {
         String[] mailListValid = {
                 "email@example.com",
                 "firstname.lastname@example.com",
@@ -49,7 +49,7 @@ class EmailValidatorTest {
         List<String> list = Arrays.asList(mailListValid);
         for (String mail : list
         ) {
-            assertTrue(emailValidator.validate(mail));
+            assertTrue(emailValidator.validateExpression(mail));
         }
     }
 
@@ -77,7 +77,7 @@ class EmailValidatorTest {
         for (String mail : list
         ) {
 
-            assertFalse(emailValidator.validate(mail));
+            assertFalse(emailValidator.validateExpression(mail));
         }
     }
 }*/

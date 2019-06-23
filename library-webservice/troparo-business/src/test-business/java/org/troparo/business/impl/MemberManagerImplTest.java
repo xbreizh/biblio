@@ -5,13 +5,13 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.impl.validator.StringElementValidator;
+import org.troparo.business.impl.validator.StringValidator;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
+import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,7 +29,7 @@ class MemberManagerImplTest {
     private MemberManagerImpl memberManager;
     //@Mock
     // private EmailValidator emailValidator;
-    private StringElementValidator stringElementValidator;
+    private StringValidator stringValidator;
     //@Mock
     private MemberDAOImpl memberDAO;
     /*@Inject
@@ -42,9 +42,9 @@ class MemberManagerImplTest {
         memberDAO = mock(MemberDAOImpl.class);
         memberManager.setMemberDAO(memberDAO);
         //emailValidator = mock(EmailValidator.class);
-        stringElementValidator = mock(StringElementValidator.class);
+        stringValidator = mock(StringValidator.class);
         //memberManager.setStringValidator(emailValidator);
-        memberManager.setStringValidator(stringElementValidator);
+        memberManager.setStringValidator(stringValidator);
     }
 
 
@@ -59,9 +59,9 @@ class MemberManagerImplTest {
         member.setLastName("Jones");
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
-        //when(emailValidator.validate(anyString())).thenReturn(true);
-        //when(stringElementValidator.validate(anyString(), "login")).thenReturn(true);
-        when(stringElementValidator.validate(anyString(), anyString())).thenReturn(true);
+        //when(emailValidator.validateExpression(anyString())).thenReturn(true);
+        //when(stringElementValidator.validateExpression(anyString(), "login")).thenReturn(true);
+        when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
         when(memberDAO.existingLogin("tomoni")).thenReturn(false);
         assertEquals("", memberManager.addMember(member));
     }
@@ -140,41 +140,9 @@ class MemberManagerImplTest {
 
     }
 
-    @Test
-    @DisplayName("should return \"nothing to update\" when member is null")
-    void updateMember3() {
-        Member oldMember = new Member();
-        String lastname = "Margo";
-        oldMember.setLastName(lastname);
-        Member newMember = new Member();
-        newMember.setLogin("poliko");
-        newMember.setLastName(lastname);
-        when(memberDAO.getMemberByLogin(anyString())).thenReturn(oldMember);
-        assertEquals("nothing to update", memberManager.updateMember(newMember));
-
-    }
 
 
-    @Test
-    @DisplayName("should return \"No Login provided\" when no login passed")
-    void checkValidityOfParametersForUpdateMember() {
-        Member member = new Member();
-        assertEquals("No login provided", memberManager.checkValidityOfParametersForUpdateMember(member));
-    }
-
-
-    @Test
-    @DisplayName("should return \"invalid email\" when email invalid")
-    void checkValidityOfParametersForUpdateMember2() {
-        Member member = new Member();
-        member.setLogin("kolio");
-        member.setLastName("parollier");
-        String email = "dede@fr";
-        member.setEmail(email);
-        assertEquals("Invalid Email: " + email, memberManager.checkValidityOfParametersForUpdateMember(member));
-    }
-
-    @Test
+/*    @Test
     @DisplayName("should transfer data from member to dbMember if filled")
     void transfertUpdatedDetails() {
         Member newMember = new Member();
@@ -196,7 +164,7 @@ class MemberManagerImplTest {
         dbMember.setFirstName(oldFirstname);
         newMember.setFirstName(newFirstname);
         assertEquals(oldFirstname, memberManager.transfertUpdatedDetails(newMember, dbMember).getFirstName());
-    }
+    }*/
 
     @Test
     @DisplayName("should return an empty string if member valid")
@@ -207,13 +175,15 @@ class MemberManagerImplTest {
         member.setLastName("brokl");
         member.setPassword("sdd");
         member.setEmail("sw.ddd@dede.fr");
-        //when(stringElementValidator.validate(anyString(), "login")).thenReturn(true);
-        when(stringElementValidator.validate(anyString(), anyString())).thenReturn(true);
+        //when(stringElementValidator.validateExpression(anyString(), "login")).thenReturn(true);
+        when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
         assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
     }
 
 
-    @Test
+
+
+  /*  @Test
     @DisplayName("should return error if param null")
     void checkRequiredValuesNotNull() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
@@ -228,9 +198,9 @@ class MemberManagerImplTest {
         Member member = new Member();
         member.setLogin("?");
         assertEquals("login should be filled", memberManager.checkRequiredValuesNotNull(member));
-    }
+    }*/
 
-    @Test
+ /*   @Test
     @DisplayName("should return empty string if params ok")
     void checkRequiredValuesNotNull12() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
@@ -242,7 +212,7 @@ class MemberManagerImplTest {
         member.setEmail("ded@dede.de");
         member.setDateJoin(new Date());
         assertEquals("", memberManager.checkRequiredValuesNotNull(member));
-    }
+    }*/
 
     @Test
     @DisplayName("should return an empty string if remove successful")

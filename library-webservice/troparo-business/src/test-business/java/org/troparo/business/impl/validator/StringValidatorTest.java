@@ -5,42 +5,38 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
-class StringElementValidatorTest {
+class StringValidatorTest {
     @Inject
-    private StringElementValidator stringElementValidator;
+    private StringValidator stringValidator;
 
 
 
     @Test
-    @DisplayName("should not validate")
+    @DisplayName("should not validateExpression")
     void validate() {
-        String[] wrongLoginList= {null,"?", "","2", "ed.","frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?"};
+        String[] wrongLoginList= {null,"?", "","2", "ed.","frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?", "ba"};
         for (String login: wrongLoginList
         ) {
             System.out.println("Login: "+login);
-            assertFalse(stringElementValidator.validate(login, "login"));
+            assertFalse(stringValidator.validateExpression("login", login));
         }
     }
 
 
     @Test
-    @DisplayName("should validate")
+    @DisplayName("should validateExpression")
     void validate1() {
         String[] validLoginList= {"bastien34", "rokoko", "M2345"};
         for (String login: validLoginList
              ) {
             System.out.println("Login: "+login);
-            assertTrue(stringElementValidator.validate(login, "login"));
+            assertTrue(stringValidator.validateExpression( "login", login));
         }
     }
 
@@ -67,7 +63,7 @@ class StringElementValidatorTest {
         };
         for (String mail : mailListValid
         ) {
-            assertTrue(stringElementValidator.validate(mail, "email"));
+            assertTrue(stringValidator.validateExpression( "email", mail));
         }
     }
 
@@ -89,12 +85,13 @@ class StringElementValidatorTest {
                 "email@example",
                 "email@-example.com",
                 "email@example..com",
+                "dede@fr",
                 "Abc..123@example.com"};
 
         for (String mail : mailListInvalid
         ) {
 
-            assertFalse(stringElementValidator.validate(mail, "email"));
+            assertFalse(stringValidator.validateExpression( "email", mail));
         }
     }
 }

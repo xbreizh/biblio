@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.troparo.business.contract.MemberManager;
-import org.troparo.business.impl.validator.StringElementValidator;
+import org.troparo.business.impl.validator.StringValidator;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
@@ -22,13 +22,12 @@ import java.util.UUID;
 public class MemberManagerImpl implements MemberManager {
     @Value("${pepper}")
     private static String PEPPER;
-    private static final String EMAIL = "email";
 
 
     @Inject
     MemberDAO memberDAO;
     @Inject
-    StringElementValidator stringValidator;
+    StringValidator stringValidator;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -37,7 +36,7 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public void setStringValidator(StringElementValidator stringValidator) {
+    public void setStringValidator(StringValidator stringValidator) {
         this.stringValidator = stringValidator;
     }
 
@@ -45,17 +44,12 @@ public class MemberManagerImpl implements MemberManager {
     public String addMember(Member member) {
         String exception;
 
-        System.out.println("member received: " + member);
-        // checking that all values are valid
         exception = checkValidityOfParametersForInsertMember(member);
-        System.out.println("exception: " + exception);
         if (!exception.equals("")) {
-            System.out.println("returning exception ");
             return exception;
         }
         if (memberDAO.existingLogin(member.getLogin())) {
-            exception = "Login already existing";
-            return exception;
+            return "Login already existing";
         }
         member.setPassword(encryptPassword(member.getPassword())); // encrypting password
         // setting dateJoin
@@ -66,13 +60,27 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-    String checkValidityOfParametersForInsertMember(Member member) {
-
+    public String checkValidityOfParametersForInsertMember(Member member) {
         if (member == null) return "no member provided";
+
+        String[][] memberParameters={{"login", member.getLogin()},
+                {"firstName", member.getFirstName()},
+                {"lastName", member.getLastName()},
+                {"password", member.getPassword()},
+                {"email", member.getEmail()}};
+
+        for (String[] param: memberParameters) {
+            if(!stringValidator.validateExpression(param[0], param[1])){
+                return stringValidator.getException(param[0])+param[1];
+            }
+        }
+
+/*
+
 
 
         System.out.println("log: " + member.getLogin());
-        if (!stringValidator.validate(member.getLogin(), "login"))
+        if (!stringValidator.validateExpression(member.getLogin(), "login"))
             return "Login must be between 5 or 20 characters: " + member.getLogin();
         logger.info("login validation: " + member.getLogin());
 
@@ -93,15 +101,36 @@ public class MemberManagerImpl implements MemberManager {
         }
         if (member.getEmail() == null || member.getEmail().equals("") || member.getEmail().equals("?"))
             return "No email provided";
-        if (!stringValidator.validate(member.getEmail(), EMAIL)) return "Invalid Email: " + member.getEmail();
-        logger.info("email validation: " + member.getEmail());
+        if (!stringValidator.validateExpression(member.getEmail(), EMAIL)) return "Invalid Email: " + member.getEmail();
+        logger.info("email validation: " + member.getEmail());*/
 
         return "";
     }
 
 
-    String checkValidityOfParametersForUpdateMember(Member memberNewValues) {
-        if (memberNewValues == null) return "no member provided";
+    public String checkValidityOfParametersForUpdateMember(Member member) {
+
+        if (member == null) return "no member provided";
+
+        String[][] memberParameters={{"login", member.getLogin()},
+                {"firstName", member.getFirstName()},
+                {"lastName", member.getLastName()},
+                {"password", member.getPassword()},
+                {"email", member.getEmail()}};
+
+        for (String[] param: memberParameters) {
+            /*System.out.println("param: "+param[0]+" / "+param[1]);
+            if(param[1]!=null|| param[0].equals("login")) {*/
+                    if (!stringValidator.validateForUpdateMember(param[0], param[1])) {
+                        return stringValidator.getException(param[0]) + param[1];
+                    }
+
+           /* }*/
+        }
+
+
+
+        /*if (memberNewValues == null) return "no member provided";
 
         String login = memberNewValues.getLogin();
         logger.info("login: " + login);
@@ -131,7 +160,7 @@ public class MemberManagerImpl implements MemberManager {
 
 
         }
-        if (email != null && !email.equals("") && !email.equals("?") && !stringValidator.validate(email, EMAIL)) {
+        if (email != null && !email.equals("") && !email.equals("?") && !stringValidator.validateExpression(email, EMAIL)) {
 
             return "Invalid Email: " + email;
 
@@ -139,14 +168,14 @@ public class MemberManagerImpl implements MemberManager {
         }
         if (role != null && (role.equals("") || role.equals("?") || role.length() < 6 || role.length() > 10)) {
             return "Role should have between 6 and 10 characters: " + role;
-        }
+        }*/
 
 
         return "";
     }
 
 
-    String checkRequiredValuesNotNull(Member member) {
+/*    String checkRequiredValuesNotNull(Member member) {
         String login = member.getLogin();
         if (member.getLogin() != null) {
             if (login.equals("") || login.equals("?")) {
@@ -188,7 +217,7 @@ public class MemberManagerImpl implements MemberManager {
 
 
         return "";
-    }
+    }*/
 
 
     @Override
