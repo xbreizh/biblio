@@ -1,5 +1,6 @@
 package org.troparo.business.impl.validator;
 
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.RegularExpression;
 import org.springframework.beans.factory.annotation.Value;
 
 import javax.inject.Named;
@@ -19,6 +20,24 @@ public class StringElementValidator {
     @Value("${EMAIL_PATTERN}")
     private String EMAIL_PATTERN;
     private Pattern pattern;
+    public enum VerifExpression
+    {
+        LOGIN("^[A-z0-9_-]{5,20}$"),
+        PASSWORD("^[A-z0-9_-]{5,20}$"),
+        FIRSTNAME("^[A-z0-9_-]{5,20}$"),
+        LASTNAME("^[A-z0-9_-]{5,20}$"),
+        EMAIL("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)])");
+        private final String  regex;
+
+        VerifExpression(String regex){
+            this.regex=regex;
+        }
+
+        public String getRegex(){
+            return this.regex;
+        }
+    }
+
 
     public StringElementValidator() {
 
@@ -43,25 +62,26 @@ public class StringElementValidator {
 
     public boolean validate(final String hex, String type) {
 
+
         if (hex == null) {
             return false;
         }
         switch (type) {
 
             case "login":
-                pattern = Pattern.compile(LOGIN_PATTERN);
+                pattern = Pattern.compile(VerifExpression.LOGIN.getRegex());
                 break;
             case "firstName":
-                pattern = Pattern.compile(FIRSTNAME_PATTERN);
+                pattern = Pattern.compile(VerifExpression.FIRSTNAME.getRegex());
                 break;
             case "lastName":
-                pattern = Pattern.compile(LASTNAME_PATTERN);
+                pattern = Pattern.compile(VerifExpression.LASTNAME.getRegex());
                 break;
             case "email":
-                pattern = Pattern.compile(EMAIL_PATTERN);
+                pattern = Pattern.compile(VerifExpression.EMAIL.getRegex());
                 break;
             case "password":
-                pattern = Pattern.compile(PASSWORD_PATTERN);
+                pattern = Pattern.compile(VerifExpression.PASSWORD.getRegex());
                 break;
             default:
 
