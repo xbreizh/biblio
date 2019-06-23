@@ -3,7 +3,6 @@ package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
@@ -90,10 +89,10 @@ public class LoanManagerImpl implements LoanManager {
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                if(entry.getKey().equalsIgnoreCase("status")&& !validStatuslist.contains(entry.getValue().toLowerCase())){
+                if (entry.getKey().equalsIgnoreCase("status") && !validStatuslist.contains(entry.getValue().toLowerCase())) {
                     return loanList;
                 }
-                    criterias.put(entry.getKey(), entry.getValue());
+                criterias.put(entry.getKey(), entry.getValue());
 
             }
 
@@ -150,7 +149,7 @@ public class LoanManagerImpl implements LoanManager {
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diffDays: " + diffInDays);
-        return diffInDays < (loanDuration+renewDuration);
+        return diffInDays < (loanDuration + renewDuration);
 
     }
 
@@ -205,7 +204,6 @@ public class LoanManagerImpl implements LoanManager {
     public int getLoanDuration() {
         return loanDuration;
     }
-
 
 
     public void setBookManager(BookManager bookManager) {

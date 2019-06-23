@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -39,7 +40,7 @@ class StringElementValidatorTest {
         for (String login: validLoginList
              ) {
             System.out.println("Login: "+login);
-            assertTrue(stringElementValidator.validateLogin(login));
+            assertTrue(stringElementValidator.validate(login, "login"));
         }
     }
 
