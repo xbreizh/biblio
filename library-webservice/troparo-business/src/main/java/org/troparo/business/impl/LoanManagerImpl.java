@@ -30,8 +30,6 @@ public class LoanManagerImpl implements LoanManager {
     private int renewDuration;
     @Value("${maxBooks}")
     private int maxBooks;
-    @Value("${testString}")
-    private String testString;
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Override

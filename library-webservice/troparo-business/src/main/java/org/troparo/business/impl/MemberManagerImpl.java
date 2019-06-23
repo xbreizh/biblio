@@ -21,17 +21,8 @@ import java.util.UUID;
 @Named
 public class MemberManagerImpl implements MemberManager {
     @Value("${pepper}")
-    private String PEPPER;
-    @Value("${login}")
-    private String LOGIN = "login";
-    @Value("${firstName}")
-    private String FIRSTNAME = "firstName";
-    @Value("${lastName}")
-    private String LASTNAME = "lastName";
-    @Value("${email}")
-    private String EMAIL = "email";
-    @Value("${password}")
-    private String PASSWORD = "password";
+    private static String PEPPER;
+    private static final String EMAIL = "email";
 
 
     @Inject
@@ -39,10 +30,6 @@ public class MemberManagerImpl implements MemberManager {
     @Inject
     StringElementValidator stringValidator;
 
-
-
-    /*@Inject
-    StringElementValidator stringElementValidator;*/
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public void setMemberDAO(MemberDAO memberDAO) {
@@ -57,20 +44,11 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public String addMember(Member member) {
         String exception;
-        // checking if already existing
-       /* if (memberDAO.existingLogin(member.getLogin())) {
-            exception = "Login already existing";
-            return exception;
-        }
-        // checking that all values are provided
-        exception = checkRequiredValuesNotNull(member);
-        if (!exception.equals("")) {
-            return exception;
-        }*/
-        System.out.println("member received: "+member);
+
+        System.out.println("member received: " + member);
         // checking that all values are valid
         exception = checkValidityOfParametersForInsertMember(member);
-        System.out.println("exception: "+exception);
+        System.out.println("exception: " + exception);
         if (!exception.equals("")) {
             System.out.println("returning exception ");
             return exception;
@@ -92,13 +70,10 @@ public class MemberManagerImpl implements MemberManager {
 
         if (member == null) return "no member provided";
 
-        /*if (member.getLogin() == null || member.getLogin().equals("") || member.getLogin().equals("?"))
-            return "No login provided";*/
-       /* if (member.getLogin().length() < 5 || member.getLogin().length() > 20) {
-            return "Login must be 5 or 20 characters: " + member.getLogin();
-        }*/
+
         System.out.println("log: " + member.getLogin());
-        if (!stringValidator.validateLogin(member.getLogin()))return "Login must be between 5 or 20 characters: " + member.getLogin();
+        if (!stringValidator.validateLogin(member.getLogin()))
+            return "Login must be between 5 or 20 characters: " + member.getLogin();
         logger.info("login validation: " + member.getLogin());
 
         if (member.getFirstName() == null || member.getFirstName().equals("") || member.getFirstName().equals("?"))
