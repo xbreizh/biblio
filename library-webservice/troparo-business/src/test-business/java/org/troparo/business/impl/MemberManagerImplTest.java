@@ -121,6 +121,8 @@ class MemberManagerImplTest {
         assertNull(memberManager.getMemberByLogin("bob"));
     }
 
+    // GET MEMBERS BY CRITERIAS
+
     @Test
     @DisplayName("should return member if member criterias existing")
     void getMembersByCriterias() {
@@ -131,11 +133,38 @@ class MemberManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return null if member criterias not existing")
+    @DisplayName("should return empty list if criteria map null or empty")
     void getMembersByCriterias1() {
         HashMap<String, String> map = new HashMap<>();
-        when(memberDAO.getMembersByCriterias(map)).thenReturn(null);
-        assertNull(memberManager.getMembersByCriterias(map));
+        assertAll(
+                ()-> assertEquals(0, memberManager.getMembersByCriterias(map).size()) ,
+                ()-> assertEquals(0, memberManager.getMembersByCriterias(null).size())
+        );
+
+    }
+
+    @Test
+    @DisplayName("should return empty list if member criterias not existing")
+    void getMembersByCriterias2() {
+        HashMap<String, String> map = new HashMap<>();
+        assertEquals(0, memberManager.getMembersByCriterias(map).size());
+    }
+
+
+    @Test
+    @DisplayName("should ignore empty params")
+    void getMembersByCriterias3() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("firstname", "");
+        assertEquals(0, memberManager.getMembersByCriterias(map).size());
+    }
+
+    @Test
+    @DisplayName("should ignore ? params")
+    void getMembersByCriterias4() {
+        HashMap<String, String> map = new HashMap<>();
+        map.put("firstname", "?");
+        assertEquals(0, memberManager.getMembersByCriterias(map).size());
     }
 
 

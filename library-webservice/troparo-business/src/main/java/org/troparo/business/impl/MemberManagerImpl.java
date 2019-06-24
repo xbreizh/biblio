@@ -12,10 +12,7 @@ import org.troparo.model.Member;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Transactional
 @Named
@@ -137,6 +134,8 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
+        List<Member> memberList = new ArrayList<>();
+        if(map==null || map.isEmpty())return memberList;
         HashMap<String, String> criterias = new HashMap<>();
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
@@ -144,6 +143,7 @@ public class MemberManagerImpl implements MemberManager {
                 criterias.put(entry.getKey(), entry.getValue());
             }
         }
+        if(criterias.isEmpty())return memberList;
         logger.info("criterias: " + criterias);
         return memberDAO.getMembersByCriterias(criterias);
     }
