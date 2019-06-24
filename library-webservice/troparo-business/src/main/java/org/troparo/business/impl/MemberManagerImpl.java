@@ -48,7 +48,6 @@ public class MemberManagerImpl implements MemberManager {
         if (!exception.equals("")) {
             return exception;
         }
-        System.out.println("login: "+member.getLogin());
         if (memberDAO.existingLogin(member.getLogin())) {
             return "Login already existing";
         }

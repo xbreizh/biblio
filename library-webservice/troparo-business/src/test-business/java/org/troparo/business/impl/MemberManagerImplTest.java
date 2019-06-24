@@ -175,24 +175,41 @@ class MemberManagerImplTest {
 
 
     @Test
-    @DisplayName("should return \\no member provided \\ if member is null")
+    @DisplayName("should return \\no member provided \\ if member is null(insert)")
     void checkValidityOfParametersForMember1() {
         assertEquals("no member provided", memberManager.checkValidityOfParametersForInsertMember(null));
     }
-/*
+
 
     @Test
-    @DisplayName("should return an an exception if param invalid")
-    void checkValidityOfParametersForMember2() {
-        Member member = new Member();
-        String login = "lokoo";
-        member.setLogin(login);
-        when(stringValidator.validateExpression("login", login)).thenReturn(false);
-        when(stringValidator.getException("login")).thenReturn();
-        assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
+    @DisplayName("should return \\no member provided \\ if member is null (update)")
+    void checkValidityOfParametersForUpdateMember(){
+        assertEquals("no member provided", memberManager.checkValidityOfParametersForUpdateMember(null));
     }
-*/
 
+    @Test
+    @DisplayName("should return empty string when updating")
+    void checkValidityOfParametersForUpdateMember1(){
+        Member member = new Member();
+        member.setLogin("lokoo");
+        member.setFirstName("Basile");
+        member.setLastName("brokl");
+        member.setPassword("sdd");
+        member.setEmail("sw.ddd@dede.fr");
+        when(stringValidator.validateForUpdateMember(anyString(), anyString())).thenReturn(true);
+        assertEquals("", memberManager.checkValidityOfParametersForUpdateMember(member));
+    }
+
+    @Test
+    @DisplayName("should return exception if member params invalid (update)")
+    void checkValidityOfParametersForUpdateMember2(){
+        Member member = new Member();
+        String login = "Basil34";
+        member.setLogin(login);
+        when(stringValidator.validateForUpdateMember("login", login)).thenReturn(false);
+        when(stringValidator.getException("login")).thenReturn("exception: ");
+        assertEquals("exception: "+login, memberManager.checkValidityOfParametersForUpdateMember(member));
+    }
 
 
     @Test
