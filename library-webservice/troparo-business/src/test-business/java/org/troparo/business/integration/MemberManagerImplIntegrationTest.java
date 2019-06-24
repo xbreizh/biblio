@@ -175,7 +175,7 @@ class MemberManagerImplIntegrationTest {
     }
 
     @Test
-    @DisplayName("should return false when password valid")
+    @DisplayName("should return true when password valid")
     void updatePassword1() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         Member newMember = new Member();
@@ -247,6 +247,33 @@ class MemberManagerImplIntegrationTest {
         String newFirstName = "Romarin";
         newMember.setFirstName(newFirstName);
         assertTrue(memberManager1.updateFirstName(memberDb, newMember));
+
+    }
+
+    @Test
+    @DisplayName("should update Member")
+    void transfertUpdatedDetails(){
+        MemberManagerImpl memberManager1 = new MemberManagerImpl();
+        Member memberDb = new Member();
+        String firstName = "Joe";
+        String lastName = "Morris";
+        String email ="joe.morris@frfr.te";
+        String role = "admin";
+        String pwd = "233";
+        Member newMember = new Member();
+
+        newMember.setFirstName(firstName);
+        newMember.setLastName(lastName);
+        newMember.setEmail(email);
+        newMember.setRole(role);
+        newMember.setPassword(pwd);
+        assertAll(
+                ()-> assertEquals(firstName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getFirstName()),
+                ()-> assertEquals(lastName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getLastName()),
+                ()-> assertEquals(email, memberManager1.transfertUpdatedDetails(newMember, memberDb).getEmail()),
+                ()-> assertTrue(memberManager1.checkPassword(pwd, memberManager1.transfertUpdatedDetails(newMember, memberDb).getPassword())),
+                ()-> assertEquals(role, memberManager1.transfertUpdatedDetails(newMember, memberDb).getRole())
+        );
 
     }
 

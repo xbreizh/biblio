@@ -172,7 +172,7 @@ public class MemberManagerImpl implements MemberManager {
         return "";
     }
 
-    Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
+    public Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
         updateFirstName(memberFromDatabase, newMember);
         updateLastName(memberFromDatabase, newMember);
         updatePassword(memberFromDatabase, newMember);
@@ -222,7 +222,6 @@ public class MemberManagerImpl implements MemberManager {
         String firstName = newMember.getFirstName();
         if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
             memberFromDatabase.setFirstName(firstName);
-            System.out.println("in truth");
             return true;
         }
         return false;
