@@ -245,17 +245,14 @@ public class MemberManagerImpl implements MemberManager {
     public String getToken(String login, String password) {
         String wrongCredentials = "wrong credentials";
         if(login==null || password==null)return wrongCredentials;
-        System.out.println("crypted: "+encryptPassword("123"));
         Member member;
         member = getMemberByLogin(login.toUpperCase());
-        System.out.println("member: "+member);
         if (member == null) return wrongCredentials;
         logger.info("trying to get token from business");
         // checking password match
         logger.info("member found: " + member);
         logger.info("login: "+login+" / password: "+password);
             if (checkPassword(password, member.getPassword())) {
-                System.out.println("in here");
                 String token = generateToken();
                 member.setToken(token);
                 member.setDateConnect(new Date());

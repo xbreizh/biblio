@@ -1,9 +1,12 @@
 package org.troparo.business.integration;
 
+import org.apache.log4j.Logger;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MemberManager;
@@ -21,10 +24,17 @@ import static org.mockito.Mockito.when;
 @Transactional
 class MemberManagerImplIntegrationTest {
 
+    private Logger logger = Logger.getLogger(this.getClass().getName());
+
 
     @Inject
     private MemberManager memberManager;
 
+    @Sql({"classpath:/src/main/resources/resetDb.sql"})
+    @BeforeEach
+    void reset() {
+        logger.info("reset db");
+    }
 
     @Test
     @DisplayName("should return members from database")
@@ -83,11 +93,11 @@ class MemberManagerImplIntegrationTest {
         member.setEmail(email);
         assertEquals("Invalid Email: " + email, memberManager1.checkValidityOfParametersForUpdateMember(member));
     }
-
+/*
     @Test
     @DisplayName("should return \\token \\ if credentials ok")
     void getToken3() {
         assertNotEquals("wrong credentials",memberManager.getToken("LOKII", "123"));
-    }
+    }*/
 
 }
