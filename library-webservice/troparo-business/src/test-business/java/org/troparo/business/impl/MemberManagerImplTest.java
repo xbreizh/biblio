@@ -128,6 +128,7 @@ class MemberManagerImplTest {
     void getMembersByCriterias() {
         List<Member> list = new ArrayList<>();
         HashMap<String, String> map = new HashMap<>();
+        map.put("login", "Maurice");
         when(memberDAO.getMembersByCriterias(map)).thenReturn(list);
         assertNotNull(memberManager.getMembersByCriterias(map));
     }
