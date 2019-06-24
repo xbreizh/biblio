@@ -151,14 +151,13 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public String updateMember(Member member) {
-        logger.info("entering");
+        logger.info("trying to update member");
         String exception;
         if (member == null) return "No member passed";
         String login = member.getLogin();
 
         Member memberFromDatabase = memberDAO.getMemberByLogin(login);
         if (memberFromDatabase == null) return "No member found with that login";
-        logger.info("reaching here");
         exception = checkValidityOfParametersForUpdateMember(member);
         if (!exception.equals("")) {
             logger.info("ex " + exception);
@@ -254,12 +253,12 @@ public class MemberManagerImpl implements MemberManager {
         try {
             Member m = memberDAO.getMemberByToken(token);
             m.setToken(null);
-            if (!memberDAO.updateMember(m)) return true;
+            System.out.println("ploc");
+            return memberDAO.updateMember(m);
         } catch (Exception e) {
             logger.error("issue while invalidating the token: " + token);
             return false;
         }
-        return true;
     }
 
 

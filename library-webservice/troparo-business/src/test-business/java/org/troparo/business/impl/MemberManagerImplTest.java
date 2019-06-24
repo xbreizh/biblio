@@ -168,11 +168,11 @@ class MemberManagerImplTest {
         assertEquals(0, memberManager.getMembersByCriterias(map).size());
     }
 
+    // UPDATE MEMBER
 
     @Test
     @DisplayName("should return \" No member passed \" when member is null")
     void updateMember1() {
-
         assertEquals("No member passed", memberManager.updateMember(null));
 
     }
@@ -184,6 +184,19 @@ class MemberManagerImplTest {
         member.setLogin("polonium");
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
         assertEquals("No member found with that login", memberManager.updateMember(member));
+
+    }
+
+
+    @Test
+    @DisplayName("should return \"No member found with that login\" when member is null")
+    void updateMember3() {
+        Member member = new Member();
+        String login = "Polonium";
+        member.setLogin(login);
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
+        when(memberManager.checkValidityOfParametersForUpdateMember(member)).thenReturn("exception: ");
+        assertEquals("exception: "+login, memberManager.updateMember(member));
 
     }
 
@@ -290,9 +303,12 @@ class MemberManagerImplTest {
 
     }
 
+    // INVALIDATE TOKEN
+
     @Test
     @DisplayName("should return false if any issue while invalidating a token")
     void invalidateToken() {
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(null);
         assertFalse(memberManager.invalidateToken("token123"));
     }
 
@@ -301,6 +317,7 @@ class MemberManagerImplTest {
     void invalidateToken1() {
         Member member = new Member();
         member.setToken("token123");
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
         when(memberDAO.updateMember(member)).thenReturn(false);
         assertFalse(memberManager.invalidateToken("token123"));
     }
@@ -309,9 +326,9 @@ class MemberManagerImplTest {
     @DisplayName("should return true if invalidate token is successful")
     void invalidateToken3() {
         Member member = new Member();
-        member.setToken("token123");
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
         when(memberDAO.updateMember(member)).thenReturn(true);
-        assertFalse(memberManager.invalidateToken("token123"));
+        assertTrue(memberManager.invalidateToken(anyString()));
     }
 
 
