@@ -212,6 +212,7 @@ public class MemberManagerImpl implements MemberManager {
         String lastName = newMember.getLastName();
         if (lastName != null && !lastName.equals("") && !lastName.equals("?")) {
             memberFromDatabase.setLastName(lastName);
+
             return true;
         }
         return false;
@@ -221,6 +222,7 @@ public class MemberManagerImpl implements MemberManager {
         String firstName = newMember.getFirstName();
         if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
             memberFromDatabase.setFirstName(firstName);
+            System.out.println("in truth");
             return true;
         }
         return false;

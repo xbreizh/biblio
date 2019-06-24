@@ -97,7 +97,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return false when role null or ? or empty")
-    @Disabled
     void updateRole() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         String[] wrongRoles = {"", null, "?"};
@@ -115,7 +114,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return true when role valid")
-    @Disabled
     void updateRole1() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         Member newMember = new Member();
@@ -130,7 +128,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return false when email null or ? or empty")
-    @Disabled
     void updateEmail() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         String[] wrongEmails = {"", null, "?"};
@@ -148,7 +145,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return true when email valid")
-    @Disabled
     void updateEmail1() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         Member newMember = new Member();
@@ -163,7 +159,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return false when password null or ? or empty")
-    @Disabled
     void updatePassword() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         String[] wrongPasswords = {"", null, "?"};
@@ -181,7 +176,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return false when password valid")
-    @Disabled
     void updatePassword1() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         Member newMember = new Member();
@@ -196,7 +190,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return false when lastname null or ? or empty")
-    @Disabled
     void updateLastName() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         String[] wrongLastNames = {"", null, "?"};
@@ -214,7 +207,6 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return true when role valid")
-    @Disabled
     void updateLastName1() {
         MemberManagerImpl memberManager = new MemberManagerImpl();
         Member newMember = new Member();
@@ -229,59 +221,35 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return false when firstName null or ? or empty")
-    @Disabled
     void updateFirstName() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
+        MemberManagerImpl memberManager1 = new MemberManagerImpl();
+        String[] wrongFirstNames = {"", null, "?"};
         Member newMember = new Member();
         Member memberDb = new Member();
         String dbFirstName = "Jomano";
         memberDb.setFirstName(dbFirstName);
-        newMember.setFirstName("");
-        assertFalse(memberManager.updateFirstName(memberDb, newMember));
-
-    }
-
-    @Test
-    @DisplayName("should return false when firstName null or ? or empty")
-    @Disabled
-    void updateFirstName1() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbFirstName = "Jomano";
-        memberDb.setFirstName(dbFirstName);
-        newMember.setFirstName("?");
-        assertFalse(memberManager.updateFirstName(memberDb, newMember));
-
-    }
-
-    @Test
-    @DisplayName("should return false when firstName null or ? or empty")
-    @Disabled
-    void updateFirstName2() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbFirstName = "Jomano";
-        memberDb.setFirstName(dbFirstName);
-        newMember.setFirstName(null);
-        assertFalse(memberManager.updateFirstName(memberDb, newMember));
+        for (String newFirstName : wrongFirstNames
+        ) {
+            newMember.setFirstName(newFirstName);
+            assertFalse(memberManager1.updateFirstName(memberDb, newMember));
+        }
 
     }
 
     @Test
     @DisplayName("should return true when role valid")
-    @Disabled
-    void updateFirstName3() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
+    void updateFirstName1() {
+        MemberManagerImpl memberManager1 = new MemberManagerImpl();
         Member newMember = new Member();
         Member memberDb = new Member();
         String dbFirstName = "Sacomano";
         memberDb.setFirstName(dbFirstName);
         String newFirstName = "Romarin";
         newMember.setFirstName(newFirstName);
-        assertTrue(memberManager.updateFirstName(memberDb, newMember));
+        assertTrue(memberManager1.updateFirstName(memberDb, newMember));
 
     }
+
+
 
 }
