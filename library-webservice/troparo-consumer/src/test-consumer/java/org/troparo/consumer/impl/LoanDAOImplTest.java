@@ -16,6 +16,7 @@ import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -161,7 +162,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return empty list if invalid criteria")
     void getLoansByCriterias() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("plouf", "jpolinfo");
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
@@ -169,7 +170,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_bookId() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
         assertEquals(1, loanDAO.getLoansByCriterias(map).size());
     }
@@ -183,7 +184,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return empty list of loans if criterias value is empty")
     void getLoansByCriterias3() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "");
         assertEquals(0, loanDAO.getLoansByCriterias(null).size());
     }
@@ -191,14 +192,14 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return empty list of loans if empty map passed")
     void getLoansByCriterias4() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_login() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("login", "lokii");
         assertEquals(1, loanDAO.getLoansByCriterias(map).size());
     }
@@ -206,7 +207,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_login1() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "");
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
@@ -215,7 +216,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_Status() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         assertEquals(3, loanDAO.getLoansByCriterias(map).size());
     }
@@ -223,7 +224,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return empty list if loan status invalid")
     void getLoansByCriterias_Status1() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "wrongOne");
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
@@ -231,7 +232,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return empty list if loan is null")
     void getLoansByCriterias_Status2() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         map.put("book_id", "5");
         LoanDAOImpl loanDAO1 = new LoanDAOImpl();
@@ -243,7 +244,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return list if several valid criterias")
     void getLoansByCriterias_Status3() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
         map.put("status", "terminated");
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
@@ -253,7 +254,7 @@ class LoanDAOImplTest {
     @DisplayName("should return nothing if invalid status")
     void addStatusToRequest() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "dede");
         assertEquals("", loanDAO.addStatusToRequest(map));
     }
@@ -263,7 +264,7 @@ class LoanDAOImplTest {
     @DisplayName("should return \" endDate is null\" string if progress")
     void addStatusToRequest2() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "progress");
         assertEquals(" where endDate is null", loanDAO.addStatusToRequest(map));
     }
@@ -272,7 +273,7 @@ class LoanDAOImplTest {
     @DisplayName("should return \"endDate is null and plannedEndDate < current_date\" string if overdue")
     void addStatusToRequest3() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "overdue");
         assertEquals(" where endDate is null and plannedEndDate < current_date", loanDAO.addStatusToRequest(map));
     }
@@ -281,7 +282,7 @@ class LoanDAOImplTest {
     @DisplayName("should return nothing if invalid status")
     void addStatusToRequest4() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "dede");
         assertEquals("", loanDAO.addStatusToRequest(map));
     }
@@ -290,7 +291,7 @@ class LoanDAOImplTest {
     @DisplayName("should return nothing if invalid status")
     void addStatusToRequest5() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "");
         assertEquals("", loanDAO.addStatusToRequest(map));
     }
@@ -299,7 +300,7 @@ class LoanDAOImplTest {
     @DisplayName("should return \"where endDate is not null\" if empty map")
     void addStatusToRequest6() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         map.put("login", "bob");
         map.put("book_id", "15");
@@ -318,7 +319,7 @@ class LoanDAOImplTest {
     @DisplayName("should return an empty string when map empty")
     void extractStatusFromMap1() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         assertEquals("", loanDAO.extractStatusFromMap(map));
     }
 
@@ -326,7 +327,7 @@ class LoanDAOImplTest {
     @DisplayName("should return terminated if passed in status")
     void extractStatusFromMap2() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         assertEquals("TERMINATED", loanDAO.extractStatusFromMap(map));
     }
@@ -335,7 +336,7 @@ class LoanDAOImplTest {
     @DisplayName("should return empty string if passed in status is incorrect")
     void extractStatusFromMap3() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("bassine", "terminated");
         assertEquals("", loanDAO.extractStatusFromMap(map));
     }
@@ -344,7 +345,7 @@ class LoanDAOImplTest {
     @DisplayName("should return string for 1 criteria")
     void createRequestFromMap() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("login", "bob");
         assertEquals("where borrower.login = :login", loanDAO.createRequestFromMap(map));
     }
@@ -353,7 +354,7 @@ class LoanDAOImplTest {
     @DisplayName("should return string for 2 criteria")
     void createRequestFromMap2() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("login", "bob");
         map.put("book_id", "ob");
         assertEquals("where book_id = :book_id and borrower.login = :login", loanDAO.createRequestFromMap(map));

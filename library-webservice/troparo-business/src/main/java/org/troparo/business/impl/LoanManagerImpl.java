@@ -73,17 +73,17 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
+    public List<Loan> getLoansByCriterias(Map<String, String> map) {
         String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS"};
         List<String> validCriteriasList = Arrays.asList(validCriterias);
-        HashMap<String, String> criterias = new HashMap<>();
+        Map<String, String> criterias = new HashMap<>();
 
         String[] validStatus = {"terminated", "progress", "overdue"};
         List<String> validStatuslist = Arrays.asList(validStatus);
 
         List<Loan> loanList = new ArrayList<>();
 
-        for (HashMap.Entry<String, String> entry : map.entrySet()
+        for (Map.Entry<String, String> entry : map.entrySet()
         ) {
 
             if (entry.getKey() != null && entry.getValue() != null &&

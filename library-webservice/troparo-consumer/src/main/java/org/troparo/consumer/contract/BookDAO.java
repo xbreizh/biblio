@@ -2,7 +2,7 @@ package org.troparo.consumer.contract;
 
 import org.troparo.model.Book;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -18,7 +18,7 @@ public interface BookDAO {
 
     boolean existingISBN(String isbn);
 
-    List<Book> getBooksByCriterias(HashMap<String, String> map);
+    List<Book> getBooksByCriterias(Map<String, String> map);
 
     boolean updateBook(Book book);
 

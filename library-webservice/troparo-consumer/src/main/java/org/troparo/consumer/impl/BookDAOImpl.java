@@ -20,7 +20,7 @@ public class BookDAOImpl implements BookDAO {
     @Inject
     private SessionFactory sessionFactory;
 
-    static void createRequestFromMap(HashMap<String, String> map, StringBuilder criteria) {
+    static void createRequestFromMap(Map<String, String> map, StringBuilder criteria) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!criteria.toString().equals("")) {
@@ -95,7 +95,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public List<Book> getBooksByCriterias(HashMap<String, String> map) {
+    public List<Book> getBooksByCriterias(Map<String, String> map) {
         String request;
         StringBuilder criteria = new StringBuilder();
         logger.info("map: " + map);
@@ -128,7 +128,7 @@ public class BookDAOImpl implements BookDAO {
         return query.getResultList();
     }
 
-    private HashMap<String, String> cleanInvaliMapEntries(HashMap<String, String> map) {
+    private Map<String, String> cleanInvaliMapEntries(Map<String, String> map) {
         String[] authorizedCriteria = {"isbn", "author", "title"};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {

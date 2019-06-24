@@ -4,7 +4,7 @@ import org.troparo.business.impl.validator.StringValidator;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -18,7 +18,7 @@ public interface MemberManager {
 
     Member getMemberByLogin(String login);
 
-    List<Member> getMembersByCriterias(HashMap<String, String> map);
+    List<Member> getMembersByCriterias(Map<String, String> map);
 
     String updateMember(Member member);
 

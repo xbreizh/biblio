@@ -270,7 +270,7 @@ public class MemberServiceImpl implements IMemberService {
 
         checkAuthentication(parameters.getToken());
         MemberCriterias criterias = parameters.getMemberCriterias();
-        HashMap<String, String> newMap = cleanCriteriasMap(criterias);
+        Map<String, String> newMap = cleanCriteriasMap(criterias);
 
 
         logger.info("after: " + newMap.size());
@@ -285,8 +285,8 @@ public class MemberServiceImpl implements IMemberService {
         return getMemberByCriteriasResponseType;
     }
 
-    private HashMap<String, String> cleanCriteriasMap(MemberCriterias criterias) {
-        HashMap<String, String> map = new HashMap<>();
+    private Map<String, String> cleanCriteriasMap(MemberCriterias criterias) {
+        Map<String, String> map = new HashMap<>();
         if (criterias.getLogin() != null) map.put("Login", criterias.getLogin().toUpperCase());
         if (criterias.getFirstName() != null) map.put("FirstName", criterias.getFirstName().toUpperCase());
         if (criterias.getLastName() != null) map.put("LastName", criterias.getLastName().toUpperCase());
@@ -294,7 +294,7 @@ public class MemberServiceImpl implements IMemberService {
         if (criterias.getRole() != null) map.put("role", criterias.getRole().toUpperCase());
         logger.info("map: " + map);
 
-        HashMap<String, String> newMap = new HashMap<>();
+        Map<String, String> newMap = new HashMap<>();
         for (Map.Entry entry : map.entrySet()
         ) {
             if (!entry.getValue().equals("") && !entry.getValue().equals("?")) {

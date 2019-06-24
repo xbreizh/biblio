@@ -15,6 +15,7 @@ import org.troparo.model.Book;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -114,7 +115,7 @@ class BookManagerImplTest {
     @DisplayName("should return a list of books")
     void getBooksByCriterias() {
         List<Book> bookList = new ArrayList<>();
-        HashMap<String, String> criterias = new HashMap<>();
+        Map<String, String> criterias = new HashMap<>();
         criterias.put("Test", "Test");
         when(bookDAO.getBooksByCriterias(criterias)).thenReturn(bookList);
         assertEquals(bookList, bookManager.getBooksByCriterias(criterias));
@@ -122,10 +123,10 @@ class BookManagerImplTest {
 
 
     @Test
-    @DisplayName("should remove invalid entries from criterias Hashmap")
+    @DisplayName("should remove invalid entries from criterias Map")
     void removeInvalidEntriesFromCriterias() {
-        HashMap<String, String> criterias = new HashMap<>();
-        HashMap<String, String> criteriaResults = new HashMap<>();
+        Map<String, String> criterias = new HashMap<>();
+        Map<String, String> criteriaResults = new HashMap<>();
 
         criterias.put("Test", "Test");
         criterias.put("Author", "");
@@ -142,7 +143,7 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should return a Null pointer exception if dao returns null")
     void updateBook() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("ISBN", "ABC");
         when(bookDAO.getBooksByCriterias(map)).thenReturn(null);
         Book book = new Book();
@@ -159,7 +160,7 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should return \"No book to update\" if dao returns an error while updating")
     void updateBook2() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         List<Book> bookList = new ArrayList<>();
         Book book = new Book();
         book.setIsbn("ABC123");
@@ -178,7 +179,7 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should return \"Issue while updating\" if dao returns an error while updating")
     void updateBook4() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("ISBN", "ABC123");
         List<Book> bookList = new ArrayList<>();
         Book book = new Book();
@@ -192,7 +193,7 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should return empty string if no error while updating")
     void updateBook5() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("ISBN", "ABC123");
         List<Book> bookList = new ArrayList<>();
         Book book = new Book();

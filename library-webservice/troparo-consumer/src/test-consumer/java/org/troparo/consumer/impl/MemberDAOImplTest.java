@@ -17,6 +17,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -99,7 +100,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return empty list if member doesn't exist")
     void getMembersByCriterias() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("LOgIN", "jpolinfo");
         assertEquals(0, memberDAO.getMembersByCriterias(map).size());
     }
@@ -107,7 +108,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should ignore if wrong key")
     void getMembersByCriterias1() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("LOGINo", "jpolinfo");
         assertEquals(0, memberDAO.getMembersByCriterias(map).size());
     }
@@ -123,7 +124,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return members")
     void getMembersByCriterias3() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("LOGIN", "jpolino");
         assertEquals(1, memberDAO.getMembersByCriterias(map).size());
     }
@@ -131,7 +132,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return members")
     void getMembersByCriterias4() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("login", "o");
         map.put("email", "@");
         assertEquals(2, memberDAO.getMembersByCriterias(map).size());
@@ -140,7 +141,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return members when using several criterias")
     void getMembersByCriterias5() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("role", "admin");
         assertEquals(1, memberDAO.getMembersByCriterias(map).size());
     }
@@ -149,7 +150,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return members")
     void getMembersByCriterias6() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("role", "admin");
         MemberDAOImpl memberDAO1 = new MemberDAOImpl();
         memberDAO1.setSessionFactory(null);

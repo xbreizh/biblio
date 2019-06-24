@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.MemberManagerImpl;
 import org.troparo.business.impl.validator.StringValidator;
+import org.troparo.consumer.contract.MemberDAO;
+import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -276,6 +278,17 @@ class MemberManagerImplIntegrationTest {
         );
 
     }
+
+    @Test
+    @DisplayName("should return empty string")
+    void updateMember4(){
+        Member member1 = memberManager.getMemberById(1);
+        String firstName = "Joe";
+        member1.setFirstName(firstName);
+        memberManager.updateMember(member1);
+        assertEquals(firstName, memberManager.getMemberById(1).getFirstName());
+    }
+
 
 
 

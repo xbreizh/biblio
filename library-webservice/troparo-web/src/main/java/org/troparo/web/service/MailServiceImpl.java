@@ -290,7 +290,7 @@ public class MailServiceImpl implements IMailService {
     // Get List By Criterias
     @Override
     public GetMailByCriteriasResponseType getMailByCriterias(GetMailByCriteriasRequestType parameters) throws BusinessExceptionMail {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         checkAuthentication(parameters.getToken());
         MailCriterias criterias = parameters.getMailCriterias();
         map.put("Login", criterias.getLogin().toUpperCase());

@@ -9,10 +9,7 @@ import org.troparo.model.Mail;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 
 @Named
@@ -32,7 +29,7 @@ public class MailManagerImpl implements MailManager {
 
     @Override
     public List<Mail> getOverdueEmailList() {
-        HashMap<String, String> criterias = new HashMap<>();
+        Map<String, String> criterias = new HashMap<>();
         criterias.put("status", "OVERDUE");
         logger.info("getting overdue list");
         List<Loan> loans = loanManager.getLoansByCriterias(criterias);

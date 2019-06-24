@@ -14,6 +14,7 @@ import org.troparo.model.Book;
 
 import javax.inject.Inject;
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 /*import static org.mockito.ArgumentMatchers.anyString;
@@ -104,7 +105,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should ignore invalid keys ")
     void getBooksByCriterias() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Titlde", "jpolinfo");
         assertEquals(0, bookDAO.getBooksByCriterias(map).size());
 
@@ -113,7 +114,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("")
     void getBooksByCriterias1() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Title", "jpolinfo");
         assertEquals(0, bookDAO.getBooksByCriterias(map).size());
 
@@ -130,7 +131,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should ignore cases")
     void getBooksByCriterias3() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Title", "grande");
         assertEquals(1, bookDAO.getBooksByCriterias(map).size());
 
@@ -139,7 +140,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return empty list if no criteria")
     void getBooksByCriterias4() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         assertEquals(0, bookDAO.getBooksByCriterias(map).size());
 
     }
@@ -149,7 +150,7 @@ class BookDAOImplTest {
     void getBooksByCriterias5() {
         BookDAOImpl bookDAO1 = new BookDAOImpl();
         bookDAO1.setSessionFactory(null);
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Title", "grande");
         assertEquals(0, bookDAO1.getBooksByCriterias(map).size());
     }
@@ -157,7 +158,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return empty list if any issue")
     void getBooksByCriterias6() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Title", "e");
         map.put("author", "e");
         assertEquals(2, bookDAO.getBooksByCriterias(map).size());

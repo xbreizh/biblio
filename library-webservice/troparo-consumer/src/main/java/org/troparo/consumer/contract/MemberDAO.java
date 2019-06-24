@@ -2,7 +2,7 @@ package org.troparo.consumer.contract;
 
 import org.troparo.model.Member;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -18,7 +18,7 @@ public interface MemberDAO {
 
     Member getMemberByToken(String token);
 
-    List<Member> getMembersByCriterias(HashMap<String, String> map);
+    List<Member> getMembersByCriterias(Map<String, String> map);
 
     boolean existingLogin(String login);
 

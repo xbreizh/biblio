@@ -11,9 +11,7 @@ import org.troparo.services.bookservice.IBookService;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.Map;
 
 @Named
@@ -215,7 +213,7 @@ public class BookServiceImpl implements IBookService {
         // String[] criteriasArray = {"ISBN", "Title", "Author"};
         BookCriterias criterias = parameters.getBookCriterias();
 
-        HashMap<String, String> newMap = cleanCriteriasMap(criterias);
+        Map<String, String> newMap = cleanCriteriasMap(criterias);
 
         if (newMap.isEmpty())
             //map.put("Title", criterias.getTitle().toUpperCase());
@@ -240,14 +238,14 @@ public class BookServiceImpl implements IBookService {
     }
 
 
-    private HashMap<String, String> cleanCriteriasMap(BookCriterias criterias) {
-        HashMap<String, String> map = new HashMap<>();
+    private Map<String, String> cleanCriteriasMap(BookCriterias criterias) {
+        Map<String, String> map = new HashMap<>();
         if (criterias.getAuthor() != null) map.put("Author", criterias.getAuthor().toUpperCase());
         if (criterias.getTitle() != null) map.put("Title", criterias.getTitle().toUpperCase());
         if (criterias.getISBN() != null) map.put("ISBN", criterias.getISBN().toUpperCase());
         logger.info("map: " + map);
 
-        HashMap<String, String> newMap = new HashMap<>();
+        Map<String, String> newMap = new HashMap<>();
         for (Map.Entry entry : map.entrySet()
         ) {
             if (!entry.getValue().equals("") && !entry.getValue().equals("?")) {

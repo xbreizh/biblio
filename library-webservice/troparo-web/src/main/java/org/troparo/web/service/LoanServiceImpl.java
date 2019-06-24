@@ -36,7 +36,6 @@ public class LoanServiceImpl implements ILoanService {
     private ConnectServiceImpl authentication;
 
     private String exception = "";
-    //private List<Loan> loanList = new ArrayList<>();
     private LoanTypeOut loanTypeOut = null;
     private LoanTypeIn loanTypeIn = null;
 
@@ -122,7 +121,7 @@ public class LoanServiceImpl implements ILoanService {
         //String[] validCriterias = {"borrower.login", "book.bookId", "status"};
         checkAuthentication(parameters.getToken());
         logger.info("troko");
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         if (parameters.getLoanCriterias() == null) {
             responseType.setLoanListType(loanListType);
             return responseType;

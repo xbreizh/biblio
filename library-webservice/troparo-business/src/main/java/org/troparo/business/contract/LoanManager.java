@@ -3,7 +3,7 @@ package org.troparo.business.contract;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -15,7 +15,7 @@ public interface LoanManager {
 
     Loan getLoanById(int id);
 
-    List<Loan> getLoansByCriterias(HashMap<String, String> map);
+    List<Loan> getLoansByCriterias(Map<String, String> map);
 
     String renewLoan(int id);
 

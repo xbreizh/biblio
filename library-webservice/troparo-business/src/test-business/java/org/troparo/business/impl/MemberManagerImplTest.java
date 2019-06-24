@@ -9,11 +9,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.impl.validator.StringValidator;
+import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -128,7 +130,7 @@ class MemberManagerImplTest {
     @DisplayName("should return member if member criterias existing")
     void getMembersByCriterias() {
         List<Member> list = new ArrayList<>();
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("login", "Maurice");
         when(memberDAO.getMembersByCriterias(map)).thenReturn(list);
         assertNotNull(memberManager.getMembersByCriterias(map));
@@ -137,7 +139,7 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return empty list if criteria map null or empty")
     void getMembersByCriterias1() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         assertAll(
                 () -> assertEquals(0, memberManager.getMembersByCriterias(map).size()),
                 () -> assertEquals(0, memberManager.getMembersByCriterias(null).size())
@@ -148,7 +150,7 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return empty list if member criterias not existing")
     void getMembersByCriterias2() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         assertEquals(0, memberManager.getMembersByCriterias(map).size());
     }
 
@@ -156,7 +158,7 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should ignore empty params")
     void getMembersByCriterias3() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("firstname", "");
         assertEquals(0, memberManager.getMembersByCriterias(map).size());
     }
@@ -164,7 +166,7 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should ignore ? params")
     void getMembersByCriterias4() {
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("firstname", "?");
         assertEquals(0, memberManager.getMembersByCriterias(map).size());
     }
@@ -200,6 +202,7 @@ class MemberManagerImplTest {
         assertEquals("exception: " + login, memberManager.updateMember(member));
 
     }
+
 
 
     @Test

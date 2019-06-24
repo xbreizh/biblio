@@ -133,11 +133,11 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public List<Member> getMembersByCriterias(HashMap<String, String> map) {
+    public List<Member> getMembersByCriterias(Map<String, String> map) {
         List<Member> memberList = new ArrayList<>();
         if (map == null || map.isEmpty()) return memberList;
-        HashMap<String, String> criterias = new HashMap<>();
-        for (HashMap.Entry<String, String> entry : map.entrySet()
+        Map<String, String> criterias = new HashMap<>();
+        for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getValue().equals("?") && !entry.getValue().equals("")) {
                 criterias.put(entry.getKey(), entry.getValue());
@@ -165,7 +165,6 @@ public class MemberManagerImpl implements MemberManager {
         }
         Member memberToTestIfAnyChange = memberFromDatabase;
         memberFromDatabase = transfertUpdatedDetails(member, memberFromDatabase);
-        if (memberFromDatabase == memberToTestIfAnyChange) return "nothing to update";
 
         memberDAO.updateMember(memberFromDatabase);
         logger.info("updated: " + memberFromDatabase.getId());

@@ -2,7 +2,7 @@ package org.troparo.consumer.contract;
 
 import org.troparo.model.Loan;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 import java.util.Map;
 

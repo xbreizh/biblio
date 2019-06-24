@@ -13,6 +13,7 @@ import org.troparo.services.bookservice.BusinessExceptionBook;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -260,7 +261,7 @@ class BookServiceImplTest {
         String author = "AUTHOR";
         bookCriterias.setAuthor(author);
         parameters.setBookCriterias(bookCriterias);
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Author", author);
         List<Book> list = new ArrayList<>();
         Book book = new Book();
@@ -279,7 +280,7 @@ class BookServiceImplTest {
         bookCriterias.setAuthor(author);
         bookCriterias.setTitle(null);
         parameters.setBookCriterias(bookCriterias);
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Author", author);
         List<Book> list = new ArrayList<>();
         Book book = new Book();

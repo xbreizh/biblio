@@ -135,18 +135,18 @@ public class BookManagerImpl implements BookManager {
     }
 
     @Override
-    public List<Book> getBooksByCriterias(HashMap<String, String> map) {
-        HashMap<String, String> criterias = removeInvalidEntriesFromCriterias(map);
+    public List<Book> getBooksByCriterias(Map<String, String> map) {
+        Map<String, String> criterias = removeInvalidEntriesFromCriterias(map);
 
         logger.info("criterias: " + criterias);
         return bookDAO.getBooksByCriterias(criterias);
     }
 
-    protected HashMap<String, String> removeInvalidEntriesFromCriterias(HashMap<String, String> map) {
-        HashMap<String, String> criterias = new HashMap<>();
+    protected Map<String, String> removeInvalidEntriesFromCriterias(Map<String, String> map) {
+        Map<String, String> criterias = new HashMap<>();
         String[] possibleCriterias = {"Author", "Title", "ISBN"};
         List<String> possibleCriteriasList = Arrays.asList(possibleCriterias);
-        for (HashMap.Entry<String, String> entry : map.entrySet()
+        for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (possibleCriteriasList.contains(entry.getKey()) && !entry.getValue().equals("?") && !entry.getValue().equals("")) {
                 criterias.put(entry.getKey(), entry.getValue());
@@ -163,7 +163,7 @@ public class BookManagerImpl implements BookManager {
         List<Book> bookList;
 
 
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("ISBN", book.getIsbn().toUpperCase());
         bookList = bookDAO.getBooksByCriterias(map);
         if (bookList == null) return "No Item found with that ISBN";

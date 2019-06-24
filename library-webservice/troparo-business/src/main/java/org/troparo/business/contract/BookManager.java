@@ -3,7 +3,7 @@ package org.troparo.business.contract;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
-import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 
@@ -15,7 +15,7 @@ public interface BookManager {
 
     Book getBookById(int id);
 
-    List<Book> getBooksByCriterias(HashMap<String, String> map);
+    List<Book> getBooksByCriterias(Map<String, String> map);
 
     String updateBook(Book book);
 

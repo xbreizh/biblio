@@ -15,10 +15,7 @@ import org.troparo.model.Loan;
 import org.troparo.model.Member;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -129,7 +126,7 @@ class LoanServiceImplTest {
         LoanCriterias loanCriterias = new LoanCriterias();
         loanCriterias.setLogin("kolio");
         parameters.setLoanCriterias(loanCriterias);
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("login", "KOLIO");
         List<Loan> loanList = new ArrayList<>();
         when(loanManager.getLoansByCriterias(map)).thenReturn(loanList);
@@ -144,7 +141,7 @@ class LoanServiceImplTest {
         LoanCriterias loanCriterias = new LoanCriterias();
         loanCriterias.setLogin("kolio");
         parameters.setLoanCriterias(loanCriterias);
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("invalid.criteria", "invalid");
         assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
     }

@@ -14,6 +14,7 @@ import org.troparo.services.memberservice.BusinessExceptionMember;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -200,7 +201,7 @@ class MemberServiceImplTest {
         MemberCriterias memberCriterias = new MemberCriterias();
         memberCriterias.setLogin("bobb");
         parameters.setMemberCriterias(memberCriterias);
-        HashMap<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<>();
         map.put("Login", "BOBB");
         logger.info(map.size());
         List<Member> list = new ArrayList<>();
@@ -219,7 +220,7 @@ class MemberServiceImplTest {
         /*MemberCriterias memberCriterias = new MemberCriterias();
         //memberCriterias.setLogin("bobb");
         parameters.setMemberCriterias(memberCriterias);*/
-       /* HashMap<String, String> map = new HashMap<>();
+       /* Map<String, String> map = new HashMap<>();
         map.put("login", "bobb");*/
         /*logger.info(map.size());
         List<Member> list = new ArrayList<>();
