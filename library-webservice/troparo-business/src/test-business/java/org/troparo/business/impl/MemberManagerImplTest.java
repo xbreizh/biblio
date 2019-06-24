@@ -280,6 +280,8 @@ class MemberManagerImplTest {
         assertEquals("Issue while removing member", memberManager.remove(2));
     }
 
+    // GET TOKEN
+
     @Test
     @DisplayName("should return wrong login or password if credentials are wrong")
     void getToken() {
@@ -287,6 +289,18 @@ class MemberManagerImplTest {
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
         assertEquals("wrong login or pwd", memberManager.getToken("Login", "anyPassword"));
     }
+
+    @Test
+    @DisplayName("should return wrong login or password if credentials are wrong")
+    void getToken1() {
+        when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
+        assertEquals("wrong login or pwd", memberManager.getToken(anyString(), anyString()));
+    }
+
+
+
+
+
 
     @Test
     void checkToken() {
@@ -312,10 +326,8 @@ class MemberManagerImplTest {
         MemberManagerImpl memberManager1 = spy(MemberManagerImpl.class);
         memberManager1.setMemberDAO(memberDAO);
         Member member = new Member();
-        String token = "token123";
-        when(memberManager1.createToken()).thenReturn(token);
-        when(memberDAO.getMemberByToken("ddd")).thenReturn(member);
-        assertEquals(token, memberManager1.generateToken());
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
+        assertEquals(null, memberManager1.generateToken());
 
     }
 

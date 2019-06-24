@@ -135,7 +135,7 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public List<Member> getMembersByCriterias(HashMap<String, String> map) {
         List<Member> memberList = new ArrayList<>();
-        if(map==null || map.isEmpty())return memberList;
+        if (map == null || map.isEmpty()) return memberList;
         HashMap<String, String> criterias = new HashMap<>();
         for (HashMap.Entry<String, String> entry : map.entrySet()
         ) {
@@ -143,7 +143,7 @@ public class MemberManagerImpl implements MemberManager {
                 criterias.put(entry.getKey(), entry.getValue());
             }
         }
-        if(criterias.isEmpty())return memberList;
+        if (criterias.isEmpty()) return memberList;
         logger.info("criterias: " + criterias);
         return memberDAO.getMembersByCriterias(criterias);
     }
@@ -213,33 +213,30 @@ public class MemberManagerImpl implements MemberManager {
     // Login
     @Override
     public String getToken(String login, String password) {
-        Member m;
-        try {
-            logger.info("trying to get token from business");
-            m = getMemberByLogin(login.toUpperCase());
-            // checking password match
-            logger.info("member found: " + m);
-            logger.info(login);
-            logger.info(password);
-            if (m != null) {
-                if (checkPassword(password, m.getPassword())) {
-                    logger.info("indere");
-                    String token = generateToken();
-                    m.setToken(token);
-                    m.setDateConnect(new Date());
-                    memberDAO.updateMember(m);
-                    return token;
-                } else {
-                    logger.info("no token");
-                }
-            } else {
-                logger.info("member is null");
+        String[] credentials = {login, password};
+        String wrongCredentials = "wrong credentials";
+        for (String s : credentials
+        ) {
+            if (s == null || s.equals("?") || s.equals("")) return wrongCredentials;
+        }
+        Member member;
+        member = getMemberByLogin(login.toUpperCase());
+        if (member == null) return wrongCredentials;
+        logger.info("trying to get token from business");
+        // checking password match
+        logger.info("member found: " + member);
+        logger.info("login: "+login+" / password: "+password);
+        if (member != null) {
+            if (checkPassword(password, member.getPassword())) {
+                String token = generateToken();
+                member.setToken(token);
+                member.setDateConnect(new Date());
+                memberDAO.updateMember(member);
+                return token;
             }
-        } catch (NullPointerException e) {
-            logger.info("wrong login or pwd");
         }
 
-        return "wrong login or pwd";
+        return wrongCredentials;
     }
 
     @Override
@@ -312,19 +309,19 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     String generateToken() {
-        boolean tokenValid = false;
-        String uuid = null;
-        while (!tokenValid) {
-            uuid = createToken();
+        int nbTries = 0;
+        while(nbTries < 5){
+            String uuid = createToken();
             logger.info("generating token: " + uuid);
             // checks if token already in use
             if (memberDAO.getMemberByToken(uuid) == null) {
-                logger.info("here");
-                tokenValid = true;
+                logger.info("token created: " + uuid);
+                return uuid;
             }
-            logger.info("token created: " + uuid);
+            nbTries++;
         }
-        return uuid;
+        logger.error("no valid token could be created");
+        return null;
     }
 
     String createToken() {
