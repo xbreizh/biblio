@@ -117,8 +117,9 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return null if member login not existing")
     void getMemberByLogin1() {
-        when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
-        assertNull(memberManager.getMemberByLogin("bob"));
+        String login = "bob";
+        when(memberDAO.getMemberByLogin(login)).thenReturn(null);
+        assertNull(memberManager.getMemberByLogin(login));
     }
 
     // GET MEMBERS BY CRITERIAS
@@ -286,15 +287,19 @@ class MemberManagerImplTest {
     @DisplayName("should return wrong login or password if credentials are wrong")
     void getToken() {
         Member member = new Member();
+        String login = "bob";
+        String password= "123";
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
-        assertEquals("wrong login or pwd", memberManager.getToken("Login", "anyPassword"));
+        assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
 
     @Test
     @DisplayName("should return wrong login or password if credentials are wrong")
     void getToken1() {
+        String login = "bob";
+        String password= "123";
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
-        assertEquals("wrong login or pwd", memberManager.getToken(anyString(), anyString()));
+        assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
 
 
