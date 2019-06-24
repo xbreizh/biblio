@@ -83,7 +83,8 @@ public class MemberManagerImpl implements MemberManager {
 
         if (member == null) return "no member provided";
 
-        String[][] memberParameters = {{"login", member.getLogin()},
+        String[][] memberParameters = {
+                {"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
                 {"lastName", member.getLastName()},
                 {"password", member.getPassword()},
