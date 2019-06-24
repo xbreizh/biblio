@@ -28,7 +28,7 @@ class MemberDAOImplTest {
     MemberDAO memberDAO;
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    @Sql({"classpath:/src/main/resources/resetDb.sql"})
+    @Sql({"classpath:resetDb.sql"})
     @BeforeEach
     void reset() {
         logger.info("reset db");
@@ -46,7 +46,6 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should not insert null member")
     void addMember1() {
-        Member member = new Member();
         memberDAO.addMember(null);
         assertEquals(2, memberDAO.getAllMembers().size());
     }

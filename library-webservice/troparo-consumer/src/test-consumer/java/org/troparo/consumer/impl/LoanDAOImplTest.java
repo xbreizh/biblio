@@ -31,7 +31,7 @@ class LoanDAOImplTest {
     @Inject
     private BookDAO bookDAO;
 
-    @Sql({"classpath:/src/main/resources/resetDb.sql"})
+    @Sql({"classpath:resetDb.sql"})
     @BeforeEach
     void reset() {
         logger.info("reset db");
@@ -244,8 +244,8 @@ class LoanDAOImplTest {
     @DisplayName("should return list if several valid criterias")
     void getLoansByCriterias_Status3() {
         HashMap<String, String> map = new HashMap<>();
-        map.put("status", "terminated");
         map.put("book_id", "5");
+        map.put("status", "terminated");
         assertEquals(0, loanDAO.getLoansByCriterias(map).size());
     }
 

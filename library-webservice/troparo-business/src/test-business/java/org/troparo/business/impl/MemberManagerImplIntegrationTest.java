@@ -1,4 +1,4 @@
-package org.troparo.business.integration;
+package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,7 +30,7 @@ class MemberManagerImplIntegrationTest {
     @Inject
     private MemberManager memberManager;
 
-    @Sql({"classpath:/src/main/resources/resetDb.sql"})
+    @Sql({"classpath:resetDb.sql"})
     @BeforeEach
     void reset() {
         logger.info("reset db");

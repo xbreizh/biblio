@@ -126,6 +126,7 @@ public class LoanDAOImpl implements LoanDAO {
 
         if (map.containsKey(STATUS)) {
             request.append(addStatusToRequest(map));
+            System.out.println("req now: "+request);
         }
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
@@ -220,7 +221,7 @@ public class LoanDAOImpl implements LoanDAO {
         if (!checkValidStatus(status)) {
             return request;
         }
-        if (map.size() - 1 > 1) {
+        if (map.size() - 1 >= 1) {
             request += " and";
         } else {
             request += " where";
@@ -239,7 +240,6 @@ public class LoanDAOImpl implements LoanDAO {
                 break;
 
         }
-
 
         return request;
     }
