@@ -72,7 +72,7 @@ class StringValidatorTest {
         for (String shortStandard : shortStandardList
         ) {
             System.out.println("shortStandard: " + shortStandard);
-            assertFalse(stringValidator.validateExpression("shortStandard", shortStandard));
+            assertFalse(stringValidator.validateExpression("short", shortStandard));
         }
     }
 
@@ -84,7 +84,7 @@ class StringValidatorTest {
         for (String shortStandard : shortStandardList
         ) {
             System.out.println("LongStandard: " + shortStandard);
-            assertTrue(stringValidator.validateExpression("shortStandard", shortStandard));
+            assertTrue(stringValidator.validateExpression("short", shortStandard));
         }
     }
 
@@ -184,7 +184,8 @@ class StringValidatorTest {
     void validateForUpdateMember1() {
         assertAll(
                 () -> assertTrue(stringValidator.validateForUpdateMember("password", "1248Er$")),
-                () -> assertTrue(stringValidator.validateForUpdateMember("firstName", "Corentin"))
+                () -> assertTrue(stringValidator.validateForUpdateMember("firstName", "Corentin")),
+                () -> assertTrue(stringValidator.validateForUpdateMember("login", "Momo56"))
 
         );
 

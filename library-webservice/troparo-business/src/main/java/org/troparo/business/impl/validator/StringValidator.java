@@ -10,8 +10,7 @@ public class StringValidator {
 
     private static final String LOGIN="login";
     private static final String NAME="name";
-    private static final String SHORTSTANDARD="shortStandard";
-    private static final String LONGSTANDARD="longStandard";
+    private static final String SHORT="short";
 
     /**
      * Validate hex with regular expression
@@ -23,10 +22,10 @@ public class StringValidator {
 
     public boolean validateExpression(String type, String hex) {
         Pattern pattern;
-        String[] names = {"firstName", "lastName"};
-        String[] shortStandards = {"role", "shortStandard"};
-        if(Arrays.asList(names).contains(type))type=NAME;
-        if(Arrays.asList(shortStandards).contains(type))type=SHORTSTANDARD;
+        String[] names = {"firstname", "lastname"};
+        String[] shortStandards = {"role", SHORT};
+        if(Arrays.asList(names).contains(type.toLowerCase()))type=NAME;
+        if(Arrays.asList(shortStandards).contains(type))type=SHORT;
         if (hex == null) {
             return false;
         }
@@ -44,12 +43,11 @@ public class StringValidator {
             case "password":
                 pattern = RegularExpression.PASSWORD.getPattern();
                 break;
-            case SHORTSTANDARD:
-                System.out.println("type: "+hex+" / :"+hex.length());
-                pattern = RegularExpression.SHORTSTANDARD.getPattern();
+            case SHORT:
+                pattern = RegularExpression.SHORT.getPattern();
                 break;
             default:
-                pattern = RegularExpression.LONGSTANDARD.getPattern();
+                pattern = RegularExpression.LONG.getPattern();
 
         }
         Matcher matcher = pattern.matcher(hex);
