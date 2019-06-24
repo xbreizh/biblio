@@ -4,6 +4,7 @@ import org.troparo.model.Loan;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 public interface LoanDAO {
@@ -21,7 +22,7 @@ public interface LoanDAO {
     List<Loan> getLoanByLogin(String login);
 
 
-    List<Loan> getLoansByCriterias(HashMap<String, String> map);
+    List<Loan> getLoansByCriterias(Map<String, String> map);
 
 
 }

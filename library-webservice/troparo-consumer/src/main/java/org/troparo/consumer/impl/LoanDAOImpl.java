@@ -112,7 +112,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     @Override
-    public List<Loan> getLoansByCriterias(HashMap<String, String> map) {
+    public List<Loan> getLoansByCriterias(Map<String, String> map) {
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
         if (map == null) return loanList;
@@ -126,7 +126,6 @@ public class LoanDAOImpl implements LoanDAO {
 
         if (map.containsKey(STATUS)) {
             request.append(addStatusToRequest(map));
-            System.out.println("req now: "+request);
         }
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
@@ -144,7 +143,7 @@ public class LoanDAOImpl implements LoanDAO {
 
     }
 
-    private void addingParametersToCriteriasQuery(HashMap<String, String> map, Query query) {
+    private void addingParametersToCriteriasQuery(Map<String, String> map, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
@@ -161,7 +160,7 @@ public class LoanDAOImpl implements LoanDAO {
         }
     }
 
-    String createRequestFromMap(HashMap<String, String> map) {
+    String createRequestFromMap(Map<String, String> map) {
         StringBuilder criteria = new StringBuilder();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
@@ -190,7 +189,7 @@ public class LoanDAOImpl implements LoanDAO {
         return criteria.toString();
     }
 
-    private boolean checkValidMapEntries(HashMap<String, String> map) {
+    private boolean checkValidMapEntries(Map<String, String> map) {
         String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -212,7 +211,7 @@ public class LoanDAOImpl implements LoanDAO {
         return authorizedList.contains(status.toUpperCase());
     }
 
-    String addStatusToRequest(HashMap<String, String> map) {
+    String addStatusToRequest(Map<String, String> map) {
 
         String status = extractStatusFromMap(map);
 
@@ -244,7 +243,7 @@ public class LoanDAOImpl implements LoanDAO {
         return request;
     }
 
-    String extractStatusFromMap(HashMap<String, String> map) {
+    String extractStatusFromMap(Map<String, String> map) {
         if (map == null) return "";
         if (!map.isEmpty()) {
             for (Map.Entry<String, String> entry : map.entrySet()) {
