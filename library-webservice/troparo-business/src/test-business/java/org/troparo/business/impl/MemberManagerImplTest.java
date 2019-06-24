@@ -509,7 +509,7 @@ class MemberManagerImplTest {
     // TRANFERT UPDATE DETAILS
 
     @Test
-    @DisplayName("should not update Role when role null or ? or empty")
+    @DisplayName("should return false when role null or ? or empty")
     @Disabled
     void updateRole() {
         String[] wrongRoles = {"", null, "?"};
@@ -521,13 +521,13 @@ class MemberManagerImplTest {
         ) {
             newMember.setRole(newRole);
             memberManager.updateRole(memberDb, newMember);
-            assertEquals(dbRole, memberDb.getRole());
+            assertFalse(memberManager.updateRole(memberDb, newMember));
         }
 
     }
 
     @Test
-    @DisplayName("should update Role when role valid")
+    @DisplayName("should return true when role valid")
     @Disabled
     void updateRole1() {
         Member newMember = new Member();
@@ -537,12 +537,12 @@ class MemberManagerImplTest {
         String newDbRole = "superAdmin";
         newMember.setRole(newDbRole);
         memberManager.updateRole(memberDb, newMember);
-        assertEquals(newDbRole, memberDb.getRole());
+        assertTrue(memberManager.updateRole(memberDb, newMember));
 
     }
 
     @Test
-    @DisplayName("should not update Email when email null or ? or empty")
+    @DisplayName("should return false when email null or ? or empty")
     @Disabled
     void updateEmail() {
         String[] wrongEmails = {"", null, "?"};
@@ -554,13 +554,13 @@ class MemberManagerImplTest {
         ) {
             newMember.setEmail(newEmail);
             memberManager.updateRole(memberDb, newMember);
-            assertEquals(dbEmail, memberDb.getEmail());
+            assertFalse(memberManager.updateEmail(memberDb, newMember));
         }
 
     }
 
     @Test
-    @DisplayName("should update Role when role valid")
+    @DisplayName("should return true when email valid")
     @Disabled
     void updateEmail1() {
         Member newMember = new Member();
@@ -568,14 +568,14 @@ class MemberManagerImplTest {
         String dbEmail = "admin@admin.admin";
         memberDb.setEmail(dbEmail);
         String newEmail = "user@user.user";
-        newMember.setRole(newEmail);
-        memberManager.updateRole(memberDb, newMember);
-        assertEquals(newEmail, memberDb.getRole());
+        newMember.setEmail(newEmail);
+        memberManager.updateEmail(memberDb, newMember);
+        assertTrue(memberManager.updateEmail(memberDb, newMember));
 
     }
 
     @Test
-    @DisplayName("should not update Password when password null or ? or empty")
+    @DisplayName("should return false when password null or ? or empty")
     @Disabled
     void updatePassword() {
         String[] wrongPasswords = {"", null, "?"};
@@ -587,13 +587,13 @@ class MemberManagerImplTest {
         ) {
             newMember.setPassword(newPassword);
             memberManager.updatePassword(memberDb, newMember);
-            assertEquals(dbPassword, memberDb.getPassword());
+            assertFalse(memberManager.updatePassword(memberDb, newMember));
         }
 
     }
 
     @Test
-    @DisplayName("should update Password when password valid")
+    @DisplayName("should return false when password valid")
     @Disabled
     void updatePassword1() {
         Member newMember = new Member();
@@ -603,12 +603,12 @@ class MemberManagerImplTest {
         String newDbPassword = "newPwd45";
         newMember.setPassword(newDbPassword);
         memberManager.updatePassword(memberDb, newMember);
-        assertNotEquals(dbPassword, memberDb.getPassword());
+        assertTrue(memberManager.updatePassword(memberDb, newMember));
 
     }
 
     @Test
-    @DisplayName("should not update LastName when lastname null or ? or empty")
+    @DisplayName("should return false when lastname null or ? or empty")
     @Disabled
     void updateLastName() {
         String[] wrongLastNames = {"", null, "?"};
@@ -620,13 +620,13 @@ class MemberManagerImplTest {
         ) {
             newMember.setLastName(newLastName);
             memberManager.updateLastName(memberDb, newMember);
-            assertEquals(dbLastName, memberDb.getLastName());
+            assertFalse(memberManager.updateLastName(memberDb, newMember));
         }
 
     }
 
     @Test
-    @DisplayName("should update LastName when role valid")
+    @DisplayName("should return true when role valid")
     @Disabled
     void updateLastName1() {
         Member newMember = new Member();
@@ -636,12 +636,12 @@ class MemberManagerImplTest {
         String newLastName = "Romarin";
         newMember.setLastName(newLastName);
         memberManager.updateLastName(memberDb, newMember);
-        assertEquals(newLastName, memberDb.getLastName());
+        assertTrue(memberManager.updateLastName(memberDb, newMember));
 
     }
 
     @Test
-    @DisplayName("should not update FirstName when firstName null or ? or empty")
+    @DisplayName("should return false when firstName null or ? or empty")
     @Disabled
     void updateFirstName() {
         String[] wrongFirstNames = {"", null, "?"};
@@ -653,13 +653,13 @@ class MemberManagerImplTest {
         ) {
             newMember.setFirstName(newFirstName);
             memberManager.updateFirstName(memberDb, newMember);
-            assertEquals(dbFirstName, memberDb.getFirstName());
+            assertFalse(memberManager.updateFirstName(memberDb, newMember));
         }
 
     }
 
     @Test
-    @DisplayName("should update FirstName when role valid")
+    @DisplayName("should return true when role valid")
     @Disabled
     void updateFirstName1() {
         Member newMember = new Member();
@@ -669,7 +669,7 @@ class MemberManagerImplTest {
         String newFirstName = "Romarin";
         newMember.setFirstName(newFirstName);
         memberManager.updateFirstName(memberDb, newMember);
-        assertEquals(newFirstName, memberDb.getFirstName());
+        assertTrue(memberManager.updateFirstName(memberDb, newMember));
 
     }
 

@@ -181,40 +181,50 @@ public class MemberManagerImpl implements MemberManager {
         return memberFromDatabase;
     }
 
-    void updateRole(Member memberFromDatabase, Member newMember) {
+    boolean updateRole(Member memberFromDatabase, Member newMember) {
         String role = newMember.getRole();
         if (role != null && !role.equals("") && !role.equals("?")) {
             memberFromDatabase.setRole(role);
+            return true;
         }
+        return false;
     }
 
-    void updateEmail(Member memberFromDatabase, Member newMember) {
+    boolean updateEmail(Member memberFromDatabase, Member newMember) {
         String email = newMember.getEmail();
         if (email != null && !email.equals("") && !email.equals("?")) {
             memberFromDatabase.setEmail(email);
+            return true;
         }
+        return false;
     }
 
-    void updatePassword(Member memberFromDatabase, Member newMember) {
+    boolean updatePassword(Member memberFromDatabase, Member newMember) {
         String password = newMember.getPassword();
         if (password != null && !password.equals("") && !password.equals("?")) {
             System.out.println("here");
             memberFromDatabase.setPassword(encryptPassword(password));
+            return true;
         }
+        return false;
     }
 
-    void updateLastName(Member memberFromDatabase, Member newMember) {
+    boolean updateLastName(Member memberFromDatabase, Member newMember) {
         String lastName = newMember.getLastName();
         if (lastName != null && !lastName.equals("") && !lastName.equals("?")) {
             memberFromDatabase.setLastName(lastName);
+            return true;
         }
+        return false;
     }
 
-    void updateFirstName(Member memberFromDatabase, Member newMember) {
+    boolean updateFirstName(Member memberFromDatabase, Member newMember) {
         String firstName = newMember.getFirstName();
         if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
             memberFromDatabase.setFirstName(firstName);
+            return true;
         }
+        return false;
     }
 
 
