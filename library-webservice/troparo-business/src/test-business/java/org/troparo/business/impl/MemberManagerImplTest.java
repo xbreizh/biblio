@@ -507,144 +507,11 @@ class MemberManagerImplTest {
     }
 
 
-    // TRANFERT UPDATE DETAILS
-
-    @Test
-    @DisplayName("should return false when role null or ? or empty")
-    @Disabled
-    void updateRole() {
-        String[] wrongRoles = {"", null, "?"};
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbRole = "admin";
-        memberDb.setRole(dbRole);
-        for (String newRole : wrongRoles
-        ) {
-            newMember.setRole(newRole);
-            memberManager.updateRole(memberDb, newMember);
-            assertFalse(memberManager.updateRole(memberDb, newMember));
-        }
-
-    }
-
-    @Test
-    @DisplayName("should return true when role valid")
-    @Disabled
-    void updateRole1() {
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbRole = "admin";
-        memberDb.setRole(dbRole);
-        String newDbRole = "superAdmin";
-        newMember.setRole(newDbRole);
-        memberManager.updateRole(memberDb, newMember);
-        assertTrue(memberManager.updateRole(memberDb, newMember));
-
-    }
-
-    @Test
-    @DisplayName("should return false when email null or ? or empty")
-    @Disabled
-    void updateEmail() {
-        String[] wrongEmails = {"", null, "?"};
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbEmail = "admin@admin.admin";
-        memberDb.setEmail(dbEmail);
-        for (String newEmail : wrongEmails
-        ) {
-            newMember.setEmail(newEmail);
-            memberManager.updateRole(memberDb, newMember);
-            assertFalse(memberManager.updateEmail(memberDb, newMember));
-        }
-
-    }
-
-    @Test
-    @DisplayName("should return true when email valid")
-    @Disabled
-    void updateEmail1() {
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbEmail = "admin@admin.admin";
-        memberDb.setEmail(dbEmail);
-        String newEmail = "user@user.user";
-        newMember.setEmail(newEmail);
-        memberManager.updateEmail(memberDb, newMember);
-        assertTrue(memberManager.updateEmail(memberDb, newMember));
-
-    }
-
-    @Test
-    @DisplayName("should return false when password null or ? or empty")
-    @Disabled
-    void updatePassword() {
-        String[] wrongPasswords = {"", null, "?"};
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbPassword = "pwd123";
-        memberDb.setPassword(dbPassword);
-        for (String newPassword : wrongPasswords
-        ) {
-            newMember.setPassword(newPassword);
-            memberManager.updatePassword(memberDb, newMember);
-            assertFalse(memberManager.updatePassword(memberDb, newMember));
-        }
-
-    }
-
-    @Test
-    @DisplayName("should return false when password valid")
-    @Disabled
-    void updatePassword1() {
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbPassword = "pwd123";
-        memberDb.setPassword(dbPassword);
-        String newDbPassword = "newPwd45";
-        newMember.setPassword(newDbPassword);
-        memberManager.updatePassword(memberDb, newMember);
-        assertTrue(memberManager.updatePassword(memberDb, newMember));
-
-    }
-
-    @Test
-    @DisplayName("should return false when lastname null or ? or empty")
-    @Disabled
-    void updateLastName() {
-        String[] wrongLastNames = {"", null, "?"};
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbLastName = "Jomano";
-        memberDb.setLastName(dbLastName);
-        for (String newLastName : wrongLastNames
-        ) {
-            newMember.setLastName(newLastName);
-            memberManager.updateLastName(memberDb, newMember);
-            assertFalse(memberManager.updateLastName(memberDb, newMember));
-        }
-
-    }
-
-    @Test
-    @DisplayName("should return true when role valid")
-    @Disabled
-    void updateLastName1() {
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbLastName = "Sacomano";
-        memberDb.setLastName(dbLastName);
-        String newLastName = "Romarin";
-        newMember.setLastName(newLastName);
-        memberManager.updateLastName(memberDb, newMember);
-        assertTrue(memberManager.updateLastName(memberDb, newMember));
-
-    }
-
     @Test
     @DisplayName("should return false when firstName null or ? or empty")
     @Disabled
     void updateFirstName() {
+        MemberManagerImpl memberManager1 = new MemberManagerImpl();
         String[] wrongFirstNames = {"", null, "?"};
         Member newMember = new Member();
         Member memberDb = new Member();
@@ -653,8 +520,7 @@ class MemberManagerImplTest {
         for (String newFirstName : wrongFirstNames
         ) {
             newMember.setFirstName(newFirstName);
-            memberManager.updateFirstName(memberDb, newMember);
-            assertFalse(memberManager.updateFirstName(memberDb, newMember));
+            assertFalse(memberManager1.updateFirstName(memberDb, newMember));
         }
 
     }
@@ -663,14 +529,14 @@ class MemberManagerImplTest {
     @DisplayName("should return true when role valid")
     @Disabled
     void updateFirstName1() {
+        MemberManagerImpl memberManager1 = new MemberManagerImpl();
         Member newMember = new Member();
         Member memberDb = new Member();
         String dbFirstName = "Sacomano";
         memberDb.setFirstName(dbFirstName);
         String newFirstName = "Romarin";
         newMember.setFirstName(newFirstName);
-        memberManager.updateFirstName(memberDb, newMember);
-        assertTrue(memberManager.updateFirstName(memberDb, newMember));
+        assertTrue(memberManager1.updateFirstName(memberDb, newMember));
 
     }
 

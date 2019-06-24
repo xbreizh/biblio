@@ -181,7 +181,7 @@ public class MemberManagerImpl implements MemberManager {
         return memberFromDatabase;
     }
 
-    boolean updateRole(Member memberFromDatabase, Member newMember) {
+    public boolean updateRole(Member memberFromDatabase, Member newMember) {
         String role = newMember.getRole();
         if (role != null && !role.equals("") && !role.equals("?")) {
             memberFromDatabase.setRole(role);
@@ -190,7 +190,7 @@ public class MemberManagerImpl implements MemberManager {
         return false;
     }
 
-    boolean updateEmail(Member memberFromDatabase, Member newMember) {
+    public boolean updateEmail(Member memberFromDatabase, Member newMember) {
         String email = newMember.getEmail();
         if (email != null && !email.equals("") && !email.equals("?")) {
             memberFromDatabase.setEmail(email);
@@ -199,7 +199,7 @@ public class MemberManagerImpl implements MemberManager {
         return false;
     }
 
-    boolean updatePassword(Member memberFromDatabase, Member newMember) {
+    public boolean updatePassword(Member memberFromDatabase, Member newMember) {
         String pass = newMember.getPassword();
         if (pass != null && !pass.equals("") && !pass.equals("?")) {
             memberFromDatabase.setPassword(encryptPassword(pass));
@@ -208,7 +208,7 @@ public class MemberManagerImpl implements MemberManager {
         return false;
     }
 
-    boolean updateLastName(Member memberFromDatabase, Member newMember) {
+    public boolean updateLastName(Member memberFromDatabase, Member newMember) {
         String lastName = newMember.getLastName();
         if (lastName != null && !lastName.equals("") && !lastName.equals("?")) {
             memberFromDatabase.setLastName(lastName);
@@ -217,7 +217,7 @@ public class MemberManagerImpl implements MemberManager {
         return false;
     }
 
-    boolean updateFirstName(Member memberFromDatabase, Member newMember) {
+    public boolean updateFirstName(Member memberFromDatabase, Member newMember) {
         String firstName = newMember.getFirstName();
         if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
             memberFromDatabase.setFirstName(firstName);

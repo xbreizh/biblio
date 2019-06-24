@@ -1,4 +1,4 @@
-package org.troparo.business.impl;
+package org.troparo.business.integration;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
