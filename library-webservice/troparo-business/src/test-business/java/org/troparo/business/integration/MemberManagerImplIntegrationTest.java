@@ -1,4 +1,4 @@
-package org.troparo.business.impl;
+package org.troparo.business.integration;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.when;
 @ContextConfiguration("classpath:application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-class MemberManagerImplTestIntegration {
+class MemberManagerImplIntegrationTest {
 
 
     @Inject

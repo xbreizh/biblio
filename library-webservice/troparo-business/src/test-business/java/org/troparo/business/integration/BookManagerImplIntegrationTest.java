@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-class BookManagerImplTestIntegration {
+class BookManagerImplIntegrationTest {
 
 
     @Inject

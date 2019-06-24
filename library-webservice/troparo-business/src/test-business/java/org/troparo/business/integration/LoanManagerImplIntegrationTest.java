@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-class LoanManagerImplTestIntegration {
+class LoanManagerImplIntegrationTest {
 
 
     @Inject
