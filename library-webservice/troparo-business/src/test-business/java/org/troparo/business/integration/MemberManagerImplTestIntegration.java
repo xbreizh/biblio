@@ -13,8 +13,7 @@ import org.troparo.model.Member;
 
 import javax.inject.Inject;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:application-context-test.xml")
@@ -88,8 +87,7 @@ class MemberManagerImplTestIntegration {
     @Test
     @DisplayName("should return \\token \\ if credentials ok")
     void getToken3() {
-
-        assertNotNull(memberManager.getToken("lokii", "123"));
+        assertNotEquals("wrong credentials",memberManager.getToken("LOKII", "123"));
     }
 
 }

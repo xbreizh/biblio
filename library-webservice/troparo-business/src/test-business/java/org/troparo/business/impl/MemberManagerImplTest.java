@@ -302,13 +302,14 @@ class MemberManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return \\wrong credentials \\ if credentials are wrong")
+    @DisplayName("should return \\wrong credentials \\ if member is null")
     void getToken2() {
         String login = "bob";
         String password = "123";
         when(memberDAO.getMemberByLogin(login)).thenReturn(null);
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
+
 
 
     @Test
