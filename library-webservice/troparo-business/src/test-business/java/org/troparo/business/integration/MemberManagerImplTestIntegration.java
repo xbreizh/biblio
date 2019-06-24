@@ -15,6 +15,7 @@ import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:application-context-test.xml")
 @ExtendWith(SpringExtension.class)
@@ -84,18 +85,11 @@ class MemberManagerImplTestIntegration {
         assertEquals("Invalid Email: " + email, memberManager1.checkValidityOfParametersForUpdateMember(member));
     }
 
-   /* @Test
-    @DisplayName("should return \"nothing to update\" when member is null")
-    void updateMember3() {
-        Member oldMember = new Member();
-        String lastname = "Margo";
-        oldMember.setLastName(lastname);
-        Member newMember = new Member();
-        newMember.setLogin("poliko");
-        newMember.setLastName(lastname);
-        when(memberDAO.getMemberByLogin(anyString())).thenReturn(oldMember);
-        assertEquals("nothing to update", memberManager.updateMember(newMember));
+    @Test
+    @DisplayName("should return \\token \\ if credentials ok")
+    void getToken3() {
 
-    }*/
+        assertNotNull(memberManager.getToken("lokii", "123"));
+    }
 
 }

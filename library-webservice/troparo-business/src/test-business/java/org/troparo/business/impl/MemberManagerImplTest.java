@@ -312,15 +312,7 @@ class MemberManagerImplTest {
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
 
-    @Test
-    @DisplayName("should return \\token \\ if credentials ok")
-    void getToken3() {
-        String login = "bob";
-        String password= "123";
-        Member member = new Member();
-        when(memberDAO.getMemberByLogin(login)).thenReturn(member);
-        assertNotNull(memberManager.getToken(login, password));
-    }
+
 
 
 
@@ -518,5 +510,18 @@ class MemberManagerImplTest {
     void checkAdmin3() {
         when(memberDAO.getMemberByToken(anyString())).thenReturn(null);
         assertFalse(memberManager.checkAdmin(anyString()));
+    }
+
+
+    // TRANFERT UPDATE DETAILS
+
+    @Test
+    @DisplayName("should transfert")
+    void transfertUpdatedDetails(){
+        Member member = new Member();
+        Member memberDb = new Member();
+        String firstName = "Jean";
+        String lastName = "Dupont";
+        fail();
     }
 }
