@@ -213,12 +213,9 @@ public class MemberManagerImpl implements MemberManager {
     // Login
     @Override
     public String getToken(String login, String password) {
-        String[] credentials = {login, password};
         String wrongCredentials = "wrong credentials";
-        for (String s : credentials
-        ) {
-            if (s == null || s.equals("?") || s.equals("")) return wrongCredentials;
-        }
+        if(login==null || password==null)return wrongCredentials;
+
         Member member;
         member = getMemberByLogin(login.toUpperCase());
         if (member == null) return wrongCredentials;
@@ -226,7 +223,6 @@ public class MemberManagerImpl implements MemberManager {
         // checking password match
         logger.info("member found: " + member);
         logger.info("login: "+login+" / password: "+password);
-        if (member != null) {
             if (checkPassword(password, member.getPassword())) {
                 String token = generateToken();
                 member.setToken(token);
@@ -234,7 +230,7 @@ public class MemberManagerImpl implements MemberManager {
                 memberDAO.updateMember(member);
                 return token;
             }
-        }
+
 
         return wrongCredentials;
     }

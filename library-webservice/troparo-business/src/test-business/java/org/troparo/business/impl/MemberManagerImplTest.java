@@ -284,7 +284,7 @@ class MemberManagerImplTest {
     // GET TOKEN
 
     @Test
-    @DisplayName("should return wrong login or password if credentials are wrong")
+    @DisplayName("should return \\wrong credentials \\ if credentials are wrong")
     void getToken() {
         Member member = new Member();
         String login = "bob";
@@ -294,14 +294,33 @@ class MemberManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return wrong login or password if credentials are wrong")
+    @DisplayName("should return \\wrong credentials \\ if one credential is null( or both)")
     void getToken1() {
+        assertAll(
+                ()->assertEquals("wrong credentials", memberManager.getToken(null, "plok")),
+                ()->assertEquals("wrong credentials", memberManager.getToken("plok", null)),
+                ()-> assertEquals("wrong credentials", memberManager.getToken(null, null))
+        );
+    }
+
+    @Test
+    @DisplayName("should return \\wrong credentials \\ if credentials are wrong")
+    void getToken2() {
         String login = "bob";
         String password= "123";
-        when(memberDAO.getMemberByLogin(anyString())).thenReturn(null);
+        when(memberDAO.getMemberByLogin(login)).thenReturn(null);
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
 
+    @Test
+    @DisplayName("should return \\token \\ if credentials ok")
+    void getToken3() {
+        String login = "bob";
+        String password= "123";
+        Member member = new Member();
+        when(memberDAO.getMemberByLogin(login)).thenReturn(member);
+        assertNotNull(memberManager.getToken(login, password));
+    }
 
 
 
@@ -332,7 +351,7 @@ class MemberManagerImplTest {
         memberManager1.setMemberDAO(memberDAO);
         Member member = new Member();
         when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
-        assertEquals(null, memberManager1.generateToken());
+        assertNull(memberManager1.generateToken());
 
     }
 
