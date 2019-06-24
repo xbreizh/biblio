@@ -64,7 +64,7 @@ class MemberManagerImplTest {
         member.setLogin(login);
         when(stringValidator.validateExpression("login", login)).thenReturn(false);
         when(stringValidator.getException("login")).thenReturn("exception for: ");
-        assertEquals("exception for: "+login, memberManager.addMember(member));
+        assertEquals("exception for: " + login, memberManager.addMember(member));
     }
 
     @Test
@@ -81,7 +81,6 @@ class MemberManagerImplTest {
         when(memberDAO.existingLogin(login)).thenReturn(true);
         assertEquals("Login already existing", memberManager.addMember(member));
     }
-
 
 
     @Test
@@ -140,8 +139,8 @@ class MemberManagerImplTest {
     void getMembersByCriterias1() {
         HashMap<String, String> map = new HashMap<>();
         assertAll(
-                ()-> assertEquals(0, memberManager.getMembersByCriterias(map).size()) ,
-                ()-> assertEquals(0, memberManager.getMembersByCriterias(null).size())
+                () -> assertEquals(0, memberManager.getMembersByCriterias(map).size()),
+                () -> assertEquals(0, memberManager.getMembersByCriterias(null).size())
         );
 
     }
@@ -198,11 +197,9 @@ class MemberManagerImplTest {
         member.setLogin(login);
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
         when(memberManager.checkValidityOfParametersForUpdateMember(member)).thenReturn("exception: ");
-        assertEquals("exception: "+login, memberManager.updateMember(member));
+        assertEquals("exception: " + login, memberManager.updateMember(member));
 
     }
-
-
 
 
     @Test
@@ -228,13 +225,13 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return \\no member provided \\ if member is null (update)")
-    void checkValidityOfParametersForUpdateMember(){
+    void checkValidityOfParametersForUpdateMember() {
         assertEquals("no member provided", memberManager.checkValidityOfParametersForUpdateMember(null));
     }
 
     @Test
     @DisplayName("should return empty string when updating")
-    void checkValidityOfParametersForUpdateMember1(){
+    void checkValidityOfParametersForUpdateMember1() {
         Member member = new Member();
         member.setLogin("lokoo");
         member.setFirstName("Basile");
@@ -247,13 +244,13 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return exception if member params invalid (update)")
-    void checkValidityOfParametersForUpdateMember2(){
+    void checkValidityOfParametersForUpdateMember2() {
         Member member = new Member();
         String login = "Basil34";
         member.setLogin(login);
         when(stringValidator.validateForUpdateMember("login", login)).thenReturn(false);
         when(stringValidator.getException("login")).thenReturn("exception: ");
-        assertEquals("exception: "+login, memberManager.checkValidityOfParametersForUpdateMember(member));
+        assertEquals("exception: " + login, memberManager.checkValidityOfParametersForUpdateMember(member));
     }
 
 
@@ -289,7 +286,7 @@ class MemberManagerImplTest {
     void getToken() {
         Member member = new Member();
         String login = "bob";
-        String password= "123";
+        String password = "123";
         when(memberDAO.getMemberByLogin(anyString())).thenReturn(member);
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
@@ -298,9 +295,9 @@ class MemberManagerImplTest {
     @DisplayName("should return \\wrong credentials \\ if one credential is null( or both)")
     void getToken1() {
         assertAll(
-                ()->assertEquals("wrong credentials", memberManager.getToken(null, "plok")),
-                ()->assertEquals("wrong credentials", memberManager.getToken("plok", null)),
-                ()-> assertEquals("wrong credentials", memberManager.getToken(null, null))
+                () -> assertEquals("wrong credentials", memberManager.getToken(null, "plok")),
+                () -> assertEquals("wrong credentials", memberManager.getToken("plok", null)),
+                () -> assertEquals("wrong credentials", memberManager.getToken(null, null))
         );
     }
 
@@ -308,15 +305,10 @@ class MemberManagerImplTest {
     @DisplayName("should return \\wrong credentials \\ if credentials are wrong")
     void getToken2() {
         String login = "bob";
-        String password= "123";
+        String password = "123";
         when(memberDAO.getMemberByLogin(login)).thenReturn(null);
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
-
-
-
-
-
 
 
     @Test
@@ -408,7 +400,7 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return false if member is null")
-    void updatePassword() {
+    void updatePasswords() {
         String login = "KOL";
         String password = "kokl";
         String email = "cdcd@test.fr";
@@ -517,13 +509,168 @@ class MemberManagerImplTest {
     // TRANFERT UPDATE DETAILS
 
     @Test
-    @DisplayName("should transfert")
+    @DisplayName("should not update Role when role null or ? or empty")
     @Disabled
-    void transfertUpdatedDetails(){
-        Member member = new Member();
+    void updateRole() {
+        String[] wrongRoles = {"", null, "?"};
+        Member newMember = new Member();
         Member memberDb = new Member();
-        String firstName = "Jean";
-        String lastName = "Dupont";
-        fail();
+        String dbRole = "admin";
+        memberDb.setRole(dbRole);
+        for (String newRole : wrongRoles
+        ) {
+            newMember.setRole(newRole);
+            memberManager.updateRole(memberDb, newMember);
+            assertEquals(dbRole, memberDb.getRole());
+        }
+
     }
+
+    @Test
+    @DisplayName("should update Role when role valid")
+    @Disabled
+    void updateRole1() {
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbRole = "admin";
+        memberDb.setRole(dbRole);
+        String newDbRole = "superAdmin";
+        newMember.setRole(newDbRole);
+        memberManager.updateRole(memberDb, newMember);
+        assertEquals(newDbRole, memberDb.getRole());
+
+    }
+
+    @Test
+    @DisplayName("should not update Email when email null or ? or empty")
+    @Disabled
+    void updateEmail() {
+        String[] wrongEmails = {"", null, "?"};
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbEmail = "admin@admin.admin";
+        memberDb.setEmail(dbEmail);
+        for (String newEmail : wrongEmails
+        ) {
+            newMember.setEmail(newEmail);
+            memberManager.updateRole(memberDb, newMember);
+            assertEquals(dbEmail, memberDb.getEmail());
+        }
+
+    }
+
+    @Test
+    @DisplayName("should update Role when role valid")
+    @Disabled
+    void updateEmail1() {
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbEmail = "admin@admin.admin";
+        memberDb.setEmail(dbEmail);
+        String newEmail = "user@user.user";
+        newMember.setRole(newEmail);
+        memberManager.updateRole(memberDb, newMember);
+        assertEquals(newEmail, memberDb.getRole());
+
+    }
+
+    @Test
+    @DisplayName("should not update Password when password null or ? or empty")
+    @Disabled
+    void updatePassword() {
+        String[] wrongPasswords = {"", null, "?"};
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbPassword = "pwd123";
+        memberDb.setPassword(dbPassword);
+        for (String newPassword : wrongPasswords
+        ) {
+            newMember.setPassword(newPassword);
+            memberManager.updatePassword(memberDb, newMember);
+            assertEquals(dbPassword, memberDb.getPassword());
+        }
+
+    }
+
+    @Test
+    @DisplayName("should update Password when password valid")
+    @Disabled
+    void updatePassword1() {
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbPassword = "pwd123";
+        memberDb.setPassword(dbPassword);
+        String newDbPassword = "newPwd45";
+        newMember.setPassword(newDbPassword);
+        memberManager.updatePassword(memberDb, newMember);
+        assertNotEquals(dbPassword, memberDb.getPassword());
+
+    }
+
+    @Test
+    @DisplayName("should not update LastName when lastname null or ? or empty")
+    @Disabled
+    void updateLastName() {
+        String[] wrongLastNames = {"", null, "?"};
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbLastName = "Jomano";
+        memberDb.setLastName(dbLastName);
+        for (String newLastName : wrongLastNames
+        ) {
+            newMember.setLastName(newLastName);
+            memberManager.updateLastName(memberDb, newMember);
+            assertEquals(dbLastName, memberDb.getLastName());
+        }
+
+    }
+
+    @Test
+    @DisplayName("should update LastName when role valid")
+    @Disabled
+    void updateLastName1() {
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbLastName = "Sacomano";
+        memberDb.setLastName(dbLastName);
+        String newLastName = "Romarin";
+        newMember.setLastName(newLastName);
+        memberManager.updateLastName(memberDb, newMember);
+        assertEquals(newLastName, memberDb.getLastName());
+
+    }
+
+    @Test
+    @DisplayName("should not update FirstName when firstName null or ? or empty")
+    @Disabled
+    void updateFirstName() {
+        String[] wrongFirstNames = {"", null, "?"};
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbFirstName = "Jomano";
+        memberDb.setFirstName(dbFirstName);
+        for (String newFirstName : wrongFirstNames
+        ) {
+            newMember.setFirstName(newFirstName);
+            memberManager.updateFirstName(memberDb, newMember);
+            assertEquals(dbFirstName, memberDb.getFirstName());
+        }
+
+    }
+
+    @Test
+    @DisplayName("should update FirstName when role valid")
+    @Disabled
+    void updateFirstName1() {
+        Member newMember = new Member();
+        Member memberDb = new Member();
+        String dbFirstName = "Sacomano";
+        memberDb.setFirstName(dbFirstName);
+        String newFirstName = "Romarin";
+        newMember.setFirstName(newFirstName);
+        memberManager.updateFirstName(memberDb, newMember);
+        assertEquals(newFirstName, memberDb.getFirstName());
+
+    }
+
 }

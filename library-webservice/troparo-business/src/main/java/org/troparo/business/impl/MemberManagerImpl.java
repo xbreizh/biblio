@@ -181,35 +181,36 @@ public class MemberManagerImpl implements MemberManager {
         return memberFromDatabase;
     }
 
-    private void updateRole(Member memberFromDatabase, Member newMember) {
+    void updateRole(Member memberFromDatabase, Member newMember) {
         String role = newMember.getRole();
         if (role != null && !role.equals("") && !role.equals("?")) {
             memberFromDatabase.setRole(role);
         }
     }
 
-    private void updateEmail(Member memberFromDatabase, Member newMember) {
+    void updateEmail(Member memberFromDatabase, Member newMember) {
         String email = newMember.getEmail();
         if (email != null && !email.equals("") && !email.equals("?")) {
             memberFromDatabase.setEmail(email);
         }
     }
 
-    private void updatePassword(Member memberFromDatabase, Member newMember) {
-        String password = encryptPassword(newMember.getPassword());
-        if (password != null && !password.equals(encryptPassword("")) && !password.equals(encryptPassword("?"))) {
-            memberFromDatabase.setPassword(password);
+    void updatePassword(Member memberFromDatabase, Member newMember) {
+        String password = newMember.getPassword();
+        if (password != null && !password.equals("") && !password.equals("?")) {
+            System.out.println("here");
+            memberFromDatabase.setPassword(encryptPassword(password));
         }
     }
 
-    private void updateLastName(Member memberFromDatabase, Member newMember) {
+    void updateLastName(Member memberFromDatabase, Member newMember) {
         String lastName = newMember.getLastName();
         if (lastName != null && !lastName.equals("") && !lastName.equals("?")) {
             memberFromDatabase.setLastName(lastName);
         }
     }
 
-    private void updateFirstName(Member memberFromDatabase, Member newMember) {
+    void updateFirstName(Member memberFromDatabase, Member newMember) {
         String firstName = newMember.getFirstName();
         if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
             memberFromDatabase.setFirstName(firstName);
