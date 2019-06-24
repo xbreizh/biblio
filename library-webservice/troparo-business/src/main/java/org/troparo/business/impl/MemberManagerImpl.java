@@ -200,9 +200,9 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     boolean updatePassword(Member memberFromDatabase, Member newMember) {
-        String password = newMember.getPassword();
-        if (password != null && !password.equals("") && !password.equals("?")) {
-            memberFromDatabase.setPassword(encryptPassword(password));
+        String pass = newMember.getPassword();
+        if (pass != null && !pass.equals("") && !pass.equals("?")) {
+            memberFromDatabase.setPassword(encryptPassword(pass));
             return true;
         }
         return false;

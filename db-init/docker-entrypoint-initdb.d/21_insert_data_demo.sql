@@ -1,6 +1,6 @@
 INSERT INTO public."member" (dateconnect,datejoin,email,firstname,lastname,login,"password","role","token") VALUES 
 (current_timestamp,'2019-01-17 17:22:58.013','POLI@KOL.FR','JOHN','POLI','JPOLINO','$2a$10$h0swcQCaOyuJ2CffLkVRn.vj.L2VaAqXCH2rRFGhGArN0YjVGktFK','USER','62751f44-b7db-49f5-a19c-5b98edef50db')
-,('2019-05-27 13:24:46.270','2019-01-16 18:58:19.604','LOKI@LOKI.LOKII','JEAN','MOKOTI','LOKII','$2a$10$cG0Byw7K1qHl8yBa71T4UOjDUevz4XKueiRO3rLW9BjOMBwRIdpcu','ADMIN','1b0e0a5b-ae4f-41cf-a600-b8b26e2ec013')
+,('2019-05-27 13:24:46.270','2019-01-16 18:58:19.604','LOKI@LOKI.LOKII','JEAN','MOKOTI','LOKII','$2a$10$Jncy6.RlsbE0SCLd/M9uJuq2iPYVFz0PQYpapHord9jy1ZpvqZEUK','ADMIN','1b0e0a5b-ae4f-41cf-a600-b8b26e2ec013')
 ;
 
 INSERT INTO public.book (author,edition,insert_date,isbn,keywords,nb_pages,publicationyear,title) VALUES 
