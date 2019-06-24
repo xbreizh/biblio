@@ -253,7 +253,6 @@ public class MemberManagerImpl implements MemberManager {
         try {
             Member m = memberDAO.getMemberByToken(token);
             m.setToken(null);
-            System.out.println("ploc");
             return memberDAO.updateMember(m);
         } catch (Exception e) {
             logger.error("issue while invalidating the token: " + token);
@@ -316,7 +315,7 @@ public class MemberManagerImpl implements MemberManager {
         boolean tokenValid = false;
         String uuid = null;
         while (!tokenValid) {
-            uuid = UUID.randomUUID().toString();
+            uuid = createToken();
             logger.info("generating token: " + uuid);
             // checks if token already in use
             if (memberDAO.getMemberByToken(uuid) == null) {
@@ -325,6 +324,12 @@ public class MemberManagerImpl implements MemberManager {
             }
             logger.info("token created: " + uuid);
         }
+        return uuid;
+    }
+
+    String createToken() {
+        String uuid;
+        uuid = UUID.randomUUID().toString();
         return uuid;
     }
 

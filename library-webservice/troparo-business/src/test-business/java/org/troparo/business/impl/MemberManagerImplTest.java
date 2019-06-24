@@ -294,12 +294,28 @@ class MemberManagerImplTest {
         assertTrue(memberManager.checkToken(anyString()));
     }
 
+    // GENERATE TOKEN
+
     @Test
     @DisplayName("should return a token")
     void generateToken() {
         MemberManagerImpl memberManager1 = spy(MemberManagerImpl.class);
         memberManager1.setMemberDAO(memberDAO);
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(null);
         assertNotNull(memberManager1.generateToken());
+
+    }
+
+    @Test
+    @DisplayName("should return null")
+    void generateToken1() {
+        MemberManagerImpl memberManager1 = spy(MemberManagerImpl.class);
+        memberManager1.setMemberDAO(memberDAO);
+        Member member = new Member();
+        String token = "token123";
+        when(memberManager1.createToken()).thenReturn(token);
+        when(memberDAO.getMemberByToken("ddd")).thenReturn(member);
+        assertEquals(token, memberManager1.generateToken());
 
     }
 
@@ -433,6 +449,8 @@ class MemberManagerImplTest {
 
     }
 
+    //  CHECK ADMIN
+
     @Test
     @DisplayName("should return true when member role is Admin")
     void checkAdmin() {
@@ -456,6 +474,13 @@ class MemberManagerImplTest {
     void checkAdmin2() {
         Member member = new Member();
         when(memberDAO.getMemberByToken(anyString())).thenReturn(member);
+        assertFalse(memberManager.checkAdmin(anyString()));
+    }
+
+    @Test
+    @DisplayName("should return false when member is null")
+    void checkAdmin3() {
+        when(memberDAO.getMemberByToken(anyString())).thenReturn(null);
         assertFalse(memberManager.checkAdmin(anyString()));
     }
 }
