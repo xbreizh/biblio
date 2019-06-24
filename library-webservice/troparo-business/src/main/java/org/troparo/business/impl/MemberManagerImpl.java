@@ -173,27 +173,47 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
-        String firstName = newMember.getFirstName();
-        String lastName = newMember.getLastName();
-        String password = encryptPassword(newMember.getPassword());
-        String email = newMember.getEmail();
+        updateFirstName(memberFromDatabase, newMember);
+        updateLastName(memberFromDatabase, newMember);
+        updatePassword(memberFromDatabase, newMember);
+        updateEmail(memberFromDatabase, newMember);
+        updateRole(memberFromDatabase, newMember);
+        return memberFromDatabase;
+    }
+
+    private void updateRole(Member memberFromDatabase, Member newMember) {
         String role = newMember.getRole();
-        if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
-            memberFromDatabase.setFirstName(firstName);
-        }
-        if (lastName != null && !lastName.equals("") && !lastName.equals("?")) {
-            memberFromDatabase.setLastName(lastName);
-        }
-        if (password != null && !password.equals(encryptPassword("")) && !password.equals(encryptPassword("?"))) {
-            memberFromDatabase.setPassword(password);
-        }
-        if (email != null && !email.equals("") && !email.equals("?")) {
-            memberFromDatabase.setEmail(email);
-        }
         if (role != null && !role.equals("") && !role.equals("?")) {
             memberFromDatabase.setRole(role);
         }
-        return memberFromDatabase;
+    }
+
+    private void updateEmail(Member memberFromDatabase, Member newMember) {
+        String email = newMember.getEmail();
+        if (email != null && !email.equals("") && !email.equals("?")) {
+            memberFromDatabase.setEmail(email);
+        }
+    }
+
+    private void updatePassword(Member memberFromDatabase, Member newMember) {
+        String password = encryptPassword(newMember.getPassword());
+        if (password != null && !password.equals(encryptPassword("")) && !password.equals(encryptPassword("?"))) {
+            memberFromDatabase.setPassword(password);
+        }
+    }
+
+    private void updateLastName(Member memberFromDatabase, Member newMember) {
+        String lastName = newMember.getLastName();
+        if (lastName != null && !lastName.equals("") && !lastName.equals("?")) {
+            memberFromDatabase.setLastName(lastName);
+        }
+    }
+
+    private void updateFirstName(Member memberFromDatabase, Member newMember) {
+        String firstName = newMember.getFirstName();
+        if (firstName != null && !firstName.equals("") && !firstName.equals("?")) {
+            memberFromDatabase.setFirstName(firstName);
+        }
     }
 
 

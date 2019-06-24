@@ -1,6 +1,7 @@
 package org.troparo.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -517,6 +518,7 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should transfert")
+    @Disabled
     void transfertUpdatedDetails(){
         Member member = new Member();
         Member memberDb = new Member();
