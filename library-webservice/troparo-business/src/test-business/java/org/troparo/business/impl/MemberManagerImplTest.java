@@ -11,9 +11,7 @@ import org.troparo.business.impl.validator.StringValidator;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
-import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,13 +25,8 @@ class MemberManagerImplTest {
 
 
     private MemberManagerImpl memberManager;
-    //@Mock
-    // private EmailValidator emailValidator;
     private StringValidator stringValidator;
-    //@Mock
     private MemberDAOImpl memberDAO;
-    /*@Inject
-    private MemberDAO mDAO;*/
 
 
     @BeforeEach
@@ -41,28 +34,54 @@ class MemberManagerImplTest {
         memberManager = new MemberManagerImpl();
         memberDAO = mock(MemberDAOImpl.class);
         memberManager.setMemberDAO(memberDAO);
-        //emailValidator = mock(EmailValidator.class);
         stringValidator = mock(StringValidator.class);
-        //memberManager.setStringValidator(emailValidator);
         memberManager.setStringValidator(stringValidator);
     }
 
 
+    //  ADD MEMBER
+
     @Test
     @DisplayName("should return nothing when trying to insert a member")
-    void addMember2() {
+    void addMember() {
         Member member = new Member();
         member.setLogin("tomoni");
         member.setFirstName("Tom");
         member.setLastName("Jones");
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
-        //when(emailValidator.validateExpression(anyString())).thenReturn(true);
-        //when(stringElementValidator.validateExpression(anyString(), "login")).thenReturn(true);
         when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
         when(memberDAO.existingLogin("tomoni")).thenReturn(false);
         assertEquals("", memberManager.addMember(member));
     }
+
+    @Test
+    @DisplayName("should return exception when checking returns false")
+    void addMember1() {
+        Member member = new Member();
+        String login = "tomoni";
+        member.setLogin(login);
+        when(stringValidator.validateExpression("login", login)).thenReturn(false);
+        when(stringValidator.getException("login")).thenReturn("exception for: ");
+        assertEquals("exception for: "+login, memberManager.addMember(member));
+    }
+
+    @Test
+    @DisplayName("should return exception when login not found in DAO")
+    void addMember2() {
+        Member member = new Member();
+        String login = "tomoni";
+        member.setLogin(login);
+        member.setFirstName("Tom");
+        member.setLastName("Jones");
+        member.setPassword("123");
+        member.setEmail("rer.xax@gtgt.gt");
+        when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(memberDAO.existingLogin(login)).thenReturn(true);
+        assertEquals("Login already existing", memberManager.addMember(member));
+    }
+
+
 
     @Test
     @DisplayName("should return member list")
@@ -140,29 +159,6 @@ class MemberManagerImplTest {
 
 
 
-/*    @Test
-    @DisplayName("should transfer data from member to dbMember if filled")
-    void transfertUpdatedDetails() {
-        Member newMember = new Member();
-        Member dbMember = new Member();
-        String oldFirstname = "Geoffrey";
-        String newFirstname = "Maurice";
-        dbMember.setFirstName(oldFirstname);
-        newMember.setFirstName(newFirstname);
-        assertEquals(newFirstname, memberManager.transfertUpdatedDetails(newMember, dbMember).getFirstName());
-    }
-
-    @Test
-    @DisplayName("should not transfer data from member to dbMember if not filled")
-    void transfertUpdatedDetails1() {
-        Member newMember = new Member();
-        Member dbMember = new Member();
-        String oldFirstname = "Geoffrey";
-        String newFirstname = "";
-        dbMember.setFirstName(oldFirstname);
-        newMember.setFirstName(newFirstname);
-        assertEquals(oldFirstname, memberManager.transfertUpdatedDetails(newMember, dbMember).getFirstName());
-    }*/
 
     @Test
     @DisplayName("should return an empty string if member valid")
@@ -173,44 +169,31 @@ class MemberManagerImplTest {
         member.setLastName("brokl");
         member.setPassword("sdd");
         member.setEmail("sw.ddd@dede.fr");
-        //when(stringElementValidator.validateExpression(anyString(), "login")).thenReturn(true);
         when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
         assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
     }
 
 
-
-
-  /*  @Test
-    @DisplayName("should return error if param null")
-    void checkRequiredValuesNotNull() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        Member member = new Member();
-        assertEquals("login should be filled", memberManager.checkRequiredValuesNotNull(member));
+    @Test
+    @DisplayName("should return \\no member provided \\ if member is null")
+    void checkValidityOfParametersForMember1() {
+        assertEquals("no member provided", memberManager.checkValidityOfParametersForInsertMember(null));
     }
+/*
 
     @Test
-    @DisplayName("should return error if param empty")
-    void checkRequiredValuesNotNull1() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
+    @DisplayName("should return an an exception if param invalid")
+    void checkValidityOfParametersForMember2() {
         Member member = new Member();
-        member.setLogin("?");
-        assertEquals("login should be filled", memberManager.checkRequiredValuesNotNull(member));
-    }*/
+        String login = "lokoo";
+        member.setLogin(login);
+        when(stringValidator.validateExpression("login", login)).thenReturn(false);
+        when(stringValidator.getException("login")).thenReturn();
+        assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
+    }
+*/
 
- /*   @Test
-    @DisplayName("should return empty string if params ok")
-    void checkRequiredValuesNotNull12() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        Member member = new Member();
-        member.setLogin("johnny");
-        member.setFirstName("bob");
-        member.setLastName("lastname");
-        member.setPassword("123");
-        member.setEmail("ded@dede.de");
-        member.setDateJoin(new Date());
-        assertEquals("", memberManager.checkRequiredValuesNotNull(member));
-    }*/
+
 
     @Test
     @DisplayName("should return an empty string if remove successful")
@@ -263,7 +246,6 @@ class MemberManagerImplTest {
     @Test
     @DisplayName("should return false if any issue while invalidating a token")
     void invalidateToken() {
-        //memberManager.invalidateToken("token123");
         assertFalse(memberManager.invalidateToken("token123"));
     }
 
