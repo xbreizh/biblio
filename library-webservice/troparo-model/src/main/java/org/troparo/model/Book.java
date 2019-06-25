@@ -14,7 +14,7 @@ public class Book {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     @NonNull
     private int id;

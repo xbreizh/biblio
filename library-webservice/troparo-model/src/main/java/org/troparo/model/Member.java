@@ -14,7 +14,7 @@ public class Member {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
     @NonNull
     private int Id;
