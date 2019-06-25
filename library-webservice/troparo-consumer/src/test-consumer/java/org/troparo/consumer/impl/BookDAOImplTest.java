@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-@Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD,scripts = "classpath:resetDb.sql")
+@Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD,scripts = "classpath:/src/main/resources/resetDb.sql")
 class BookDAOImplTest {
     private Logger logger = Logger.getLogger(BookDAOImplTest.class);
 
@@ -31,7 +31,7 @@ class BookDAOImplTest {
 
     @BeforeEach
     void reset() {
-        System.out.println("size: "+bookDAO.getBooks().size());
+        logger.info("size: "+bookDAO.getBooks().size());
         logger.info("reset db");
     }
 
