@@ -35,6 +35,7 @@ public class MemberDAOImpl implements MemberDAO {
     public boolean addMember(Member member) {
         logger.info("Member from dao: " + member);
         try {
+            sessionFactory.getCurrentSession().flush();
             sessionFactory.getCurrentSession().persist(member);
         } catch (Exception e) {
             logger.error("error while persisting: " + e.getMessage());

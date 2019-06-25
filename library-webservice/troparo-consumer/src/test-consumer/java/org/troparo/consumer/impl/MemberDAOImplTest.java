@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.MemberDAO;
+import org.troparo.model.Loan;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -41,9 +42,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should add member")
     void addMember() {
-        Member member = new Member();
-        memberDAO.addMember(member);
-        assertEquals(3, memberDAO.getAllMembers().size());
+        assertTrue(memberDAO.addMember(new Member()));
     }
 
     @Test

@@ -59,12 +59,7 @@ class LoanDAOImplTest {
     @DisplayName("should add a loan")
     void addLoan() {
 
-        assertAll(
-                () ->  assertEquals(5, loanDAO.getLoans().size()),
-                () -> assertTrue(loanDAO.addLoan(new Loan())),
-                () -> assertEquals(6, loanDAO.getLoans().size())
-
-        );
+        assertTrue(loanDAO.addLoan(new Loan()));
 
     }
 

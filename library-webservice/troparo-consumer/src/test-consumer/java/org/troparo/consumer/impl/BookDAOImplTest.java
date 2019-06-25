@@ -13,6 +13,7 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
 import javax.inject.Inject;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,11 +55,15 @@ class BookDAOImplTest {
     @DisplayName("should return true")
     void addBook() {
         Book book = new Book();
-        assertAll(
-                () -> assertEquals(5, bookDAO.getBooks().size()),
-                () -> assertTrue(bookDAO.addBook(book)),
-                () -> assertEquals(6, bookDAO.getBooks().size())
-        );
+        book.setIsbn("jijndmme43");
+        book.setNbPages(123);
+        book.setEdition("edition");
+        book.setAuthor("Mark");
+        book.setTitle("baize");
+        book.setPublicationYear(1983);
+        book.setInsertDate(new Date());
+        book.setKeywords("one, two, three");
+        assertTrue(bookDAO.addBook(book));
 
 
     }
