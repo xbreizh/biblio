@@ -1,6 +1,8 @@
 package org.troparo.model;
 
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -14,6 +16,7 @@ public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")
+    @NonNull
     private int id;
 
     @Column(name = "ISBN")

@@ -1,22 +1,5 @@
 
 
-
--- Drop table
-
-DROP TABLE IF EXISTS public.loan;
-DROP TABLE IF EXISTS public.member;
-DROP TABLE IF EXISTS public.book;
-
-DROP SEQUENCE IF EXISTS hibernate_sequence;
-DROP SEQUENCE IF EXISTS loan_id_seq cascade;
-DROP SEQUENCE IF EXISTS member_id_seq cascade;
-DROP SEQUENCE IF EXISTS book_id_seq cascade;
-
-
-
--- Specify timezone
-SET TIME ZONE 'CET';
-
 CREATE TABLE public."member" (
         id SERIAL,
         dateconnect timestamp NULL,
@@ -46,8 +29,6 @@ CREATE TABLE public.book (
         title varchar(255) NULL,
         CONSTRAINT book_pkey PRIMARY KEY (id)
 );
-
--- Drop table
 
 
 

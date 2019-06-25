@@ -17,14 +17,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
-/*import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;*/
+
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
 class BookDAOImplTest {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(BookDAOImplTest.class);
 
     @Inject
     private BookDAO bookDAO;

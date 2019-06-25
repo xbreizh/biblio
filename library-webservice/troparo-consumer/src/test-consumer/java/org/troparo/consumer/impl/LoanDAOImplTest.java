@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class LoanDAOImplTest {
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(LoanDAOImplTest.class);
 
     @Inject
     private LoanDAO loanDAO;

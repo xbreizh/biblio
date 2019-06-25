@@ -1,6 +1,8 @@
 package org.troparo.model;
 
 
+import org.springframework.lang.NonNull;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -12,6 +14,7 @@ public class Loan {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "ID")
+    @NonNull
     private int id;
 
     @Column(name = "START_DATE")

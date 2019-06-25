@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class MemberDAOImplTest {
     @Inject
     MemberDAO memberDAO;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(MemberDAOImplTest.class);
 
     @Sql({"classpath:resetDb.sql"})
     @BeforeEach
