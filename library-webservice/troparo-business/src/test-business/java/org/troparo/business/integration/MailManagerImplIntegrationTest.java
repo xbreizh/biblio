@@ -24,7 +24,7 @@ class MailManagerImplIntegrationTest {
     @Inject
     private MailManager mailManager;
 
-    @Sql({"classpath:resetDb.sql"})
+    @Sql(scripts = "classpath:resetDb.sql")
     @BeforeEach
     void reset() {
         logger.info("reset db");

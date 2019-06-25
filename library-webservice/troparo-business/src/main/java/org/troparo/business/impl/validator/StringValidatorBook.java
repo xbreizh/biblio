@@ -40,7 +40,7 @@ public class StringValidatorBook {
                 pattern = RegularExpression.ISBN.getPattern();
                 break;
             case PUBLICATIONYEAR:
-                pattern = Pattern.compile("(45[5-9]|4[6-9][0-9]|[5-9][0-9]{2}|1[0-9]{3}|20[01][0-9]|"+thisYear+")");
+                pattern = Pattern.compile("(45[5-9]|4[6-9][0-9]|[5-9][0-9]{2}|1[0-9]{3}|20[01][0-9]|" + thisYear + ")");
                 break;
             case NB_PAGES:
                 pattern = RegularExpression.NB_PAGES.getPattern();
@@ -81,9 +81,9 @@ public class StringValidatorBook {
                 return "Title should have between 2 and 200 characters: ";
             case "edition":
                 return "Edition should have between 2 and 200 characters: ";
-            case "nbPages":
+            case NB_PAGES:
                 return "NbPages should be between 1 and 9 999, please recheck: ";
-            case "publicationYear":
+            case PUBLICATIONYEAR:
                 return "Publication year should be between 455 and current: ";
             default:
                 return "Invalid entry";

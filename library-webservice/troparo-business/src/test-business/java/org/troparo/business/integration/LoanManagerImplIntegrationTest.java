@@ -27,7 +27,7 @@ class LoanManagerImplIntegrationTest {
     @Inject
     private LoanManager loanManager;
 
-    @Sql({"classpath:resetDb.sql"})
+    @Sql(scripts = "classpath:resetDb.sql")
     @BeforeEach
     void reset() {
         logger.info("reset db");

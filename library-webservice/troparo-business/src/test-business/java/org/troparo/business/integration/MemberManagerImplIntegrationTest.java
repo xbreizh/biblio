@@ -29,7 +29,7 @@ class MemberManagerImplIntegrationTest {
     @Inject
     private MemberManager memberManager;
 
-    @Sql({"classpath:resetDb.sql"})
+    @Sql(scripts = "classpath:resetDb.sql")
     @BeforeEach
     void reset() {
         logger.info("reset db");
@@ -51,7 +51,6 @@ class MemberManagerImplIntegrationTest {
         memberManager.updateMember(member);
         assertEquals(email, memberManager.getMemberByLogin(login).getEmail());
     }
-
 
 
     @Test

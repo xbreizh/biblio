@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.contract.BookManager;
 import org.troparo.business.impl.validator.StringValidatorBook;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
@@ -73,41 +72,6 @@ class BookManagerImplTest {
 
     }
 
-
-
-
-
-
-   /* @Test
-    @DisplayName("should return error if isbn not 10 or 13 characters")
-    void checkInsertion() {
-        Book book = new Book();
-        book.setIsbn("1234d");
-        assertEquals("ISBN must be 10 or 13 characters: 1234d", bookManager2.checkInsertion(book));
-    }
-
-    @Test
-    @DisplayName("should return false if param less than 2 or more than 200 characters")
-    void checkBookParamLength() {
-        Book book = new Book();
-        book.setTitle("m");
-        assertFalse(bookManager2.checkBookParamLength(book.getTitle()));
-    }
-
-    @Test
-    @DisplayName("should return false if param is null")
-    void checkBookParamLength1() {
-        Book book = new Book();
-        assertFalse(bookManager2.checkBookParamLength(book.getAuthor()));
-    }
-
-    @Test
-    @DisplayName("should return true if param between 2 and 200 characters")
-    void checkBookParamLength2() {
-        Book book = new Book();
-        book.setEdition("momo");
-        assertTrue(bookManager2.checkBookParamLength(book.getEdition()));
-    }*/
 
 
     @Test
