@@ -20,7 +20,6 @@ public class BookManagerImpl implements BookManager {
     @Inject
     StringValidatorBook stringValidatorBook;
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    private String exception = "";
 
     public void setStringValidatorBook(StringValidatorBook stringValidatorBook) {
         this.stringValidatorBook = stringValidatorBook;
@@ -40,9 +39,8 @@ public class BookManagerImpl implements BookManager {
 
         book.setInsertDate(new Date());
         book.setIsbn(book.getIsbn().toUpperCase());
-        bookDAO.addBook(book);
-        logger.info("exception: " + exception);
-        return exception;
+        if(bookDAO.addBook(book))return "";
+        return "there was an issue while inserting the book";
     }
 
 
@@ -240,7 +238,7 @@ public class BookManagerImpl implements BookManager {
         } else {
             bookDAO.remove(book);
         }
-        return exception;
+        return "";
     }
 
     @Override
@@ -250,7 +248,6 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public String addCopy(String isbn, int copies) {
-        exception = "";
         if (!bookDAO.existingISBN(isbn.toUpperCase())) {
             return "No record found with that ISBN";
         } else {
@@ -270,13 +267,12 @@ public class BookManagerImpl implements BookManager {
                 b2.setInsertDate(new Date());
                 logger.info("new Book: " + b2);
                 if (!bookDAO.addBook(b2)) {
-                    exception = "Issue while adding copies for: " + isbn;
-                    logger.info("exception: " + exception);
+                    return "Issue while adding copies for: " + isbn;
                 }
                 i++;
             }
         }
-        return exception;
+        return "";
     }
 
     @Override
