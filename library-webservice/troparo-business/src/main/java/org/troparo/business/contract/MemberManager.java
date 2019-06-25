@@ -1,11 +1,11 @@
 package org.troparo.business.contract;
 
-import org.troparo.business.impl.validator.StringValidator;
+import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 
 public interface MemberManager {
@@ -35,7 +35,7 @@ public interface MemberManager {
 
     void setMemberDAO(MemberDAO memberDao);
 
-    void setStringValidator(StringValidator stringValidator);
+    void setStringValidatorMember(StringValidatorMember stringValidatorMember);
 
     String encryptPassword(String password);
 

@@ -3,8 +3,8 @@ package org.troparo.business.contract;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 
 public interface LoanManager {

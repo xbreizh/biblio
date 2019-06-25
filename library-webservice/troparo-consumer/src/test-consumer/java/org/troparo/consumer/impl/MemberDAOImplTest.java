@@ -10,7 +10,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.MemberDAO;
-import org.troparo.model.Loan;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -34,7 +33,7 @@ class MemberDAOImplTest {
     @BeforeEach
     @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
-        logger.info("size: "+memberDAO.getAllMembers().size());
+        logger.info("size: " + memberDAO.getAllMembers().size());
         logger.info("reset db");
     }
 

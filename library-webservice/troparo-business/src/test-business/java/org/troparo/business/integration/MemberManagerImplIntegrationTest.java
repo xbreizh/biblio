@@ -11,7 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.MemberManagerImpl;
-import org.troparo.business.impl.validator.StringValidator;
+import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -52,6 +52,8 @@ class MemberManagerImplIntegrationTest {
         assertEquals(email, memberManager.getMemberByLogin(login).getEmail());
     }
 
+
+
     @Test
     @DisplayName("should return invalid login when add member with no login")
     void addMember() {
@@ -64,7 +66,7 @@ class MemberManagerImplIntegrationTest {
     @DisplayName("should return an empty string if member valid")
     void checkValidityOfParametersForMember1() {
         MemberManagerImpl memberManager1 = new MemberManagerImpl();
-        memberManager1.setStringValidator(new StringValidator());
+        memberManager1.setStringValidatorMember(new StringValidatorMember());
         Member member = new Member();
         member.setLogin("ba");
         assertEquals("Login must be between 5 or 10 characters: ba", memberManager1.checkValidityOfParametersForInsertMember(member));
@@ -74,7 +76,7 @@ class MemberManagerImplIntegrationTest {
     @DisplayName("should return \"No Login provided\" when no login passed")
     void checkValidityOfParametersForUpdateMember() {
         MemberManagerImpl memberManager1 = new MemberManagerImpl();
-        memberManager1.setStringValidator(new StringValidator());
+        memberManager1.setStringValidatorMember(new StringValidatorMember());
         Member member = new Member();
         assertEquals("Login must be between 5 or 10 characters: null", memberManager1.checkValidityOfParametersForUpdateMember(member));
     }
@@ -84,7 +86,7 @@ class MemberManagerImplIntegrationTest {
     @DisplayName("should return \"invalid email\" when email invalid")
     void checkValidityOfParametersForUpdateMember2() {
         MemberManagerImpl memberManager1 = new MemberManagerImpl();
-        memberManager1.setStringValidator(new StringValidator());
+        memberManager1.setStringValidatorMember(new StringValidatorMember());
         Member member = new Member();
         member.setLogin("kolio");
         member.setLastName("parollier");
@@ -155,7 +157,6 @@ class MemberManagerImplIntegrationTest {
         assertTrue(memberManager.updateEmail(memberDb, newMember));
 
     }
-
 
 
     @Test
@@ -256,12 +257,12 @@ class MemberManagerImplIntegrationTest {
     @Test
     @DisplayName("should return \\wrong credentials\\ ")
     void getToken() {
-        assertEquals("wrong credentials",memberManager.getToken("LOKII", "123"));
+        assertEquals("wrong credentials", memberManager.getToken("LOKII", "123"));
     }
 
     @Test
     @DisplayName("should return a token")
-    void getToken1(){
+    void getToken1() {
         String login = "lokii";
         String password = "123";
         memberManager.updatePassword("lokii", "LOKI@LOKI.LOKII", "123");

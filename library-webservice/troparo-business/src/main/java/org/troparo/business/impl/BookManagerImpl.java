@@ -3,9 +3,11 @@ package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.BookManager;
+import org.troparo.business.impl.validator.StringValidatorBook;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
+import org.troparo.model.Member;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,22 +19,37 @@ import java.util.*;
 public class BookManagerImpl implements BookManager {
     @Inject
     BookDAO bookDAO;
+
+    public void setStringValidatorBook(StringValidatorBook stringValidatorBook) {
+        this.stringValidatorBook = stringValidatorBook;
+    }
+
     @Inject
-    LoanDAO loanDAO;
+    StringValidatorBook stringValidatorBook;
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private String exception = "";
 
     @Override
     public String addBook(Book book) {
-        exception = "";
-        // checking if already existing
+        String exception;
+
+        exception = checkValidityOfParametersForInsertBook(book);
+        if (!exception.equals("")) {
+            return exception;
+        }
+        if (bookDAO.existingISBN(book.getIsbn())) {
+            return "ISBN already existing";
+        }
+
+
+      /*  // checking if already existing
         checksThatBookHasAnISBN(book);
         book.setIsbn(book.getIsbn().toUpperCase());
         if (bookDAO.existingISBN(book.getIsbn())) {
             exception = "ISBN already existing";
             return exception;
-        }
-        // checking that all values are provided
+        }*/
+     /*   // checking that all values are provided
         exception = checkRequiredValuesNotNull(book);
         if (!exception.equals("")) {
             return exception;
@@ -42,7 +59,7 @@ public class BookManagerImpl implements BookManager {
         exception = checkInsertion(book);
         if (!exception.equals("")) {
             return exception;
-        }
+        }*/
         // adding insertion date
         book.setInsertDate(new Date());
         book.setIsbn(book.getIsbn().toUpperCase());
@@ -51,8 +68,49 @@ public class BookManagerImpl implements BookManager {
         return exception;
     }
 
+    /*public String checkValidityOfParametersForInserBook(Book book) {
+        if (book == null) return "no book provided";
 
-    String checkInsertion(Book book) {
+        String[][] memberParameters = {{"login", member.getLogin()},
+                {"firstName", member.getFirstName()},
+                {"lastName", member.getLastName()},
+                {"password", member.getPassword()},
+                {"email", member.getEmail()}};
+
+        for (String[] param : memberParameters) {
+            if (!stringValidator.validateExpression(param[0], param[1])) {
+                return stringValidator.getException(param[0]) + param[1];
+            }
+        }
+
+        return "";
+    }*/
+
+
+    public String checkValidityOfParametersForInsertBook(Book book) {
+        if (book == null) return "no book provided";
+
+        String[][] bookParameters = {
+                {"isbn", book.getIsbn()},
+                {"title", book.getTitle()},
+                {"author", book.getAuthor()},
+                {"publicationYear", Integer.toString(book.getPublicationYear())},
+                {"nbPages", Integer.toString(book.getNbPages())},
+                {"keywords", book.getKeywords()},
+                {"edition", book.getEdition()}};
+
+        for (String[] param : bookParameters) {
+            System.out.println("param: "+param[0]+" / "+param[1]);
+            if (!stringValidatorBook.validateExpression(param[0], param[1])) {
+                return stringValidatorBook.getException(param[0]) + param[1];
+            }
+        }
+
+        return "";
+    }
+
+
+   /* String checkInsertion(Book book) {
         if (checkIsbnLength(book)) return "ISBN must be 10 or 13 characters: " + book.getIsbn();
         if (!checkBookParamLength(book.getTitle()))
             return "Title should have between 2 and 200 characters: " + book.getTitle();
@@ -85,7 +143,7 @@ public class BookManagerImpl implements BookManager {
     private boolean checkIsbnLength(Book book) {
 
         return book.getIsbn().length() != 10 && book.getIsbn().length() != 13;
-    }
+    }*/
 
     String replaceSeparatorWithWhiteSpace(String string) {
         logger.info("trying to replace: " + string);
@@ -100,7 +158,7 @@ public class BookManagerImpl implements BookManager {
     }
 
 
-    String checkRequiredValuesNotNull(Book book) {
+   /* String checkRequiredValuesNotNull(Book book) {
         if (book == null) return "book is null";
 
         if (checkValidParamString(book.getIsbn())) return "isbn should be filled";
@@ -120,7 +178,7 @@ public class BookManagerImpl implements BookManager {
     private boolean checkValidParamString(String isbn) {
 
         return isbn == null || isbn.equals("") || isbn.equals("?");
-    }
+    }*/
 
     @Override
     public List<Book> getBooks() {
@@ -158,6 +216,10 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public String updateBook(Book book) {
+
+
+
+
         if (book == null) return "No book provided!";
         if (!checksThatBookHasAnISBN(book).equals("")) return checksThatBookHasAnISBN(book);
         List<Book> bookList;
@@ -182,6 +244,12 @@ public class BookManagerImpl implements BookManager {
 
         return "";
     }
+
+
+
+
+
+
 
     Book transferValuesToSimilarBooks(Book book, Book b) {
         transferTitleToSimilarBooks(book, b);

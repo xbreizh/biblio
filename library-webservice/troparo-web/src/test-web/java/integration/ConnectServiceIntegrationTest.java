@@ -8,7 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.connect.GetTokenRequestType;
-import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.web.service.ConnectServiceImpl;
 
 import javax.inject.Inject;

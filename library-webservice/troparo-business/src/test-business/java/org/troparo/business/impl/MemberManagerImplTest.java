@@ -8,15 +8,14 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.impl.validator.StringValidator;
-import org.troparo.consumer.contract.MemberDAO;
+import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -28,7 +27,7 @@ class MemberManagerImplTest {
 
 
     private MemberManagerImpl memberManager;
-    private StringValidator stringValidator;
+    private StringValidatorMember stringValidatorMember;
     private MemberDAOImpl memberDAO;
 
 
@@ -37,8 +36,8 @@ class MemberManagerImplTest {
         memberManager = new MemberManagerImpl();
         memberDAO = mock(MemberDAOImpl.class);
         memberManager.setMemberDAO(memberDAO);
-        stringValidator = mock(StringValidator.class);
-        memberManager.setStringValidator(stringValidator);
+        stringValidatorMember = mock(StringValidatorMember.class);
+        memberManager.setStringValidatorMember(stringValidatorMember);
     }
 
 
@@ -53,7 +52,7 @@ class MemberManagerImplTest {
         member.setLastName("Jones");
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
-        when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(stringValidatorMember.validateExpression(anyString(), anyString())).thenReturn(true);
         when(memberDAO.existingLogin("tomoni")).thenReturn(false);
         assertEquals("", memberManager.addMember(member));
     }
@@ -64,8 +63,8 @@ class MemberManagerImplTest {
         Member member = new Member();
         String login = "tomoni";
         member.setLogin(login);
-        when(stringValidator.validateExpression("login", login)).thenReturn(false);
-        when(stringValidator.getException("login")).thenReturn("exception for: ");
+        when(stringValidatorMember.validateExpression("login", login)).thenReturn(false);
+        when(stringValidatorMember.getException("login")).thenReturn("exception for: ");
         assertEquals("exception for: " + login, memberManager.addMember(member));
     }
 
@@ -79,7 +78,7 @@ class MemberManagerImplTest {
         member.setLastName("Jones");
         member.setPassword("123");
         member.setEmail("rer.xax@gtgt.gt");
-        when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(stringValidatorMember.validateExpression(anyString(), anyString())).thenReturn(true);
         when(memberDAO.existingLogin(login)).thenReturn(true);
         assertEquals("Login already existing", memberManager.addMember(member));
     }
@@ -204,7 +203,6 @@ class MemberManagerImplTest {
     }
 
 
-
     @Test
     @DisplayName("should return an empty string if member valid")
     void checkValidityOfParametersForMember() {
@@ -214,7 +212,7 @@ class MemberManagerImplTest {
         member.setLastName("brokl");
         member.setPassword("sdd");
         member.setEmail("sw.ddd@dede.fr");
-        when(stringValidator.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(stringValidatorMember.validateExpression(anyString(), anyString())).thenReturn(true);
         assertEquals("", memberManager.checkValidityOfParametersForInsertMember(member));
     }
 
@@ -241,7 +239,7 @@ class MemberManagerImplTest {
         member.setLastName("brokl");
         member.setPassword("sdd");
         member.setEmail("sw.ddd@dede.fr");
-        when(stringValidator.validateForUpdateMember(anyString(), anyString())).thenReturn(true);
+        when(stringValidatorMember.validateForUpdateMember(anyString(), anyString())).thenReturn(true);
         assertEquals("", memberManager.checkValidityOfParametersForUpdateMember(member));
     }
 
@@ -251,8 +249,8 @@ class MemberManagerImplTest {
         Member member = new Member();
         String login = "Basil34";
         member.setLogin(login);
-        when(stringValidator.validateForUpdateMember("login", login)).thenReturn(false);
-        when(stringValidator.getException("login")).thenReturn("exception: ");
+        when(stringValidatorMember.validateForUpdateMember("login", login)).thenReturn(false);
+        when(stringValidatorMember.getException("login")).thenReturn("exception: ");
         assertEquals("exception: " + login, memberManager.checkValidityOfParametersForUpdateMember(member));
     }
 
@@ -312,7 +310,6 @@ class MemberManagerImplTest {
         when(memberDAO.getMemberByLogin(login)).thenReturn(null);
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
-
 
 
     @Test

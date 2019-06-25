@@ -5,7 +5,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.troparo.business.contract.MemberManager;
-import org.troparo.business.impl.validator.StringValidator;
+import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
@@ -24,7 +24,7 @@ public class MemberManagerImpl implements MemberManager {
     @Inject
     MemberDAO memberDAO;
     @Inject
-    StringValidator stringValidator;
+    StringValidatorMember stringValidatorMember;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -33,8 +33,8 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public void setStringValidator(StringValidator stringValidator) {
-        this.stringValidator = stringValidator;
+    public void setStringValidatorMember(StringValidatorMember stringValidatorMember) {
+        this.stringValidatorMember = stringValidatorMember;
     }
 
     @Override
@@ -67,8 +67,8 @@ public class MemberManagerImpl implements MemberManager {
                 {"email", member.getEmail()}};
 
         for (String[] param : memberParameters) {
-            if (!stringValidator.validateExpression(param[0], param[1])) {
-                return stringValidator.getException(param[0]) + param[1];
+            if (!stringValidatorMember.validateExpression(param[0], param[1])) {
+                return stringValidatorMember.getException(param[0]) + param[1];
             }
         }
 
@@ -88,8 +88,8 @@ public class MemberManagerImpl implements MemberManager {
 
         for (String[] param : memberParameters) {
 
-            if (!stringValidator.validateForUpdateMember(param[0], param[1])) {
-                return stringValidator.getException(param[0]) + param[1];
+            if (!stringValidatorMember.validateForUpdateMember(param[0], param[1])) {
+                return stringValidatorMember.getException(param[0]) + param[1];
             }
         }
 
@@ -233,21 +233,21 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public String getToken(String login, String password) {
         String wrongCredentials = "wrong credentials";
-        if(login==null || password==null)return wrongCredentials;
+        if (login == null || password == null) return wrongCredentials;
         Member member;
         member = getMemberByLogin(login.toUpperCase());
         if (member == null) return wrongCredentials;
         logger.info("trying to get token from business");
         // checking password match
         logger.info("member found: " + member);
-        logger.info("login: "+login+" / password: "+password);
-            if (checkPassword(password, member.getPassword())) {
-                String token = generateToken();
-                member.setToken(token);
-                member.setDateConnect(new Date());
-                memberDAO.updateMember(member);
-                return token;
-            }
+        logger.info("login: " + login + " / password: " + password);
+        if (checkPassword(password, member.getPassword())) {
+            String token = generateToken();
+            member.setToken(token);
+            member.setDateConnect(new Date());
+            memberDAO.updateMember(member);
+            return token;
+        }
 
 
         return wrongCredentials;
@@ -279,7 +279,6 @@ public class MemberManagerImpl implements MemberManager {
         logger.info("hashed pwd: " + pwd);
         return pwd;
     }
-
 
 
     @Override
@@ -326,7 +325,7 @@ public class MemberManagerImpl implements MemberManager {
 
     String generateToken() {
         int nbTries = 0;
-        while(nbTries < 5){
+        while (nbTries < 5) {
             String uuid = createToken();
             logger.info("generating token: " + uuid);
             // checks if token already in use

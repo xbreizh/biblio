@@ -6,11 +6,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Named
-public class StringValidator {
+public class StringValidatorMember {
 
-    private static final String LOGIN="login";
-    private static final String NAME="name";
-    private static final String SHORT="short";
+    private static final String LOGIN = "login";
+    private static final String NAME = "name";
+    private static final String SHORT = "short";
 
     /**
      * Validate hex with regular expression
@@ -24,8 +24,8 @@ public class StringValidator {
         Pattern pattern;
         String[] names = {"firstname", "lastname"};
         String[] shortStandards = {"role", SHORT};
-        if(Arrays.asList(names).contains(type.toLowerCase()))type=NAME;
-        if(Arrays.asList(shortStandards).contains(type))type=SHORT;
+        if (Arrays.asList(names).contains(type.toLowerCase())) type = NAME;
+        if (Arrays.asList(shortStandards).contains(type)) type = SHORT;
         if (hex == null) {
             return false;
         }
@@ -56,10 +56,10 @@ public class StringValidator {
     }
 
     public boolean validateForUpdateMember(String type, String hex) {
-        if (type.equals(LOGIN) && (hex == null || hex.equals("")||hex.equals("?"))) return false;
+        if (type.equals(LOGIN) && (hex == null || hex.equals("") || hex.equals("?"))) return false;
         if (hex != null && !hex.equals("?") && !hex.equals("")) {
-                return validateExpression(type, hex);
-            }
+            return validateExpression(type, hex);
+        }
 
 
         return true;

@@ -13,7 +13,6 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
 
 import javax.inject.Inject;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-@Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD,scripts = "classpath:resetDb.sql")
+@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:resetDb.sql")
 class BookDAOImplTest {
     private Logger logger = Logger.getLogger(BookDAOImplTest.class);
 
@@ -33,7 +32,7 @@ class BookDAOImplTest {
     @BeforeEach
     @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
-        logger.info("size: "+bookDAO.getBooks().size());
+        logger.info("size: " + bookDAO.getBooks().size());
         logger.info("reset db");
     }
 
@@ -54,16 +53,8 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return true")
     void addBook() {
-        Book book = new Book();
-        book.setIsbn("jijndmme43");
-        book.setNbPages(123);
-        book.setEdition("edition");
-        book.setAuthor("Mark");
-        book.setTitle("baize");
-        book.setPublicationYear(1983);
-        book.setInsertDate(new Date());
-        book.setKeywords("one, two, three");
-        assertTrue(bookDAO.addBook(book));
+
+        assertTrue(bookDAO.addBook(new Book()));
 
 
     }

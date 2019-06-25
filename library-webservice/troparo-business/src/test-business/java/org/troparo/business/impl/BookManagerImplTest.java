@@ -5,18 +5,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
+import org.troparo.business.impl.validator.StringValidatorBook;
 import org.troparo.consumer.contract.BookDAO;
-import org.troparo.consumer.impl.BookDAOImpl;
 import org.troparo.model.Book;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
@@ -29,14 +25,17 @@ import static org.mockito.Mockito.when;
 class BookManagerImplTest {
 
     private BookManagerImpl bookManager2 = new BookManagerImpl();
-    private BookManager bookManager;
+    private BookManagerImpl bookManager;
     private BookDAO bookDAO;
+    private StringValidatorBook stringValidatorBook;
 
     @BeforeEach
     void init() {
         bookDAO = mock(BookDAO.class);
         bookManager = new BookManagerImpl();
         bookManager.setBookDAO(bookDAO);
+        stringValidatorBook = mock(StringValidatorBook.class);
+        bookManager.setStringValidatorBook(stringValidatorBook);
     }
 
     @Test
@@ -44,12 +43,42 @@ class BookManagerImplTest {
     void addBook() {
         Book book = new Book();
         book.setIsbn("isbn234");
-        when(bookDAO.existingISBN("ISBN234")).thenReturn(true);
+        book.setAuthor("author");
+        book.setTitle("title");
+        book.setNbPages(12);
+        book.setEdition("edition");
+        book.setPublicationYear(1983);
+        book.setKeywords("frfr, frfr");
+        when(stringValidatorBook.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(bookDAO.existingISBN("isbn234")).thenReturn(true);
         assertEquals("ISBN already existing", bookManager.addBook(book));
 
     }
 
     @Test
+    @DisplayName("should return empty string when insertion ok")
+    void addBook1() {
+        Book book = new Book();
+        book.setIsbn("isnhyehrj1");
+        book.setTitle("title");
+        book.setAuthor("author");
+        book.setInsertDate(new Date());
+        book.setPublicationYear(1983);
+        book.setEdition("edition");
+        book.setNbPages(123);
+        book.setKeywords("un");
+        when(stringValidatorBook.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(bookDAO.existingISBN("ISBN234")).thenReturn(false);
+        assertEquals("", bookManager.addBook(book));
+
+    }
+
+
+
+
+
+
+   /* @Test
     @DisplayName("should return error if isbn not 10 or 13 characters")
     void checkInsertion() {
         Book book = new Book();
@@ -78,7 +107,7 @@ class BookManagerImplTest {
         Book book = new Book();
         book.setEdition("momo");
         assertTrue(bookManager2.checkBookParamLength(book.getEdition()));
-    }
+    }*/
 
 
     @Test
@@ -434,7 +463,7 @@ class BookManagerImplTest {
         assertFalse(bookManager.isAvailable(12));
     }
 
-    @Test
+  /*  @Test
     @DisplayName("should return error is isbn not filled")
     void checkRequiredValuesNotNull() {
         BookManagerImpl bookManager1 = new BookManagerImpl();
@@ -458,5 +487,5 @@ class BookManagerImplTest {
         Book book = new Book();
         book.setIsbn("?");
         assertEquals("isbn should be filled", bookManager1.checkRequiredValuesNotNull(book));
-    }
+    }*/
 }

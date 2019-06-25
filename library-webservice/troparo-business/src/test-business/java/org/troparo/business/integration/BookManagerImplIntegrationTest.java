@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,17 +21,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class BookManagerImplIntegrationTest {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
+    @Inject
+    private BookManager bookManager;
 
     @Sql({"classpath:resetDb.sql"})
     @BeforeEach
     void reset() {
         logger.info("reset db");
     }
-
-
-    @Inject
-    private BookManager bookManager;
-
 
     @Test
     @DisplayName("should return books from database")

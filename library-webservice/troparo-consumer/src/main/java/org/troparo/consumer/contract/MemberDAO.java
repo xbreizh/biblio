@@ -2,8 +2,8 @@ package org.troparo.consumer.contract;
 
 import org.troparo.model.Member;
 
-import java.util.Map;
 import java.util.List;
+import java.util.Map;
 
 
 public interface MemberDAO {

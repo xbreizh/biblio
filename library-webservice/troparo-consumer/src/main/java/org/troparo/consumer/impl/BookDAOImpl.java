@@ -9,7 +9,10 @@ import org.troparo.model.Book;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 import static java.lang.Math.toIntExact;
 

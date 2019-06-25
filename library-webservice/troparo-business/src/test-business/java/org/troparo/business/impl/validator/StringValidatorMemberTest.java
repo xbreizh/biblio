@@ -12,11 +12,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
-class StringValidatorTest {
+class StringValidatorMemberTest {
     @Inject
-    private StringValidator stringValidator;
-
-
+    private StringValidatorMember stringValidatorMember;
 
 
     @Test
@@ -26,7 +24,7 @@ class StringValidatorTest {
         for (String login : wrongLoginList
         ) {
             System.out.println("Login: " + login);
-            assertFalse(stringValidator.validateExpression("login", login));
+            assertFalse(stringValidatorMember.validateExpression("login", login));
         }
     }
 
@@ -38,7 +36,7 @@ class StringValidatorTest {
         for (String login : validLoginList
         ) {
             System.out.println("Login: " + login);
-            assertTrue(stringValidator.validateExpression("login", login));
+            assertTrue(stringValidatorMember.validateExpression("login", login));
         }
     }
 
@@ -49,7 +47,7 @@ class StringValidatorTest {
         for (String password : passwordList
         ) {
             System.out.println("password: " + password);
-            assertFalse(stringValidator.validateExpression("password", password));
+            assertFalse(stringValidatorMember.validateExpression("password", password));
         }
     }
 
@@ -61,7 +59,7 @@ class StringValidatorTest {
         for (String password : passwordList
         ) {
             System.out.println("Password: " + password);
-            assertTrue(stringValidator.validateExpression("password", password));
+            assertTrue(stringValidatorMember.validateExpression("password", password));
         }
     }
 
@@ -72,7 +70,7 @@ class StringValidatorTest {
         for (String shortStandard : shortStandardList
         ) {
             System.out.println("shortStandard: " + shortStandard);
-            assertFalse(stringValidator.validateExpression("short", shortStandard));
+            assertFalse(stringValidatorMember.validateExpression("short", shortStandard));
         }
     }
 
@@ -84,7 +82,7 @@ class StringValidatorTest {
         for (String shortStandard : shortStandardList
         ) {
             System.out.println("LongStandard: " + shortStandard);
-            assertTrue(stringValidator.validateExpression("short", shortStandard));
+            assertTrue(stringValidatorMember.validateExpression("short", shortStandard));
         }
     }
 
@@ -96,7 +94,7 @@ class StringValidatorTest {
         for (String longStandard : longStandardList
         ) {
             System.out.println("longStandard: " + longStandard);
-            assertFalse(stringValidator.validateExpression("longStandard", longStandard));
+            assertFalse(stringValidatorMember.validateExpression("longStandard", longStandard));
         }
     }
 
@@ -108,7 +106,7 @@ class StringValidatorTest {
         for (String longStandard : longStandardList
         ) {
             System.out.println("Standard: " + longStandard);
-            assertTrue(stringValidator.validateExpression("longStandard", longStandard));
+            assertTrue(stringValidatorMember.validateExpression("longStandard", longStandard));
         }
     }
 
@@ -136,7 +134,7 @@ class StringValidatorTest {
         };
         for (String mail : mailListValid
         ) {
-            assertTrue(stringValidator.validateExpression("email", mail));
+            assertTrue(stringValidatorMember.validateExpression("email", mail));
         }
     }
 
@@ -164,7 +162,7 @@ class StringValidatorTest {
         for (String mail : mailListInvalid
         ) {
 
-            assertFalse(stringValidator.validateExpression("email", mail));
+            assertFalse(stringValidatorMember.validateExpression("email", mail));
         }
     }
 
@@ -173,9 +171,9 @@ class StringValidatorTest {
     @DisplayName("should return false if login empty, null or ?")
     void validateForUpdateMember() {
         assertAll(
-                () -> assertFalse(stringValidator.validateForUpdateMember("login", "")),
-                () -> assertFalse(stringValidator.validateForUpdateMember("login", "?")),
-                () -> assertFalse(stringValidator.validateForUpdateMember("login", null))
+                () -> assertFalse(stringValidatorMember.validateForUpdateMember("login", "")),
+                () -> assertFalse(stringValidatorMember.validateForUpdateMember("login", "?")),
+                () -> assertFalse(stringValidatorMember.validateForUpdateMember("login", null))
         );
 
     }
@@ -184,9 +182,9 @@ class StringValidatorTest {
     @DisplayName("should return true if value respects regex")
     void validateForUpdateMember1() {
         assertAll(
-                () -> assertTrue(stringValidator.validateForUpdateMember("password", "1248Er$")),
-                () -> assertTrue(stringValidator.validateForUpdateMember("firstName", "Corentin")),
-                () -> assertTrue(stringValidator.validateForUpdateMember("login", "Momo56"))
+                () -> assertTrue(stringValidatorMember.validateForUpdateMember("password", "1248Er$")),
+                () -> assertTrue(stringValidatorMember.validateForUpdateMember("firstName", "Corentin")),
+                () -> assertTrue(stringValidatorMember.validateForUpdateMember("login", "Momo56"))
 
         );
 
@@ -196,9 +194,9 @@ class StringValidatorTest {
     @DisplayName("should return true if value null, empty ? and type != login")
     void validateForUpdateMember2() {
         assertAll(
-                () -> assertTrue(stringValidator.validateForUpdateMember("password", "?")),
-                () -> assertTrue(stringValidator.validateForUpdateMember("firstName", "")),
-                () -> assertTrue(stringValidator.validateForUpdateMember("lastName", null))
+                () -> assertTrue(stringValidatorMember.validateForUpdateMember("password", "?")),
+                () -> assertTrue(stringValidatorMember.validateForUpdateMember("firstName", "")),
+                () -> assertTrue(stringValidatorMember.validateForUpdateMember("lastName", null))
 
         );
 
@@ -208,12 +206,12 @@ class StringValidatorTest {
     @Test
     void getException() {
         assertAll(
-                ()-> assertEquals("Login must be between 5 or 10 characters: ", stringValidator.getException("login")),
-                ()-> assertEquals("FirstName must be between 2 or 20 characters: ", stringValidator.getException("firstName")),
-                ()-> assertEquals("LastName must be between 2 or 20 characters: ", stringValidator.getException("lastName")),
-                ()-> assertEquals("Invalid Email: ", stringValidator.getException("email")),
-                ()-> assertEquals("Password should have between 2 and 10 characters, have at least a lower case, an upper case, a special character and a number", stringValidator.getException("password")),
-                ()-> assertEquals("Invalid entry", stringValidator.getException("ploc"))
+                () -> assertEquals("Login must be between 5 or 10 characters: ", stringValidatorMember.getException("login")),
+                () -> assertEquals("FirstName must be between 2 or 20 characters: ", stringValidatorMember.getException("firstName")),
+                () -> assertEquals("LastName must be between 2 or 20 characters: ", stringValidatorMember.getException("lastName")),
+                () -> assertEquals("Invalid Email: ", stringValidatorMember.getException("email")),
+                () -> assertEquals("Password should have between 2 and 10 characters, have at least a lower case, an upper case, a special character and a number", stringValidatorMember.getException("password")),
+                () -> assertEquals("Invalid entry", stringValidatorMember.getException("ploc"))
         );
     }
 }
