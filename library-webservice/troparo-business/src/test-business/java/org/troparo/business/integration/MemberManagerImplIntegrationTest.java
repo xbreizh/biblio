@@ -2,7 +2,6 @@ package org.troparo.business.integration;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.MemberManagerImpl;
 import org.troparo.business.impl.validator.StringValidator;
-import org.troparo.consumer.contract.MemberDAO;
-import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -159,36 +156,7 @@ class MemberManagerImplIntegrationTest {
 
     }
 
-    @Test
-    @DisplayName("should return false when password null or ? or empty")
-    void updatePassword() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        String[] wrongPasswords = {"", null, "?"};
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbPassword = "pwd123";
-        memberDb.setPassword(dbPassword);
-        for (String newPassword : wrongPasswords
-        ) {
-            newMember.setPassword(newPassword);
-            assertFalse(memberManager.updatePassword(memberDb, newMember));
-        }
 
-    }
-
-    @Test
-    @DisplayName("should return true when password valid")
-    void updatePassword1() {
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        Member newMember = new Member();
-        Member memberDb = new Member();
-        String dbPassword = "pwd123";
-        memberDb.setPassword(dbPassword);
-        String newDbPassword = "newPwd45";
-        newMember.setPassword(newDbPassword);
-        assertTrue(memberManager.updatePassword(memberDb, newMember));
-
-    }
 
     @Test
     @DisplayName("should return false when lastname null or ? or empty")
@@ -254,42 +222,51 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should update Member")
-    void transfertUpdatedDetails(){
+    void transfertUpdatedDetails() {
         MemberManagerImpl memberManager1 = new MemberManagerImpl();
         Member memberDb = new Member();
         String firstName = "Joe";
         String lastName = "Morris";
-        String email ="joe.morris@frfr.te";
+        String email = "joe.morris@frfr.te";
         String role = "admin";
-        String pwd = "233";
         Member newMember = new Member();
 
         newMember.setFirstName(firstName);
         newMember.setLastName(lastName);
         newMember.setEmail(email);
         newMember.setRole(role);
-        newMember.setPassword(pwd);
         assertAll(
-                ()-> assertEquals(firstName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getFirstName()),
-                ()-> assertEquals(lastName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getLastName()),
-                ()-> assertEquals(email, memberManager1.transfertUpdatedDetails(newMember, memberDb).getEmail()),
-                ()-> assertTrue(memberManager1.checkPassword(pwd, memberManager1.transfertUpdatedDetails(newMember, memberDb).getPassword())),
-                ()-> assertEquals(role, memberManager1.transfertUpdatedDetails(newMember, memberDb).getRole())
+                () -> assertEquals(firstName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getFirstName()),
+                () -> assertEquals(lastName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getLastName()),
+                () -> assertEquals(email, memberManager1.transfertUpdatedDetails(newMember, memberDb).getEmail()),
+                () -> assertEquals(role, memberManager1.transfertUpdatedDetails(newMember, memberDb).getRole())
         );
 
     }
 
     @Test
     @DisplayName("should return empty string")
-    void updateMember4(){
-        Member member1 = memberManager.getMemberById(1);
-        String firstName = "Joe";
-        member1.setFirstName(firstName);
-        memberManager.updateMember(member1);
-        assertEquals(firstName, memberManager.getMemberById(1).getFirstName());
+    void updateMember4() {
+        Member member1 = memberManager.getMemberById(2);
+        String email = "email@111.222.333.44444";
+        member1.setEmail(email);
+        assertEquals("", memberManager.updateMember(member1));
     }
 
+    @Test
+    @DisplayName("should return \\wrong credentials\\ ")
+    void getToken() {
+        assertEquals("wrong credentials",memberManager.getToken("LOKII", "123"));
+    }
 
+    @Test
+    @DisplayName("should return a token")
+    void getToken1(){
+        String login = "lokii";
+        String password = "123";
+        memberManager.updatePassword("lokii", "LOKI@LOKI.LOKII", "123");
+        assertNotEquals("wrong credentials", memberManager.getToken(login, password));
+    }
 
 
 }

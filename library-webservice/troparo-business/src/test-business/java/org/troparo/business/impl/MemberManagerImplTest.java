@@ -390,7 +390,6 @@ class MemberManagerImplTest {
     void checkPassword() {
         String password1 = "test123";
         String password2 = memberManager.encryptPassword(password1);
-        String password3 = "plouf";
         assertTrue(memberManager.checkPassword(password1, password2));
     }
 

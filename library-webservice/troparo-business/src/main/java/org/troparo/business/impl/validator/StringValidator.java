@@ -21,6 +21,7 @@ public class StringValidator {
 
 
     public boolean validateExpression(String type, String hex) {
+        if(type.equals("email"))hex.toLowerCase();
         Pattern pattern;
         String[] names = {"firstname", "lastname"};
         String[] shortStandards = {"role", SHORT};

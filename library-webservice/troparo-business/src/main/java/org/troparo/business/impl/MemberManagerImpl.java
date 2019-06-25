@@ -84,7 +84,6 @@ public class MemberManagerImpl implements MemberManager {
                 {"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
                 {"lastName", member.getLastName()},
-                {"password", member.getPassword()},
                 {"email", member.getEmail()}};
 
         for (String[] param : memberParameters) {
@@ -163,7 +162,6 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("ex " + exception);
             return exception;
         }
-        Member memberToTestIfAnyChange = memberFromDatabase;
         memberFromDatabase = transfertUpdatedDetails(member, memberFromDatabase);
 
         memberDAO.updateMember(memberFromDatabase);
@@ -174,7 +172,6 @@ public class MemberManagerImpl implements MemberManager {
     public Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
         updateFirstName(memberFromDatabase, newMember);
         updateLastName(memberFromDatabase, newMember);
-        updatePassword(memberFromDatabase, newMember);
         updateEmail(memberFromDatabase, newMember);
         updateRole(memberFromDatabase, newMember);
         return memberFromDatabase;
@@ -198,14 +195,6 @@ public class MemberManagerImpl implements MemberManager {
         return false;
     }
 
-    public boolean updatePassword(Member memberFromDatabase, Member newMember) {
-        String pass = newMember.getPassword();
-        if (pass != null && !pass.equals("") && !pass.equals("?")) {
-            memberFromDatabase.setPassword(encryptPassword(pass));
-            return true;
-        }
-        return false;
-    }
 
     public boolean updateLastName(Member memberFromDatabase, Member newMember) {
         String lastName = newMember.getLastName();
