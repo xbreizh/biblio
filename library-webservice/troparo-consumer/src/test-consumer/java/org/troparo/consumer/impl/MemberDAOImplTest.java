@@ -23,15 +23,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(executionPhase= Sql.ExecutionPhase.BEFORE_TEST_METHOD,scripts = "classpath:resetDb.sql")
 @Transactional
 class MemberDAOImplTest {
     @Inject
     MemberDAO memberDAO;
     private Logger logger = Logger.getLogger(MemberDAOImplTest.class);
 
-    @Sql({"classpath:resetDb.sql"})
+
     @BeforeEach
     void reset() {
+        System.out.println("size: "+memberDAO.getAllMembers().size());
         logger.info("reset db");
     }
 
