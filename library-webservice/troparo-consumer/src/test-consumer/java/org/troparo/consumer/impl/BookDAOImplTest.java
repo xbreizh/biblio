@@ -30,6 +30,7 @@ class BookDAOImplTest {
     private BookDAO bookDAO;
 
     @BeforeEach
+    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         logger.info("size: "+bookDAO.getBooks().size());
         logger.info("reset db");

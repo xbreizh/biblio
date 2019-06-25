@@ -9,26 +9,10 @@ services:
       - 9000:9000
       - 9092:9092
     container_name: sonarqube
-    networks:
-      - troparo  
-    environment:
-      - sonar.jdbc.url=jdbc:postgresql://dbsonar:5432/sonar
     volumes:
       - ./sonarqube/sonarqube_home:/opt/sonarqube/data
-      - ./sonarqube/sonarqube_conf:/opt/sonarqube/conf
-      - ./sonarqube/sonarqube_data:/opt/sonarqube/data
-      - ./sonarqube/sonarqube_extensions:/opt/sonarqube/extensions  
-  dbsonar:
-    image: postgres
     networks:
-      - troparo
-    environment:
-      - POSTGRES_USER=sonar
-      - POSTGRES_PASSWORD=sonar
-    volumes:
-      - ./dbsonar/postgresql:/var/lib/postgresql
-      # This needs explicit mapping due to https://github.com/docker-library/postgres/blob/4e48e3228a30763913ece952c611e5e9b95c8759/Dockerfile.template#L52
-      - ./dbsonar/postgresql_data:/var/lib/postgresql/data
+      - troparo    
   jenkins:
     build:
       context: jenkins/
@@ -47,7 +31,7 @@ services:
       - troparo  
   # getting postgres DB
   db:
-    image: postgres
+    image: postgres:11.1-alpine
     container_name: library-db
     ports:
       - 5532:5432
@@ -63,7 +47,7 @@ services:
     networks:
       - troparo
   dbtest:
-    image: postgres
+    image: postgres:11.1-alpine
     container_name: library-dbtest
     ports:
       - 5432:5432
@@ -126,11 +110,6 @@ services:
 volumes:  
   pg-data:
   logs:
-  sonarqube_conf:
-  sonarqube_data:
-  sonarqube_extensions:
-  postgresql:
-  postgresql_data:
 
 networks:
   troparo:

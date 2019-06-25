@@ -15,6 +15,8 @@ CREATE SCHEMA TROPARO;
 -- Specify timezone
 SET TIME ZONE 'CET';
 
+CREATE SEQUENCE hibernate_sequence START 1;
+
 CREATE TABLE public."member"
 (
     id          SERIAL,
