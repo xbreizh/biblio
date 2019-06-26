@@ -167,10 +167,14 @@ public class BookManagerImpl implements BookManager {
     }
 
     int transferNbPagesToSimilarBooks(Book book, Book b) {
+        if (book != null && b != null) {
         if (book.getNbPages() != 0) {
             b.setNbPages(book.getNbPages());
         }
         return b.getNbPages();
+        } else {
+            return 0;
+        }
 
     }
 

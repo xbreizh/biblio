@@ -72,6 +72,25 @@ class BookManagerImplTest {
 
     }
 
+    @Test
+    @DisplayName("should return \\there was an issue while inserting the book\\ when insertion ko")
+    void addBook2() {
+        Book book = new Book();
+        book.setIsbn("isnhyehrj1");
+        book.setTitle("title");
+        book.setAuthor("author");
+        book.setInsertDate(new Date());
+        book.setPublicationYear(1983);
+        book.setEdition("edition");
+        book.setNbPages(123);
+        book.setKeywords("un");
+        when(stringValidatorBook.validateExpression(anyString(), anyString())).thenReturn(true);
+        when(bookDAO.existingISBN("ISBN234")).thenReturn(false);
+        when(bookDAO.addBook(book)).thenReturn(false);
+        assertEquals("there was an issue while inserting the book", bookManager.addBook(book));
+
+    }
+
 
     @Test
     @DisplayName("should return books from DAO")
@@ -308,7 +327,7 @@ class BookManagerImplTest {
         for (String s : authors
         ) {
             book.setAuthor(s);
-            assertNull(bookManager2.transferTitleToSimilarBooks(book, new Book()));
+            assertNull(bookManager2.transferAuthorToSimilarBooks(book, new Book()));
         }
 
     }
@@ -362,12 +381,28 @@ class BookManagerImplTest {
     @DisplayName("should return null if invalid value")
     void transferNbPagesToSimilarBooks() {
         Book book = new Book();
-        String[] keywords = {null, "", "?"};
-        for (String s : keywords
-        ) {
-            book.setKeywords(s);
-            assertNull(bookManager.transferKeywordsToSimilarBooks(book, new Book()));
-        }
+        assertEquals(0, bookManager.transferNbPagesToSimilarBooks(book, new Book()));
+
+
+    }
+
+    @Test
+    @DisplayName("should return null if invalid value")
+    void transferNbPagesToSimilarBooks1() {
+        Book book = new Book();
+        int nbPages = 18;
+        book.setNbPages(nbPages);
+        assertEquals(nbPages, bookManager.transferNbPagesToSimilarBooks(book, new Book()));
+
+    }
+
+    @Test
+    @DisplayName("should return null if any book is null")
+    void transferNbPagesToSimilarBooks2() {
+        assertAll(
+                () -> assertEquals(0,bookManager2.transferNbPagesToSimilarBooks(null, new Book())),
+                () -> assertEquals(0,bookManager2.transferNbPagesToSimilarBooks(new Book(), null))
+        );
 
     }
 
@@ -400,7 +435,7 @@ class BookManagerImplTest {
         for (String edition : editions
         ) {
             book.setAuthor(edition);
-            assertNull(bookManager2.transferTitleToSimilarBooks(book, new Book()));
+            assertNull(bookManager2.transferEditionToSimilarBooks(book, new Book()));
         }
 
     }
