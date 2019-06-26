@@ -295,28 +295,52 @@ class MemberServiceImplTest {
         List<Member> list = new ArrayList<>();
         Member member = new Member();
         list.add(member);
-        //when(memberManager.getMembersByCriterias(map)).thenReturn(list);
         assertDoesNotThrow(() -> memberService.getMemberByCriterias(parameters));
     }
 
     @Test
     @DisplayName("should throw an exception when getting members by Criterias")
     void getMemberByCriterias1() {
-        //when(connectService.checkToken(anyString())).thenReturn(true);
-        GetMemberByCriteriasRequestType parameters = new GetMemberByCriteriasRequestType();/*
-        parameters.setToken("de");*/
-        /*MemberCriterias memberCriterias = new MemberCriterias();
-        //memberCriterias.setLogin("bobb");
-        parameters.setMemberCriterias(memberCriterias);*/
-       /* Map<String, String> map = new HashMap<>();
-        map.put("login", "bobb");*/
-        /*logger.info(map.size());
-        List<Member> list = new ArrayList<>();
-        Member member = new Member();
-        list.add(member);*/
-        // when(memberManager.getMembersByCriterias(map)).thenReturn(list);
+        GetMemberByCriteriasRequestType parameters = new GetMemberByCriteriasRequestType();
         assertThrows(BusinessExceptionMember.class, () -> memberService.getMemberByCriterias(parameters));
     }
+
+    @Test
+    @DisplayName("")
+    void convertMemberIntoMemberTypeOut() throws ParseException {
+        List<Member> memberList = new ArrayList<>();
+        Member member = new Member();
+        int id  = 3;
+        String login = "login";
+        String firstName = "firstName";
+        String lastname = "lastName";
+        String email = "email";
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date dateJoin = simpleDateFormat.parse("2018-09-09 12:02:48");
+        member.setId(id);
+        member.setLogin(login);
+        member.setLastName(lastname);
+        member.setFirstName(firstName);
+        member.setEmail(email);
+        member.setDateJoin(dateJoin);
+        memberList.add(member);
+        MemberTypeOut memberTypeOut = memberService.convertMemberIntoMemberTypeOut(memberList).getMemberTypeOut().get(0);
+        assertAll(
+                ()-> assertEquals(login, memberTypeOut.getLogin()),
+                ()-> assertEquals(firstName, memberTypeOut.getFirstName()),
+                ()-> assertEquals(lastname, memberTypeOut.getLastName()),
+                ()-> assertEquals(email, memberTypeOut.getEmail()),
+                ()-> assertEquals(id, memberTypeOut.getId()),
+                ()-> assertEquals(memberService.convertDateIntoXmlDate(dateJoin), memberTypeOut.getDateJoin())
+
+        );
+
+
+    }
+
+
+
 
     @Test
     @DisplayName("shouldn't throw exception when removing member")

@@ -32,10 +32,10 @@ public class MemberServiceImpl implements IMemberService {
     private ConnectServiceImpl authentication;
 
 
-    private List<Member> memberList = new ArrayList<>();
 
 
-    private MemberListType memberListType = new MemberListType();
+
+    //private MemberListType memberListType = new MemberListType();
 
     // Create
     @Override
@@ -198,6 +198,8 @@ public class MemberServiceImpl implements IMemberService {
     // Get All
     @Override
     public MemberListResponseType getAllMembers(MemberListRequestType parameters) throws BusinessExceptionMember {
+        MemberListType memberListType;
+        List<Member> memberList;
         checkAuthentication(parameters.getToken());
         memberList = memberManager.getMembers();
         logger.info("size list: " + memberList.size());
@@ -205,7 +207,7 @@ public class MemberServiceImpl implements IMemberService {
         MemberListResponseType memberListResponseType = new MemberListResponseType();
 
 
-        convertMemberIntoMemberTypeOut();
+        memberListType = convertMemberIntoMemberTypeOut(memberList);
         // add memberType to the movieListType
 
         memberListResponseType.setMemberListType(memberListType);
@@ -216,7 +218,8 @@ public class MemberServiceImpl implements IMemberService {
     // Get List By Criterias
     @Override
     public GetMemberByCriteriasResponseType getMemberByCriterias(GetMemberByCriteriasRequestType parameters) throws BusinessExceptionMember {
-
+        MemberListType memberListType = new MemberListType();
+        List<Member> memberList ;
         checkAuthentication(parameters.getToken());
         MemberCriterias criterias = parameters.getMemberCriterias();
         Map<String, String> newMap = cleanCriteriasMap(criterias);
@@ -227,7 +230,7 @@ public class MemberServiceImpl implements IMemberService {
         GetMemberByCriteriasResponseType getMemberByCriteriasResponseType = new GetMemberByCriteriasResponseType();
         logger.info("memberListType beg: " + memberListType.getMemberTypeOut().size());
 
-        convertMemberIntoMemberTypeOut();
+        memberListType = convertMemberIntoMemberTypeOut(memberList);
 
         logger.info("memberListType end: " + memberListType.getMemberTypeOut().size());
         getMemberByCriteriasResponseType.setMemberListType(memberListType);
@@ -251,22 +254,6 @@ public class MemberServiceImpl implements IMemberService {
         }
         return map;
 
-
-      /*  if (criterias.getLogin() != null) map.put("Login", criterias.getLogin().toUpperCase());
-        if (criterias.getFirstName() != null) map.put("FirstName", criterias.getFirstName().toUpperCase());
-        if (criterias.getLastName() != null) map.put("LastName", criterias.getLastName().toUpperCase());
-        if (criterias.getEmail() != null) map.put("Email", criterias.getEmail().toUpperCase());
-        if (criterias.getRole() != null) map.put("role", criterias.getRole().toUpperCase());
-        logger.info("map: " + map);
-
-        Map<String, String> newMap = new HashMap<>();
-        for (Map.Entry entry : map.entrySet()
-        ) {
-            if (!entry.getValue().equals("") && !entry.getValue().equals("?")) {
-                newMap.put(entry.getKey().toString(), entry.getValue().toString());
-            }
-        }
-        return newMap;*/
     }
 
 
@@ -289,9 +276,9 @@ public class MemberServiceImpl implements IMemberService {
 
 
     // Converts Member from Business into output
-    private void convertMemberIntoMemberTypeOut() {
+    MemberListType convertMemberIntoMemberTypeOut(List<Member> memberList ) {
+        MemberListType memberListType = new MemberListType();
         MemberTypeOut memberTypeOut;
-        memberListType.getMemberTypeOut().clear();
         for (Member member : memberList) {
 
             // set values retrieved from DAO class
@@ -312,6 +299,7 @@ public class MemberServiceImpl implements IMemberService {
             memberListType.getMemberTypeOut().add(memberTypeOut);
         }
         logger.info("memberListType end: " + memberListType.getMemberTypeOut().size());
+        return memberListType;
     }
 
     XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
