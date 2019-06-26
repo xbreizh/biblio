@@ -107,26 +107,10 @@ public class MemberServiceImpl implements IMemberService {
     public GetMemberByIdResponseType getMemberById(GetMemberByIdRequestType parameters) throws BusinessExceptionMember {
         checkAuthentication(parameters.getToken());
         logger.info("new method added");
-        GetMemberByIdResponseType rep = new GetMemberByIdResponseType();
-        MemberTypeOut bt = new MemberTypeOut();
+        GetMemberByIdResponseType responseType = new GetMemberByIdResponseType();
+        MemberTypeOut memberTypeOut = new MemberTypeOut();
         Member member = memberManager.getMemberById(parameters.getId());
-        if (member == null) {
-            throw new BusinessExceptionMember("no member found");
-        } else {
-            bt.setId(member.getId());
-            bt.setLogin(member.getLogin());
-            bt.setFirstName(member.getFirstName());
-            bt.setLastName(member.getLastName());
-            bt.setEmail(member.getEmail());
-            XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(member.getDateJoin());
-            bt.setDateJoin(xmlCalendar);
-
-
-            bt.setLoanListType(convertingListOfLoansIntoLoanListMember(member.getLoanList()));
-            rep.setMemberTypeOut(bt);
-
-        }
-        return rep;
+        return (GetMemberByIdResponseType) getMemberResponseType(responseType, memberTypeOut, member);
     }
 
     LoanListType convertingListOfLoansIntoLoanListMember(List<Loan> loanList) {
@@ -167,26 +151,38 @@ public class MemberServiceImpl implements IMemberService {
     public GetMemberByLoginResponseType getMemberByLogin(GetMemberByLoginRequestType parameters) throws BusinessExceptionMember {
         checkAuthentication(parameters.getToken());
         logger.info("new method added");
-        GetMemberByLoginResponseType rep = new GetMemberByLoginResponseType();
+        GetMemberByLoginResponseType responseType = new GetMemberByLoginResponseType();
         MemberTypeOut bt = new MemberTypeOut();
         Member member = memberManager.getMemberByLogin(parameters.getLogin().toUpperCase());
+        return (GetMemberByLoginResponseType) getMemberResponseType(responseType, bt, member);
+    }
+
+    Object getMemberResponseType(Object response, MemberTypeOut memberTypeOut, Member member) throws BusinessExceptionMember {
+
         if (member == null) {
             throw new BusinessExceptionMember("no member found");
         } else {
-            bt.setId(member.getId());
-            bt.setLogin(member.getLogin());
-            bt.setFirstName(member.getFirstName());
-            bt.setLastName(member.getLastName());
-            bt.setEmail(member.getEmail());
+            memberTypeOut.setId(member.getId());
+            memberTypeOut.setLogin(member.getLogin());
+            memberTypeOut.setFirstName(member.getFirstName());
+            memberTypeOut.setLastName(member.getLastName());
+            memberTypeOut.setEmail(member.getEmail());
             XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(member.getDateJoin());
-            bt.setDateJoin(xmlCalendar);
+            memberTypeOut.setDateJoin(xmlCalendar);
 
             // getting the loanList
 
-            bt.setLoanListType(convertingListOfLoansIntoLoanListMember(member.getLoanList()));
-            rep.setMemberTypeOut(bt);
+            memberTypeOut.setLoanListType(convertingListOfLoansIntoLoanListMember(member.getLoanList()));
+            if(response.getClass()==GetMemberByLoginResponseType.class){
+                GetMemberByLoginResponseType responseType = new GetMemberByLoginResponseType();
+                responseType.setMemberTypeOut(memberTypeOut);
+                return responseType;
+            }else{
+                GetMemberByIdResponseType responseType = new GetMemberByIdResponseType();
+                responseType.setMemberTypeOut(memberTypeOut);
+                return responseType;
+            }
         }
-        return rep;
     }
 
 
