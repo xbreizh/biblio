@@ -35,6 +35,10 @@ public class MailManagerImpl implements MailManager {
         List<Loan> loans = loanManager.getLoansByCriterias(criterias);
 
         logger.info("loans: " + loans.size());
+        return gettingDataForLoan(loans);
+    }
+
+    List<Mail> gettingDataForLoan(List<Loan> loans) {
         List<Mail> mailList = new ArrayList<>();
         for (Loan loan : loans
         ) {
