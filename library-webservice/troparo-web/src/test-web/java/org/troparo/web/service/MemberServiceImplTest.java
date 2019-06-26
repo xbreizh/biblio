@@ -1,6 +1,5 @@
 package org.troparo.web.service;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.member.*;
 import org.troparo.model.Book;
+import org.troparo.model.Loan;
 import org.troparo.model.Member;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 
@@ -67,30 +67,6 @@ class MemberServiceImplTest {
     void checkAuthentication2() {
         assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(null));
     }
-
-/*    @Test
-    @DisplayName("should clean map")
-    void cleanCriteriasMap(){
-        MemberCriterias memberCriterias = new MemberCriterias();
-        String role = "role";
-        String login = "login";
-        String firstName = "firstName";
-        String lastName = "lastName";
-        String email = "email";
-
-        memberCriterias.setRole(role);
-        memberCriterias.setLastName(lastName);
-        memberCriterias.setLogin(login);
-        memberCriterias.setEmail(email);
-        memberCriterias.setFirstName(firstName);
-
-    *//*    assertAll(
-                ()-> assertEquals(role, memberService.)
-        );*//*
-    fail();
-
-    }*/
-
 
 
     @Test
@@ -196,14 +172,14 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should return exception when getting member by Id")
-    void getMemberById2(){
+    void getMemberById2() {
         when(connectService.checkToken(anyString())).thenReturn(true);
         GetMemberByIdRequestType parameters = new GetMemberByIdRequestType();
         parameters.setToken("fr");
         parameters.setId(3);
         when(memberManager.getMemberById(anyInt())).thenReturn(null);
         //assertDoesNotThrow(() -> memberService.getMemberById(parameters));
-        assertThrows(BusinessExceptionMember.class, ()-> memberService.getMemberById(parameters));
+        assertThrows(BusinessExceptionMember.class, () -> memberService.getMemberById(parameters));
     }
 
     @Test
@@ -226,18 +202,18 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should return exception when getting member by Login")
-    void getMemberByLogin1(){
+    void getMemberByLogin1() {
         when(connectService.checkToken(anyString())).thenReturn(true);
         GetMemberByLoginRequestType parameters = new GetMemberByLoginRequestType();
         parameters.setToken("fr");
         parameters.setLogin("Caren");
         when(memberManager.getMemberByLogin(anyString())).thenReturn(null);
-        assertThrows(BusinessExceptionMember.class, ()-> memberService.getMemberByLogin(parameters));
+        assertThrows(BusinessExceptionMember.class, () -> memberService.getMemberByLogin(parameters));
     }
 
     @Test
     @DisplayName("should convertBookIntoBookTypeOut")
-    void convertBookIntoBookTypeOut(){
+    void convertBookIntoBookTypeOut() {
         Book book = new Book();
         int id = 3;
         String isbn = "isbn123";
@@ -256,14 +232,14 @@ class MemberServiceImplTest {
         book.setPublicationYear(publicationYear);
         book.setKeywords(keywords);
         assertAll(
-                ()-> assertEquals(id, memberService.convertBookIntoBookTypeOut(book).getId()),
-                ()-> assertEquals(isbn, memberService.convertBookIntoBookTypeOut(book).getISBN()),
-                ()-> assertEquals(title, memberService.convertBookIntoBookTypeOut(book).getTitle()),
-                ()-> assertEquals(author, memberService.convertBookIntoBookTypeOut(book).getAuthor()),
-                ()-> assertEquals(edition, memberService.convertBookIntoBookTypeOut(book).getEdition()),
-                ()-> assertEquals(nbPages, memberService.convertBookIntoBookTypeOut(book).getNbPages()),
-                ()-> assertEquals(publicationYear, memberService.convertBookIntoBookTypeOut(book).getPublicationYear()),
-                ()-> assertEquals(keywords, memberService.convertBookIntoBookTypeOut(book).getKeywords())
+                () -> assertEquals(id, memberService.convertBookIntoBookTypeOut(book).getId()),
+                () -> assertEquals(isbn, memberService.convertBookIntoBookTypeOut(book).getISBN()),
+                () -> assertEquals(title, memberService.convertBookIntoBookTypeOut(book).getTitle()),
+                () -> assertEquals(author, memberService.convertBookIntoBookTypeOut(book).getAuthor()),
+                () -> assertEquals(edition, memberService.convertBookIntoBookTypeOut(book).getEdition()),
+                () -> assertEquals(nbPages, memberService.convertBookIntoBookTypeOut(book).getNbPages()),
+                () -> assertEquals(publicationYear, memberService.convertBookIntoBookTypeOut(book).getPublicationYear()),
+                () -> assertEquals(keywords, memberService.convertBookIntoBookTypeOut(book).getKeywords())
         );
 
 
@@ -310,7 +286,7 @@ class MemberServiceImplTest {
     void convertMemberIntoMemberTypeOut() throws ParseException {
         List<Member> memberList = new ArrayList<>();
         Member member = new Member();
-        int id  = 3;
+        int id = 3;
         String login = "login";
         String firstName = "firstName";
         String lastname = "lastName";
@@ -327,19 +303,71 @@ class MemberServiceImplTest {
         memberList.add(member);
         MemberTypeOut memberTypeOut = memberService.convertMemberIntoMemberTypeOut(memberList).getMemberTypeOut().get(0);
         assertAll(
-                ()-> assertEquals(login, memberTypeOut.getLogin()),
-                ()-> assertEquals(firstName, memberTypeOut.getFirstName()),
-                ()-> assertEquals(lastname, memberTypeOut.getLastName()),
-                ()-> assertEquals(email, memberTypeOut.getEmail()),
-                ()-> assertEquals(id, memberTypeOut.getId()),
-                ()-> assertEquals(memberService.convertDateIntoXmlDate(dateJoin), memberTypeOut.getDateJoin())
+                () -> assertEquals(login, memberTypeOut.getLogin()),
+                () -> assertEquals(firstName, memberTypeOut.getFirstName()),
+                () -> assertEquals(lastname, memberTypeOut.getLastName()),
+                () -> assertEquals(email, memberTypeOut.getEmail()),
+                () -> assertEquals(id, memberTypeOut.getId()),
+                () -> assertEquals(memberService.convertDateIntoXmlDate(dateJoin), memberTypeOut.getDateJoin())
 
         );
 
 
     }
 
+    @Test
+    @DisplayName("should return empty list if loanList is empty")
+    void convertingListOfLoansIntoLoanListMember()  {
+        List<Loan> loanList = new ArrayList<>();
+        assertTrue(memberService.convertingListOfLoansIntoLoanListMember(loanList).getLoanTypeOut().isEmpty());
 
+    }
+
+    @Test
+    @DisplayName("should convert list<Loan> into LoanListType")
+    void convertingListOfLoansIntoLoanListMember1() throws ParseException {
+        List<Loan> loanList = new ArrayList<>();
+        Loan loan = new Loan();
+        int id = 3;
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2017-09-09 12:02:48");
+        Date plannedEndDate = simpleDateFormat.parse("2018-09-09 12:02:48");
+        Date endDate = simpleDateFormat.parse("2018-19-09 12:02:48");
+        Book book = new Book();
+        String isbn = "isbn123";
+        String title = "title";
+        String author = "author";
+        String edition = "edition";
+        int nbPages = 132;
+        int publicationYear = 1980;
+        String keywords = "";
+        book.setId(id);
+        book.setIsbn(isbn);
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setEdition(edition);
+        book.setNbPages(nbPages);
+        book.setPublicationYear(publicationYear);
+        book.setKeywords(keywords);
+        loan.setBook(book);
+        loan.setPlannedEndDate(plannedEndDate);
+        loan.setEndDate(endDate);
+        loan.setStartDate(startDate);
+        loan.setId(id);
+        loanList.add(loan);
+        LoanTypeOut loanTypeOut = memberService.convertingListOfLoansIntoLoanListMember(loanList).getLoanTypeOut().get(0);
+
+        assertAll(
+                () -> assertEquals(title, loanTypeOut.getBookTypeOut().getTitle()),
+                () -> assertEquals(memberService.convertDateIntoXmlDate(startDate), loanTypeOut.getStartDate()),
+                () -> assertEquals(memberService.convertDateIntoXmlDate(plannedEndDate), loanTypeOut.getPlannedEndDate()),
+                () -> assertEquals(memberService.convertDateIntoXmlDate(endDate), loanTypeOut.getEndDate())
+
+        );
+
+
+    }
 
 
     @Test
@@ -366,7 +394,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should return null if date null")
-    void convertDateIntoXmlDate(){
+    void convertDateIntoXmlDate() {
 
         assertNull(memberService.convertDateIntoXmlDate(null));
     }

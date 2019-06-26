@@ -32,11 +32,6 @@ public class MemberServiceImpl implements IMemberService {
     private ConnectServiceImpl authentication;
 
 
-
-
-
-    //private MemberListType memberListType = new MemberListType();
-
     // Create
     @Override
     public AddMemberResponseType addMember(AddMemberRequestType parameters) throws BusinessExceptionMember {
@@ -127,30 +122,30 @@ public class MemberServiceImpl implements IMemberService {
             bt.setDateJoin(xmlCalendar);
 
 
-            bt.setLoanListType(settingLoanListMember(member.getLoanList()));
+            bt.setLoanListType(convertingListOfLoansIntoLoanListMember(member.getLoanList()));
             rep.setMemberTypeOut(bt);
 
         }
         return rep;
     }
 
-    private LoanListType settingLoanListMember(List<Loan> loanList) {
+    LoanListType convertingListOfLoansIntoLoanListMember(List<Loan> loanList) {
         LoanListType loanListType = new LoanListType();
 
         for (Loan l : loanList
         ) {
-            LoanTypeOut lout = new LoanTypeOut();
-            lout.setId(l.getId());
+            LoanTypeOut loanTypeOut = new LoanTypeOut();
+            loanTypeOut.setId(l.getId());
             XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(l.getStartDate());
-            lout.setStartDate(xmlCalendar);
+            loanTypeOut.setStartDate(xmlCalendar);
             xmlCalendar = convertDateIntoXmlDate(l.getPlannedEndDate());
-            lout.setPlannedEndDate(xmlCalendar);
+            loanTypeOut.setPlannedEndDate(xmlCalendar);
             if (l.getEndDate() != null) {
                 xmlCalendar = convertDateIntoXmlDate(l.getEndDate());
-                lout.setEndDate(xmlCalendar);
+                loanTypeOut.setEndDate(xmlCalendar);
             }
-            lout.setBookTypeOut(convertBookIntoBookTypeOut(l.getBook()));
-            loanListType.getLoanTypeOut().add(lout);
+            loanTypeOut.setBookTypeOut(convertBookIntoBookTypeOut(l.getBook()));
+            loanListType.getLoanTypeOut().add(loanTypeOut);
         }
         return loanListType;
     }
@@ -188,7 +183,7 @@ public class MemberServiceImpl implements IMemberService {
 
             // getting the loanList
 
-            bt.setLoanListType(settingLoanListMember(member.getLoanList()));
+            bt.setLoanListType(convertingListOfLoansIntoLoanListMember(member.getLoanList()));
             rep.setMemberTypeOut(bt);
         }
         return rep;
@@ -219,7 +214,7 @@ public class MemberServiceImpl implements IMemberService {
     @Override
     public GetMemberByCriteriasResponseType getMemberByCriterias(GetMemberByCriteriasRequestType parameters) throws BusinessExceptionMember {
         MemberListType memberListType = new MemberListType();
-        List<Member> memberList ;
+        List<Member> memberList;
         checkAuthentication(parameters.getToken());
         MemberCriterias criterias = parameters.getMemberCriterias();
         Map<String, String> newMap = cleanCriteriasMap(criterias);
@@ -246,9 +241,9 @@ public class MemberServiceImpl implements IMemberService {
                 {"role", criterias.getRole()},
                 {"email", criterias.getEmail()}};
 
-        for (String[] s: criteriaList
-             ) {
-            if(s[0]!=null && !s[0].equalsIgnoreCase("") || !s[0].equalsIgnoreCase("?")){
+        for (String[] s : criteriaList
+        ) {
+            if (s[0] != null && !s[0].equalsIgnoreCase("") || !s[0].equalsIgnoreCase("?")) {
                 map.put(s[0], s[1]);
             }
         }
@@ -276,7 +271,7 @@ public class MemberServiceImpl implements IMemberService {
 
 
     // Converts Member from Business into output
-    MemberListType convertMemberIntoMemberTypeOut(List<Member> memberList ) {
+    MemberListType convertMemberIntoMemberTypeOut(List<Member> memberList) {
         MemberListType memberListType = new MemberListType();
         MemberTypeOut memberTypeOut;
         for (Member member : memberList) {
