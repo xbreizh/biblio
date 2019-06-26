@@ -212,14 +212,12 @@ public class BookServiceImpl implements IBookService {
     public GetBookByCriteriasResponseType getBookByCriterias(GetBookByCriteriasRequestType parameters) throws BusinessExceptionBook {
         GetBookByCriteriasResponseType getBookByCriteriasResponseType = new GetBookByCriteriasResponseType();
         checkAuthentication(parameters.getToken());
-        // String[] criteriasArray = {"ISBN", "Title", "Author"};
+
         BookCriterias criterias = parameters.getBookCriterias();
 
         Map<String, String> newMap = cleanCriteriasMap(criterias);
 
-        if (newMap.isEmpty())
-            //map.put("Title", criterias.getTitle().toUpperCase());
-            /*map.put("Author", criterias.getAuthor().toUpperCase());*/ {
+        if (newMap.isEmpty()) {
             logger.info("map: " + newMap);
         }
         logger.info(newMap);
@@ -227,15 +225,15 @@ public class BookServiceImpl implements IBookService {
             getBookByCriteriasResponseType.setBookListType(bookListType);
             return getBookByCriteriasResponseType;
         }
-        /*bookListType.getBookTypeOut().clear();*/
+
         bookList = bookManager.getBooksByCriterias(newMap);
         logger.info("bookListType beg: " + bookListType.getBookTypeOut().size());
 
         convertBookIntoBookTypeOut();
-        /*bookListType.getBookTypeOut().add(bookTypeOut); // add bookType to the movieListType*/
+
         logger.info("bookListType end: " + bookListType.getBookTypeOut().size());
         getBookByCriteriasResponseType.setBookListType(bookListType);
-        /* getBookByCriteriasResponseType = removeDuplicates(getBookByCriteriasResponseType);*/
+
         return getBookByCriteriasResponseType;
     }
 
@@ -257,24 +255,6 @@ public class BookServiceImpl implements IBookService {
         logger.info("newMap: " + newMap);
         return newMap;
     }
-/*
-    private GetBookByCriteriasResponseType removeDuplicates(GetBookByCriteriasResponseType brt) {
-        List<BookTypeOut> finallist = new ArrayList<>();
-        List<BookTypeOut> intermlist = new ArrayList<>();
-        List<BookTypeOut> initList = brt.getBookListType().getBookTypeOut();
-
-        for (BookTypeOut bout: initList
-             ) {
-            for (BookTypeOut bout2: finallist
-                 ) {
-                if(bout.getISBN().equals())
-            }
-        }*/
-
-/*
-        return brt;
-    }*/
-
 
     // Delete
     @Override

@@ -317,7 +317,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should return empty list if loanList is empty")
-    void convertingListOfLoansIntoLoanListMember()  {
+    void convertingListOfLoansIntoLoanListMember() {
         List<Loan> loanList = new ArrayList<>();
         assertTrue(memberService.convertingListOfLoansIntoLoanListMember(loanList).getLoanTypeOut().isEmpty());
 

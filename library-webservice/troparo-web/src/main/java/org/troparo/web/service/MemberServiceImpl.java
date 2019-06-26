@@ -157,7 +157,7 @@ public class MemberServiceImpl implements IMemberService {
         return (GetMemberByLoginResponseType) getMemberResponseType(responseType, bt, member);
     }
 
-    Object getMemberResponseType(Object response, MemberTypeOut memberTypeOut, Member member) throws BusinessExceptionMember {
+    private Object getMemberResponseType(Object response, MemberTypeOut memberTypeOut, Member member) throws BusinessExceptionMember {
 
         if (member == null) {
             throw new BusinessExceptionMember("no member found");
@@ -173,11 +173,11 @@ public class MemberServiceImpl implements IMemberService {
             // getting the loanList
 
             memberTypeOut.setLoanListType(convertingListOfLoansIntoLoanListMember(member.getLoanList()));
-            if(response.getClass()==GetMemberByLoginResponseType.class){
+            if (response.getClass() == GetMemberByLoginResponseType.class) {
                 GetMemberByLoginResponseType responseType = new GetMemberByLoginResponseType();
                 responseType.setMemberTypeOut(memberTypeOut);
                 return responseType;
-            }else{
+            } else {
                 GetMemberByIdResponseType responseType = new GetMemberByIdResponseType();
                 responseType.setMemberTypeOut(memberTypeOut);
                 return responseType;
