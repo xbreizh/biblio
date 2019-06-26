@@ -91,6 +91,15 @@ class BookManagerImplTest {
 
     }
 
+    @Test
+    @DisplayName("should return exception")
+    void addBook3() {
+        bookManager.setStringValidatorBook(new StringValidatorBook());
+        Book book = new Book();
+        assertEquals("ISBN must be 10 or 13 characters: null", bookManager.addBook(book));
+
+    }
+
 
     @Test
     @DisplayName("should return books from DAO")
@@ -368,12 +377,13 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should transfer Keywords")
     void transferKeywordsToSimilarBooks2() {
-        String keywords = "Mer, Ocean, Poissons";
         Book book = new Book();
-        Book book2 = new Book();
-        book.setKeywords(keywords);
-        bookManager2.setBookDAO(bookDAO);
-        assertEquals(keywords, bookManager2.transferKeywordsToSimilarBooks(book, book2));
+        String[] keywords = {null, "", "?"};
+        for (String s : keywords
+        ) {
+            book.setKeywords(s);
+            assertNull(bookManager2.transferKeywordsToSimilarBooks(book, new Book()));
+        }
 
     }
 
@@ -434,7 +444,7 @@ class BookManagerImplTest {
         String[] editions = {null, "", "?"};
         for (String edition : editions
         ) {
-            book.setAuthor(edition);
+            book.setEdition(edition);
             assertNull(bookManager2.transferEditionToSimilarBooks(book, new Book()));
         }
 
