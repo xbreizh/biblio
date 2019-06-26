@@ -4,39 +4,40 @@ import java.util.Date;
 
 public class Mail {
 
-    private String email;
-    private String firstName;
-    private String lastName;
-    private Date dueDate;
+
+private Date dueDate;
     private int diffDays;
-    private String isbn;
-    private String title;
-    private String author;
-    private String edition;
+    private Book book;
+    private Member member;
+
+    public Mail(){
+        book = new Book();
+        member = new Member();
+    }
 
 
     public String getEmail() {
-        return email;
+        return member.getEmail();
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        member.setEmail(email);
     }
 
     public String getFirstName() {
-        return firstName;
+        return member.getFirstName();
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+     member.setFirstName(firstName);
     }
 
     public String getLastName() {
-        return lastName;
+        return member.getLastName();
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        member.setLastName(lastName);
     }
 
     public Date getDueDate() {
@@ -56,49 +57,49 @@ public class Mail {
     }
 
     public String getIsbn() {
-        return isbn;
+        return book.getIsbn();
     }
 
     public void setIsbn(String isbn) {
-        this.isbn = isbn;
+        book.setIsbn(isbn);
     }
 
     public String getTitle() {
-        return title;
+        return book.getTitle();
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        book.setTitle(title);
     }
 
     public String getAuthor() {
-        return author;
+       return book.getAuthor();
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+       book.setAuthor(author);
     }
 
     public String getEdition() {
-        return edition;
+        return book.getEdition();
     }
 
     public void setEdition(String edition) {
-        this.edition = edition;
+       book.setEdition(edition);
     }
 
     @Override
     public String toString() {
         return "Mail{" +
-                "email='" + email + '\'' +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
+                "email='" + member.getEmail() + '\'' +
+                ", firstName='" + member.getFirstName() + '\'' +
+                ", lastName='" + member.getLastName() + '\'' +
                 ", dueDate=" + dueDate +
                 ", diffDays=" + diffDays +
-                ", isbn='" + isbn + '\'' +
-                ", title='" + title + '\'' +
-                ", author='" + author + '\'' +
-                ", edition='" + edition + '\'' +
+                ", isbn='" + book.getIsbn() + '\'' +
+                ", title='" + book.getTitle() + '\'' +
+                ", author='" + book.getAuthor() + '\'' +
+                ", edition='" + book.getEdition() + '\'' +
                 '}';
     }
 }
