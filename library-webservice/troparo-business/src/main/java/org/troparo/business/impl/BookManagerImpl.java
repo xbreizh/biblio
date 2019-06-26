@@ -46,7 +46,6 @@ public class BookManagerImpl implements BookManager {
 
     public String checkValidityOfParametersForInsertBook(Book book) {
         if (book == null) return "no book provided";
-        System.out.println("book received: "+book);
         String[][] bookParameters = {
                 {"isbn", book.getIsbn()},
                 {"title", book.getTitle()},
@@ -156,11 +155,15 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferKeywordsToSimilarBooks(Book book, Book b) {
+        if (book != null && b != null) {
         if (book.getKeywords() != null && !book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
             b.setKeywords(book.getKeywords());
         }
 
         return b.getKeywords();
+        } else {
+            return null;
+        }
     }
 
     int transferNbPagesToSimilarBooks(Book book, Book b) {
@@ -168,6 +171,7 @@ public class BookManagerImpl implements BookManager {
             b.setNbPages(book.getNbPages());
         }
         return b.getNbPages();
+
     }
 
     int transferPublicationYearToSimilarBooks(Book book, Book b) {
@@ -180,7 +184,6 @@ public class BookManagerImpl implements BookManager {
     String transferEditionToSimilarBooks(Book book, Book b) {
         if (book != null && b != null) {
             if (book.getEdition() != null && !book.getEdition().equals("") && !book.getEdition().equals("?")) {
-                logger.info("got you");
                 b.setEdition(book.getEdition());
             }
 
@@ -190,8 +193,12 @@ public class BookManagerImpl implements BookManager {
     }
 
     String transferAuthorToSimilarBooks(Book book, Book b) {
+        if (book != null && b != null) {
         if (book.getAuthor() != null && !book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
             b.setAuthor(book.getAuthor());
+        }
+        } else {
+            return null;
         }
 
         return b.getAuthor();
@@ -254,15 +261,6 @@ public class BookManagerImpl implements BookManager {
             logger.info("record found: " + b);
             int i = 0;
             while (i < copies) {
-               /* Book b2 = new Book();
-                // duplicating record
-                b2.setIsbn(b.getIsbn());
-                b2.setTitle(b.getTitle());
-                b2.setAuthor(b.getAuthor());
-                b2.setPublicationYear(b.getPublicationYear());
-                b2.setNbPages(b.getNbPages());
-                b2.setEdition(b.getEdition());
-                b2.setKeywords(b.getKeywords());*/
                 Book b2 = b;
                 b2.setId(0);
                 b2.setInsertDate(new Date());

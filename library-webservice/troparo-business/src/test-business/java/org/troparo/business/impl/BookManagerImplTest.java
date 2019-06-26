@@ -73,7 +73,6 @@ class BookManagerImplTest {
     }
 
 
-
     @Test
     @DisplayName("should return books from DAO")
     void getBooks() {
@@ -124,6 +123,7 @@ class BookManagerImplTest {
         criterias.put("Test", "Test");
         criterias.put("Author", "");
         criterias.put("ISBN", "123");
+        criterias.put("Title", "?");
         criterias.put("Moko", "");
         criterias.put("", "?");
 
@@ -250,12 +250,27 @@ class BookManagerImplTest {
 
 
     @Test
-    @DisplayName("should return null if first book is null")
+    @DisplayName("should return null if book is null")
     void transferTitleToSimilarBooks() {
         assertAll(
                 () -> assertNull(bookManager2.transferTitleToSimilarBooks(null, new Book())),
                 () -> assertNull(bookManager2.transferTitleToSimilarBooks(new Book(), null))
         );
+
+
+    }
+
+
+    @Test
+    @DisplayName("should return null if title is null")
+    void transferTitleToSimilarBooks1() {
+        Book book = new Book();
+        String[] titles = {null, "", "?"};
+        for (String s : titles
+        ) {
+            book.setTitle(s);
+            assertNull(bookManager2.transferTitleToSimilarBooks(book, new Book()));
+        }
 
 
     }
@@ -272,6 +287,7 @@ class BookManagerImplTest {
 
     }
 
+
     @Test
     @DisplayName("should transfer Author")
     void transferAuthorToSimilarBooks() {
@@ -281,6 +297,30 @@ class BookManagerImplTest {
         Book book2 = new Book();
         book.setAuthor(author);
         assertEquals(author, bookManager.transferAuthorToSimilarBooks(book, book2));
+
+    }
+
+    @Test
+    @DisplayName("should return null ")
+    void transferAuthorToSimilarBooks1() {
+        Book book = new Book();
+        String[] authors = {null, "", "?"};
+        for (String s : authors
+        ) {
+            book.setAuthor(s);
+            assertNull(bookManager2.transferTitleToSimilarBooks(book, new Book()));
+        }
+
+    }
+
+    @Test
+    @DisplayName("should return null if book is null")
+    void transferAuthorToSimilarBooks2() {
+        assertAll(
+                () -> assertNull(bookManager2.transferAuthorToSimilarBooks(null, new Book())),
+                () -> assertNull(bookManager2.transferAuthorToSimilarBooks(new Book(), null))
+        );
+
 
     }
 
@@ -297,13 +337,37 @@ class BookManagerImplTest {
     }
 
     @Test
-    @DisplayName("should transfer NbPages")
-    void transferNbPagesToSimilarBooks() {
-        int nbPages = 126;
+    @DisplayName("should should return null if book is null")
+    void transferKeywordsToSimilarBooks1() {
+        assertAll(
+                () -> assertNull(bookManager2.transferKeywordsToSimilarBooks(null, new Book())),
+                () -> assertNull(bookManager2.transferKeywordsToSimilarBooks(new Book(), null))
+        );
+
+    }
+
+    @Test
+    @DisplayName("should transfer Keywords")
+    void transferKeywordsToSimilarBooks2() {
+        String keywords = "Mer, Ocean, Poissons";
         Book book = new Book();
         Book book2 = new Book();
-        book.setNbPages(nbPages);
-        assertEquals(nbPages, bookManager2.transferNbPagesToSimilarBooks(book, book2));
+        book.setKeywords(keywords);
+        bookManager2.setBookDAO(bookDAO);
+        assertEquals(keywords, bookManager2.transferKeywordsToSimilarBooks(book, book2));
+
+    }
+
+    @Test
+    @DisplayName("should return null if invalid value")
+    void transferNbPagesToSimilarBooks() {
+        Book book = new Book();
+        String[] keywords = {null, "", "?"};
+        for (String s : keywords
+        ) {
+            book.setKeywords(s);
+            assertNull(bookManager.transferKeywordsToSimilarBooks(book, new Book()));
+        }
 
     }
 
@@ -319,20 +383,31 @@ class BookManagerImplTest {
     }
 
     @Test
-    @DisplayName("should transfer Edition")
-    void transferPublicationEditionToSimilarBooks() {
-        String edition = "Gaumont";
+    @DisplayName("should transfert edition")
+    void transferEditionToSimilarBooks() {
         Book book = new Book();
-        Book book2 = new Book();
-        book2.setEdition(edition);
-        book.setEdition("?");
-        assertEquals(edition, bookManager2.transferEditionToSimilarBooks(book, book2));
+        String edition = "plokko";
+        book.setEdition(edition);
+        assertEquals(edition, bookManager.transferEditionToSimilarBooks(book, new Book()));
+
+    }
+
+    @Test
+    @DisplayName("should return null if invalid entry")
+    void transferEditionToSimilarBooks1() {
+        Book book = new Book();
+        String[] editions = {null, "", "?"};
+        for (String edition : editions
+        ) {
+            book.setAuthor(edition);
+            assertNull(bookManager2.transferTitleToSimilarBooks(book, new Book()));
+        }
 
     }
 
     @Test
     @DisplayName("should return null if any book is null")
-    void transferPublicationEditionToSimilarBooks1() {
+    void transferEditionToSimilarBooks2() {
         assertAll(
                 () -> assertNull(bookManager2.transferEditionToSimilarBooks(null, new Book())),
                 () -> assertNull(bookManager2.transferEditionToSimilarBooks(new Book(), null))
@@ -429,11 +504,18 @@ class BookManagerImplTest {
 
     @Test
     @DisplayName("should return an exception")
-    void checkValidityOfParametersForInsertBook(){
+    void checkValidityOfParametersForInsertBook() {
         Book book = new Book();
         book.setIsbn("isbn123");
         bookManager.setStringValidatorBook(new StringValidatorBook());
         assertEquals("ISBN must be 10 or 13 characters: isbn123", bookManager.checkValidityOfParametersForInsertBook(book));
+
+    }
+
+    @Test
+    @DisplayName("should return \\no book provided\\")
+    void checkValidityOfParametersForInsertBook1() {
+        assertEquals("no book provided", bookManager.checkValidityOfParametersForInsertBook(null));
 
     }
 
