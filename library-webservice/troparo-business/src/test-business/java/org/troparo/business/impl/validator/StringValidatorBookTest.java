@@ -102,10 +102,14 @@ class StringValidatorBookTest {
     @Test
     @DisplayName("should validate Name")
     void validateName() {
-        String[] nameList = {"bAstien34$", "rokoko%2Q", "M234hu$5", "4322222y%T"};
+        String[] nameList = {"bAstien", "Jean-roger", "Mag folstine", "AAAAAA"};
         for (String name : nameList
         ) {
-            assertTrue(stringValidatorBook.validateExpression("name", name));
+            assertAll(
+                    ()->assertTrue(stringValidatorBook.validateExpression("name", name)),
+                    ()->assertTrue(stringValidatorBook.validateExpression("author", name))
+            );
+
         }
     }
 
@@ -115,7 +119,10 @@ class StringValidatorBookTest {
         String[] nameList = {null, "?", "", "marvin2", "j", "jen_marcel"};
         for (String name : nameList
         ) {
-            assertFalse(stringValidatorBook.validateExpression("name", name));
+            assertAll(
+                    ()->assertFalse(stringValidatorBook.validateExpression("name", name)),
+                    ()->assertFalse(stringValidatorBook.validateExpression("author", name))
+            );
         }
     }
 
@@ -144,6 +151,7 @@ class StringValidatorBookTest {
     @Test
     void getException() {
         assertAll(
+                () -> assertEquals("ISBN must be 10 or 13 characters: ", stringValidatorBook.getException("isbn")),
                 () -> assertEquals("ISBN must be 10 or 13 characters: ", stringValidatorBook.getException("isbn")),
                 () -> assertEquals("Author should have between 2 and 200 characters: ", stringValidatorBook.getException("author")),
                 () -> assertEquals("Title should have between 2 and 200 characters: ", stringValidatorBook.getException("title")),
