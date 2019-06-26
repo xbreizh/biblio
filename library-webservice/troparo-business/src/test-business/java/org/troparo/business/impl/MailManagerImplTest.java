@@ -52,6 +52,13 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should return the overdue mailing list")
+    void getOverdueEmailList() {
+
+        assertNotNull(mailManager.getOverdueEmailList());
+    }
+
+    @Test
+    @DisplayName("should return the overdue mailing list")
     void getOverdueEmailList1() {
 
         assertNotNull(mailManager.getOverdueEmailList());
@@ -68,10 +75,19 @@ class MailManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return data")
-    void gettingDataForLoan() throws ParseException {
+    @DisplayName("should return empty list")
+    void gettingDataForLoan(){
+        MailManagerImpl mailManager1 = new MailManagerImpl();
         List<Loan> loanList = new ArrayList<>();
-        List<Mail> mailList = new ArrayList<>();
+
+        assertTrue(mailManager1.gettingDataForLoan(loanList).isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return data")
+    void gettingDataForLoan1() throws ParseException {
+        MailManagerImpl mailManager1 = new MailManagerImpl();
+        List<Loan> loanList = new ArrayList<>();
         String email = "email";
         String isbn = "isbn123";
         String firstName = "firstname";
@@ -99,7 +115,7 @@ class MailManagerImplTest {
         loan.setPlannedEndDate(plannedEndDate);
         loanList.add(loan);
 
-        MailManagerImpl mailManager1 = new MailManagerImpl();
+
         assertAll(
                 ()-> assertEquals(title, mailManager1.gettingDataForLoan(loanList).get(0).getTitle()),
                 ()-> assertEquals(author, mailManager1.gettingDataForLoan(loanList).get(0).getAuthor()),

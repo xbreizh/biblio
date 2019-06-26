@@ -99,6 +99,26 @@ class StringValidatorBookTest {
         }
     }
 
+    @Test
+    @DisplayName("should validate Name")
+    void validateName() {
+        String[] nameList = {"bAstien34$", "rokoko%2Q", "M234hu$5", "4322222y%T"};
+        for (String name : nameList
+        ) {
+            assertTrue(stringValidatorBook.validateExpression("name", name));
+        }
+    }
+
+    @Test
+    @DisplayName("should not validate Name")
+    void invalidateName() {
+        String[] nameList = {null, "?", "", "marvin2", "j", "jen_marcel"};
+        for (String name : nameList
+        ) {
+            assertFalse(stringValidatorBook.validateExpression("name", name));
+        }
+    }
+
 
     @Test
     @DisplayName("should not validate LongStandard")

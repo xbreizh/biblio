@@ -30,7 +30,7 @@ public class StringValidatorBook {
         Pattern pattern;
         String[] names = {"author"};
         String[] shortStandard = {"edition", SHORT};
-        logger.info("Type: "+type+" / hex: "+hex);
+        logger.info("Type: " + type + " / hex: " + hex);
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         if (Arrays.asList(names).contains(type)) type = NAME;
         if (Arrays.asList(shortStandard).contains(type)) type = SHORT;
@@ -64,22 +64,10 @@ public class StringValidatorBook {
 
     }
 
-    public boolean validateForUpdateMember(String type, String hex) {
-        if (type.equals(ISBN) && (hex == null || hex.equals("") || hex.equals("?"))) return false;
-        if (hex != null && !hex.equals("?") && !hex.equals("")) {
-            return validateExpression(type, hex);
-        }
-
-
-        return true;
-
-    }
 
     public String getException(String param) {
-        System.out.println("param: "+param);
         switch (param) {
             case ISBN:
-                System.out.println("getting");
                 return "ISBN must be 10 or 13 characters: ";
             case "author":
                 return "Author should have between 2 and 200 characters: ";
