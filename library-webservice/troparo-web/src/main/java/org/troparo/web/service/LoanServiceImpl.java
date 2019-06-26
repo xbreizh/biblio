@@ -35,16 +35,12 @@ public class LoanServiceImpl implements ILoanService {
     @Inject
     private ConnectServiceImpl authentication;
 
-    private String exception = "";
-    private LoanTypeOut loanTypeOut = null;
-    private LoanTypeIn loanTypeIn = null;
-
-    private Loan loan = null;
 
     // Create
     @Override
     public AddLoanResponseType addLoan(AddLoanRequestType parameters) throws BusinessExceptionLoan {
-        exception = "";
+        LoanTypeIn loanTypeIn;
+        String exception;
         AddLoanResponseType ar = new AddLoanResponseType();
         checkAuthentication(parameters.getToken());
         ar.setReturn(true);
@@ -67,7 +63,6 @@ public class LoanServiceImpl implements ILoanService {
     // Get One
     @Override
     public GetLoanByIdResponseType getLoanById(GetLoanByIdRequestType parameters) throws BusinessExceptionLoan {
-        exception = "";
         checkAuthentication(parameters.getToken());
         logger.info("new method added");
         GetLoanByIdResponseType rep = new GetLoanByIdResponseType();
@@ -95,9 +90,9 @@ public class LoanServiceImpl implements ILoanService {
     // Get All
     @Override
     public LoanListResponseType getAllLoans(LoanListRequestType parameters) throws BusinessExceptionLoan {
-        LoanListType loanListType = new LoanListType();
+        LoanListType loanListType;
         checkAuthentication(parameters.getToken());
-        List<Loan> loanList = new ArrayList<>();
+        List<Loan> loanList;
         loanList = loanManager.getLoans();
 
         logger.info("size list: " + loanList.size());
@@ -115,10 +110,10 @@ public class LoanServiceImpl implements ILoanService {
     // Get List By Criterias
     @Override
     public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
-        List<Loan> loanList = new ArrayList<>();
+        List<Loan> loanList;
         LoanListType loanListType = new LoanListType();
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
-        //String[] validCriterias = {"borrower.login", "book.bookId", "status"};
+
         checkAuthentication(parameters.getToken());
         logger.info("troko");
         Map<String, String> map = new HashMap<>();
@@ -128,8 +123,7 @@ public class LoanServiceImpl implements ILoanService {
         }
         if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null)
             return null;
-        //LoanCriterias criterias = parameters.getLoanCriterias();
-        //logger.info(parameters.getLoanCriterias());
+
         if (parameters.getLoanCriterias().getLogin() != null) {
             if (!parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
                 map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
@@ -151,16 +145,10 @@ public class LoanServiceImpl implements ILoanService {
 
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
         logger.info(loanList);
-        if (loanList != null) {
-            if (loanList.size() > 0) {
+        if (loanList != null && !loanList.isEmpty()) {
                 loanListType = convertLoanIntoLoanTypeOut(loanList);
-            } /*else {
-                logger.info("stuff");
-                return null;
-            }*/
-        }/* else {
-            return null;
-        }*/
+            }
+
         logger.info("loanListType end: " + loanListType.getLoanTypeOut().size());
         responseType.setLoanListType(loanListType);
         return responseType;
@@ -191,9 +179,7 @@ public class LoanServiceImpl implements ILoanService {
         checkAuthentication(parameters.getToken());
         RenewLoanResponseType ar = new RenewLoanResponseType();
         String feedback = loanManager.renewLoan(parameters.getId());
-       /* if (feedback.equals("")) {
-            ar.setReturn(feedback);
-        }*/
+
         ar.setReturn(feedback);
         return ar;
     }
@@ -202,10 +188,9 @@ public class LoanServiceImpl implements ILoanService {
     public TerminateLoanResponseType terminateLoan(TerminateLoanRequestType parameters) throws BusinessExceptionLoan {
         checkAuthentication(parameters.getToken());
         TerminateLoanResponseType ar = new TerminateLoanResponseType();
-        //ar.setReturn(false);
+
         String feedback = loanManager.terminate(parameters.getId());
-       /* if (feedback.equals("")) {
-        }*/
+
         ar.setReturn(feedback);
         return ar;
     }
@@ -216,6 +201,7 @@ public class LoanServiceImpl implements ILoanService {
 
     // Converts Loan from Business into output
     private LoanListType convertLoanIntoLoanTypeOut(List<Loan> loanList) {
+        LoanTypeOut loanTypeOut;
         LoanListType loanListType = new LoanListType();
         loanListType.getLoanTypeOut().clear();
 
@@ -243,10 +229,6 @@ public class LoanServiceImpl implements ILoanService {
 
             // converting xml into Date
 
-          /*  XMLGregorianCalendar xcal = xmlCalendar;
-            java.util.Date dt = xcal.toGregorianCalendar().getTime();*/
-
-
             loanListType.getLoanTypeOut().add(loanTypeOut);
         }
 
@@ -258,7 +240,7 @@ public class LoanServiceImpl implements ILoanService {
     // Converts Input into Loan for business
     private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
         logger.info(loanTypeIn);
-        loan = new Loan();
+        Loan loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
         loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
         logger.info("conversion loanType into loan done");

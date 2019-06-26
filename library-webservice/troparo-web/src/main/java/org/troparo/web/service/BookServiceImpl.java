@@ -29,17 +29,19 @@ public class BookServiceImpl implements IBookService {
     @Inject
     private ConnectServiceImpl authentication;
 
-    private String exception = "";
+
     private List<Book> bookList = new ArrayList<>();
-    private BookTypeOut bookTypeOut = null;
-    private BookTypeIn bookTypeIn = null;
+
     private BookListType bookListType = new BookListType();
-    private Book book = null;
+
 
     // Create
     @Override
     public AddBookResponseType addBook(AddBookRequestType parameters) throws BusinessExceptionBook {
+        String exception = "";
+        Book book;
         AddBookResponseType ar = new AddBookResponseType();
+        BookTypeIn bookTypeIn;
         ar.setReturn(true);
         checkAuthentication(parameters.getToken());
         if (!checkIfBookHasLegitArguments(parameters.getBookTypeIn())) {
@@ -48,8 +50,7 @@ public class BookServiceImpl implements IBookService {
         }
 
         bookTypeIn = parameters.getBookTypeIn();
-        this.book = convertBookTypeInIntoBook(bookTypeIn);
-        logger.info("bookManager: " + bookManager);
+        book = convertBookTypeInIntoBook(bookTypeIn);
         exception = bookManager.addBook(book);
         if (!exception.equals("")) {
             logger.info(exception);
@@ -81,7 +82,7 @@ public class BookServiceImpl implements IBookService {
 
     // Converts Input into Book for business
     private Book convertBookTypeInIntoBook(BookTypeIn bookTypeIn) {
-        book = new Book();
+        Book book = new Book();
         book.setIsbn(bookTypeIn.getISBN().toUpperCase());
         book.setTitle(bookTypeIn.getTitle().toUpperCase());
         book.setAuthor(bookTypeIn.getAuthor().toUpperCase());
@@ -96,7 +97,7 @@ public class BookServiceImpl implements IBookService {
 
     // Converts Input into Book for business
     private void convertBookTypeUpdateIntoBook(BookTypeUpdate bookTypeUpdate) {
-        book = new Book();
+        Book book = new Book();
         book.setIsbn(bookTypeUpdate.getISBN().toUpperCase());
         book.setTitle(bookTypeUpdate.getTitle().toUpperCase());
         book.setAuthor(bookTypeUpdate.getAuthor().toUpperCase());
@@ -111,6 +112,8 @@ public class BookServiceImpl implements IBookService {
     // Update
     @Override
     public UpdateBookResponseType updateBook(UpdateBookRequestType parameters) throws BusinessExceptionBook {
+        String exception;
+        Book book= new Book();
         checkAuthentication(parameters.getToken());
 
         org.troparo.entities.book.UpdateBookResponseType ar = new org.troparo.entities.book.UpdateBookResponseType();
@@ -119,7 +122,6 @@ public class BookServiceImpl implements IBookService {
         logger.info("received: " + bookTypeUpdate);
         // update
         convertBookTypeUpdateIntoBook(bookTypeUpdate);
-        logger.info("bookManager: " + bookManager);
         exception = bookManager.updateBook(book);
         if (!exception.equals("")) {
             throw new BusinessExceptionBook(exception);
@@ -130,14 +132,13 @@ public class BookServiceImpl implements IBookService {
 
     @Override
     public AddCopyResponseType addCopy(AddCopyRequestType parameters) throws BusinessExceptionBook {
+        String exception;
         checkAuthentication(parameters.getToken());
 
         AddCopyResponseType ar = new AddCopyResponseType();
         ar.setReturn(true);
         String isbn = parameters.getISBN().toUpperCase();
         int copies = parameters.getNbCopies();
-
-        logger.info("bookManager: " + bookManager);
         exception = bookManager.addCopy(isbn, copies);
         if (!exception.equals("")) {
             throw new BusinessExceptionBook(exception);
@@ -259,12 +260,12 @@ public class BookServiceImpl implements IBookService {
     // Delete
     @Override
     public RemoveBookResponseType removeBook(RemoveBookRequestType parameters) throws BusinessExceptionBook {
+        String exception;
         checkAuthentication(parameters.getToken());
 
         RemoveBookResponseType ar = new RemoveBookResponseType();
         ar.setReturn(true);
 
-        logger.info("bookManager: " + bookManager);
         exception = bookManager.remove(parameters.getId());
         if (!exception.equals("")) {
             throw new BusinessExceptionBook(exception);
@@ -289,7 +290,7 @@ public class BookServiceImpl implements IBookService {
 
     // Converts Book from Business into output
     private void convertBookIntoBookTypeOut() {
-
+        BookTypeOut bookTypeOut;
         bookListType.getBookTypeOut().clear();
         for (Book book : bookList) {
 
