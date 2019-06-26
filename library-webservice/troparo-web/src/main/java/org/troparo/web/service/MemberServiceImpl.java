@@ -116,7 +116,7 @@ public class MemberServiceImpl implements IMemberService {
         MemberTypeOut bt = new MemberTypeOut();
         Member member = memberManager.getMemberById(parameters.getId());
         if (member == null) {
-            throw new BusinessExceptionMember("no member found with that bookId");
+            throw new BusinessExceptionMember("no member found");
         } else {
             bt.setId(member.getId());
             bt.setLogin(member.getLogin());
@@ -155,7 +155,7 @@ public class MemberServiceImpl implements IMemberService {
         return loanListType;
     }
 
-    private BookTypeOut convertBookIntoBookTypeOut(Book book) {
+    BookTypeOut convertBookIntoBookTypeOut(Book book) {
         BookTypeOut bookTypeOut = new BookTypeOut();
         bookTypeOut.setId(book.getId());
         bookTypeOut.setISBN(book.getIsbn());
@@ -176,7 +176,7 @@ public class MemberServiceImpl implements IMemberService {
         MemberTypeOut bt = new MemberTypeOut();
         Member member = memberManager.getMemberByLogin(parameters.getLogin().toUpperCase());
         if (member == null) {
-            throw new BusinessExceptionMember("no member found with that login");
+            throw new BusinessExceptionMember("no member found");
         } else {
             bt.setId(member.getId());
             bt.setLogin(member.getLogin());
@@ -187,7 +187,6 @@ public class MemberServiceImpl implements IMemberService {
             bt.setDateJoin(xmlCalendar);
 
             // getting the loanList
-            LoanListType loanListType = new LoanListType();
 
             bt.setLoanListType(settingLoanListMember(member.getLoanList()));
             rep.setMemberTypeOut(bt);

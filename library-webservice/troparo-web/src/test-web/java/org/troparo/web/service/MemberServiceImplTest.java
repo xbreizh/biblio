@@ -9,6 +9,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.member.*;
+import org.troparo.model.Book;
 import org.troparo.model.Member;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 
@@ -190,6 +191,41 @@ class MemberServiceImplTest {
         member.setLogin(login);
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         assertEquals(firstname, memberService.getMemberByLogin(parameters).getMemberTypeOut().getFirstName());
+
+
+    }
+
+
+    @Test
+    @DisplayName("should convertBookIntoBookTypeOut")
+    void convertBookIntoBookTypeOut(){
+        Book book = new Book();
+        int id = 3;
+        String isbn = "isbn123";
+        String title = "title";
+        String author = "author";
+        String edition = "edition";
+        int nbPages = 132;
+        int publicationYear = 1980;
+        String keywords = "";
+        book.setId(id);
+        book.setIsbn(isbn);
+        book.setTitle(title);
+        book.setAuthor(author);
+        book.setEdition(edition);
+        book.setNbPages(nbPages);
+        book.setPublicationYear(publicationYear);
+        book.setKeywords(keywords);
+        assertAll(
+                ()-> assertEquals(id, memberService.convertBookIntoBookTypeOut(book).getId()),
+                ()-> assertEquals(isbn, memberService.convertBookIntoBookTypeOut(book).getISBN()),
+                ()-> assertEquals(title, memberService.convertBookIntoBookTypeOut(book).getTitle()),
+                ()-> assertEquals(author, memberService.convertBookIntoBookTypeOut(book).getAuthor()),
+                ()-> assertEquals(edition, memberService.convertBookIntoBookTypeOut(book).getEdition()),
+                ()-> assertEquals(nbPages, memberService.convertBookIntoBookTypeOut(book).getNbPages()),
+                ()-> assertEquals(publicationYear, memberService.convertBookIntoBookTypeOut(book).getPublicationYear()),
+                ()-> assertEquals(keywords, memberService.convertBookIntoBookTypeOut(book).getKeywords())
+        );
 
 
     }
