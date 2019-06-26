@@ -427,6 +427,16 @@ class BookManagerImplTest {
         assertFalse(bookManager.isAvailable(12));
     }
 
+    @Test
+    @DisplayName("should return an exception")
+    void checkValidityOfParametersForInsertBook(){
+        Book book = new Book();
+        book.setIsbn("isbn123");
+        bookManager.setStringValidatorBook(new StringValidatorBook());
+        assertEquals("ISBN must be 10 or 13 characters: isbn123", bookManager.checkValidityOfParametersForInsertBook(book));
+
+    }
+
   /*  @Test
     @DisplayName("should return error is isbn not filled")
     void checkRequiredValuesNotNull() {

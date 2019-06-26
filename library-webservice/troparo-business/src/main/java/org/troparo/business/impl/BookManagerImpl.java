@@ -19,7 +19,7 @@ public class BookManagerImpl implements BookManager {
     BookDAO bookDAO;
     @Inject
     StringValidatorBook stringValidatorBook;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(BookManagerImpl.class);
 
     public void setStringValidatorBook(StringValidatorBook stringValidatorBook) {
         this.stringValidatorBook = stringValidatorBook;
@@ -39,14 +39,14 @@ public class BookManagerImpl implements BookManager {
 
         book.setInsertDate(new Date());
         book.setIsbn(book.getIsbn().toUpperCase());
-        if(bookDAO.addBook(book))return "";
+        if (bookDAO.addBook(book)) return "";
         return "there was an issue while inserting the book";
     }
 
 
     public String checkValidityOfParametersForInsertBook(Book book) {
         if (book == null) return "no book provided";
-
+        System.out.println("book received: "+book);
         String[][] bookParameters = {
                 {"isbn", book.getIsbn()},
                 {"title", book.getTitle()},
@@ -67,10 +67,9 @@ public class BookManagerImpl implements BookManager {
     }
 
 
-
-
     String replaceSeparatorWithWhiteSpace(String string) {
         logger.info("trying to replace: " + string);
+        if(string==null)return "";
         String[] separators = {";", ",", "/", "\\",};
         for (String sep : separators
         ) {
@@ -255,7 +254,7 @@ public class BookManagerImpl implements BookManager {
             logger.info("record found: " + b);
             int i = 0;
             while (i < copies) {
-                Book b2 = new Book();
+               /* Book b2 = new Book();
                 // duplicating record
                 b2.setIsbn(b.getIsbn());
                 b2.setTitle(b.getTitle());
@@ -263,7 +262,9 @@ public class BookManagerImpl implements BookManager {
                 b2.setPublicationYear(b.getPublicationYear());
                 b2.setNbPages(b.getNbPages());
                 b2.setEdition(b.getEdition());
-                b2.setKeywords(b.getKeywords());
+                b2.setKeywords(b.getKeywords());*/
+                Book b2 = b;
+                b2.setId(0);
                 b2.setInsertDate(new Date());
                 logger.info("new Book: " + b2);
                 if (!bookDAO.addBook(b2)) {

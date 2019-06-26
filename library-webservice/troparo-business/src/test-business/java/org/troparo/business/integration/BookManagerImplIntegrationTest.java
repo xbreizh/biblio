@@ -13,6 +13,7 @@ import org.troparo.business.contract.BookManager;
 
 import javax.inject.Inject;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
@@ -36,5 +37,10 @@ class BookManagerImplIntegrationTest {
         assertNotNull(bookManager.getBooks());
     }
 
+    @Test
+    @DisplayName("should add Copy")
+    void addCopy() {
+        assertEquals("", bookManager.addCopy("1234567824", 3));
+    }
 
 }

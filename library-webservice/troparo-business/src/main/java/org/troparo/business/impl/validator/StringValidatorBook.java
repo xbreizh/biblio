@@ -1,5 +1,7 @@
 package org.troparo.business.impl.validator;
 
+import org.apache.log4j.Logger;
+
 import javax.inject.Named;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -14,7 +16,7 @@ public class StringValidatorBook {
     private static final String NAME = "name";
     private static final String PUBLICATIONYEAR = "publicationYear";
     private static final String NB_PAGES = "nbPages";
-
+    private Logger logger = Logger.getLogger(StringValidatorBook.class);
 
     /**
      * Validate hex with regular expression
@@ -28,12 +30,14 @@ public class StringValidatorBook {
         Pattern pattern;
         String[] names = {"author"};
         String[] shortStandard = {"edition", SHORT};
+        logger.info("Type: "+type+" / hex: "+hex);
         int thisYear = Calendar.getInstance().get(Calendar.YEAR);
         if (Arrays.asList(names).contains(type)) type = NAME;
         if (Arrays.asList(shortStandard).contains(type)) type = SHORT;
         if (hex == null) {
             return false;
         }
+
         switch (type) {
 
             case ISBN:
@@ -72,8 +76,10 @@ public class StringValidatorBook {
     }
 
     public String getException(String param) {
+        System.out.println("param: "+param);
         switch (param) {
             case ISBN:
+                System.out.println("getting");
                 return "ISBN must be 10 or 13 characters: ";
             case "author":
                 return "Author should have between 2 and 200 characters: ";
