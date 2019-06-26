@@ -58,9 +58,17 @@ class MemberServiceImplTest {
         assertDoesNotThrow(() -> memberService.checkAuthentication(""));
     }
 
+
     @Test
     @DisplayName("should return exception if token null")
     void checkAuthentication2() {
+        assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(null));
+    }
+
+    @Test
+    @DisplayName("should return exception if token null")
+    void checkAuthentication3() {
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(null));
     }
 
@@ -195,6 +203,16 @@ class MemberServiceImplTest {
 
     }
 
+    @Test
+    @DisplayName("should return exception when getting member by Login")
+    void getMemberByLogin1(){
+        when(connectService.checkToken(anyString())).thenReturn(true);
+        GetMemberByLoginRequestType parameters = new GetMemberByLoginRequestType();
+        parameters.setToken("fr");
+        parameters.setLogin("Caren");
+        when(memberManager.getMemberByLogin(anyString())).thenReturn(null);
+        assertThrows(BusinessExceptionMember.class, ()-> memberService.getMemberByLogin(parameters));
+    }
 
     @Test
     @DisplayName("should convertBookIntoBookTypeOut")
