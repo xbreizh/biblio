@@ -149,7 +149,7 @@ class MemberServiceImplTest {
     }
 
     @Test
-    @DisplayName("should throw exception when getting member by Id")
+    @DisplayName("should return member when getting member by Id")
     void getMemberById1() throws BusinessExceptionMember {
         when(connectService.checkToken(anyString())).thenReturn(true);
         GetMemberByIdRequestType parameters = new GetMemberByIdRequestType();
@@ -161,6 +161,19 @@ class MemberServiceImplTest {
         when(memberManager.getMemberById(anyInt())).thenReturn(member);
         //assertDoesNotThrow(() -> memberService.getMemberById(parameters));
         assertEquals(firstname, memberService.getMemberById(parameters).getMemberTypeOut().getFirstName());
+    }
+
+
+    @Test
+    @DisplayName("should return exception when getting member by Id")
+    void getMemberById2(){
+        when(connectService.checkToken(anyString())).thenReturn(true);
+        GetMemberByIdRequestType parameters = new GetMemberByIdRequestType();
+        parameters.setToken("fr");
+        parameters.setId(3);
+        when(memberManager.getMemberById(anyInt())).thenReturn(null);
+        //assertDoesNotThrow(() -> memberService.getMemberById(parameters));
+        assertThrows(BusinessExceptionMember.class, ()-> memberService.getMemberById(parameters));
     }
 
     @Test

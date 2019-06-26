@@ -34,13 +34,14 @@ public class MemberServiceImpl implements IMemberService {
 
     private List<Member> memberList = new ArrayList<>();
 
-    private MemberTypeOut memberTypeOut = null;
-    private MemberTypeIn memberTypeIn = null;
+
     private MemberListType memberListType = new MemberListType();
 
     // Create
     @Override
     public AddMemberResponseType addMember(AddMemberRequestType parameters) throws BusinessExceptionMember {
+        logger.info("parameters: " + parameters.getMemberTypeIn());
+        MemberTypeIn memberTypeIn;
         Member member;
         String exception;
         AddMemberResponseType ar = new AddMemberResponseType();
@@ -48,7 +49,6 @@ public class MemberServiceImpl implements IMemberService {
         ar.setReturn(true);
         memberTypeIn = parameters.getMemberTypeIn();
         member = convertMemberTypeInIntoMember(memberTypeIn);
-        logger.info("memberManager: " + memberManager);
         exception = memberManager.addMember(member);
         logger.info("exception: ");
         if (!exception.equals("")) {
@@ -97,7 +97,7 @@ public class MemberServiceImpl implements IMemberService {
         MemberTypeUpdate memberTypeUpdate = parameters.getMemberTypeUpdate();
         // update
         convertMemberTypeUpdateIntoMember(memberTypeUpdate);
-        logger.info("memberManager: " + memberManager);
+
         exception = memberManager.updateMember(member);
         if (!exception.equals("")) {
             throw new BusinessExceptionMember(exception);
@@ -125,7 +125,6 @@ public class MemberServiceImpl implements IMemberService {
             bt.setEmail(member.getEmail());
             XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(member.getDateJoin());
             bt.setDateJoin(xmlCalendar);
-            LoanListType loanListType = new LoanListType();
 
 
             bt.setLoanListType(settingLoanListMember(member.getLoanList()));
@@ -264,7 +263,6 @@ public class MemberServiceImpl implements IMemberService {
         checkAuthentication(parameters.getToken());
         ar.setReturn(true);
 
-        logger.info("memberManager: " + memberManager);
         exception = memberManager.remove(parameters.getId());
         if (!exception.equals("")) {
             throw new BusinessExceptionMember(exception);
@@ -277,6 +275,7 @@ public class MemberServiceImpl implements IMemberService {
 
     // Converts Member from Business into output
     private void convertMemberIntoMemberTypeOut() {
+        MemberTypeOut memberTypeOut;
         memberListType.getMemberTypeOut().clear();
         for (Member member : memberList) {
 
