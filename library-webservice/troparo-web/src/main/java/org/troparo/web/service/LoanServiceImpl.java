@@ -124,19 +124,17 @@ public class LoanServiceImpl implements ILoanService {
         if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null)
             return null;
 
-        if (parameters.getLoanCriterias().getLogin() != null) {
-            if (!parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
+        if (parameters.getLoanCriterias().getLogin() != null && !parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
                 map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
             }
-        }
+
         if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
             map.put("book.bookId", Integer.toString(parameters.getLoanCriterias().getBookId()));
         }
-        if (parameters.getLoanCriterias().getStatus() != null) {
-            if (!parameters.getLoanCriterias().getStatus().equals("")) {
+        if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("")) {
                 map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
             }
-        }
+
         logger.info("map: " + map);
         logger.info(map);
 
