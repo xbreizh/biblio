@@ -34,6 +34,10 @@ public class LoanServiceImpl implements ILoanService {
     @Inject
     private ConnectServiceImpl authentication;
 
+    void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+        this.dateConvertedHelper = dateConvertedHelper;
+    }
+
     @Inject
     private DateConvertedHelper dateConvertedHelper;
 
@@ -69,7 +73,6 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("new method added");
         GetLoanByIdResponseType rep = new GetLoanByIdResponseType();
         LoanTypeOut loanTypeOut = new LoanTypeOut();
-        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         Loan loan = loanManager.getLoanById(parameters.getId());
         if (loan == null) {
             throw new BusinessExceptionLoan("no loan found with that bookId");

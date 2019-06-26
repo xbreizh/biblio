@@ -14,6 +14,7 @@ import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import java.util.*;
 
@@ -77,6 +78,8 @@ class LoanServiceImplTest {
     @Test
     @DisplayName("should return member by ID")
     void getLoanById() {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        loanService.setDateConvertedHelper(dateConvertedHelper);
         GetLoanByIdRequestType parameters = new GetLoanByIdRequestType();
         parameters.setToken("token123");
         parameters.setId(2);
