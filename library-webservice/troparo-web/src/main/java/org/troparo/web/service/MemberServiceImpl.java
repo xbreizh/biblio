@@ -298,7 +298,7 @@ public class MemberServiceImpl implements IMemberService {
         logger.info("memberListType end: " + memberListType.getMemberTypeOut().size());
     }
 
-    private XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
+    XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
         // converting Date into XML date
         if (date == null) return null;
         GregorianCalendar cal = new GregorianCalendar();

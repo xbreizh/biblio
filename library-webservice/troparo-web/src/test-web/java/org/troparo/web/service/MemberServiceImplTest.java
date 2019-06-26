@@ -1,5 +1,6 @@
 package org.troparo.web.service;
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -13,10 +14,12 @@ import org.troparo.model.Book;
 import org.troparo.model.Member;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -65,12 +68,6 @@ class MemberServiceImplTest {
         assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(null));
     }
 
-    @Test
-    @DisplayName("should return exception if token null")
-    void checkAuthentication3() {
-        when(connectService.checkToken(anyString())).thenReturn(true);
-        assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(null));
-    }
 
     @Test
     @DisplayName("should add member with no exception")
@@ -317,5 +314,25 @@ class MemberServiceImplTest {
         parameters.setId(2);
         when(memberManager.remove(anyInt())).thenReturn("dede");
         assertThrows(BusinessExceptionMember.class, () -> memberService.removeMember(parameters));
+    }
+
+    @Test
+    @DisplayName("should return null if date null")
+    void convertDateIntoXmlDate(){
+
+        assertNull(memberService.convertDateIntoXmlDate(null));
+    }
+
+    @Test
+    @DisplayName("should convert date")
+    void convertDateIntoXmlDate1() throws DatatypeConfigurationException, ParseException {
+        String pattern = "yyyy-MM-dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date date = simpleDateFormat.parse("2018-09-09 12:02:48");
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+
+        XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        assertEquals("2018-09-09T12:02:48.000Z", memberService.convertDateIntoXmlDate(date).toString());
     }
 }
