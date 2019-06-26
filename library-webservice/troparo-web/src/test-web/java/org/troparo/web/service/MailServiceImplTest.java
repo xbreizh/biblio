@@ -13,6 +13,7 @@ import org.troparo.entities.mail.MailListType;
 import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.ParseException;
@@ -60,6 +61,8 @@ class MailServiceImplTest {
     @Test
     @DisplayName("should convert Date into Xml Date")
     void conversionDateFormats() throws ParseException {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        mailService.setDateConvertedHelper(dateConvertedHelper);
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = simpleDateFormat.parse("2019-01-31 23:59:59");
         Calendar calendar = Calendar.getInstance();
@@ -70,7 +73,7 @@ class MailServiceImplTest {
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
-        XMLGregorianCalendar dateGregorian = mailService.convertDateIntoXmlDate(date);
+        XMLGregorianCalendar dateGregorian = dateConvertedHelper.convertDateIntoXmlDate(date);
         logger.info(date);
         logger.info(dateGregorian);
 
@@ -89,6 +92,8 @@ class MailServiceImplTest {
     @Test
     @DisplayName("should convert List into MailListType")
     void convertmailListIntoMailListType() {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        mailService.setDateConvertedHelper(dateConvertedHelper);
         MailListType listType;
         List<Mail> mailList = new ArrayList<>();
         Mail mail = new Mail();

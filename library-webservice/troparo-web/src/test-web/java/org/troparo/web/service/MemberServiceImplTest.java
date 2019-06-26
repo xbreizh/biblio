@@ -13,10 +13,8 @@ import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
 import org.troparo.services.memberservice.BusinessExceptionMember;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -146,6 +144,8 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("should not throw exception when getting member by Id")
     void getMemberById() {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        memberService.setDateConvertedHelper(dateConvertedHelper);
         when(connectService.checkToken(anyString())).thenReturn(true);
         GetMemberByIdRequestType parameters = new GetMemberByIdRequestType();
         parameters.setToken("fr");
@@ -157,6 +157,8 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("should return member when getting member by Id")
     void getMemberById1() throws BusinessExceptionMember {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        memberService.setDateConvertedHelper(dateConvertedHelper);
         when(connectService.checkToken(anyString())).thenReturn(true);
         GetMemberByIdRequestType parameters = new GetMemberByIdRequestType();
         parameters.setToken("fr");
@@ -185,6 +187,8 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("should return member")
     void getMemberByLogin() throws BusinessExceptionMember {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        memberService.setDateConvertedHelper(dateConvertedHelper);
         when(connectService.checkToken(anyString())).thenReturn(true);
         GetMemberByLoginRequestType parameters = new GetMemberByLoginRequestType();
         parameters.setToken("de");
@@ -285,6 +289,8 @@ class MemberServiceImplTest {
     @DisplayName("")
     void convertMemberIntoMemberTypeOut() throws ParseException {
         List<Member> memberList = new ArrayList<>();
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        memberService.setDateConvertedHelper(dateConvertedHelper);
         Member member = new Member();
         int id = 3;
         String login = "login";
@@ -308,7 +314,7 @@ class MemberServiceImplTest {
                 () -> assertEquals(lastname, memberTypeOut.getLastName()),
                 () -> assertEquals(email, memberTypeOut.getEmail()),
                 () -> assertEquals(id, memberTypeOut.getId()),
-                () -> assertEquals(memberService.convertDateIntoXmlDate(dateJoin), memberTypeOut.getDateJoin())
+                () -> assertEquals(dateConvertedHelper.convertDateIntoXmlDate(dateJoin), memberTypeOut.getDateJoin())
 
         );
 
@@ -326,6 +332,8 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("should convert list<Loan> into LoanListType")
     void convertingListOfLoansIntoLoanListMember1() throws ParseException {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        memberService.setDateConvertedHelper(dateConvertedHelper);
         List<Loan> loanList = new ArrayList<>();
         Loan loan = new Loan();
         int id = 3;
@@ -360,9 +368,9 @@ class MemberServiceImplTest {
 
         assertAll(
                 () -> assertEquals(title, loanTypeOut.getBookTypeOut().getTitle()),
-                () -> assertEquals(memberService.convertDateIntoXmlDate(startDate), loanTypeOut.getStartDate()),
-                () -> assertEquals(memberService.convertDateIntoXmlDate(plannedEndDate), loanTypeOut.getPlannedEndDate()),
-                () -> assertEquals(memberService.convertDateIntoXmlDate(endDate), loanTypeOut.getEndDate())
+                () -> assertEquals(dateConvertedHelper.convertDateIntoXmlDate(startDate), loanTypeOut.getStartDate()),
+                () -> assertEquals(dateConvertedHelper.convertDateIntoXmlDate(plannedEndDate), loanTypeOut.getPlannedEndDate()),
+                () -> assertEquals(dateConvertedHelper.convertDateIntoXmlDate(endDate), loanTypeOut.getEndDate())
 
         );
 
@@ -395,20 +403,20 @@ class MemberServiceImplTest {
     @Test
     @DisplayName("should return null if date null")
     void convertDateIntoXmlDate() {
-
-        assertNull(memberService.convertDateIntoXmlDate(null));
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        assertNull(dateConvertedHelper.convertDateIntoXmlDate(null));
     }
 
     @Test
     @DisplayName("should convert date")
-    void convertDateIntoXmlDate1() throws DatatypeConfigurationException, ParseException {
+    void convertDateIntoXmlDate1() throws  ParseException {
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         Date date = simpleDateFormat.parse("2018-09-09 12:02:48");
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
 
-        XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-        assertEquals("2018-09-09T12:02:48.000Z", memberService.convertDateIntoXmlDate(date).toString());
+        assertEquals("2018-09-09T12:02:48.000Z", dateConvertedHelper.convertDateIntoXmlDate(date).toString());
     }
 }

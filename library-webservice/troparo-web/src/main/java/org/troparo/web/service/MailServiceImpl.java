@@ -10,15 +10,11 @@ import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 @Named
@@ -33,6 +29,13 @@ public class MailServiceImpl implements IMailService {
 
     @Inject
     private ConnectServiceImpl authentication;
+
+    void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+        this.dateConvertedHelper = dateConvertedHelper;
+    }
+
+    @Inject
+    private DateConvertedHelper dateConvertedHelper;
 
 
     @Override
@@ -55,7 +58,7 @@ public class MailServiceImpl implements IMailService {
             mout.setEmail(mail.getEmail());
             mout.setFirstName(mail.getFirstName());
             mout.setLastName(mail.getLastName());
-            mout.setDueDate(convertDateIntoXmlDate(mail.getDueDate()));
+            mout.setDueDate(dateConvertedHelper.convertDateIntoXmlDate(mail.getDueDate()));
             mout.setDiffDays(mail.getDiffDays());
             mout.setIsbn(mail.getIsbn());
             mout.setTitle(mail.getTitle());
@@ -68,19 +71,7 @@ public class MailServiceImpl implements IMailService {
         return mlt;
     }
 
-    XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
-        // converting Date into XML date
 
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        XMLGregorianCalendar xmlCalendar = null;
-        try {
-            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-        } catch (DatatypeConfigurationException e) {
-            logger.error(e.getMessage());
-        }
-        return xmlCalendar;
-    }
 
     private void checkAuthentication(String token) throws BusinessExceptionMail {
         try {

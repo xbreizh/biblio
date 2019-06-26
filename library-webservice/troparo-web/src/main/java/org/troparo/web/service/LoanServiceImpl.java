@@ -9,12 +9,11 @@ import org.troparo.entities.loan.*;
 import org.troparo.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
@@ -34,6 +33,9 @@ public class LoanServiceImpl implements ILoanService {
 
     @Inject
     private ConnectServiceImpl authentication;
+
+    @Inject
+    private DateConvertedHelper dateConvertedHelper;
 
 
     // Create
@@ -67,6 +69,7 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("new method added");
         GetLoanByIdResponseType rep = new GetLoanByIdResponseType();
         LoanTypeOut loanTypeOut = new LoanTypeOut();
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         Loan loan = loanManager.getLoanById(parameters.getId());
         if (loan == null) {
             throw new BusinessExceptionLoan("no loan found with that bookId");
@@ -74,10 +77,10 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setBookId(loan.getBook().getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
-            loanTypeOut.setStartDate(convertDateIntoXmlDate(loan.getStartDate()));
-            loanTypeOut.setPlannedEndDate(convertDateIntoXmlDate(loan.getPlannedEndDate()));
+            loanTypeOut.setStartDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate()));
+            loanTypeOut.setPlannedEndDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate()));
             if (loan.getEndDate() != null) {
-                loanTypeOut.setEndDate(convertDateIntoXmlDate(loan.getEndDate()));
+                loanTypeOut.setEndDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getEndDate()));
             } else {
                 loanTypeOut.setEndDate(null);
             }
@@ -210,10 +213,10 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
             loanTypeOut.setBookId(loan.getBook().getId());
-            XMLGregorianCalendar startDate = convertDateIntoXmlDate(loan.getStartDate());
-            XMLGregorianCalendar plannedEndDate = convertDateIntoXmlDate(loan.getPlannedEndDate());
+            XMLGregorianCalendar startDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate());
+            XMLGregorianCalendar plannedEndDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate());
             if (loan.getEndDate() != null) {
-                XMLGregorianCalendar endDate = convertDateIntoXmlDate(loan.getEndDate());
+                XMLGregorianCalendar endDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getEndDate());
                 loanTypeOut.setEndDate(endDate);
             } else {
                 loanTypeOut.setEndDate(null);
@@ -245,20 +248,6 @@ public class LoanServiceImpl implements ILoanService {
         return loan;
     }
 
-
-    private XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
-        // converting Date into XML date
-
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(date);
-        XMLGregorianCalendar xmlCalendar = null;
-        try {
-            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-        } catch (DatatypeConfigurationException e) {
-            logger.error(e.getMessage());
-        }
-        return xmlCalendar;
-    }
 
     private void checkAuthentication(String token) throws BusinessExceptionLoan {
         try {

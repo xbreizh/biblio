@@ -9,12 +9,11 @@ import org.troparo.model.Loan;
 import org.troparo.model.Member;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
@@ -30,6 +29,13 @@ public class MemberServiceImpl implements IMemberService {
 
     @Inject
     private ConnectServiceImpl authentication;
+
+    void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+        this.dateConvertedHelper = dateConvertedHelper;
+    }
+
+    @Inject
+    private DateConvertedHelper dateConvertedHelper;
 
 
     // Create
@@ -120,12 +126,12 @@ public class MemberServiceImpl implements IMemberService {
         ) {
             LoanTypeOut loanTypeOut = new LoanTypeOut();
             loanTypeOut.setId(l.getId());
-            XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(l.getStartDate());
+            XMLGregorianCalendar xmlCalendar = dateConvertedHelper.convertDateIntoXmlDate(l.getStartDate());
             loanTypeOut.setStartDate(xmlCalendar);
-            xmlCalendar = convertDateIntoXmlDate(l.getPlannedEndDate());
+            xmlCalendar = dateConvertedHelper.convertDateIntoXmlDate(l.getPlannedEndDate());
             loanTypeOut.setPlannedEndDate(xmlCalendar);
             if (l.getEndDate() != null) {
-                xmlCalendar = convertDateIntoXmlDate(l.getEndDate());
+                xmlCalendar = dateConvertedHelper.convertDateIntoXmlDate(l.getEndDate());
                 loanTypeOut.setEndDate(xmlCalendar);
             }
             loanTypeOut.setBookTypeOut(convertBookIntoBookTypeOut(l.getBook()));
@@ -167,7 +173,7 @@ public class MemberServiceImpl implements IMemberService {
             memberTypeOut.setFirstName(member.getFirstName());
             memberTypeOut.setLastName(member.getLastName());
             memberTypeOut.setEmail(member.getEmail());
-            XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(member.getDateJoin());
+            XMLGregorianCalendar xmlCalendar = dateConvertedHelper.convertDateIntoXmlDate(member.getDateJoin());
             memberTypeOut.setDateJoin(xmlCalendar);
 
             // getting the loanList
@@ -279,13 +285,13 @@ public class MemberServiceImpl implements IMemberService {
             memberTypeOut.setFirstName(member.getFirstName());
             memberTypeOut.setLastName(member.getLastName());
             memberTypeOut.setEmail(member.getEmail());
-            XMLGregorianCalendar xmlCalendar = convertDateIntoXmlDate(member.getDateJoin());
+            XMLGregorianCalendar xmlCalendar = dateConvertedHelper.convertDateIntoXmlDate(member.getDateJoin());
 
             logger.info("new date: " + xmlCalendar);
 
             // converting xml into Date
 
-            memberTypeOut.setDateJoin(convertDateIntoXmlDate(member.getDateJoin()));
+            memberTypeOut.setDateJoin(dateConvertedHelper.convertDateIntoXmlDate(member.getDateJoin()));
 
             memberListType.getMemberTypeOut().add(memberTypeOut);
         }
@@ -293,20 +299,7 @@ public class MemberServiceImpl implements IMemberService {
         return memberListType;
     }
 
-    XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
-        // converting Date into XML date
-        if (date == null) return null;
-        GregorianCalendar cal = new GregorianCalendar();
-        logger.info(date);
-        cal.setTime(date);
-        XMLGregorianCalendar xmlCalendar = null;
-        try {
-            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
-        } catch (DatatypeConfigurationException e) {
-            logger.error(e.getMessage());
-        }
-        return xmlCalendar;
-    }
+
 
     void checkAuthentication(String token) throws BusinessExceptionMember {
         logger.info("tok tok token");
