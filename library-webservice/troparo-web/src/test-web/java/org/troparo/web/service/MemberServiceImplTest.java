@@ -68,6 +68,30 @@ class MemberServiceImplTest {
         assertThrows(BusinessExceptionMember.class, () -> memberService.checkAuthentication(null));
     }
 
+/*    @Test
+    @DisplayName("should clean map")
+    void cleanCriteriasMap(){
+        MemberCriterias memberCriterias = new MemberCriterias();
+        String role = "role";
+        String login = "login";
+        String firstName = "firstName";
+        String lastName = "lastName";
+        String email = "email";
+
+        memberCriterias.setRole(role);
+        memberCriterias.setLastName(lastName);
+        memberCriterias.setLogin(login);
+        memberCriterias.setEmail(email);
+        memberCriterias.setFirstName(firstName);
+
+    *//*    assertAll(
+                ()-> assertEquals(role, memberService.)
+        );*//*
+    fail();
+
+    }*/
+
+
 
     @Test
     @DisplayName("should add member with no exception")
@@ -271,7 +295,7 @@ class MemberServiceImplTest {
         List<Member> list = new ArrayList<>();
         Member member = new Member();
         list.add(member);
-        when(memberManager.getMembersByCriterias(map)).thenReturn(list);
+        //when(memberManager.getMembersByCriterias(map)).thenReturn(list);
         assertDoesNotThrow(() -> memberService.getMemberByCriterias(parameters));
     }
 

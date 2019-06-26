@@ -236,7 +236,23 @@ public class MemberServiceImpl implements IMemberService {
 
     private Map<String, String> cleanCriteriasMap(MemberCriterias criterias) {
         Map<String, String> map = new HashMap<>();
-        if (criterias.getLogin() != null) map.put("Login", criterias.getLogin().toUpperCase());
+        String[][] criteriaList = {
+                {"login", criterias.getLogin()},
+                {"firstName", criterias.getFirstName()},
+                {"lastName", criterias.getLastName()},
+                {"role", criterias.getRole()},
+                {"email", criterias.getEmail()}};
+
+        for (String[] s: criteriaList
+             ) {
+            if(s[0]!=null && !s[0].equalsIgnoreCase("") || !s[0].equalsIgnoreCase("?")){
+                map.put(s[0], s[1]);
+            }
+        }
+        return map;
+
+
+      /*  if (criterias.getLogin() != null) map.put("Login", criterias.getLogin().toUpperCase());
         if (criterias.getFirstName() != null) map.put("FirstName", criterias.getFirstName().toUpperCase());
         if (criterias.getLastName() != null) map.put("LastName", criterias.getLastName().toUpperCase());
         if (criterias.getEmail() != null) map.put("Email", criterias.getEmail().toUpperCase());
@@ -250,7 +266,7 @@ public class MemberServiceImpl implements IMemberService {
                 newMap.put(entry.getKey().toString(), entry.getValue().toString());
             }
         }
-        return newMap;
+        return newMap;*/
     }
 
 
