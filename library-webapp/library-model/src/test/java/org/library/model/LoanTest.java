@@ -11,7 +11,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class LoanTest {
+class LoanTest {
     private Loan loan;
 
     @BeforeEach
@@ -134,7 +134,7 @@ public class LoanTest {
         loan.setStartDate(date);
         loan.setPlannedEndDate(format.parse("2010-01-07"));
         loan.setEndDate(format.parse("2010-01-17"));
-        assertEquals("Loan{Id=123, startDate=Thu Dec 31 00:00:00 CET 2009, plannedEndDate=Thu Jan 07 00:00:00 CET 2010, endDate=Sun Jan 17 00:00:00 CET 2010, renewable=false, status=null, book=Captain Cook}", loan.toString());
+        assertEquals("Loan{Id=123, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, renewable=false, status=null, book=Captain Cook}", loan.toString());
     }
 
 }
