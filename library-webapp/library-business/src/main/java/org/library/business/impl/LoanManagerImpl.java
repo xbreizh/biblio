@@ -22,8 +22,8 @@ public class LoanManagerImpl implements LoanManager {
     private String login = "";
     private List<Loan> loanList = new ArrayList<>();*/
 
-    @Inject
-    BookManager bookManager;
+ /*   @Inject
+    BookManager bookManager;*/
 
 
 
@@ -34,17 +34,17 @@ public class LoanManagerImpl implements LoanManager {
         RenewLoanRequestType renewLoanRequestType = new RenewLoanRequestType();
         renewLoanRequestType.setToken(token);
         renewLoanRequestType.setId(id);
-        RenewLoanResponseType responseType = new RenewLoanResponseType();
+       // RenewLoanResponseType responseType = new RenewLoanResponseType();
         try {
-            responseType = loanService.getLoanServicePort().renewLoan(renewLoanRequestType);
+            /*responseType = */loanService.getLoanServicePort().renewLoan(renewLoanRequestType);
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());
         }
-        if (responseType.isReturn()) {
+       /* if (responseType.isReturn()) {
             logger.info("renew ok for: " + id);
         } else {
             logger.info("issue renewing for: " + id);
-        }
+        }*/
         return false;
     }
 
@@ -82,15 +82,14 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
-    protected Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+ /*   protected Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
         XMLGregorianCalendar xmlCalendar = null;
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
         } catch (DatatypeConfigurationException e) {
             e.printStackTrace();
         }
-        Date date = xmlCalendar.toGregorianCalendar().getTime();
-        return date;
+        return  xmlCalendar.toGregorianCalendar().getTime();
 
-    }
+    }*/
 }

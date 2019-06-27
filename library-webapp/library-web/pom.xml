@@ -59,13 +59,13 @@
             <artifactId>spring-security-taglibs</artifactId>
             <version>${spring-security.version}</version>
         </dependency>
-       <!-- &lt;!&ndash; Servlet Dependency &ndash;&gt;
+        <!-- Servlet Dependency -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
             <scope>provided</scope>
-        </dependency>-->
+        </dependency>
         <!-- JSP Dependency -->
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
@@ -107,12 +107,12 @@
 
 
 
-        <dependency>
+       <!-- <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
             <version>3.1.0</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <!-- ===== Tests ===== -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
         <dependency>
@@ -151,14 +151,14 @@
     <build>
         <finalName>library-webapp</finalName>
         <plugins>
-            <plugin>
+            <!--<plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
                     <source>${jdk.version}</source>
                     <target>${jdk.version}</target>
                 </configuration>
-            </plugin>
+            </plugin>-->
 
             <!-- Embedded Apache Tomcat required for testing web application -->
             <plugin>
