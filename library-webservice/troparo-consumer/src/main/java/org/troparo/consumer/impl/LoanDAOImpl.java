@@ -127,7 +127,6 @@ public class LoanDAOImpl implements LoanDAO {
         request.append(createRequestFromMap(map));
 
         logger.info("request: " + request);
-
         if (map.containsKey(STATUS)) {
             request.append(addStatusToRequest(map));
         }

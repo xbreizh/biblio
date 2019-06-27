@@ -6,7 +6,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.loan.GetLoanByCriteriasRequestType;
 import org.troparo.entities.loan.LoanCriterias;
@@ -21,6 +23,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
+@Transactional
 class LoanServiceIntegrationTest {
     private Logger logger = Logger.getLogger(LoanServiceIntegrationTest.class.getName());
     @Inject
@@ -54,6 +58,7 @@ class LoanServiceIntegrationTest {
         LoanCriterias loanCriterias = new LoanCriterias();
         loanCriterias.setLogin("jpolino");
         loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
+        System.out.println("size: " + loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
         assertEquals(4, loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
     }
 }

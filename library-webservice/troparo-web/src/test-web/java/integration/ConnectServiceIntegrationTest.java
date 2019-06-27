@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.web.service.ConnectServiceImpl;
 
@@ -16,6 +18,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
+@Transactional
 class ConnectServiceIntegrationTest {
     private Logger logger = Logger.getLogger(ConnectServiceIntegrationTest.class.getName());
     @Inject
