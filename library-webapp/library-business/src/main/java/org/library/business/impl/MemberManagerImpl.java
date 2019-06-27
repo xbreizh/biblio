@@ -1,6 +1,7 @@
 package org.library.business.impl;
 
 
+import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.apache.log4j.Logger;
 import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
@@ -26,15 +27,15 @@ import java.util.List;
 public class MemberManagerImpl implements MemberManager {
     private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
-    private String token = "";
-    private String login = "";
+   /* private String token = "";
+    private String login = "";*/
     private MemberTypeOut memberTypeOut;
     private Member member;
 
     @Inject
     LoanManager loanManager;
-    @Inject
-    BookManager bookManager;
+   /* @Inject
+    BookManager bookManager;*/
 
 
     @Override
@@ -68,7 +69,7 @@ public class MemberManagerImpl implements MemberManager {
         } catch (NullPointerException e) {
             logger.info("Issue while trying to get member details");
         } catch (BusinessExceptionMember businessExceptionMember) {
-            businessExceptionMember.printStackTrace();
+            logger.error(businessExceptionMember.getMessage());
         }
         /*logger.info("member converted: "+member.getLoanList().get(0));*/
         return member;
@@ -132,15 +133,16 @@ public class MemberManagerImpl implements MemberManager {
         return book;
     }
 
-    protected Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
-        XMLGregorianCalendar xmlCalendar = null;
+    private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+        if(gDate==null)return null;
+        XMLGregorianCalendar xmlCalendar = new XMLGregorianCalendarImpl();
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-        Date date = xmlCalendar.toGregorianCalendar().getTime();
-        return date;
+
+        return xmlCalendar.toGregorianCalendar().getTime();
 
     }
 
