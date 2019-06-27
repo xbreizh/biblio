@@ -37,6 +37,10 @@ public class LoanManagerImpl implements LoanManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public LoanManagerImpl() {
+        workaroundConfigFile();
+    }
+
+    void workaroundConfigFile() {
         if (loanDurationString != null && !loanDurationString.isEmpty()) {
             loanDuration = Integer.parseInt(loanDurationString);
         } else {

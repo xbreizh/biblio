@@ -286,6 +286,8 @@ class LoanManagerImplTest {
         assertNull(loanManager.getLoanStatus(55));
 
     }
+
+
 }
 
 
