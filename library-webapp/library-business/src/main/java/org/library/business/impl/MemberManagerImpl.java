@@ -3,7 +3,6 @@ package org.library.business.impl;
 
 import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.apache.log4j.Logger;
-import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
 import org.library.model.Book;
@@ -27,8 +26,8 @@ import java.util.List;
 public class MemberManagerImpl implements MemberManager {
     private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
-   /* private String token = "";
-    private String login = "";*/
+    /* private String token = "";
+     private String login = "";*/
     private MemberTypeOut memberTypeOut;
     private Member member;
 
@@ -114,7 +113,7 @@ public class MemberManagerImpl implements MemberManager {
             }
         }
 
-        logger.info("loan list size: "+loanList.size());
+        logger.info("loan list size: " + loanList.size());
         return loanList;
     }
 
@@ -129,12 +128,12 @@ public class MemberManagerImpl implements MemberManager {
         book.setPublicationYear(bookTypeOut.getPublicationYear());
         book.setNbPages(bookTypeOut.getNbPages());
         book.setKeywords(bookTypeOut.getKeywords());
-        logger.info("book converted: "+book);
+        logger.info("book converted: " + book);
         return book;
     }
 
     private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
-        if(gDate==null)return null;
+        if (gDate == null) return null;
         XMLGregorianCalendar xmlCalendar = new XMLGregorianCalendarImpl();
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);

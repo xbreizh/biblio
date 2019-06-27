@@ -23,6 +23,11 @@ public class MemberManagerImpl implements MemberManager {
 
     @Inject
     MemberDAO memberDAO;
+
+    public MemberManagerImpl() {
+        if(pepper==null)pepper="TIPIAK";
+    }
+
     @Inject
     StringValidatorMember stringValidatorMember;
 
