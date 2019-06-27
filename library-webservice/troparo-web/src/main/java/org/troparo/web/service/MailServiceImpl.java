@@ -29,14 +29,12 @@ public class MailServiceImpl implements IMailService {
 
     @Inject
     private ConnectServiceImpl authentication;
+    @Inject
+    private DateConvertedHelper dateConvertedHelper;
 
     void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
         this.dateConvertedHelper = dateConvertedHelper;
     }
-
-    @Inject
-    private DateConvertedHelper dateConvertedHelper;
-
 
     @Override
     public GetOverdueMailListResponse getOverdueMailList(GetOverdueMailListRequest parameters) throws BusinessExceptionMail {
@@ -70,7 +68,6 @@ public class MailServiceImpl implements IMailService {
 
         return mlt;
     }
-
 
 
     private void checkAuthentication(String token) throws BusinessExceptionMail {

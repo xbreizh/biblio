@@ -4,7 +4,6 @@ package org.troparo.business.impl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
@@ -13,7 +12,6 @@ import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.transaction.Transactional;
 import java.util.*;
 
 
@@ -28,7 +26,7 @@ public class LoanManagerImpl implements LoanManager {
     MemberManager memberManager;
     @Value("${loanDuration}")
     private String loanDurationString;
-    private int loanDuration ;
+    private int loanDuration;
     @Value("${renewDuration}")
     private String renewDurationString;
     private int renewDuration;
@@ -39,19 +37,19 @@ public class LoanManagerImpl implements LoanManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public LoanManagerImpl() {
-        if(loanDurationString!=null&& !loanDurationString.isEmpty()) {
+        if (loanDurationString != null && !loanDurationString.isEmpty()) {
             loanDuration = Integer.parseInt(loanDurationString);
-        }else{
+        } else {
             loanDuration = 28;
         }
-        if(renewDurationString!=null&&!renewDurationString.isEmpty()) {
-            renewDuration =Integer.parseInt(renewDurationString);
-        }else{
+        if (renewDurationString != null && !renewDurationString.isEmpty()) {
+            renewDuration = Integer.parseInt(renewDurationString);
+        } else {
             renewDuration = 28;
         }
-        if(maxBooksString!=null&&!maxBooksString.isEmpty()) {
+        if (maxBooksString != null && !maxBooksString.isEmpty()) {
             maxBooks = Integer.parseInt(maxBooksString);
-        }else{
+        } else {
             maxBooks = 4;
         }
     }

@@ -15,7 +15,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Named
 @WebService(serviceName = "MemberService", endpointInterface = "org.troparo.services.memberservice.IMemberService",
@@ -29,14 +31,12 @@ public class MemberServiceImpl implements IMemberService {
 
     @Inject
     private ConnectServiceImpl authentication;
+    @Inject
+    private DateConvertedHelper dateConvertedHelper;
 
     void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
         this.dateConvertedHelper = dateConvertedHelper;
     }
-
-    @Inject
-    private DateConvertedHelper dateConvertedHelper;
-
 
     // Create
     @Override
@@ -298,7 +298,6 @@ public class MemberServiceImpl implements IMemberService {
         logger.info("memberListType end: " + memberListType.getMemberTypeOut().size());
         return memberListType;
     }
-
 
 
     void checkAuthentication(String token) throws BusinessExceptionMember {

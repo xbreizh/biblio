@@ -68,7 +68,7 @@ public class BookManagerImpl implements BookManager {
 
     String replaceSeparatorWithWhiteSpace(String string) {
         logger.info("trying to replace: " + string);
-        if(string==null)return "";
+        if (string == null) return "";
         String[] separators = {";", ",", "/", "\\",};
         for (String sep : separators
         ) {
@@ -156,11 +156,11 @@ public class BookManagerImpl implements BookManager {
 
     String transferKeywordsToSimilarBooks(Book book, Book b) {
         if (book != null && b != null) {
-        if (book.getKeywords() != null && !book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
-            b.setKeywords(book.getKeywords());
-        }
+            if (book.getKeywords() != null && !book.getKeywords().equals("") && !book.getKeywords().equals("?")) {
+                b.setKeywords(book.getKeywords());
+            }
 
-        return b.getKeywords();
+            return b.getKeywords();
         } else {
             return null;
         }
@@ -168,10 +168,10 @@ public class BookManagerImpl implements BookManager {
 
     int transferNbPagesToSimilarBooks(Book book, Book b) {
         if (book != null && b != null) {
-        if (book.getNbPages() != 0) {
-            b.setNbPages(book.getNbPages());
-        }
-        return b.getNbPages();
+            if (book.getNbPages() != 0) {
+                b.setNbPages(book.getNbPages());
+            }
+            return b.getNbPages();
         } else {
             return 0;
         }
@@ -198,9 +198,9 @@ public class BookManagerImpl implements BookManager {
 
     String transferAuthorToSimilarBooks(Book book, Book b) {
         if (book != null && b != null) {
-        if (book.getAuthor() != null && !book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
-            b.setAuthor(book.getAuthor());
-        }
+            if (book.getAuthor() != null && !book.getAuthor().equals("") && !book.getAuthor().equals("?")) {
+                b.setAuthor(book.getAuthor());
+            }
         } else {
             return null;
         }

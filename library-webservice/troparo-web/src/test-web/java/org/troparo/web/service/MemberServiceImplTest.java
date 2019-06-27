@@ -409,7 +409,7 @@ class MemberServiceImplTest {
 
     @Test
     @DisplayName("should convert date")
-    void convertDateIntoXmlDate1() throws  ParseException {
+    void convertDateIntoXmlDate1() throws ParseException {
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         String pattern = "yyyy-MM-dd HH:mm:ss";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);

@@ -5,12 +5,12 @@ import java.util.Date;
 public class Mail {
 
 
-private Date dueDate;
+    private Date dueDate;
     private int diffDays;
     private Book book;
     private Member member;
 
-    public Mail(){
+    public Mail() {
         book = new Book();
         member = new Member();
     }
@@ -29,7 +29,7 @@ private Date dueDate;
     }
 
     public void setFirstName(String firstName) {
-     member.setFirstName(firstName);
+        member.setFirstName(firstName);
     }
 
     public String getLastName() {
@@ -73,11 +73,11 @@ private Date dueDate;
     }
 
     public String getAuthor() {
-       return book.getAuthor();
+        return book.getAuthor();
     }
 
     public void setAuthor(String author) {
-       book.setAuthor(author);
+        book.setAuthor(author);
     }
 
     public String getEdition() {
@@ -85,7 +85,7 @@ private Date dueDate;
     }
 
     public void setEdition(String edition) {
-       book.setEdition(edition);
+        book.setEdition(edition);
     }
 
     @Override

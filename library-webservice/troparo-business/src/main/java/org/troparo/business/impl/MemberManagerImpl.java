@@ -17,21 +17,17 @@ import java.util.*;
 @Transactional
 @Named
 public class MemberManagerImpl implements MemberManager {
-    @Value("${pepper}")
-    private static String pepper;
-
-
     @Inject
     MemberDAO memberDAO;
-
-    public MemberManagerImpl() {
-        if(pepper==null)pepper="TIPIAK";
-    }
-
     @Inject
     StringValidatorMember stringValidatorMember;
-
+    @Value("${pepper}")
+    private String pepper;
     private Logger logger = Logger.getLogger(this.getClass().getName());
+
+    public MemberManagerImpl() {
+        if (pepper == null) pepper = "TIPIAK";
+    }
 
     public void setMemberDAO(MemberDAO memberDAO) {
         this.memberDAO = memberDAO;

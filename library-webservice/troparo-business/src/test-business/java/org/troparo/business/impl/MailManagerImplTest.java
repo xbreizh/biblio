@@ -10,7 +10,6 @@ import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
-import org.troparo.model.Mail;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -76,7 +75,7 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should return empty list")
-    void gettingDataForLoan(){
+    void gettingDataForLoan() {
         MailManagerImpl mailManager1 = new MailManagerImpl();
         List<Loan> loanList = new ArrayList<>();
 
@@ -117,12 +116,12 @@ class MailManagerImplTest {
 
 
         assertAll(
-                ()-> assertEquals(title, mailManager1.gettingDataForLoan(loanList).get(0).getTitle()),
-                ()-> assertEquals(author, mailManager1.gettingDataForLoan(loanList).get(0).getAuthor()),
-                ()-> assertEquals(edition, mailManager1.gettingDataForLoan(loanList).get(0).getEdition()),
-                ()-> assertEquals(firstName, mailManager1.gettingDataForLoan(loanList).get(0).getFirstName()),
-                ()-> assertEquals(lastName, mailManager1.gettingDataForLoan(loanList).get(0).getLastName()),
-                ()-> assertEquals(email, mailManager1.gettingDataForLoan(loanList).get(0).getEmail())
+                () -> assertEquals(title, mailManager1.gettingDataForLoan(loanList).get(0).getTitle()),
+                () -> assertEquals(author, mailManager1.gettingDataForLoan(loanList).get(0).getAuthor()),
+                () -> assertEquals(edition, mailManager1.gettingDataForLoan(loanList).get(0).getEdition()),
+                () -> assertEquals(firstName, mailManager1.gettingDataForLoan(loanList).get(0).getFirstName()),
+                () -> assertEquals(lastName, mailManager1.gettingDataForLoan(loanList).get(0).getLastName()),
+                () -> assertEquals(email, mailManager1.gettingDataForLoan(loanList).get(0).getEmail())
 
         );
 

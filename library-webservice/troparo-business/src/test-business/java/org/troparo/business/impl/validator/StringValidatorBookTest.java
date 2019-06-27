@@ -106,8 +106,8 @@ class StringValidatorBookTest {
         for (String name : nameList
         ) {
             assertAll(
-                    ()->assertTrue(stringValidatorBook.validateExpression("name", name)),
-                    ()->assertTrue(stringValidatorBook.validateExpression("author", name))
+                    () -> assertTrue(stringValidatorBook.validateExpression("name", name)),
+                    () -> assertTrue(stringValidatorBook.validateExpression("author", name))
             );
 
         }
@@ -120,8 +120,8 @@ class StringValidatorBookTest {
         for (String name : nameList
         ) {
             assertAll(
-                    ()->assertFalse(stringValidatorBook.validateExpression("name", name)),
-                    ()->assertFalse(stringValidatorBook.validateExpression("author", name))
+                    () -> assertFalse(stringValidatorBook.validateExpression("name", name)),
+                    () -> assertFalse(stringValidatorBook.validateExpression("author", name))
             );
         }
     }

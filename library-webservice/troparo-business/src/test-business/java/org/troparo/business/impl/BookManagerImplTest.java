@@ -410,8 +410,8 @@ class BookManagerImplTest {
     @DisplayName("should return null if any book is null")
     void transferNbPagesToSimilarBooks2() {
         assertAll(
-                () -> assertEquals(0,bookManager2.transferNbPagesToSimilarBooks(null, new Book())),
-                () -> assertEquals(0,bookManager2.transferNbPagesToSimilarBooks(new Book(), null))
+                () -> assertEquals(0, bookManager2.transferNbPagesToSimilarBooks(null, new Book())),
+                () -> assertEquals(0, bookManager2.transferNbPagesToSimilarBooks(new Book(), null))
         );
 
     }

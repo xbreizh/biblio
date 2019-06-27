@@ -15,7 +15,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.jws.WebService;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Named
 @WebService(serviceName = "LoanService", endpointInterface = "org.troparo.services.loanservice.ILoanService",
@@ -33,14 +35,12 @@ public class LoanServiceImpl implements ILoanService {
 
     @Inject
     private ConnectServiceImpl authentication;
+    @Inject
+    private DateConvertedHelper dateConvertedHelper;
 
     void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
         this.dateConvertedHelper = dateConvertedHelper;
     }
-
-    @Inject
-    private DateConvertedHelper dateConvertedHelper;
-
 
     // Create
     @Override
@@ -131,15 +131,15 @@ public class LoanServiceImpl implements ILoanService {
             return null;
 
         if (parameters.getLoanCriterias().getLogin() != null && !parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
-                map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
-            }
+            map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
+        }
 
         if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
             map.put("book.bookId", Integer.toString(parameters.getLoanCriterias().getBookId()));
         }
         if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("")) {
-                map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
-            }
+            map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
+        }
 
         logger.info("map: " + map);
         logger.info(map);
@@ -150,8 +150,8 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
         logger.info(loanList);
         if (loanList != null && !loanList.isEmpty()) {
-                loanListType = convertLoanIntoLoanTypeOut(loanList);
-            }
+            loanListType = convertLoanIntoLoanTypeOut(loanList);
+        }
 
         logger.info("loanListType end: " + loanListType.getLoanTypeOut().size());
         responseType.setLoanListType(loanListType);

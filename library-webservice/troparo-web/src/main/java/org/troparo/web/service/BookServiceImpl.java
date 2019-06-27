@@ -113,7 +113,7 @@ public class BookServiceImpl implements IBookService {
     @Override
     public UpdateBookResponseType updateBook(UpdateBookRequestType parameters) throws BusinessExceptionBook {
         String exception;
-        Book book= new Book();
+        Book book = new Book();
         checkAuthentication(parameters.getToken());
 
         org.troparo.entities.book.UpdateBookResponseType ar = new org.troparo.entities.book.UpdateBookResponseType();

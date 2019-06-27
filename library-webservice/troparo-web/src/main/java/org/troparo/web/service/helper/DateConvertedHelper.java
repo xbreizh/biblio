@@ -16,7 +16,7 @@ public class DateConvertedHelper {
 
     public XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
         // converting Date into XML date
-        if(date==null)return  null;
+        if (date == null) return null;
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
         XMLGregorianCalendar xmlCalendar = null;
