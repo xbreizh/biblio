@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 
 class LoanTest {
@@ -88,6 +89,36 @@ class LoanTest {
     }
 
     @Test
+    @DisplayName("should get renewable")
+    void isRenewable() {
+        loan.setRenewable(false);
+        assertFalse(loan.isRenewable());
+    }
+
+    @Test
+    @DisplayName("should set renewable")
+    void setRenewable(){
+        loan.setRenewable(false);
+        assertFalse(loan.isRenewable());
+    }
+
+    @Test
+    @DisplayName("should get status")
+    void getStatus() {
+        String status = "status";
+        loan.setStatus(status);
+        assertEquals(status, loan.getStatus());
+    }
+
+    @Test
+    @DisplayName("should set status")
+    void setStatus(){
+        String status = "status";
+        loan.setStatus(status);
+        assertEquals(status, loan.getStatus());
+    }
+
+    @Test
     @DisplayName("should get Borrower")
     void getBorrower() {
         Member borrower = new Member();
@@ -134,7 +165,7 @@ class LoanTest {
         loan.setStartDate(date);
         loan.setPlannedEndDate(format.parse("2010-01-07"));
         loan.setEndDate(format.parse("2010-01-17"));
-        assertEquals("Loan{Id=123, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, renewable=false, status=null, book=Captain Cook}", loan.toString());
+        assertEquals("Loan{id=123, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, renewable=false, status=null, book=Captain Cook}", loan.toString());
     }
 
 }

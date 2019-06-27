@@ -72,16 +72,16 @@ class BookTest {
     void getInsert_date() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date       = format.parse ( "2009-12-31" );
-        book.setInsert_date(date);
-        assertEquals(date, book.getInsert_date());
+        book.setInsertDate(date);
+        assertEquals(date, book.getInsertDate());
     }
 
     @Test
     void setInsert_date() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date       = format.parse ( "2009-12-31" );
-        book.setInsert_date(date);
-        assertEquals(date, book.getInsert_date());
+        book.setInsertDate(date);
+        assertEquals(date, book.getInsertDate());
     }
 
     @Test
@@ -145,6 +145,18 @@ class BookTest {
     }
 
     @Test
+    void getNbAvailable() {
+        book.setNbAvailable(124);
+        assertEquals(124, book.getNbAvailable());
+    }
+
+    @Test
+    void setNbAvailable() {
+        book.setNbAvailable(124);
+        assertEquals(124, book.getNbAvailable());
+    }
+
+    @Test
     void toString1() throws ParseException {
         book.setAuthor("Marxo");
         book.setTitle("Le grand cirque");
@@ -152,7 +164,7 @@ class BookTest {
         book.setId(123);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         Date date       = format.parse ( "2009-12-31" );
-        book.setInsert_date(date);
+        book.setInsertDate(date);
         book.setNbPages(125);
         book.setEdition("maroko");
         book.setPublicationYear(1984);
@@ -161,6 +173,6 @@ class BookTest {
         book.setKeywords("top, montagne, hiver");
         System.out.println(book);
 
-        assertEquals("Book{Id=123, isbn='AbG231', title='Le grand cirque', author='Marxo', insert_date=Thu Dec 31 00:00:00 UTC 2009, publicationYear=1984, edition='maroko', nbPages=125, keywords='top, montagne, hiver', nbAvailable='0', loanList=0}", book.toString());
+        assertEquals("Book{id=123, isbn='AbG231', title='Le grand cirque', author='Marxo', insertDate=Thu Dec 31 00:00:00 UTC 2009, publicationYear=1984, edition='maroko', nbPages=125, keywords='top, montagne, hiver', nbAvailable='0', loanList=0}", book.toString());
     }
 }

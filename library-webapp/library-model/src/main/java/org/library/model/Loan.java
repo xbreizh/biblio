@@ -8,7 +8,7 @@ public class Loan {
 
     // member variables
 
-    private int Id;
+    private int id;
 
 
     private Date startDate;
@@ -34,14 +34,14 @@ public class Loan {
 
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
-    public Date getStartDate() {
+    Date getStartDate() {
         return startDate;
     }
 
@@ -49,7 +49,7 @@ public class Loan {
         this.startDate = startDate;
     }
 
-    public Date getPlannedEndDate() {
+    Date getPlannedEndDate() {
         return plannedEndDate;
     }
 
@@ -57,7 +57,7 @@ public class Loan {
         this.plannedEndDate = plannedEndDate;
     }
 
-    public Date getEndDate() {
+    Date getEndDate() {
         return endDate;
     }
 
@@ -65,11 +65,11 @@ public class Loan {
         this.endDate = endDate;
     }
 
-    public Member getBorrower() {
+    Member getBorrower() {
         return borrower;
     }
 
-    public void setBorrower(Member borrower) {
+    void setBorrower(Member borrower) {
         this.borrower = borrower;
     }
 
@@ -77,7 +77,7 @@ public class Loan {
         return book;
     }
 
-    public boolean isRenewable() {
+    boolean isRenewable() {
         return renewable;
     }
 
@@ -85,7 +85,7 @@ public class Loan {
         this.renewable = renewable;
     }
 
-    public String getStatus() {
+    String getStatus() {
         return status;
     }
 
@@ -102,7 +102,7 @@ public class Loan {
     @Override
     public String toString() {
         return "Loan{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", startDate=" + startDate +
                 ", plannedEndDate=" + plannedEndDate +
                 ", endDate=" + endDate +

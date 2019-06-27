@@ -10,7 +10,7 @@ public class Book {
 
     // member variables
 
-    private int Id;
+    private int id;
 
 
     private String isbn;
@@ -22,7 +22,7 @@ public class Book {
     private String author;
 
 
-    private Date insert_date;
+    private Date insertDate;
 
 
     private int publicationYear;
@@ -44,14 +44,14 @@ public class Book {
     // getters & setters
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
-    public int getNbAvailable() {
+    int getNbAvailable() {
         return nbAvailable;
     }
 
@@ -83,15 +83,15 @@ public class Book {
         this.author = author;
     }
 
-    public Date getInsert_date() {
-        return insert_date;
+    Date getInsertDate() {
+        return insertDate;
     }
 
-    public void setInsert_date(Date insert_date) {
-        this.insert_date = insert_date;
+    void setInsertDate(Date insertDate) {
+        this.insertDate = insertDate;
     }
 
-    public int getPublicationYear() {
+    int getPublicationYear() {
         return publicationYear;
     }
 
@@ -99,7 +99,7 @@ public class Book {
         this.publicationYear = publicationYear;
     }
 
-    public String getEdition() {
+    String getEdition() {
         return edition;
     }
 
@@ -107,7 +107,7 @@ public class Book {
         this.edition = edition;
     }
 
-    public int getNbPages() {
+    int getNbPages() {
         return nbPages;
     }
 
@@ -115,7 +115,7 @@ public class Book {
         this.nbPages = nbPages;
     }
 
-    public String getKeywords() {
+    String getKeywords() {
         return keywords;
     }
 
@@ -123,22 +123,22 @@ public class Book {
         this.keywords = keywords;
     }
 
-    public List<Loan> getLoanList() {
+    List<Loan> getLoanList() {
         return loanList;
     }
 
-    public void setLoanList(List<Loan> loanList) {
+    void setLoanList(List<Loan> loanList) {
         this.loanList = loanList;
     }
 
     @Override
     public String toString() {
         return "Book{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", isbn='" + isbn + '\'' +
                 ", title='" + title + '\'' +
                 ", author='" + author + '\'' +
-                ", insert_date=" + insert_date +
+                ", insertDate=" + insertDate +
                 ", publicationYear=" + publicationYear +
                 ", edition='" + edition + '\'' +
                 ", nbPages=" + nbPages +
