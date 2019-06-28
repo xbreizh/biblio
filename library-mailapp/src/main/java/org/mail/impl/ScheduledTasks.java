@@ -10,7 +10,6 @@ public class ScheduledTasks {
 
 
     public static void main(String[] args) {
-        System.out.println("plopplop");
         SpringApplication.run(ScheduledTasks.class, args);
     }
 }

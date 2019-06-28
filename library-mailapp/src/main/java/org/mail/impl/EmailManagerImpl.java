@@ -42,17 +42,18 @@ public class EmailManagerImpl {
 
     private String mailFrom = "xavier.lamourec@gmail.com";
 
-    private String fileLocation = "/usr/app/resources/mail.properties";
+
 
     private String subject = "mail Reminder ** LOAN OVERDUE **";
 
-    /*private String body="<h1>test</h1>";*/
 
-    private String templateLocation = "/usr/app/resources/HTMLTemplate.html";
+
+
 
     private String mailServer = "smtp.gmail.com";
 
     private String port = "587";
+
 
     private boolean test;
 
@@ -71,7 +72,6 @@ public class EmailManagerImpl {
     @Value("${mailServerPort}")
     private String port;*/
 
-    private String token;
 
 
     private static final String AES = "AES";
@@ -82,6 +82,7 @@ public class EmailManagerImpl {
     //@Scheduled(cron = "* 00 11 * * *")
     @Scheduled(fixedRate = 500000)
     public void sendMail() {
+        String token;
         token = connectManager.authenticate();
         if (token != null) {
 
@@ -117,25 +118,25 @@ public class EmailManagerImpl {
 
                 List<Mail> overdueList = getOverdueList(token);
 
-                if (overdueList!=null && overdueList.size() > 0) {
+                if (overdueList!=null && !overdueList.isEmpty()) {
                     for (Mail mail : overdueList
                     ) {
 
-                        String text = createMailContent(mail);
+
                         String recipient = mail.getEmail();
 
                         // adding condition for testign purposes
                         if (test) {
                             recipient = "dontkillewok@gmail.com";
                         }
-
+                        try {
                         message.setRecipients(Message.RecipientType.TO,
                                 InternetAddress.parse(recipient));
                         //HTML mail content
                         String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
 
                         message.setContent(htmlText, "text/html");
-                        try {
+
                             logger.info("mail content: " + message.getContent().toString());
                         } catch (IOException e) {
                             logger.error(e.getMessage());
@@ -183,7 +184,7 @@ public class EmailManagerImpl {
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
         String dueDate = dt1.format(mail.getDueDate());
         input.put("DUEDATE", dueDate);
-        Date today = new Date();
+
         logger.info("date: " + dueDate);
         int overDays = mail.getDiffdays();
         input.put("Isbn", mail.getIsbn());

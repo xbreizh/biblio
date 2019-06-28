@@ -14,33 +14,31 @@ public class ConnectManagerImpl implements ConnectManager {
 
     private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
     private String token;
-    private static final String login = "lokii";
+    private static final String LOGIN = "lokii";
     private static final String PWD = "123";
 
     /* @Override*/
     public String authenticate() {
         ConnectService cs = new ConnectService();
         GetTokenRequestType t = new GetTokenRequestType();
-        t.setLogin(login);
+        t.setLogin(LOGIN);
         t.setPassword(PWD);
-        /* System.out.println("login: " + login + " \n password: " + password);*/
         try {
             GetTokenResponseType responseType = cs.getConnectServicePort().getToken(t);
             token = responseType.getReturn();
         } catch (BusinessExceptionConnect businessExceptionConnect) {
             logger.error("issue while trying to get the token");
         }
-        System.out.println("token found: ");
 
 
-        if (!token.equals("wrong login or pwd")) {
+
+        if (!token.equals("wrong LOGIN or pwd")) {
 
 
             return token;
         } else {
             return null;
-           /* throw new
-                    BadCredentialsException("External system authentication failed");*/
+
 
         }
 
