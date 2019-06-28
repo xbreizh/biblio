@@ -51,7 +51,7 @@
     <wsdl:service name="MailService">
         <wsdl:port name="MailServicePort" binding="tns:MailServiceSOAPBinding">
             <soap:address
-                    location="http://localhost:8080/troparo_app/services/mail/MailService"/>
+                    location="http://localhost:8082/troparo_app/services/mail/MailService"/>
         </wsdl:port>
     </wsdl:service>
 

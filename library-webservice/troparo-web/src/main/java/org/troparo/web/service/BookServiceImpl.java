@@ -20,7 +20,7 @@ import java.util.Map;
 @WebService(serviceName = "BookService", endpointInterface = "org.troparo.services.bookservice.IBookService",
         targetNamespace = "http://troparo.org/services/BookService/", portName = "BookServicePort", name = "BookServiceImpl")
 public class BookServiceImpl implements IBookService {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(BookServiceImpl.class);
 
 
     @Inject

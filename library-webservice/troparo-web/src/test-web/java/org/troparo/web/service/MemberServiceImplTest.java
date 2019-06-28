@@ -117,7 +117,6 @@ class MemberServiceImplTest {
         memberTypeIn.setFirstName("John");
         memberTypeIn.setLastName("Bonham");
         memberTypeIn.setEmail("dsdsd@dede.fr");
-        memberTypeIn.setPassword("123dd");
         parameters.setMemberTypeUpdate(memberTypeIn);
         when(memberManager.updateMember(any(Member.class))).thenReturn("pas bon");
         assertThrows(BusinessExceptionMember.class, () -> memberService.updateMember(parameters));
@@ -135,7 +134,6 @@ class MemberServiceImplTest {
         memberTypeIn.setFirstName("John");
         memberTypeIn.setLastName("Bonham");
         memberTypeIn.setEmail("dsdsd@dede.fr");
-        memberTypeIn.setPassword("123dd");
         parameters.setMemberTypeUpdate(memberTypeIn);
         when(memberManager.updateMember(any(Member.class))).thenReturn("");
         assertDoesNotThrow(() -> memberService.updateMember(parameters));

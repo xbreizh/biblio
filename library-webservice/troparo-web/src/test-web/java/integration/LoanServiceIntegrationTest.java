@@ -10,9 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.entities.connect.GetTokenRequestType;
-import org.troparo.entities.loan.GetLoanByCriteriasRequestType;
-import org.troparo.entities.loan.LoanCriterias;
-import org.troparo.entities.loan.LoanListRequestType;
+import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.web.service.ConnectServiceImpl;
 import org.troparo.web.service.LoanServiceImpl;
@@ -47,7 +45,17 @@ class LoanServiceIntegrationTest {
     void getLoans() throws BusinessExceptionLoan {
         LoanListRequestType loanListRequestType = new LoanListRequestType();
         loanListRequestType.setToken(token);
+        System.out.println(loanService.getAllLoans(loanListRequestType).getLoanListType().getLoanTypeOut());
         assertEquals(5, loanService.getAllLoans(loanListRequestType).getLoanListType().getLoanTypeOut().size());
+    }
+
+    @Test
+    @DisplayName("should return list of Loans")
+    void getLoansById() throws BusinessExceptionLoan {
+        GetLoanByIdRequestType loanListRequestType = new GetLoanByIdRequestType();
+        loanListRequestType.setToken(token);
+        loanListRequestType.setId(1);
+        assertEquals("JPOLINO", loanService.getLoanById(loanListRequestType).getLoanTypeOut().getLogin());
     }
 
     @Test

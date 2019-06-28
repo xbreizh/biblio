@@ -21,7 +21,7 @@ import java.util.List;
 @WebService(serviceName = "MailService", endpointInterface = "org.troparo.services.mailservice.IMailService",
         targetNamespace = "http://troparo.org/services/MailService/", portName = "MailServicePort", name = "MailServiceImpl")
 public class MailServiceImpl implements IMailService {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(MailServiceImpl.class);
 
     @Inject
     private MailManager mailManager;

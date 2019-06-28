@@ -23,7 +23,7 @@ import java.util.Map;
 @WebService(serviceName = "MemberService", endpointInterface = "org.troparo.services.memberservice.IMemberService",
         targetNamespace = "http://troparo.org/services/MemberService/", portName = "MemberServicePort", name = "MemberServiceImpl")
 public class MemberServiceImpl implements IMemberService {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(MemberServiceImpl.class);
 
     @Inject
     private MemberManager memberManager;
@@ -80,7 +80,6 @@ public class MemberServiceImpl implements IMemberService {
         Member member = new Member();
         member.setLogin(memberTypeUpdate.getLogin().toUpperCase());
         member.setFirstName(memberTypeUpdate.getFirstName().toUpperCase());
-        member.setPassword(memberTypeUpdate.getPassword().toUpperCase());
         member.setLastName(memberTypeUpdate.getLastName().toUpperCase());
         member.setEmail(memberTypeUpdate.getEmail().toUpperCase());
         member.setRole(memberTypeUpdate.getRole().toUpperCase());

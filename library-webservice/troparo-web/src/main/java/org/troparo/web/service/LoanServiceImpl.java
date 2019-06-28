@@ -23,7 +23,7 @@ import java.util.Map;
 @WebService(serviceName = "LoanService", endpointInterface = "org.troparo.services.loanservice.ILoanService",
         targetNamespace = "http://troparo.org/services/LoanService/", portName = "LoanServicePort", name = "LoanServiceImpl")
 public class LoanServiceImpl implements ILoanService {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(LoanServiceImpl.class);
 
 
     @Inject

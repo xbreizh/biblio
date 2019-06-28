@@ -13,7 +13,7 @@ import javax.jws.WebService;
 @WebService(serviceName = "ConnectService", endpointInterface = "org.troparo.services.connectservice.IConnectService",
         targetNamespace = "http://troparo.org/services/ConnectService/", portName = "ConnectServicePort", name = "ConnectServiceImpl")
 public class ConnectServiceImpl implements IConnectService {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(ConnectServiceImpl.class);
 
     @Inject
     private MemberManager memberManager;
