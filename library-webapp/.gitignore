@@ -25,9 +25,3 @@ hs_err_pid*
 *.iml
 target/
 generated/
-bookservice/
-connectservice/
-loanservice/
-mailservice/
-memberservice/
-**/entities/
