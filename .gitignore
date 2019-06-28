@@ -26,8 +26,11 @@ hs_err_pid*
 target/
 generated/
 org/troparo/entities/**
+troparo-web/src/main/java/org/troparo/entities/
+troparo-web/src/main/java/org/troparo/services/
 org/troparo/services/**
 jenkins/
 db-init/
 sonarqube/
-
+sonarqube_backup/
+jenkins-sonarqube-backup/
