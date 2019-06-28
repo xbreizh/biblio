@@ -74,7 +74,7 @@ public class EmailManagerImpl {
     private String token;
 
 
-    public static final String AES = "AES";
+    private static final String AES = "AES";
 
 
     // */10 * * * * *
@@ -86,15 +86,14 @@ public class EmailManagerImpl {
         if (token != null) {
 
             final String username = "xavier.lamourec@gmail.com";
-            System.out.println("trying to send mail");
-            System.out.println("testing logger");
+            logger.info("trying to send mail");
 
             Properties props = new Properties();
             props.put("mail.smtp.auth", "true");
             props.put("mail.smtp.starttls.enable", "true");
             props.put("mail.smtp.host", mailServer);
             props.put("mail.smtp.port", port);
-            System.out.println("properties passed ok");
+            logger.info("properties passed ok");
             Session session = Session.getInstance(props,
                     new Authenticator() {
                         protected PasswordAuthentication getPasswordAuthentication() {
@@ -102,28 +101,26 @@ public class EmailManagerImpl {
                                 return new PasswordAuthentication(username, getPassword());
 
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                logger.error(e.getMessage());
                             }
                             return null;
                         }
                     });
 
             try {
-                System.out.println("authentication ok");
+                logger.info("authentication ok");
                 Message message = new MimeMessage(session);
                 message.setFrom(new InternetAddress(mailFrom));
 
                 message.setSubject(subject);
-                System.out.println("getting message ok");
-          /*  message.setText(body);
-            String test = "markolo";*/
+
 
                 List<Mail> overdueList = getOverdueList(token);
-                System.out.println("overdue list size: " + overdueList.size());
-                if (overdueList.size() > 0) {
+
+                if (overdueList!=null && overdueList.size() > 0) {
                     for (Mail mail : overdueList
                     ) {
-                        System.out.println("loan id: " + mail.getEmail());
+
                         String text = createMailContent(mail);
                         String recipient = mail.getEmail();
 
@@ -135,30 +132,21 @@ public class EmailManagerImpl {
                         message.setRecipients(Message.RecipientType.TO,
                                 InternetAddress.parse(recipient));
                         //HTML mail content
-                        System.out.println("getting template location: " + templateLocation);
                         String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
-                        System.out.println("html to be sent: " + htmlText);
 
                         message.setContent(htmlText, "text/html");
-                        System.out.println("sending email to " + mail.getEmail());
                         try {
-                            System.out.println("mail content: " + message.getContent().toString());
+                            logger.info("mail content: " + message.getContent().toString());
                         } catch (IOException e) {
-                            e.printStackTrace();
+                            logger.error(e.getMessage());
                         }
                         Transport.send(message);
-                        System.out.println("bam, sent: " + message.getSubject());
-                       /* try {
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }*/
+
+
                     }
-                } else {
-                    System.out.println("nothing to send");
                 }
 
-                System.out.println("Done");
+
 
             } catch (MessagingException e) {
                 throw new RuntimeException(e);
@@ -168,16 +156,16 @@ public class EmailManagerImpl {
 
 
     //Method to replace the values for keys
-    protected String readEmailFromHtml(String filePath, Mail mail) {
-        Map<String, String> input = new HashMap<String, String>();
+    private String readEmailFromHtml(String filePath, Mail mail) {
+        Map<String, String> input ;
         input = getTemplateItems(mail);
 
-        System.out.println("trying to get content from file");
+        logger.info("trying to get content from file");
         String msg = readContentFromFile(filePath);
         try {
             Set<Map.Entry<String, String>> entries = input.entrySet();
             for (Map.Entry<String, String> entry : entries) {
-                System.out.println("entry: " + entry.getKey() + " / " + entry.getValue());
+                logger.info("entry: " + entry.getKey() + " / " + entry.getValue());
                 msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
             }
         } catch (Exception exception) {
@@ -196,7 +184,7 @@ public class EmailManagerImpl {
         String dueDate = dt1.format(mail.getDueDate());
         input.put("DUEDATE", dueDate);
         Date today = new Date();
-        System.out.println("date: " + dueDate);
+        logger.info("date: " + dueDate);
         int overDays = mail.getDiffdays();
         input.put("Isbn", mail.getIsbn());
         input.put("DIFFDAYS", Integer.toString(overDays));
@@ -208,14 +196,14 @@ public class EmailManagerImpl {
 
     //Method to read HTML file as a String
     private String readContentFromFile(String fileName) {
-        System.out.println("trying to buffer file");
-        StringBuffer contents = new StringBuffer();
+        logger.info("trying to buffer file");
+        StringBuilder contents = new StringBuilder();
 
         try {
             //use buffering, reading one line at a time
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             try {
-                String line = null;
+                String line ;
                 while ((line = reader.readLine()) != null) {
                     contents.append(line);
                     contents.append(System.getProperty("line.separator"));
@@ -230,7 +218,7 @@ public class EmailManagerImpl {
     }
 
 
-    private String byteArrayToHexString(byte[] b) {
+  /*  private String byteArrayToHexString(byte[] b) {
         StringBuffer sb = new StringBuffer(b.length * 2);
         for (int i = 0; i < b.length; i++) {
             int v = b[i] & 0xff;
@@ -240,7 +228,7 @@ public class EmailManagerImpl {
             sb.append(Integer.toHexString(v));
         }
         return sb.toString().toUpperCase();
-    }
+    }*/
 
     private byte[] hexStringToByteArray(String s) {
         byte[] b = new byte[s.length() / 2];
@@ -253,19 +241,17 @@ public class EmailManagerImpl {
     }
 
     private List<Mail> getOverdueList(String token) {
-        List<Mail> mailList = new ArrayList<Mail>();
-        System.out.println("getting overdue list");
+        logger.info("getting overdue list");
         MailService mailService = new MailService();
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
         try {
             GetOverdueMailListResponse response = mailService.getMailServicePort().getOverdueMailList(requestType);
-            mailList = convertMailingListTypeIntoMailList(response);
+            return convertMailingListTypeIntoMailList(response);
         } catch (BusinessExceptionMail businessExceptionMail) {
             businessExceptionMail.printStackTrace();
         }
-        System.out.println("overlist recuperated: " + mailList.size());
-        return mailList;
+        return null;
     }
 
     private List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) {
@@ -289,15 +275,15 @@ public class EmailManagerImpl {
     }
 
 
-    protected Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
-        XMLGregorianCalendar xmlCalendar = null;
+    private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+        XMLGregorianCalendar xmlCalendar;
         try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
+            return xmlCalendar.toGregorianCalendar().getTime();
         } catch (DatatypeConfigurationException e) {
-            e.printStackTrace();
+            logger.error(e.getMessage());
         }
-        Date date = xmlCalendar.toGregorianCalendar().getTime();
-        return date;
+        return null;
 
     }
    /* @Override
@@ -347,10 +333,10 @@ public class EmailManagerImpl {
 
 
     private String getPassword() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        String tempkey = "";
-        String password = "";
+        String tempkey ;
+        String password;
         Properties prop = new Properties();
-        InputStream input = null;
+        InputStream input;
         input = new FileInputStream("/usr/app/resources/mail.properties");
         // load a properties file
         prop.load(input);
@@ -362,16 +348,16 @@ public class EmailManagerImpl {
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.DECRYPT_MODE, sks);
         byte[] decrypted = cipher.doFinal(hexStringToByteArray(password));
-        String OriginalPassword = new String(decrypted);
 
-        return OriginalPassword;
+
+        return new String(decrypted);
     }
 
   /*  @Override
     public List<Mail> getOverdueEmailList() {
         HashMap<String, String> criterias = new HashMap<>();
         criterias.put("status", "OVERDUE");
-        System.out.println("getting overdue list");
+        logger.info("getting overdue list");
         List<org.mail.model.Loan> loans = loanManager.getLoansByCriterias(criterias);
         List<Mail> mailList = new ArrayList<>();
 
