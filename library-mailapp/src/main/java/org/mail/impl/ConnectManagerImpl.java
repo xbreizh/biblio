@@ -14,15 +14,15 @@ public class ConnectManagerImpl implements ConnectManager {
 
     private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
     private String token;
-    private String login = "lokii";
-    private String password = "123";
+    private static final String login = "lokii";
+    private static final String PWD = "123";
 
     /* @Override*/
     public String authenticate() {
         ConnectService cs = new ConnectService();
         GetTokenRequestType t = new GetTokenRequestType();
         t.setLogin(login);
-        t.setPassword(password);
+        t.setPassword(PWD);
         /* System.out.println("login: " + login + " \n password: " + password);*/
         try {
             GetTokenResponseType responseType = cs.getConnectServicePort().getToken(t);

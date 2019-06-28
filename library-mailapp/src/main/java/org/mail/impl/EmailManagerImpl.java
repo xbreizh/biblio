@@ -169,7 +169,7 @@ public class EmailManagerImpl {
                 msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
             }
         } catch (Exception exception) {
-            exception.printStackTrace();
+            logger.error(exception.getMessage());
         }
         return msg;
     }
@@ -212,7 +212,7 @@ public class EmailManagerImpl {
                 reader.close();
             }
         } catch (IOException ex) {
-            ex.printStackTrace();
+            logger.error(ex.getMessage());
         }
         return contents.toString();
     }
@@ -249,7 +249,7 @@ public class EmailManagerImpl {
             GetOverdueMailListResponse response = mailService.getMailServicePort().getOverdueMailList(requestType);
             return convertMailingListTypeIntoMailList(response);
         } catch (BusinessExceptionMail businessExceptionMail) {
-            businessExceptionMail.printStackTrace();
+            logger.error(businessExceptionMail.getMessage());
         }
         return null;
     }
