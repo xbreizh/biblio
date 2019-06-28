@@ -9,84 +9,102 @@
     <groupId>org.mail</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-
+    <properties>
+        <junit.jupiter.version>5.4.0</junit.jupiter.version>
+    </properties>
     <profiles>
-    <!-- Local profile -->
-    <profile>
-    <id>mailapp-local</id>
-    <build>
-    <plugins>
-    <!-- plugin 4- apache cxf codegen wsdl2java goal -->
-    <plugin>
-        <groupId>org.apache.cxf</groupId>
-        <artifactId>cxf-codegen-plugin</artifactId>
-        <version>3.0.2</version>
-        <executions>
-            <execution>
-                <configuration>
-                    <sourceRoot>generated/java</sourceRoot>
-                    <wsdlOptions>
-                        <wsdlOption>
-                            <wsdl>
-                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
-                            </wsdl>
-                        </wsdlOption>
-                        <wsdlOption>
-                            <wsdl>
-                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
-                            </wsdl>
-                        </wsdlOption>
-                    </wsdlOptions>
-                </configuration>
-                <goals>
-                    <goal>wsdl2java</goal>
-                </goals>
-            </execution>
-        </executions>
-    </plugin>
-    </plugins>
-    </build>
-    </profile>
-    <profile>
-        <id>mailapp-docker</id>
-        <build>
-            <plugins>
-                <!-- plugin 4- apache cxf codegen wsdl2java goal -->
-                <plugin>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-codegen-plugin</artifactId>
-                    <version>3.0.2</version>
-                    <executions>
-                        <execution>
-                            <configuration>
-                                <sourceRoot>generated/java</sourceRoot>
-                                <wsdlOptions>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                </wsdlOptions>
-                            </configuration>
-                            <goals>
-                                <goal>wsdl2java</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </build>
-    </profile>
+        <!-- Local profile -->
+        <profile>
+            <id>mailapp-local</id>
+            <build>
+                <plugins>
+                    <!-- plugin 4- apache cxf codegen wsdl2java goal -->
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-codegen-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <sourceRoot>generated/java</sourceRoot>
+                                    <wsdlOptions>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                    </wsdlOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>wsdl2java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>mailapp-docker</id>
+            <build>
+                <plugins>
+                    <!-- plugin 4- apache cxf codegen wsdl2java goal -->
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-codegen-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <sourceRoot>generated/java</sourceRoot>
+                                    <wsdlOptions>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                    </wsdlOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>wsdl2java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
 
-
     <dependencies>
+        <!-- ===== Test unitaires ===== -->
+        <!--Core of Junit-->
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 
         <!-- ===== Bibliothèques tierces ===== -->
@@ -132,14 +150,17 @@
             <version>1.2.17</version>
             <scope>compile</scope>
         </dependency>
-
-
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>5.1.5.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
 
 
     </dependencies>
     <build>
         <plugins>
-
 
 
             <plugin>
@@ -154,7 +175,6 @@
                     </execution>
                 </executions>
             </plugin>
-
 
 
             <!--Reports and Coverage-->
