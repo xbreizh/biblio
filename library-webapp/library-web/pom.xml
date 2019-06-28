@@ -103,15 +103,7 @@
             <artifactId>thymeleaf-spring4</artifactId>
             <version>3.0.11.RELEASE</version>
         </dependency>
-        <!-- ===== Tests ===== -->
 
-
-        <!-- <dependency>
-             <groupId>javax.servlet</groupId>
-             <artifactId>javax.servlet-api</artifactId>
-             <version>3.1.0</version>
-             <scope>test</scope>
-         </dependency>-->
         <!-- ===== Tests ===== -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
         <dependency>
@@ -150,15 +142,6 @@
     <build>
         <finalName>library-webapp</finalName>
         <plugins>
-            <!--<plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.5.1</version>
-                <configuration>
-                    <source>${jdk.version}</source>
-                    <target>${jdk.version}</target>
-                </configuration>
-            </plugin>-->
-
             <!-- Embedded Apache Tomcat required for testing web application -->
             <plugin>
                 <groupId>org.apache.tomcat.maven</groupId>

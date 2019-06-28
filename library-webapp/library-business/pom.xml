@@ -98,11 +98,7 @@
             <version>${log4j.version}</version>
         </dependency>
 
-        <!-- <dependency>
-             <groupId>com.google.inject</groupId>
-             <artifactId>guice</artifactId>
-             <version>4.2.0</version>
-         </dependency>-->
+
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
@@ -158,14 +154,7 @@
     <build>
         <plugins>
 
-            <!-- <plugin>
-                 <groupId>org.apache.maven.plugins</groupId>
-                 <artifactId>maven-compiler-plugin</artifactId>
-                 <configuration>
-                     <source>8</source>
-                     <target>8</target>
-                 </configuration>
-             </plugin>-->
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
