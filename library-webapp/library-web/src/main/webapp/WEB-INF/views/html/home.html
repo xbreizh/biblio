@@ -10,7 +10,7 @@
     <div th:replace="fragments/navbar :: navbar"/>
 
     <div layout:fragment="content" th:remove="tag">
-    <h1>My Space</h1>
+        <h1>My Space</h1>
 
         <h2>
             <button class="btn btn-info" onclick="toggle_displays('myLoans', 'myProfile')">Loans</button>
@@ -23,15 +23,13 @@
             <div th:replace="fragments/table_profile :: profile"></div>
         </div>
 
-</div>
+    </div>
     <br><br><br>
     <h2>Search</h2>
     <div th:replace="fragments/search :: search"></div>
     <br><br><br>
     <div th:replace="fragments/search_result :: search_result"></div>
     <br><br><br>
-
-
 
 
     <br><br><br>

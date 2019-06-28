@@ -77,6 +77,12 @@ public class Loan {
         return book;
     }
 
+    public void setBook(Book book) {
+        this.book = book;
+
+
+    }
+
     boolean isRenewable() {
         return renewable;
     }
@@ -91,12 +97,6 @@ public class Loan {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public void setBook(Book book) {
-        this.book = book;
-
-
     }
 
     @Override

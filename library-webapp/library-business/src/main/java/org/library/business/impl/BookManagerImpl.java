@@ -9,8 +9,8 @@ import org.troparo.services.bookservice.BusinessExceptionBook;
 
 import javax.inject.Named;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Named
 public class BookManagerImpl implements BookManager {
@@ -18,7 +18,7 @@ public class BookManagerImpl implements BookManager {
 
 
     @Override
-    public List<Book> searchBooks(String token, HashMap criterias) {
+    public List<Book> searchBooks(String token, Map<String, String> criterias) {
         List<Book> result;
         BookService bookService = new BookService();
         GetBookByCriteriasRequestType requestType = new GetBookByCriteriasRequestType();
@@ -34,16 +34,16 @@ public class BookManagerImpl implements BookManager {
             logger.error(businessExceptionBook.getMessage());
         }
 
-        logger.info("result: "+responseType.getBookListType().getBookTypeOut().size());
+        logger.info("result: " + responseType.getBookListType().getBookTypeOut().size());
         result = convertBookTypeOutListIntoBookList(token, responseType.getBookListType().getBookTypeOut());
-        logger.info("result: "+result);
+        logger.info("result: " + result);
         return result;
     }
 
-    List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
+    private List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
         List<Book> bookList = new ArrayList<>();
-        for (BookTypeOut bookTypeOut: bookTypeOutList
-             ) {
+        for (BookTypeOut bookTypeOut : bookTypeOutList
+        ) {
             Book book = new Book();
             book.setId(bookTypeOut.getId());
             book.setIsbn(bookTypeOut.getISBN());
@@ -68,7 +68,7 @@ public class BookManagerImpl implements BookManager {
         try {
             GetAvailableResponseType responseType;
             responseType = bookService.getBookServicePort().getAvailable(requestType);
-            logger.info("getting: "+responseType.getReturn());
+            logger.info("getting: " + responseType.getReturn());
             available = responseType.getReturn();
         } catch (BusinessExceptionBook businessExceptionBook) {
             logger.error(businessExceptionBook.getMessage());
@@ -77,22 +77,22 @@ public class BookManagerImpl implements BookManager {
         return available;
     }
 
-    private BookCriterias convertCriteriasIntoCriteriasRequest(HashMap<String, String> criterias) {
+    private BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
         BookCriterias bookCriterias = new BookCriterias();
-            bookCriterias.setISBN(criterias.get("ISBN"));
-            logger.info("added isbn: ");
+        bookCriterias.setISBN(criterias.get("ISBN"));
+        logger.info("added isbn: ");
 
-            bookCriterias.setTitle(criterias.get("TITLE"));
-            logger.info("added title: ");
+        bookCriterias.setTitle(criterias.get("TITLE"));
+        logger.info("added title: ");
 
-            bookCriterias.setAuthor(criterias.get("AUTHOR"));
-            logger.info("added author: ");
+        bookCriterias.setAuthor(criterias.get("AUTHOR"));
+        logger.info("added author: ");
 
 
-        logger.info("author passed: "+bookCriterias.getAuthor());
-        logger.info("title passed: "+bookCriterias.getTitle());
-        logger.info("isbn passed: "+bookCriterias.getISBN());
-        
+        logger.info("author passed: " + bookCriterias.getAuthor());
+        logger.info("title passed: " + bookCriterias.getTitle());
+        logger.info("isbn passed: " + bookCriterias.getISBN());
+
         return bookCriterias;
     }
 

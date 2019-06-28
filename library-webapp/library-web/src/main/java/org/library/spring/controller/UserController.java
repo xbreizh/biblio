@@ -16,7 +16,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.inject.Inject;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -44,7 +43,6 @@ public class UserController {
 
         ModelAndView mv = new ModelAndView();
 
-        Search search = new Search();
         mv.addObject("loanList", m.getLoanList());
         mv.addObject("member", m);
         mv.setViewName("home");
@@ -73,7 +71,6 @@ public class UserController {
     }
 
 
-
     @GetMapping("/connect")
     public String user(Principal principal) {
         // Get authenticated user name from Principal
@@ -96,23 +93,23 @@ public class UserController {
     }
 
     @PostMapping("/search")
-    public ModelAndView search(ModelAndView mv, String ISBN, String author, String title) {
+    public ModelAndView search(ModelAndView mv, String isbn, String author, String title) {
         logger.info("getting into search");
-        List<Book> books ;
+        List<Book> books;
 
         // Get authenticated user name from SecurityContext
         SecurityContext context = SecurityContextHolder.getContext();
         String token = context.getAuthentication().getDetails().toString();
         String login = context.getAuthentication().getPrincipal().toString();
         Member m = memberManager.getMember(token, login);
-        logger.info("token: "+token);
+        logger.info("token: " + token);
         logger.info(context.getAuthentication().getName());
-        logger.info("isbn received: " + ISBN);
+        logger.info("isbn received: " + isbn);
         logger.info("title received: " + title);
         logger.info("author received: " + author);
 
         HashMap criterias = new HashMap<String, String>();
-        criterias.put("ISBN", ISBN);
+        criterias.put("isbn", isbn);
         criterias.put("TITLE", title);
         criterias.put("AUTHOR", author);
         books = bookManager.searchBooks(token, criterias);
@@ -120,7 +117,7 @@ public class UserController {
         mv.addObject("loanList", m.getLoanList());
         mv.addObject("member", m);
         mv.addObject("books", books);
-        mv.addObject("isbn", ISBN);
+        mv.addObject("isbn", isbn);
         mv.addObject("title", title);
         mv.addObject("author", author);
         mv.setViewName("home");

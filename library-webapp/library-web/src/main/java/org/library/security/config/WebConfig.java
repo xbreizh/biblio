@@ -19,7 +19,6 @@ import javax.inject.Inject;
 public class WebConfig implements WebMvcConfigurer {
 
 
-
     @Inject
     private ApplicationContext applicationContext;
 

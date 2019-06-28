@@ -1,25 +1,16 @@
 package org.library.business.impl;
 
 import org.apache.log4j.Logger;
-import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.LoanService;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
     private static final Logger logger = Logger.getLogger(LoanManager.class.toString());
-
-
 
 
     @Override
@@ -29,7 +20,6 @@ public class LoanManagerImpl implements LoanManager {
         RenewLoanRequestType renewLoanRequestType = new RenewLoanRequestType();
         renewLoanRequestType.setToken(token);
         renewLoanRequestType.setId(id);
-       // RenewLoanResponseType responseType = new RenewLoanResponseType();
         try {
             loanService.getLoanServicePort().renewLoan(renewLoanRequestType);
         } catch (BusinessExceptionLoan businessExceptionLoan) {

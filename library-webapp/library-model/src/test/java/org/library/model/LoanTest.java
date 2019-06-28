@@ -97,7 +97,7 @@ class LoanTest {
 
     @Test
     @DisplayName("should set renewable")
-    void setRenewable(){
+    void setRenewable() {
         loan.setRenewable(false);
         assertFalse(loan.isRenewable());
     }
@@ -112,7 +112,7 @@ class LoanTest {
 
     @Test
     @DisplayName("should set status")
-    void setStatus(){
+    void setStatus() {
         String status = "status";
         loan.setStatus(status);
         assertEquals(status, loan.getStatus());

@@ -4,18 +4,15 @@ package org.library.business;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.library.business.contract.ConnectManager;
 import org.library.business.impl.BookManagerImpl;
-import org.library.business.impl.ConnectManagerImpl;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.connect.ResetPasswordRequestType;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 
 import java.util.HashMap;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class BookManagerImplIntegrationTest {
 
@@ -50,7 +47,7 @@ class BookManagerImplIntegrationTest {
 
         HashMap<String, String> criterias = new HashMap<>();
         criterias.put("author", "moss");
-        assertNotNull( bookManager.searchBooks(token, criterias));
+        assertNotNull(bookManager.searchBooks(token, criterias));
 
     }
 

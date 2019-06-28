@@ -9,14 +9,14 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class BookTest {
 
     private Book book;
 
     @BeforeEach
-    void init(){
+    void init() {
         book = new Book();
     }
 
@@ -71,7 +71,7 @@ class BookTest {
     @Test
     void getInsert_date() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         book.setInsertDate(date);
         assertEquals(date, book.getInsertDate());
     }
@@ -79,7 +79,7 @@ class BookTest {
     @Test
     void setInsert_date() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         book.setInsertDate(date);
         assertEquals(date, book.getInsertDate());
     }
@@ -99,25 +99,25 @@ class BookTest {
     @Test
     void getEdition() {
         book.setEdition("Maroni");
-        assertEquals("Maroni",book.getEdition());
+        assertEquals("Maroni", book.getEdition());
     }
 
     @Test
     void setEdition() {
         book.setEdition("Maroni");
-        assertEquals("Maroni",book.getEdition());
+        assertEquals("Maroni", book.getEdition());
     }
 
     @Test
     void getNbPages() {
         book.setNbPages(233);
-        assertEquals(233,book.getNbPages());
+        assertEquals(233, book.getNbPages());
     }
 
     @Test
     void setNbPages() {
         book.setNbPages(233);
-        assertEquals(233,book.getNbPages());
+        assertEquals(233, book.getNbPages());
     }
 
     @Test
@@ -163,7 +163,7 @@ class BookTest {
         book.setIsbn("AbG231");
         book.setId(123);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date       = format.parse ( "2009-12-31" );
+        Date date = format.parse("2009-12-31");
         book.setInsertDate(date);
         book.setNbPages(125);
         book.setEdition("maroko");

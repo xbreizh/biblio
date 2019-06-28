@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>library</artifactId>
@@ -12,95 +12,95 @@
     <artifactId>library-service</artifactId>
 
     <profiles>
-    <!-- Profile utilisé pour lancer les tests d'intégration de la couche Web -->
-    <profile>
-        <id>test-service-local</id>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-codegen-plugin</artifactId>
-                    <version>3.0.2</version>
-                    <executions>
-                        <execution>
-                            <configuration>
-                                <sourceRoot>generated/java</sourceRoot>
-                                <wsdlOptions>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MemberService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/BookService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                </wsdlOptions>
-                            </configuration>
-                            <goals>
-                                <goal>wsdl2java</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </build>
-    </profile>
-    <profile>
-        <id>test-service-docker</id>
-        <build>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.cxf</groupId>
-                    <artifactId>cxf-codegen-plugin</artifactId>
-                    <version>3.0.2</version>
-                    <executions>
-                        <execution>
-                            <configuration>
-                                <sourceRoot>generated/java</sourceRoot>
-                                <wsdlOptions>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/MemberService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/ConnectService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                    <wsdlOption>
-                                        <wsdl>
-                                            https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/BookService.wsdl
-                                        </wsdl>
-                                    </wsdlOption>
-                                </wsdlOptions>
-                            </configuration>
-                            <goals>
-                                <goal>wsdl2java</goal>
-                            </goals>
-                        </execution>
-                    </executions>
-                </plugin>
-            </plugins>
-        </build>
-    </profile>
+        <!-- Profile utilisé pour lancer les tests d'intégration de la couche Web -->
+        <profile>
+            <id>test-service-local</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-codegen-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <sourceRoot>generated/java</sourceRoot>
+                                    <wsdlOptions>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MemberService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/BookService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                    </wsdlOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>wsdl2java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>test-service-docker</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-codegen-plugin</artifactId>
+                        <version>3.0.2</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <sourceRoot>generated/java</sourceRoot>
+                                    <wsdlOptions>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/MemberService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/ConnectService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>
+                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/BookService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                    </wsdlOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>wsdl2java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 
     <dependencies>
@@ -205,7 +205,6 @@
 
     <build>
         <plugins>
-
 
 
             <plugin>

@@ -10,7 +10,7 @@ public class Member {
 
     // member variables
 
-    private int Id;
+    private int id;
 
 
     private String login;
@@ -46,11 +46,11 @@ public class Member {
 
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public String getLogin() {
@@ -136,7 +136,7 @@ public class Member {
     @Override
     public String toString() {
         return "Member{" +
-                "Id=" + Id +
+                "id=" + id +
                 ", login='" + login + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +

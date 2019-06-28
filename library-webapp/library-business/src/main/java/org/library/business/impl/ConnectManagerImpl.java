@@ -6,7 +6,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.troparo.entities.connect.GetTokenRequestType;
@@ -24,14 +23,14 @@ import java.util.Set;
 @Named
 public class ConnectManagerImpl implements AuthenticationProvider {
 
+    private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
+    private final static String ROLE = "USER";
     @Inject
     MemberManager memberManager;
-    private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
     private String token;
-    private final static String role = "USER";
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) {
         logger.info(authentication.getPrincipal().toString());
         ConnectService cs = new ConnectService();
         GetTokenRequestType t = new GetTokenRequestType();
@@ -74,12 +73,12 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
     private Collection<GrantedAuthority> buildUserAuthority() {
 
-        Set<GrantedAuthority> setAuths = new HashSet<GrantedAuthority>();
+        Set<GrantedAuthority> setAuths = new HashSet<>();
 
         // Build user's authorities
-        setAuths.add(new SimpleGrantedAuthority(role));
+        setAuths.add(new SimpleGrantedAuthority(ROLE));
 
-        Collection<GrantedAuthority> result = new ArrayList<GrantedAuthority>(setAuths);
+        Collection<GrantedAuthority> result = new ArrayList<>(setAuths);
         logger.info("result: " + ((ArrayList<GrantedAuthority>) result).get(0));
 
         return result;

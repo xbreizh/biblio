@@ -1,7 +1,6 @@
 package org.library.business.impl;
 
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.apache.log4j.Logger;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
@@ -27,16 +26,13 @@ public class MemberManagerImpl implements MemberManager {
     private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
 
-    private MemberTypeOut memberTypeOut;
-    private Member member;
-
     @Inject
     LoanManager loanManager;
 
 
-
     @Override
     public Member getMember(String token, String login) {
+        MemberTypeOut memberTypeOut;
         logger.info("token: " + token);
         logger.info("login: " + login);
         try {
@@ -50,19 +46,19 @@ public class MemberManagerImpl implements MemberManager {
             memberTypeOut = responseType.getMemberTypeOut();
 
             // converting into Member
-            member = convertMemberTypeOutIntoMember(token, memberTypeOut);
+            Member member = convertMemberTypeOutIntoMember(token, memberTypeOut);
             logger.info("trying to pass loan to member");
 
             logger.info("member loan size: " + member.getLoanList());
             logger.info("loan list for that member: " + memberTypeOut.getLoanListType().getLoanTypeOut().get(0).getBookTypeOut().getTitle());
-
+            return member;
         } catch (NullPointerException e) {
             logger.info("Issue while trying to get member details");
         } catch (BusinessExceptionMember businessExceptionMember) {
             logger.error(businessExceptionMember.getMessage());
         }
 
-        return member;
+        return null;
     }
 
     private Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) {
@@ -124,15 +120,16 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
-        if (gDate == null) return null;
-        XMLGregorianCalendar xmlCalendar = new XMLGregorianCalendarImpl();
-        try {
-            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
-        } catch (DatatypeConfigurationException e) {
-            logger.error(e.getMessage());
+        if (gDate != null) {
+            XMLGregorianCalendar xmlCalendar;
+            try {
+                xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
+                return xmlCalendar.toGregorianCalendar().getTime();
+            } catch (DatatypeConfigurationException e) {
+                logger.error(e.getMessage());
+            }
         }
-
-        return xmlCalendar.toGregorianCalendar().getTime();
+        return null;
 
     }
 
