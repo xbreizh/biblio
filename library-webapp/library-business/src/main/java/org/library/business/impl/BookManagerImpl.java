@@ -15,14 +15,11 @@ import java.util.List;
 @Named
 public class BookManagerImpl implements BookManager {
     private static final Logger logger = Logger.getLogger(BookManagerImpl.class);
-    /*private String token="";
-    private String login="";
-    private Book book=null;*/
 
 
     @Override
     public List<Book> searchBooks(String token, HashMap criterias) {
-        List<Book> result = new ArrayList<>();
+        List<Book> result;
         BookService bookService = new BookService();
         GetBookByCriteriasRequestType requestType = new GetBookByCriteriasRequestType();
         requestType.setToken(token);
@@ -43,7 +40,7 @@ public class BookManagerImpl implements BookManager {
         return result;
     }
 
-    public List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
+    List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
         List<Book> bookList = new ArrayList<>();
         for (BookTypeOut bookTypeOut: bookTypeOutList
              ) {
@@ -69,7 +66,7 @@ public class BookManagerImpl implements BookManager {
         requestType.setISBN(isbn.toUpperCase());
         requestType.setToken(token);
         try {
-            GetAvailableResponseType responseType = new GetAvailableResponseType();
+            GetAvailableResponseType responseType;
             responseType = bookService.getBookServicePort().getAvailable(requestType);
             logger.info("getting: "+responseType.getReturn());
             available = responseType.getReturn();
@@ -99,20 +96,5 @@ public class BookManagerImpl implements BookManager {
         return bookCriterias;
     }
 
-
-    private Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
-        logger.info("trying to convert book");
-        Book book = new Book();
-        book.setId(bookTypeOut.getId());
-        book.setIsbn(bookTypeOut.getISBN());
-        book.setTitle(bookTypeOut.getTitle());
-        book.setAuthor(bookTypeOut.getAuthor());
-        book.setEdition(bookTypeOut.getEdition());
-        book.setPublicationYear(bookTypeOut.getPublicationYear());
-        book.setNbPages(bookTypeOut.getNbPages());
-        book.setKeywords(bookTypeOut.getKeywords());
-        logger.info("book converted: "+book);
-        return book;
-    }
 
 }

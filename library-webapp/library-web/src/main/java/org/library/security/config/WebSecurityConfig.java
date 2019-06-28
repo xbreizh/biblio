@@ -16,29 +16,14 @@ import javax.inject.Inject;
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Inject
     AuthenticationProvider authenticationProvider;
-    /*@Inject
-    PasswordEncoder passwordEncoder;*/
+
 
     private Logger logger = Logger.getLogger(WebSecurityConfig.class);
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 
-        auth.authenticationProvider(authenticationProvider);/*
-      auth.inMemoryAuthentication().withUser("user").password("123").roles("ADMIN");*//*
-
-       auth.inMemoryAuthentication()
-               .withUser("memuser")
-               .password("pass")
-               .roles("USER");*/
- /*     auth.inMemoryAuthentication()
-         .withUser("user").password("{noop}123").roles("USER")
-         .and()
-         .withUser("admin").password("{noop}123").roles("ADMIN");*/
-    /*   auth.inMemoryAuthentication()
-               .withUser("sunil").password("{noop}pass123").roles("USER")
-               .and()
-               .withUser("admin").password("{noop}pass123").roles("ADMIN");*/
+        auth.authenticationProvider(authenticationProvider);
     }
 
     @Override
@@ -53,8 +38,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 
-/*    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }*/
 }

@@ -31,7 +31,6 @@
             <td data-th-text="${loan.book.isbn}"/>
             <td data-th-text="${loan.book.title}"/>
             <td data-th-text="${loan.status}"/>
-            <!-- <td data-th-text="${loan.renewable} == true ? 'renew' : 'nope'"/>-->
             <td>
                 <div th:if="${loan.renewable} == true">
                     <div>
@@ -72,9 +71,7 @@
         }
     </script>
 
-    <!--  <th:block data-th-each="loan : ${member.loanList}">
-          <td data-th-text="${loan.book}"/>
-      </th:block>-->
+
 
 
 </div>

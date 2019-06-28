@@ -17,10 +17,7 @@ import javax.inject.Inject;
 @EnableWebMvc
 @ComponentScan(basePackages = {"org.library"})
 public class WebConfig implements WebMvcConfigurer {
-  /*  @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        registry.jsp().prefix("/WEB-INF/views/").suffix(".jsp");
-    }*/
+
 
 
     @Inject

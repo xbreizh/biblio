@@ -26,15 +26,13 @@ import java.util.List;
 public class MemberManagerImpl implements MemberManager {
     private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
-    /* private String token = "";
-     private String login = "";*/
+
     private MemberTypeOut memberTypeOut;
     private Member member;
 
     @Inject
     LoanManager loanManager;
-   /* @Inject
-    BookManager bookManager;*/
+
 
 
     @Override
@@ -46,7 +44,7 @@ public class MemberManagerImpl implements MemberManager {
             GetMemberByLoginRequestType requestType = new GetMemberByLoginRequestType();
             requestType.setToken(token);
             requestType.setLogin(login);
-            /*memberService.getMemberServicePort().getMemberByLogin(requestType);*/
+
             GetMemberByLoginResponseType responseType = memberService.getMemberServicePort().getMemberByLogin(requestType);
             logger.info("response: " + responseType.getMemberTypeOut().getEmail());
             memberTypeOut = responseType.getMemberTypeOut();
@@ -57,20 +55,13 @@ public class MemberManagerImpl implements MemberManager {
 
             logger.info("member loan size: " + member.getLoanList());
             logger.info("loan list for that member: " + memberTypeOut.getLoanListType().getLoanTypeOut().get(0).getBookTypeOut().getTitle());
-            /*// getting Loan list
-            try {
-                logger.info("trying to pass the loan list");
 
-            }catch (NullPointerException e){
-                logger.info("no loan so far for that user: "+member.getLogin());
-                member.setLoanList(new ArrayList<Loan>());
-            }*/
         } catch (NullPointerException e) {
             logger.info("Issue while trying to get member details");
         } catch (BusinessExceptionMember businessExceptionMember) {
             logger.error(businessExceptionMember.getMessage());
         }
-        /*logger.info("member converted: "+member.getLoanList().get(0));*/
+
         return member;
     }
 
