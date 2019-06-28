@@ -57,7 +57,6 @@ public class BookDAOImpl implements BookDAO {
         logger.info("Book: " + book);
         try {
             sessionFactory.getCurrentSession().flush();
-            System.out.println("flushed");
             sessionFactory.getCurrentSession().persist(book);
         } catch (Exception e) {
             logger.error("error while persisting: " + e.getMessage());

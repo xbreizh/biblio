@@ -258,7 +258,6 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public String addCopy(String isbn, int copies) {
-        System.out.println("trying to add a copy");
         if (!bookDAO.existingISBN(isbn.toUpperCase())) {
             return "No record found with that ISBN";
         } else {
