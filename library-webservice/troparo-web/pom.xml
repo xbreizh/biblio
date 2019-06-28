@@ -38,6 +38,41 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-codegen-plugin</artifactId>
+                        <version>${cxf.version}</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <sourceRoot>src/main/java/</sourceRoot>
+                                    <wsdlOptions>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/BookService.wsdl</wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/MemberService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl</wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/ConnectService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/MailService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                    </wsdlOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>wsdl2java</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
                 </plugins>
                 <testResources>
                     <testResource>
@@ -69,6 +104,41 @@
                                         <source>src/test-web/java</source>
                                     </sources>
                                 </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.cxf</groupId>
+                        <artifactId>cxf-codegen-plugin</artifactId>
+                        <version>${cxf.version}</version>
+                        <executions>
+                            <execution>
+                                <configuration>
+                                    <sourceRoot>src/main/java/</sourceRoot>
+                                    <wsdlOptions>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/BookService.wsdl</wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/MemberService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/LoanService.wsdl</wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                        <wsdlOption>
+                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                            </wsdl>
+                                        </wsdlOption>
+                                    </wsdlOptions>
+                                </configuration>
+                                <goals>
+                                    <goal>wsdl2java</goal>
+                                </goals>
                             </execution>
                         </executions>
                     </plugin>
@@ -115,7 +185,7 @@
         <dependency>
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
-            <version>1.2.17</version>
+            <version>${log4j.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -125,24 +195,24 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>3.2.7</version>
+            <version>${cxf.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-transports-http -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports-http</artifactId>
-            <version>3.2.7</version>
+            <version>${cxf.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-ws-security -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-ws-security</artifactId>
-            <version>3.2.7</version>
+            <version>${cxf.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
-            <version>2.3.0</version>
+            <version>${jaxws.version}</version>
         </dependency>
 
         <!-- Spring Framework-4.x -->
@@ -192,17 +262,18 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>5.1.5.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
+            <version>${mockito.version}</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>2.23.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -214,16 +285,16 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>${surefire.version}</version>
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-            </plugin>
+            </plugin>-->
 
             <!-- <plugin>
                  <groupId>org.apache.maven.plugins</groupId>
@@ -245,41 +316,7 @@
                 </configuration>
             </plugin>
             <!-- plugin 4- apache cxf codegen wsdl2java goal -->
-            <plugin>
-                <groupId>org.apache.cxf</groupId>
-                <artifactId>cxf-codegen-plugin</artifactId>
-                <version>3.2.7</version>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <sourceRoot>src/main/java/</sourceRoot>
-                            <wsdlOptions>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/org/troparo/web/services/BookService.wsdl</wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/org/troparo/web/services/MemberService.wsdl
-                                    </wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/org/troparo/web/services/LoanService.wsdl</wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/org/troparo/web/services/ConnectService.wsdl
-                                    </wsdl>
-                                </wsdlOption>
-                                <wsdlOption>
-                                    <wsdl>${basedir}/src/main/resources/org/troparo/web/services/MailService.wsdl
-                                    </wsdl>
-                                </wsdlOption>
-                            </wsdlOptions>
-                        </configuration>
-                        <goals>
-                            <goal>wsdl2java</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
