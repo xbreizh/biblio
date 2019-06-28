@@ -22,9 +22,6 @@ public class Member {
     private String lastName;
 
 
-    private String password;
-
-
     private String role;
 
 
@@ -75,14 +72,6 @@ public class Member {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     String getRole() {
@@ -140,7 +129,6 @@ public class Member {
                 ", login='" + login + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", password='" + password + '\'' +
                 ", role='" + role + '\'' +
                 ", token='" + token + '\'' +
                 ", email='" + email + '\'' +

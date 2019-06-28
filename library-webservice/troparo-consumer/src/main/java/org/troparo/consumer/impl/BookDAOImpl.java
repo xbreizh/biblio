@@ -56,6 +56,8 @@ public class BookDAOImpl implements BookDAO {
     public boolean addBook(Book book) {
         logger.info("Book: " + book);
         try {
+            sessionFactory.getCurrentSession().flush();
+            System.out.println("flushed");
             sessionFactory.getCurrentSession().persist(book);
         } catch (Exception e) {
             logger.error("error while persisting: " + e.getMessage());
@@ -114,7 +116,6 @@ public class BookDAOImpl implements BookDAO {
         Query query;
         try {
             logger.info("request: " + request);
-            sessionFactory.getCurrentSession().flush();
             sessionFactory.getCurrentSession().clear();
             query = sessionFactory.getCurrentSession().createNativeQuery(request, Book.class);
             for (Map.Entry<String, String> entry : map.entrySet()

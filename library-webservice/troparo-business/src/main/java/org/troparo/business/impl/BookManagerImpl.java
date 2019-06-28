@@ -258,6 +258,7 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public String addCopy(String isbn, int copies) {
+        System.out.println("trying to add a copy");
         if (!bookDAO.existingISBN(isbn.toUpperCase())) {
             return "No record found with that ISBN";
         } else {
@@ -265,8 +266,14 @@ public class BookManagerImpl implements BookManager {
             logger.info("record found: " + b);
             int i = 0;
             while (i < copies) {
-                Book b2 = b;
-                b2.setId(0);
+                Book b2 = new Book();
+                b2.setAuthor(b.getAuthor());
+                b2.setTitle(b.getTitle());
+                b2.setIsbn(b.getIsbn());
+                b2.setEdition(b.getEdition());
+                b2.setPublicationYear(b.getPublicationYear());
+                b2.setNbPages(b.getNbPages());
+                b2.setKeywords(b.getKeywords());
                 b2.setInsertDate(new Date());
                 logger.info("new Book: " + b2);
                 if (!bookDAO.addBook(b2)) {
