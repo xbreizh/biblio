@@ -1,7 +1,7 @@
 C:\Users\john\Documents\openClassrooms\Project_7-Library_troparo\project\new\troparo\troparo-business\src\main\resources\config.properties
 pgdata
-org/troparo/services/
-org/troparo/entities/
+org/troparo/services/**
+org/troparo/entities/**
 db-init/
 jenkins/
 sonarqube/

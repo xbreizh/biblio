@@ -25,8 +25,8 @@ hs_err_pid*
 *.iml
 target/
 generated/
-services/
-**/entities/
+org/troparo/services/**
+org/troparo/entities/**
 jenkins/
 db-init/
 sonarqube/
