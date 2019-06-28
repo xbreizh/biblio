@@ -25,7 +25,11 @@ hs_err_pid*
 *.iml
 target/
 generated/
-org/troparo/services/**
+bookservice/
+connectservice/
+loanservice/
+mailservice/
+memberservice/
 org/troparo/entities/**
 jenkins/
 db-init/
