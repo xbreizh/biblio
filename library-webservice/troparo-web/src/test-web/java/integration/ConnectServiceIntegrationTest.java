@@ -39,7 +39,6 @@ class ConnectServiceIntegrationTest {
     }
 
     @Test
-    @Disabled("should return a token")
     void getToken() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("LOKII");

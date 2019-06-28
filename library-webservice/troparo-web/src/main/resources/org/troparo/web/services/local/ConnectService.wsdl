@@ -17,12 +17,6 @@
     <wsdl:message name="resetPasswordResponse">
         <wsdl:part element="connect:resetPasswordResponseType" name="parameters"/>
     </wsdl:message>
-    <!--  <wsdl:message name="connectRequest">
-          <wsdl:part element=":connectRequestType" name="parameters"/>
-      </wsdl:message>
-      <wsdl:message name="connectResponse">
-          <wsdl:part element=":connectResponseType" name="parameters"/>
-      </wsdl:message>-->
     <wsdl:message name="getTokenRequest">
         <wsdl:part element="connect:getTokenRequestType" name="parameters"/>
     </wsdl:message>
@@ -51,11 +45,6 @@
             <wsdl:output message="tns:resetPasswordResponse"/>
             <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
         </wsdl:operation>
-        <!-- <wsdl:operation name="connect">
-             <wsdl:input message="tns:connectRequest"/>
-             <wsdl:output message="tns:connectResponse"/>
-             <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
-         </wsdl:operation>-->
         <wsdl:operation name="getToken">
             <wsdl:input message="tns:getTokenRequest"/>
             <wsdl:output message="tns:getTokenResponse"/>
@@ -90,19 +79,6 @@
                 <soap:fault name="businessExceptionConnect" use="literal"/>
             </wsdl:fault>
         </wsdl:operation>
-        <!-- <wsdl:operation name="connect">
-             <soap:operation
-                     soapAction=""/>
-             <wsdl:input>
-                 <soap:body use="literal"/>
-             </wsdl:input>
-             <wsdl:output>
-                 <soap:body use="literal"/>
-             </wsdl:output>
-             <wsdl:fault name="businessExceptionConnect">
-                 <soap:fault name="businessExceptionConnect" use="literal"/>
-             </wsdl:fault>
-         </wsdl:operation>-->
         <wsdl:operation name="checkToken">
             <soap:operation
                     soapAction=""/>

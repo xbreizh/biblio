@@ -84,26 +84,6 @@
         </xsd:complexType>
     </xsd:element>
 
-    <!--   &lt;!&ndash; Connect Request Type &ndash;&gt;
-       <xsd:element name="connectRequestType">
-           <xsd:complexType>
-               <xsd:sequence>
-                   <xsd:element name="Login" type="xsd:string"/>
-                   <xsd:element name="Password" type="xsd:string"/>
-               </xsd:sequence>
-           </xsd:complexType>
-       </xsd:element>
-
-       &lt;!&ndash; Connect  Response Type &ndash;&gt;
-       <xsd:element name="connectResponseType">
-           <xsd:complexType>
-               <xsd:sequence>
-                   <xsd:element name="return" type="xsd:boolean"/>
-               </xsd:sequence>
-           </xsd:complexType>
-       </xsd:element>-->
-
-
     <!--Token-->
     <xsd:element name="Token">
         <xsd:simpleType>

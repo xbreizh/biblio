@@ -3,105 +3,6 @@
             xmlns:tns="http://troparo.org/entities/member" targetNamespace="http://troparo.org/entities/member"
             elementFormDefault="qualified">
 
-    <!-- &lt;!&ndash; checkToken Request Type &ndash;&gt;
-     <xsd:element name="checkTokenRequestType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="Token" type="xsd:string"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; checkToken  Response Type &ndash;&gt;
-     <xsd:element name="checkTokenResponseType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="return" type="xsd:boolean"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; getToken Request Type &ndash;&gt;
-     <xsd:element name="invalidateTokenRequestType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="Token" type="xsd:string"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; getToken  Response Type &ndash;&gt;
-     <xsd:element name="invalidateTokenResponseType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="return" type="xsd:boolean"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; getToken Request Type &ndash;&gt;
-     <xsd:element name="getTokenRequestType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="Login" type="xsd:string"/>
-                 <xsd:element name="Password" type="xsd:string"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; getToken  Response Type &ndash;&gt;
-     <xsd:element name="getTokenResponseType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="return" type="xsd:string"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; Connect Request Type &ndash;&gt;
-     <xsd:element name="resetPasswordRequestType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="Login" type="xsd:string"/>
-                 <xsd:element name="Email">
-                     <xsd:simpleType>
-                         <xsd:restriction base="xsd:string">
-                             <xsd:pattern value="[^@]+@[^\.]+\..+"/>
-                         </xsd:restriction>
-                     </xsd:simpleType>
-                 </xsd:element>
-                 <xsd:element name="Password" type="xsd:string"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; Connect  Response Type &ndash;&gt;
-     <xsd:element name="resetPasswordResponseType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="return" type="xsd:boolean"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; Connect Request Type &ndash;&gt;
-     <xsd:element name="connectRequestType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="Login" type="xsd:string"/>
-                 <xsd:element name="Password" type="xsd:string"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>
-
-     &lt;!&ndash; Connect  Response Type &ndash;&gt;
-     <xsd:element name="connectResponseType">
-         <xsd:complexType>
-             <xsd:sequence>
-                 <xsd:element name="return" type="xsd:boolean"/>
-             </xsd:sequence>
-         </xsd:complexType>
-     </xsd:element>-->
 
     <!-- Add Member Request Type -->
     <xsd:element name="addMemberRequestType">
@@ -375,14 +276,6 @@
                         </xsd:restriction>
                     </xsd:simpleType>
                 </xsd:element>
-                <xsd:element name="Password" minOccurs="0">
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:string">
-                            <xsd:minLength value="6"/>
-                            <xsd:maxLength value="10"/>
-                        </xsd:restriction>
-                    </xsd:simpleType>
-                </xsd:element>
                 <xsd:element name="Email" minOccurs="0">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">
@@ -410,7 +303,6 @@
                 <xsd:element name="Login" type="xsd:string"/>
                 <xsd:element name="FirstName" type="xsd:string"/>
                 <xsd:element name="LastName" type="xsd:string"/>
-                <xsd:element name="Password" type="xsd:string"/>
                 <xsd:element name="Email" type="xsd:string"/>
                 <xsd:element name="DateJoin" type="xsd:date"/>
                 <xsd:element name="Role" type="xsd:string"/>

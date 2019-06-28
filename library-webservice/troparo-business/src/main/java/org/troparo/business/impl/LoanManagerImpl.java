@@ -4,6 +4,7 @@ package org.troparo.business.impl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
@@ -16,6 +17,7 @@ import java.util.*;
 
 
 @Configuration
+@Transactional
 @Named
 public class LoanManagerImpl implements LoanManager {
     @Inject

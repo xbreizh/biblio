@@ -347,3 +347,4 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 }
+
