@@ -13,23 +13,28 @@ import javax.inject.Named;
 public class LoanManagerImpl implements LoanManager {
     private static final Logger logger = Logger.getLogger(LoanManager.class.toString());
 
+    public void setLoanService(LoanService loanService) {
+        this.loanService = loanService;
+    }
+
     private LoanService loanService;
 
 
     @Override
     public boolean renewLoan(String token, int id) {
         logger.info("trying to renew: " + id);
-        //LoanService loanService = new LoanService();
         RenewLoanRequestType renewLoanRequestType = new RenewLoanRequestType();
         renewLoanRequestType.setToken(token);
         renewLoanRequestType.setId(id);
+        RenewLoanResponseType renewLoanResponseType ;
         try {
-            getLoanServicePort().renewLoan(renewLoanRequestType);
+            renewLoanResponseType = getLoanServicePort().renewLoan(renewLoanRequestType);
+            return renewLoanResponseType.getReturn().isEmpty();
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());
         }
-
         return false;
+
     }
 
     ILoanService getLoanServicePort() {
@@ -39,7 +44,6 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public boolean isRenewable(String token, int id) {
-       // LoanService loanService = new LoanService();
         IsRenewableRequestType requestType = new IsRenewableRequestType();
         requestType.setToken(token);
         requestType.setId(id);
@@ -55,14 +59,14 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String getStatus(String token, int id) {
-        //LoanService loanService = new LoanService();
+        System.out.println("tok: "+token+" "+id);
         GetLoanStatusRequestType requestType = new GetLoanStatusRequestType();
         requestType.setToken(token);
         requestType.setId(id);
 
         try {
-            GetLoanStatusResponseType responseType = getLoanServicePort().getLoanStatus(requestType);
-            return responseType.getStatus();
+
+            return getLoanServicePort().getLoanStatus(requestType).getStatus();
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());
         }

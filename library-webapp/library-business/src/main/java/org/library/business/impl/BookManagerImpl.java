@@ -31,7 +31,6 @@ public class BookManagerImpl implements BookManager {
         logger.info(requestType.getToken());
         responseType = getBookServicePort().getBookByCriterias(requestType);
 
-        logger.info("result: " + responseType.getBookListType().getBookTypeOut().size());
         result = convertBookTypeOutListIntoBookList(token, responseType.getBookListType().getBookTypeOut());
         logger.info("result: " + result);
         return result;
