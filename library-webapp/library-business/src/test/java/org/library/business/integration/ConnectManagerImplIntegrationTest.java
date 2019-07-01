@@ -17,11 +17,11 @@ class ConnectManagerImplIntegrationTest {
     @Inject
     ConnectManagerImpl connectManager;
 
-    @Test
+   /* @Test
     void authenticate() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         connectManager.authenticate(authentication);
-    }
+    }*/
 
     @Test
     void supports() {
