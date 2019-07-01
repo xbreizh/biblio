@@ -12,6 +12,7 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
@@ -43,6 +44,8 @@ class LoanManagerImplTest {
     private BookManager bookManager;
 
 
+
+
    /* @Value("${loanDuration}")
     private int loanDuration;
     @Value("${renewDuration}")
@@ -52,6 +55,8 @@ class LoanManagerImplTest {
 
     @BeforeAll
     static void initAll() {
+
+
         //  applicationContext.getBean("emailManagerImpl", MailManagerImpl.class);
     }
 

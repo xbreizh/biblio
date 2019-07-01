@@ -61,7 +61,7 @@ public class Member {
         this.login = login;
     }
 
-    String getFirstName() {
+    public String getFirstName() {
         return firstName;
     }
 
@@ -69,7 +69,7 @@ public class Member {
         this.firstName = firstName;
     }
 
-    String getLastName() {
+    public String getLastName() {
         return lastName;
     }
 
@@ -85,7 +85,7 @@ public class Member {
         this.password = password;
     }
 
-    String getRole() {
+    public String getRole() {
         return role;
     }
 
@@ -101,7 +101,7 @@ public class Member {
         this.token = token;
     }
 
-    String getEmail() {
+    public String getEmail() {
         return email;
     }
 
@@ -109,7 +109,7 @@ public class Member {
         this.email = email;
     }
 
-    Date getDateJoin() {
+    public Date getDateJoin() {
         return dateJoin;
     }
 
@@ -117,11 +117,11 @@ public class Member {
         this.dateJoin = dateJoin;
     }
 
-    Date getDateConnect() {
+    public Date getDateConnect() {
         return dateConnect;
     }
 
-    void setDateConnect(Date dateConnect) {
+    public void setDateConnect(Date dateConnect) {
         this.dateConnect = dateConnect;
     }
 

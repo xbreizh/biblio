@@ -41,7 +41,7 @@ public class Loan {
         this.id = id;
     }
 
-    Date getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
@@ -49,7 +49,7 @@ public class Loan {
         this.startDate = startDate;
     }
 
-    Date getPlannedEndDate() {
+    public Date getPlannedEndDate() {
         return plannedEndDate;
     }
 
@@ -57,7 +57,7 @@ public class Loan {
         this.plannedEndDate = plannedEndDate;
     }
 
-    Date getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
@@ -65,11 +65,11 @@ public class Loan {
         this.endDate = endDate;
     }
 
-    Member getBorrower() {
+    public Member getBorrower() {
         return borrower;
     }
 
-    void setBorrower(Member borrower) {
+    public void setBorrower(Member borrower) {
         this.borrower = borrower;
     }
 
@@ -83,7 +83,7 @@ public class Loan {
 
     }
 
-    boolean isRenewable() {
+    public boolean isRenewable() {
         return renewable;
     }
 
@@ -91,7 +91,7 @@ public class Loan {
         this.renewable = renewable;
     }
 
-    String getStatus() {
+    public String getStatus() {
         return status;
     }
 

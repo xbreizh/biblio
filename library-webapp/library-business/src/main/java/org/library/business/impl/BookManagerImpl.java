@@ -6,6 +6,8 @@ import org.library.model.Book;
 import org.troparo.entities.book.*;
 import org.troparo.services.bookservice.BookService;
 import org.troparo.services.bookservice.BusinessExceptionBook;
+import org.troparo.services.bookservice.IBookService;
+
 
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -16,11 +18,22 @@ import java.util.Map;
 public class BookManagerImpl implements BookManager {
     private static final Logger logger = Logger.getLogger(BookManagerImpl.class);
 
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+
+    public BookService getBookService() {
+        return bookService;
+    }
+
+    private BookService bookService;
+
 
     @Override
     public List<Book> searchBooks(String token, Map<String, String> criterias) {
         List<Book> result;
-        BookService bookService = new BookService();
+        bookService = new BookService();
         GetBookByCriteriasRequestType requestType = new GetBookByCriteriasRequestType();
         requestType.setToken(token);
         requestType.setBookCriterias(convertCriteriasIntoCriteriasRequest(criterias));
@@ -28,7 +41,7 @@ public class BookManagerImpl implements BookManager {
         try {
             logger.info(requestType.getBookCriterias().getAuthor());
             logger.info(requestType.getToken());
-            responseType = bookService.getBookServicePort().getBookByCriterias(requestType);
+            responseType = getBookServicePort().getBookByCriterias(requestType);
         } catch (BusinessExceptionBook businessExceptionBook) {
             logger.error("error trying to get the result");
             logger.error(businessExceptionBook.getMessage());
@@ -40,7 +53,11 @@ public class BookManagerImpl implements BookManager {
         return result;
     }
 
-    private List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
+    IBookService getBookServicePort() {
+        return bookService.getBookServicePort();
+    }
+
+    List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
         List<Book> bookList = new ArrayList<>();
         for (BookTypeOut bookTypeOut : bookTypeOutList
         ) {
@@ -59,7 +76,7 @@ public class BookManagerImpl implements BookManager {
         return bookList;
     }
 
-    private int settingNbAvailable(String token, String isbn) {
+    int settingNbAvailable(String token, String isbn) {
         int available = 0;
         BookService bookService = new BookService();
         GetAvailableRequestType requestType = new GetAvailableRequestType();
@@ -77,7 +94,8 @@ public class BookManagerImpl implements BookManager {
         return available;
     }
 
-    private BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
+    BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
+        logger.info("criterias: "+criterias);
         BookCriterias bookCriterias = new BookCriterias();
         bookCriterias.setISBN(criterias.get("ISBN"));
         logger.info("added isbn: ");

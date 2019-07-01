@@ -4,19 +4,19 @@
         <thead>
         <tr>
             <th th:text="Login">Date Planted</th>
-            <th th:text="Firstname">Covered</th>
-            <th th:text="Lastname">Type</th>
+            <th th:text="FirstName">Covered</th>
+            <th th:text="LastName">Type</th>
             <th th:text="Email">Features</th>
-            <th th:text="Datejoin">Rows</th>
+            <th th:text="DateJoin">Rows</th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td th:text="${member.login}">13/01/2011</td>
-            <td th:text="${member.firstName}">13/01/2011</td>
-            <td th:text="${member.lastName}">13/01/2011</td>
-            <td th:text="${member.email}">13/01/2011</td>
-            <td th:text="${#dates.format(member.dateJoin, 'dd-MM-yyyy')}"/>
+            <td th:text="${member.login}">login</td>
+            <td th:text="${member.firstName}">firstName</td>
+            <td th:text="${member.lastName}">lastName</td>
+            <td th:text="${member.email}">Email</td>
+            <td th:text="${#dates.format(member.dateJoin, 'dd-MM-yyyy')}">dateJoin</td>
         </tr>
         </tbody>
     </table>

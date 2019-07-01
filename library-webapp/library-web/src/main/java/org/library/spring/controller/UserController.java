@@ -6,7 +6,7 @@ import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
 import org.library.model.Book;
 import org.library.model.Member;
-import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,30 +27,32 @@ public class UserController {
     @Inject
     LoanManager loanManager;
 
+
     private Logger logger = Logger.getLogger(UserController.class);
 
     @GetMapping("/")
     public ModelAndView home() {
-        SecurityContext context = SecurityContextHolder.getContext();
-        String token = context.getAuthentication().getDetails().toString();
-        String login = context.getAuthentication().getPrincipal().toString();
-        logger.info("controller: " + context.getAuthentication().getName());
+        //SecurityContext context = SecurityContextHolder.getContext();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        String login = authentication.getPrincipal().toString();
+        logger.info("controller: " + authentication.getName());
 
-        Member m = memberManager.getMember(token, login);
-        logger.info("Member retrieved: " + m);
-        logger.info("loan list: " + m.getLoanList());
+        Member member = memberManager.getMember(token, login);
+        logger.info("Member retrieved: " + member);
+        logger.info("loan list: " + member.getLoanList());
 
         ModelAndView mv = new ModelAndView();
-
-        mv.addObject("loanList", m.getLoanList());
-        mv.addObject("member", m);
+        mv.addObject("loanList", member.getLoanList());
+        mv.addObject("member", member);
+        System.out.println("member yo: " + member.getLogin());
         mv.setViewName("home");
         return mv;
     }
 
     @GetMapping("/login")
     public ModelAndView login() {
-        logger.info("yuhuhuhuhu");
+        logger.info("login");
         ModelAndView mv = new ModelAndView();
 
         mv.setViewName("login");
@@ -59,8 +61,9 @@ public class UserController {
 
     @PostMapping("/renew")
     public ModelAndView renew(ModelAndView mv, String id) {
-        SecurityContext context = SecurityContextHolder.getContext();
-        String token = context.getAuthentication().getDetails().toString();
+        /*SecurityContext context = SecurityContextHolder.getContext();*/
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
         logger.info("trying to renew: " + id);
         int idLoan = Integer.parseInt(id);
         loanManager.renewLoan(token, idLoan);
@@ -97,12 +100,13 @@ public class UserController {
         List<Book> books;
 
         // Get authenticated user name from SecurityContext
-        SecurityContext context = SecurityContextHolder.getContext();
-        String token = context.getAuthentication().getDetails().toString();
-        String login = context.getAuthentication().getPrincipal().toString();
-        Member m = memberManager.getMember(token, login);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //SecurityContext context = SecurityContextHolder.getContext();
+        String token = authentication.getDetails().toString();
+        String login = authentication.getPrincipal().toString();
+        Member member = memberManager.getMember(token, login);
         logger.info("token: " + token);
-        logger.info(context.getAuthentication().getName());
+        logger.info(authentication.getName());
         logger.info("isbn received: " + isbn);
         logger.info("title received: " + title);
         logger.info("author received: " + author);
@@ -113,8 +117,8 @@ public class UserController {
         criterias.put("AUTHOR", author);
         books = bookManager.searchBooks(token, criterias);
 
-        mv.addObject("loanList", m.getLoanList());
-        mv.addObject("member", m);
+        mv.addObject("loanList", member.getLoanList());
+        mv.addObject("member", member);
         mv.addObject("books", books);
         mv.addObject("isbn", isbn);
         mv.addObject("title", title);

@@ -1,6 +1,6 @@
 <div th:fragment="loans" xmlns:th="http://www.w3.org/1999/xhtml">
 
-
+    <h2>Loans table</h2>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -25,12 +25,12 @@
             </div>
 
 
-            <td data-th-text="${loan.id}"/>
-            <td data-th-text="${#dates.format(loan.startDate, 'dd-MM-yyyy')}"/>
-            <td data-th-text="${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}"/>
-            <td data-th-text="${loan.book.isbn}"/>
-            <td data-th-text="${loan.book.title}"/>
-            <td data-th-text="${loan.status}"/>
+            <td data-th-text="${loan.id}"></td>
+            <td data-th-text="${#dates.format(loan.startDate, 'dd-MM-yyyy')}"></td>
+            <td data-th-text="${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}"></td>
+            <td data-th-text="${loan.book.isbn}"></td>
+            <td data-th-text="${loan.book.title}"></td>
+            <td data-th-text="${loan.status}"></td>
             <td>
                 <div th:if="${loan.renewable} == true">
                     <div>

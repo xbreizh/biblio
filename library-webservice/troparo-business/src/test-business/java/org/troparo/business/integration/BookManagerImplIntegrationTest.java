@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
+import org.troparo.business.contract.LoanManager;
 
 import javax.inject.Inject;
 
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class BookManagerImplIntegrationTest {
 
@@ -25,11 +27,18 @@ class BookManagerImplIntegrationTest {
     @Inject
     private BookManager bookManager;
 
-    @Sql(scripts = "classpath:resetDb.sql")
+    @Inject
+    private LoanManager loanManager;
+
+
     @BeforeEach
     void reset() {
+        System.out.println("db size books: "+bookManager.getBooks().size());
+        System.out.println("db size loans: "+loanManager.getLoans().size());
         logger.info("reset db");
     }
+
+
 
     @Test
     @DisplayName("should return books from database")

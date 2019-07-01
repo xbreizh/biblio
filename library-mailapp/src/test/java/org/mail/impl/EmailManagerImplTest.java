@@ -11,5 +11,6 @@ class EmailManagerImplTest {
 
     @Test
     void sendMail() {
+        System.out.println("test");
     }
 }

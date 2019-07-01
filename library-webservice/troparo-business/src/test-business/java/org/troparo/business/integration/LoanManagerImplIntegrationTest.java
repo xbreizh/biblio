@@ -31,6 +31,7 @@ class LoanManagerImplIntegrationTest {
 
     @BeforeEach
     void reset() {
+        System.out.println("db size loans : "+loanManager.getLoans().size());
         logger.info("reset db");
     }
 

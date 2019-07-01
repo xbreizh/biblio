@@ -17,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class MailManagerImplIntegrationTest {
 
@@ -24,7 +25,7 @@ class MailManagerImplIntegrationTest {
     @Inject
     private MailManager mailManager;
 
-    @Sql(scripts = "classpath:resetDb.sql")
+
     @BeforeEach
     void reset() {
         logger.info("reset db");

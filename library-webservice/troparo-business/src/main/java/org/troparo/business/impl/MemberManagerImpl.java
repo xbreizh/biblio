@@ -3,7 +3,9 @@ package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Component;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.contract.MemberDAO;
@@ -16,6 +18,8 @@ import java.util.*;
 
 @Transactional
 @Named
+@Component
+@PropertySource("classpath:config.properties")
 public class MemberManagerImpl implements MemberManager {
     @Inject
     MemberDAO memberDAO;
@@ -26,7 +30,9 @@ public class MemberManagerImpl implements MemberManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public MemberManagerImpl() {
-        if (pepper == null) pepper = "TIPIAK";
+        /*if (pepper == null)
+            System.out.println("peppper was null");
+            pepper = "TIPIAK";*/
     }
 
     public void setMemberDAO(MemberDAO memberDAO) {
@@ -100,6 +106,7 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public List<Member> getMembers() {
+        System.out.println("pepper: "+pepper);
         return memberDAO.getAllMembers();
     }
 

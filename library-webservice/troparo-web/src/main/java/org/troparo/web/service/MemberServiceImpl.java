@@ -54,7 +54,6 @@ public class MemberServiceImpl implements IMemberService {
         logger.info("exception: ");
         if (!exception.equals("")) {
             logger.info(exception);
-            logger.info("exx: " + exception);
             throw new BusinessExceptionMember(exception);
         }
 

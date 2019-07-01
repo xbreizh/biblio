@@ -51,7 +51,7 @@ public class Book {
         this.id = id;
     }
 
-    int getNbAvailable() {
+    public int getNbAvailable() {
         return nbAvailable;
     }
 
@@ -83,15 +83,15 @@ public class Book {
         this.author = author;
     }
 
-    Date getInsertDate() {
+    public Date getInsertDate() {
         return insertDate;
     }
 
-    void setInsertDate(Date insertDate) {
+    public void setInsertDate(Date insertDate) {
         this.insertDate = insertDate;
     }
 
-    int getPublicationYear() {
+    public int getPublicationYear() {
         return publicationYear;
     }
 
@@ -99,7 +99,7 @@ public class Book {
         this.publicationYear = publicationYear;
     }
 
-    String getEdition() {
+    public String getEdition() {
         return edition;
     }
 
@@ -107,7 +107,7 @@ public class Book {
         this.edition = edition;
     }
 
-    int getNbPages() {
+    public int getNbPages() {
         return nbPages;
     }
 
@@ -115,7 +115,7 @@ public class Book {
         this.nbPages = nbPages;
     }
 
-    String getKeywords() {
+    public String getKeywords() {
         return keywords;
     }
 
@@ -123,7 +123,7 @@ public class Book {
         this.keywords = keywords;
     }
 
-    List<Loan> getLoanList() {
+    public List<Loan> getLoanList() {
         return loanList;
     }
 

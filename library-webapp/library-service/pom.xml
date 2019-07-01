@@ -28,22 +28,22 @@
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MemberService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/8fb68da49c369e9a2107e721c6fefce7e1ccd139/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MemberService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/8fb68da49c369e9a2107e721c6fefce7e1ccd139/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/8fb68da49c369e9a2107e721c6fefce7e1ccd139/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/baaf9cbae419e41f12202433a9efc17d5cabee8e/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/BookService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/8fb68da49c369e9a2107e721c6fefce7e1ccd139/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/BookService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>

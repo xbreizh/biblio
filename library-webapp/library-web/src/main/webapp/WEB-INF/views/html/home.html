@@ -1,15 +1,18 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragments/layout}"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/html"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+
 
 <div th:replace="fragments/header :: head1"></div>
 <body>
 <div class="container">
 
-    <div th:replace="fragments/navbar :: navbar"/>
 
-    <div layout:fragment="content" th:remove="tag">
+
+    <div th:replace="fragments/navbar :: navbar"></div>
+
+
+    <div th:fragment="content" th:remove="tag">
         <h1>My Space</h1>
 
         <h2>
@@ -35,7 +38,7 @@
     <br><br><br>
 
 </div>
-
+</div>
 </body>
 <div th:replace="fragments/header :: foot"></div>
 
