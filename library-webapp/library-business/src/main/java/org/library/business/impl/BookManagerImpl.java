@@ -8,7 +8,6 @@ import org.troparo.services.bookservice.BookService;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.bookservice.IBookService;
 
-
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,34 +17,19 @@ import java.util.Map;
 public class BookManagerImpl implements BookManager {
     private static final Logger logger = Logger.getLogger(BookManagerImpl.class);
 
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
-    }
-
-
-    public BookService getBookService() {
-        return bookService;
-    }
-
     private BookService bookService;
 
 
     @Override
-    public List<Book> searchBooks(String token, Map<String, String> criterias) {
+    public List<Book> searchBooks(String token, Map<String, String> criterias) throws BusinessExceptionBook {
         List<Book> result;
-        bookService = new BookService();
         GetBookByCriteriasRequestType requestType = new GetBookByCriteriasRequestType();
         requestType.setToken(token);
         requestType.setBookCriterias(convertCriteriasIntoCriteriasRequest(criterias));
-        GetBookByCriteriasResponseType responseType = new GetBookByCriteriasResponseType();
-        try {
-            logger.info(requestType.getBookCriterias().getAuthor());
-            logger.info(requestType.getToken());
-            responseType = getBookServicePort().getBookByCriterias(requestType);
-        } catch (BusinessExceptionBook businessExceptionBook) {
-            logger.error("error trying to get the result");
-            logger.error(businessExceptionBook.getMessage());
-        }
+        GetBookByCriteriasResponseType responseType;
+        logger.info(requestType.getBookCriterias().getAuthor());
+        logger.info(requestType.getToken());
+        responseType = getBookServicePort().getBookByCriterias(requestType);
 
         logger.info("result: " + responseType.getBookListType().getBookTypeOut().size());
         result = convertBookTypeOutListIntoBookList(token, responseType.getBookListType().getBookTypeOut());
@@ -54,10 +38,11 @@ public class BookManagerImpl implements BookManager {
     }
 
     IBookService getBookServicePort() {
+        if (bookService == null) bookService = new BookService();
         return bookService.getBookServicePort();
     }
 
-    List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) {
+    List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) throws BusinessExceptionBook {
         List<Book> bookList = new ArrayList<>();
         for (BookTypeOut bookTypeOut : bookTypeOutList
         ) {
@@ -70,32 +55,26 @@ public class BookManagerImpl implements BookManager {
             book.setPublicationYear(bookTypeOut.getPublicationYear());
             book.setNbPages(bookTypeOut.getNbPages());
             book.setKeywords(bookTypeOut.getKeywords());
-            book.setNbAvailable(settingNbAvailable(token, book.getIsbn()));
+            book.setNbAvailable(getNbAvailable(token, book.getIsbn()));
             bookList.add(book);
         }
         return bookList;
     }
 
-    int settingNbAvailable(String token, String isbn) {
-        int available = 0;
-        BookService bookService = new BookService();
+    public int getNbAvailable(String token, String isbn) throws BusinessExceptionBook {
         GetAvailableRequestType requestType = new GetAvailableRequestType();
         requestType.setISBN(isbn.toUpperCase());
         requestType.setToken(token);
-        try {
-            GetAvailableResponseType responseType;
-            responseType = bookService.getBookServicePort().getAvailable(requestType);
-            logger.info("getting: " + responseType.getReturn());
-            available = responseType.getReturn();
-        } catch (BusinessExceptionBook businessExceptionBook) {
-            logger.error(businessExceptionBook.getMessage());
-        }
+        GetAvailableResponseType responseType;
+        responseType = getBookServicePort().getAvailable(requestType);
+        logger.info("getting: " + responseType.getReturn());
 
-        return available;
+
+        return responseType.getReturn();
     }
 
     BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
-        logger.info("criterias: "+criterias);
+        logger.info("criterias: " + criterias);
         BookCriterias bookCriterias = new BookCriterias();
         bookCriterias.setISBN(criterias.get("ISBN"));
         logger.info("added isbn: ");
@@ -110,7 +89,6 @@ public class BookManagerImpl implements BookManager {
         logger.info("author passed: " + bookCriterias.getAuthor());
         logger.info("title passed: " + bookCriterias.getTitle());
         logger.info("isbn passed: " + bookCriterias.getISBN());
-
         return bookCriterias;
     }
 

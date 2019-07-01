@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
+import org.troparo.services.bookservice.BusinessExceptionBook;
 
 import javax.inject.Inject;
 import java.security.Principal;
@@ -95,7 +96,7 @@ public class UserController {
     }
 
     @PostMapping("/search")
-    public ModelAndView search(ModelAndView mv, String isbn, String author, String title) {
+    public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {
         logger.info("getting into search");
         List<Book> books;
 
