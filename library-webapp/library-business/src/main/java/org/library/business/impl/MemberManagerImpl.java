@@ -58,7 +58,7 @@ public class MemberManagerImpl implements MemberManager {
         } catch (BusinessExceptionMember businessExceptionMember) {
             logger.error(businessExceptionMember.getMessage());
         } catch (BusinessExceptionLoan businessExceptionLoan) {
-            businessExceptionLoan.printStackTrace();
+            logger.error(businessExceptionLoan.getMessage());
         }
 
         return null;

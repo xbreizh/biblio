@@ -34,7 +34,6 @@ public class UserController {
 
     @GetMapping("/")
     public ModelAndView home() {
-        //SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
@@ -47,7 +46,6 @@ public class UserController {
         ModelAndView mv = new ModelAndView();
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);
-        System.out.println("member yo: " + member.getLogin());
         mv.setViewName("home");
         return mv;
     }
@@ -63,7 +61,6 @@ public class UserController {
 
     @PostMapping("/renew")
     public ModelAndView renew(ModelAndView mv, String id) throws BusinessExceptionLoan {
-        /*SecurityContext context = SecurityContextHolder.getContext();*/
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         logger.info("trying to renew: " + id);
@@ -103,7 +100,6 @@ public class UserController {
 
         // Get authenticated user name from SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        //SecurityContext context = SecurityContextHolder.getContext();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
         Member member = memberManager.getMember(token, login);

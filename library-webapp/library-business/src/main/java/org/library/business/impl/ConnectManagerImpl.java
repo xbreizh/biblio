@@ -22,9 +22,7 @@ import java.util.Set;
 public class ConnectManagerImpl implements AuthenticationProvider {
 
     private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
-    private final static String ROLE = "USER";
-    /*@Inject
-    MemberManager memberManager;*/
+    private static final  String ROLE = "USER";
     private String token;
 
     @Override
@@ -68,7 +66,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
 
-    Collection<GrantedAuthority> buildUserAuthority() {
+    private Collection<GrantedAuthority> buildUserAuthority() {
 
         Set<GrantedAuthority> setAuths = new HashSet<>();
 

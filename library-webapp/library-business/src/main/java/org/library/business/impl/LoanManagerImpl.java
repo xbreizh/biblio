@@ -26,14 +26,9 @@ public class LoanManagerImpl implements LoanManager {
         RenewLoanRequestType renewLoanRequestType = new RenewLoanRequestType();
         renewLoanRequestType.setToken(token);
         renewLoanRequestType.setId(id);
-        RenewLoanResponseType renewLoanResponseType ;
-        /*try {*/
-            renewLoanResponseType = getLoanServicePort().renewLoan(renewLoanRequestType);
-            return renewLoanResponseType.getReturn().isEmpty();
-        /*} catch (BusinessExceptionLoan businessExceptionLoan) {
-            logger.error(businessExceptionLoan.getMessage());
-        }
-        return false;*/
+        RenewLoanResponseType renewLoanResponseType;
+        renewLoanResponseType = getLoanServicePort().renewLoan(renewLoanRequestType);
+        return renewLoanResponseType.getReturn().isEmpty();
 
     }
 
@@ -47,14 +42,8 @@ public class LoanManagerImpl implements LoanManager {
         IsRenewableRequestType requestType = new IsRenewableRequestType();
         requestType.setToken(token);
         requestType.setId(id);
-       /* try {*/
-            IsRenewableResponseType responseType = getLoanServicePort().isRenewable(requestType);
-            return responseType.isReturn();
-
-       /* } catch (BusinessExceptionLoan businessExceptionLoan) {
-            logger.error(businessExceptionLoan.getMessage());
-        }*/
-       // return false;
+        IsRenewableResponseType responseType = getLoanServicePort().isRenewable(requestType);
+        return responseType.isReturn();
     }
 
     @Override
@@ -62,15 +51,7 @@ public class LoanManagerImpl implements LoanManager {
         GetLoanStatusRequestType requestType = new GetLoanStatusRequestType();
         requestType.setToken(token);
         requestType.setId(id);
-
-       /* try {
-*/
-            return getLoanServicePort().getLoanStatus(requestType).getStatus();
-       /* } catch (BusinessExceptionLoan businessExceptionLoan) {
-            logger.error(businessExceptionLoan.getMessage());
-        }
-
-        return null;*/
+        return getLoanServicePort().getLoanStatus(requestType).getStatus();
     }
 
 
