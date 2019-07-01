@@ -1,6 +1,8 @@
 package org.library.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
@@ -31,6 +33,7 @@ class LoanManagerImplTest {
     }
 
     @Test
+    @Disabled
     void renewLoan() throws BusinessExceptionLoan {
         RenewLoanRequestType renewLoanRequestType = new RenewLoanRequestType();
         String token = "token123";
@@ -59,6 +62,7 @@ class LoanManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return status")
     void getStatus() throws BusinessExceptionLoan {
         GetLoanStatusRequestType getLoanStatusRequestType = new GetLoanStatusRequestType();
         String token ="token123";
