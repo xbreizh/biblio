@@ -164,7 +164,7 @@
                 <version>0.7.7.201606060606</version>
                 <configuration>
                     <excludes>
-                        <exclude>**/config/*.class</exclude>
+                        <exclude>**/config/*.java</exclude>
                     </excludes>
                 </configuration>
                 <executions>
