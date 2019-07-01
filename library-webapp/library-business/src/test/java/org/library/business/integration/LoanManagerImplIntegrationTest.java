@@ -15,7 +15,7 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = LoanManagerImpl.class)
-@EnableTransactionManagement
+@Transactional
 class LoanManagerImplIntegrationTest {
 
     @Inject
