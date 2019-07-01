@@ -59,7 +59,6 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String getStatus(String token, int id) {
-        System.out.println("tok: "+token+" "+id);
         GetLoanStatusRequestType requestType = new GetLoanStatusRequestType();
         requestType.setToken(token);
         requestType.setId(id);

@@ -8,10 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.library.business.contract.LoanManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.troparo.entities.loan.GetLoanStatusRequestType;
-import org.troparo.entities.loan.GetLoanStatusResponseType;
-import org.troparo.entities.loan.RenewLoanRequestType;
-import org.troparo.entities.loan.RenewLoanResponseType;
+import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
@@ -59,29 +56,61 @@ class LoanManagerImplTest {
 
     @Test
     void getLoanServicePort() {
+        loanManager.setLoanService(null);
+        assertNotNull(loanManager.getLoanServicePort());
     }
 
     @Test
-    void isRenewable() {
+    @DisplayName("should return true")
+    void isRenewable() throws BusinessExceptionLoan {
+        IsRenewableResponseType responseType = mock(IsRenewableResponseType.class);
+        responseType.setReturn(true);
+        ILoanService iLoanService = mock(ILoanService.class);
+        when(responseType.isReturn()).thenReturn(true);
+        when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
+        when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
+        assertTrue( loanManager.isRenewable("", 2));
+
+    }
+
+    @Test
+    @DisplayName("should return false")
+    void isRenewable1() throws BusinessExceptionLoan {
+        IsRenewableResponseType responseType = mock(IsRenewableResponseType.class);
+        responseType.setReturn(false);
+        ILoanService iLoanService = mock(ILoanService.class);
+        when(responseType.isReturn()).thenReturn(true);
+        when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
+        when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
+        assertTrue( loanManager.isRenewable("", 2));
+
     }
 
     @Test
     @DisplayName("should return status")
-    @Disabled
     void getStatus() throws BusinessExceptionLoan {
-        GetLoanStatusRequestType getLoanStatusRequestType = new GetLoanStatusRequestType();
-        String token ="token123";
-        int id = 3;
         String status = "dol";
-        getLoanStatusRequestType.setToken(token);
-        getLoanStatusRequestType.setId(id);
         GetLoanStatusResponseType getLoanStatusResponseType = mock(GetLoanStatusResponseType.class);
         getLoanStatusResponseType.setStatus(status);
         ILoanService iLoanService = mock(ILoanService.class);
         when(getLoanStatusResponseType.getStatus()).thenReturn(status);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
-        when(iLoanService.getLoanStatus(getLoanStatusRequestType)).thenReturn(getLoanStatusResponseType);
-        assertEquals(status, loanManager.getLoanServicePort().getLoanStatus(getLoanStatusRequestType).getStatus());
+        when(iLoanService.getLoanStatus(any(GetLoanStatusRequestType.class))).thenReturn(getLoanStatusResponseType);
+        assertEquals(status, loanManager.getStatus("", 2));
+
+    }
+
+    @Test
+    @DisplayName("should return null")
+    void getStatus1() throws BusinessExceptionLoan {
+        String status = null;
+        GetLoanStatusResponseType getLoanStatusResponseType = mock(GetLoanStatusResponseType.class);
+        getLoanStatusResponseType.setStatus(status);
+        ILoanService iLoanService = mock(ILoanService.class);
+        when(getLoanStatusResponseType.getStatus()).thenReturn(status);
+        when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
+        when(iLoanService.getLoanStatus(any(GetLoanStatusRequestType.class))).thenReturn(getLoanStatusResponseType);
+        assertNull(loanManager.getStatus("", 2));
 
     }
 }
