@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.library.business.contract.LoanManager;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
+import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
 
 import javax.inject.Named;
@@ -12,16 +13,18 @@ import javax.inject.Named;
 public class LoanManagerImpl implements LoanManager {
     private static final Logger logger = Logger.getLogger(LoanManager.class.toString());
 
+    private LoanService loanService;
+
 
     @Override
     public boolean renewLoan(String token, int id) {
         logger.info("trying to renew: " + id);
-        LoanService loanService = new LoanService();
+        //LoanService loanService = new LoanService();
         RenewLoanRequestType renewLoanRequestType = new RenewLoanRequestType();
         renewLoanRequestType.setToken(token);
         renewLoanRequestType.setId(id);
         try {
-            loanService.getLoanServicePort().renewLoan(renewLoanRequestType);
+            getLoanServicePort().renewLoan(renewLoanRequestType);
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());
         }
@@ -29,14 +32,19 @@ public class LoanManagerImpl implements LoanManager {
         return false;
     }
 
+    ILoanService getLoanServicePort() {
+        if (loanService == null) loanService = new LoanService();
+        return loanService.getLoanServicePort();
+    }
+
     @Override
     public boolean isRenewable(String token, int id) {
-        LoanService loanService = new LoanService();
+       // LoanService loanService = new LoanService();
         IsRenewableRequestType requestType = new IsRenewableRequestType();
         requestType.setToken(token);
         requestType.setId(id);
         try {
-            IsRenewableResponseType responseType = loanService.getLoanServicePort().isRenewable(requestType);
+            IsRenewableResponseType responseType = getLoanServicePort().isRenewable(requestType);
             return responseType.isReturn();
 
         } catch (BusinessExceptionLoan businessExceptionLoan) {
@@ -47,13 +55,13 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String getStatus(String token, int id) {
-        LoanService loanService = new LoanService();
+        //LoanService loanService = new LoanService();
         GetLoanStatusRequestType requestType = new GetLoanStatusRequestType();
         requestType.setToken(token);
         requestType.setId(id);
 
         try {
-            GetLoanStatusResponseType responseType = loanService.getLoanServicePort().getLoanStatus(requestType);
+            GetLoanStatusResponseType responseType = getLoanServicePort().getLoanStatus(requestType);
             return responseType.getStatus();
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());
