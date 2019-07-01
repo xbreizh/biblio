@@ -1,3 +1,4 @@
+/*
 package impl;
 
 import contract.ConnectConsumer;
@@ -18,3 +19,4 @@ public class ConnectConsumerImpl implements ConnectConsumer {
         return false;
     }
 }
+*/

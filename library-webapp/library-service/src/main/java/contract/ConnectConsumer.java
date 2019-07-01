@@ -1,3 +1,4 @@
+/*
 package contract;
 
 public interface ConnectConsumer {
@@ -9,3 +10,4 @@ public interface ConnectConsumer {
     boolean closeConnection(String login);
 
 }
+*/

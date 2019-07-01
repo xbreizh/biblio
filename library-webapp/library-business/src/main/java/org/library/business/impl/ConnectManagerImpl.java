@@ -1,7 +1,6 @@
 package org.library.business.impl;
 
 import org.apache.log4j.Logger;
-import org.library.business.contract.MemberManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -13,7 +12,6 @@ import org.troparo.entities.connect.GetTokenResponseType;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +23,8 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
     private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
     private final static String ROLE = "USER";
-    @Inject
-    MemberManager memberManager;
+    /*@Inject
+    MemberManager memberManager;*/
     private String token;
 
     @Override
@@ -65,13 +63,12 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
 
-    @Override
     public boolean supports(Class<?> auth) {
         return auth.equals(UsernamePasswordAuthenticationToken.class);
     }
 
 
-    private Collection<GrantedAuthority> buildUserAuthority() {
+    Collection<GrantedAuthority> buildUserAuthority() {
 
         Set<GrantedAuthority> setAuths = new HashSet<>();
 

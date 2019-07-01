@@ -61,7 +61,7 @@ public class MemberManagerImpl implements MemberManager {
         return null;
     }
 
-    private Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) {
+    Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) {
         Member member = new Member();
         member.setFirstName(memberTypeOut.getFirstName());
         member.setLastName(memberTypeOut.getLastName());
@@ -76,7 +76,7 @@ public class MemberManagerImpl implements MemberManager {
         return member;
     }
 
-    private List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) {
+    List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert LoanListType into List<Loan>");
         for (LoanTypeOut loanTypeOut : loanListType.getLoanTypeOut()
@@ -104,7 +104,7 @@ public class MemberManagerImpl implements MemberManager {
         return loanList;
     }
 
-    private Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
+    Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
         logger.info("trying to convert book");
         Book book = new Book();
         book.setId(bookTypeOut.getId());
@@ -119,7 +119,7 @@ public class MemberManagerImpl implements MemberManager {
         return book;
     }
 
-    private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+    Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
         if (gDate != null) {
             XMLGregorianCalendar xmlCalendar;
             try {
