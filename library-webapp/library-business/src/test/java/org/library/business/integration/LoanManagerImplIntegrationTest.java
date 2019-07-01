@@ -7,6 +7,7 @@ import org.library.business.impl.BookManagerImpl;
 import org.library.business.impl.LoanManagerImpl;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -14,6 +15,7 @@ import javax.inject.Inject;
 import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = LoanManagerImpl.class)
+@EnableTransactionManagement
 class LoanManagerImplIntegrationTest {
 
     @Inject
