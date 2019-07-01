@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.troparo.services.bookservice.BusinessExceptionBook;
+import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
 import java.security.Principal;
@@ -61,7 +62,7 @@ public class UserController {
     }
 
     @PostMapping("/renew")
-    public ModelAndView renew(ModelAndView mv, String id) {
+    public ModelAndView renew(ModelAndView mv, String id) throws BusinessExceptionLoan {
         /*SecurityContext context = SecurityContextHolder.getContext();*/
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();

@@ -103,11 +103,9 @@ class LoanManagerImplTest {
     @Test
     @DisplayName("should return null")
     void getStatus1() throws BusinessExceptionLoan {
-        String status = null;
         GetLoanStatusResponseType getLoanStatusResponseType = mock(GetLoanStatusResponseType.class);
-        getLoanStatusResponseType.setStatus(status);
         ILoanService iLoanService = mock(ILoanService.class);
-        when(getLoanStatusResponseType.getStatus()).thenReturn(status);
+        when(getLoanStatusResponseType.getStatus()).thenReturn(null);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(iLoanService.getLoanStatus(any(GetLoanStatusRequestType.class))).thenReturn(getLoanStatusResponseType);
         assertNull(loanManager.getStatus("", 2));

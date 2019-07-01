@@ -8,6 +8,7 @@ import org.library.model.Book;
 import org.library.model.Loan;
 import org.library.model.Member;
 import org.troparo.entities.member.*;
+import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.MemberService;
 
@@ -56,12 +57,14 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("Issue while trying to get member details");
         } catch (BusinessExceptionMember businessExceptionMember) {
             logger.error(businessExceptionMember.getMessage());
+        } catch (BusinessExceptionLoan businessExceptionLoan) {
+            businessExceptionLoan.printStackTrace();
         }
 
         return null;
     }
 
-    Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) {
+    private Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan {
         Member member = new Member();
         member.setFirstName(memberTypeOut.getFirstName());
         member.setLastName(memberTypeOut.getLastName());
@@ -76,7 +79,7 @@ public class MemberManagerImpl implements MemberManager {
         return member;
     }
 
-    List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) {
+    private List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert LoanListType into List<Loan>");
         for (LoanTypeOut loanTypeOut : loanListType.getLoanTypeOut()
@@ -104,7 +107,7 @@ public class MemberManagerImpl implements MemberManager {
         return loanList;
     }
 
-    Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
+    private Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
         logger.info("trying to convert book");
         Book book = new Book();
         book.setId(bookTypeOut.getId());
@@ -119,7 +122,7 @@ public class MemberManagerImpl implements MemberManager {
         return book;
     }
 
-    Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+    private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
         if (gDate != null) {
             XMLGregorianCalendar xmlCalendar;
             try {
