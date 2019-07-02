@@ -75,11 +75,10 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should update loan")
     void updateLoan() {
-        int loanId = 14;
+        int loanId = 4;
         int bookId=1;
         Loan loan = loanDAO.getLoanById(loanId);
         Book newBook = bookDAO.getBookById(bookId);
-        System.out.println("loanDao: "+loanDAO.getLoanById(loanId));
         assertNotEquals(newBook, loanDAO.getLoanById(loanId).getBook());
         loan.setBook(newBook);
         assertAll(
