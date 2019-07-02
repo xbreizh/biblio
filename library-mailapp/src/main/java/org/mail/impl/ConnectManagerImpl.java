@@ -17,7 +17,7 @@ public class ConnectManagerImpl implements ConnectManager {
     private static final String LOGIN = "lokii";
     private static final String PWD = "123";
 
-    /* @Override*/
+    @Override
     public String authenticate() {
         ConnectService cs = new ConnectService();
         GetTokenRequestType t = new GetTokenRequestType();
@@ -29,7 +29,6 @@ public class ConnectManagerImpl implements ConnectManager {
         } catch (BusinessExceptionConnect businessExceptionConnect) {
             logger.error("issue while trying to get the token");
         }
-
 
 
         if (!token.equals("wrong LOGIN or pwd")) {

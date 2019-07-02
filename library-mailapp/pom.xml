@@ -11,6 +11,7 @@
     <packaging>jar</packaging>
     <properties>
         <junit.jupiter.version>5.4.0</junit.jupiter.version>
+        <spring.version>5.1.3.RELEASE</spring.version>
     </properties>
     <profiles>
         <!-- Local profile -->
@@ -111,7 +112,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>5.1.3.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.bval/bval-jsr -->
         <dependency>
@@ -136,12 +137,12 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>5.1.3.RELEASE</version>
+            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>2.1.2.RELEASE</version>
+            <version>1.2.5.RELEASE</version>
         </dependency>
 
         <dependency>
@@ -153,7 +154,7 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>5.1.5.RELEASE</version>
+            <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
 
