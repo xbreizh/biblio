@@ -21,17 +21,13 @@ public class ConnectManagerImpl implements ConnectManager {
     private ConnectService connectService;
 
     @Override
-    public String authenticate() {
-        String token="";
+    public String authenticate() throws BusinessExceptionConnect {
         GetTokenRequestType getTokenRequestType = new GetTokenRequestType();
         getTokenRequestType.setLogin(LOGIN);
         getTokenRequestType.setPassword(PWD);
-        try {
-            GetTokenResponseType responseType = getConnectServicePort(connectService).getToken(getTokenRequestType);
-            token = responseType.getReturn();
-        } catch (BusinessExceptionConnect businessExceptionConnect) {
-            logger.error("issue while trying to get the token");
-        }
+
+        GetTokenResponseType responseType = getConnectServicePort(connectService).getToken(getTokenRequestType);
+        String token = responseType.getReturn();
 
 
         if (!token.equals("wrong LOGIN or pwd")) {
@@ -55,7 +51,7 @@ public class ConnectManagerImpl implements ConnectManager {
     }
 
     IConnectService getConnectServicePort(ConnectService connectService) {
-        if(connectService==null)connectService=new ConnectService();
+        if (connectService == null) connectService = new ConnectService();
         return connectService.getConnectServicePort();
     }
 

@@ -42,6 +42,17 @@ class ConnectManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return null")
+    void authenticate1() throws BusinessExceptionConnect {
+        GetTokenResponseType getTokenResponseType = new GetTokenResponseType();
+        getTokenResponseType.setReturn("wrong LOGIN or pwd");
+        IConnectService iConnectService = mock(IConnectService.class);
+        when(connectService.getConnectServicePort()).thenReturn(iConnectService);
+        when(connectManager.getConnectServicePort(connectService).getToken(any(GetTokenRequestType.class))).thenReturn(getTokenResponseType);
+        assertNull( connectManager.authenticate());
+    }
+
+    @Test
     @DisplayName("should set connectService")
     void setConnectService(){
         ConnectService connectService1 = new ConnectService();

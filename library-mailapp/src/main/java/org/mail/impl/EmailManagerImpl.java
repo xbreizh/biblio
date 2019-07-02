@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import org.troparo.entities.mail.GetOverdueMailListRequest;
 import org.troparo.entities.mail.GetOverdueMailListResponse;
 import org.troparo.entities.mail.MailTypeOut;
+import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.MailService;
 
@@ -81,7 +82,7 @@ public class EmailManagerImpl {
     // "* 00 11 * * *"
     //@Scheduled(cron = "* 00 11 * * *")
     @Scheduled(fixedRate = 500000)
-    public void sendMail() {
+    public void sendMail() throws BusinessExceptionConnect {
         String token;
         token = connectManager.authenticate();
         if (token != null) {
@@ -178,7 +179,7 @@ public class EmailManagerImpl {
     private Map<String, String> getTemplateItems(Mail mail) {
 
         //Set key values
-        Map<String, String> input = new HashMap<String, String>();
+        Map<String, String> input = new HashMap<>();
         input.put("FIRSTNAME", mail.getFirstname());
         input.put("LASTNAME", mail.getLastname());
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
@@ -256,7 +257,7 @@ public class EmailManagerImpl {
     }
 
     private List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) {
-        List<Mail> mailList = new ArrayList<Mail>();
+        List<Mail> mailList = new ArrayList<>();
 
         for (MailTypeOut mout : response.getMailListType().getMailTypeOut()) {
             Mail mail = new Mail();
