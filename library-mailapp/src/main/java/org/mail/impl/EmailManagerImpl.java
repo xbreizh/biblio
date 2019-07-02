@@ -149,17 +149,18 @@ public class EmailManagerImpl {
 
     private Session getSession(String username, Properties props) {
         return Session.getInstance(props,
-                        new Authenticator() {
-                            protected PasswordAuthentication getPasswordAuthentication() {
-                                try {
-                                    return new PasswordAuthentication(username, getPassword());
+                new Authenticator() {
+                    @Override
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        try {
+                            return new PasswordAuthentication(username, getPassword());
 
-                                } catch (Exception e) {
-                                    logger.error(e.getMessage());
-                                }
-                                return null;
-                            }
-                        });
+                        } catch (Exception e) {
+                            logger.error(e.getMessage());
+                        }
+                        return null;
+                    }
+                });
     }
 
     //Method to replace the values for keys
@@ -181,6 +182,7 @@ public class EmailManagerImpl {
         }
         return msg;
     }
+
     Map<String, String> getTemplateItems(Mail mail) {
 
         //Set key values
@@ -250,7 +252,7 @@ public class EmailManagerImpl {
     }
 
     private IMailService getMailServicePort() {
-        if(mailService==null)mailService = new MailService();
+        if (mailService == null) mailService = new MailService();
         return mailService.getMailServicePort();
     }
 
@@ -275,10 +277,10 @@ public class EmailManagerImpl {
     }
 
 
-    private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+    Date convertGregorianCalendarIntoDate(GregorianCalendar gregorianCalendar) {
         XMLGregorianCalendar xmlCalendar;
         try {
-            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
+            xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             return xmlCalendar.toGregorianCalendar().getTime();
         } catch (DatatypeConfigurationException e) {
             logger.error(e.getMessage());
@@ -308,7 +310,6 @@ public class EmailManagerImpl {
 
         return new String(decrypted);
     }
-
 
 
     public MailService getMailService() {

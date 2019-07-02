@@ -23,8 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
 
@@ -53,6 +52,22 @@ class EmailManagerImplTest {
         emailManager.setMailService(mailService1);
         assertEquals(mailService1, emailManager.getMailService());
     }
+
+    @Test
+    @DisplayName("should convert date")
+    void convertGregorianCalendarIntoDate() throws ParseException, DatatypeConfigurationException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date1 = simpleDateFormat.parse("2018-09-09");
+        GregorianCalendar gregorianCalendar = new GregorianCalendar();
+        gregorianCalendar.setTime(date1);
+        XMLGregorianCalendar xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
+        assertEquals(date1, emailManager.convertGregorianCalendarIntoDate(xmlGregorianCalendar.toGregorianCalendar()));
+
+    }
+
+
 
 
     @Test
