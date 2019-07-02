@@ -37,8 +37,6 @@ public class Book {
 
     private String keywords;
 
-   private Book book;
-
 
     private List<Loan> loanList = new ArrayList<>();
 
