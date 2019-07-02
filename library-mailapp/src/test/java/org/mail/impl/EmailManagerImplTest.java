@@ -7,10 +7,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mail.contract.ConnectManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.troparo.entities.mail.GetOverdueMailListRequest;
+import org.troparo.entities.mail.GetOverdueMailListResponse;
+import org.troparo.entities.mail.MailListType;
+import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.services.mailservice.MailService;
 
 import javax.inject.Inject;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.spy;
@@ -41,5 +54,56 @@ class EmailManagerImplTest {
         assertEquals(mailService1, emailManager.getMailService());
     }
 
+
+    @Test
+    @DisplayName("should convert MailLisType into List<Mail>")
+    void convertMailingListTypeIntoMailList() throws DatatypeConfigurationException, ParseException {
+        GetOverdueMailListResponse getOverdueMailListResponse = new GetOverdueMailListResponse();
+        MailListType mailListType = new MailListType();
+
+        MailTypeOut mailTypeOut = new MailTypeOut();
+        String firstName = "John";
+        String lastName = "Maldo";
+        String title = "user";
+        String email = "dede@dede.fr";
+        String author = "maxso";
+        int diffDays = 23;
+        String isbn = "frfrf09f";
+        String edition = "maloni";
+
+        mailTypeOut.setTitle(title);
+        mailTypeOut.setAuthor(author);
+        mailTypeOut.setIsbn(isbn);
+        mailTypeOut.setEdition(edition);
+        mailTypeOut.setEmail(email);
+        mailTypeOut.setLastName(lastName);
+        mailTypeOut.setFirstName(firstName);
+        mailTypeOut.setDiffDays(diffDays);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date1 = simpleDateFormat.parse("2018-09-09");
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(date1);
+        XMLGregorianCalendar xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+        mailTypeOut.setDueDate(xmlGregorianCalendar );
+        mailListType.getMailTypeOut().add(mailTypeOut);
+        getOverdueMailListResponse.setMailListType(mailListType);
+
+        assertAll(
+                ()-> assertEquals(title, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getTitle()),
+                ()-> assertEquals(author, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getAuthor()),
+                ()-> assertEquals(email, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getEmail()),
+                ()-> assertEquals(edition, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getEdition()),
+                ()-> assertEquals(firstName, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getFirstname()),
+                ()-> assertEquals(lastName, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getLastname()),
+                ()-> assertEquals(diffDays, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getDiffdays()),
+                ()-> assertEquals(isbn, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getIsbn()),
+                ()-> assertEquals(date1, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getDueDate())
+        );
+
+
+
+    }
 
 }

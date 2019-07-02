@@ -237,36 +237,37 @@ public class EmailManagerImpl {
 
     private List<Mail> getOverdueList(String token) {
         logger.info("getting overdue list");
-        MailService mailService = new MailService();
+        List<Mail> mailList = new ArrayList<>();
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
         try {
-            GetOverdueMailListResponse response = getMailServicePort(mailService).getOverdueMailList(requestType);
+            GetOverdueMailListResponse response = getMailServicePort().getOverdueMailList(requestType);
             return convertMailingListTypeIntoMailList(response);
         } catch (BusinessExceptionMail businessExceptionMail) {
             logger.error(businessExceptionMail.getMessage());
         }
-        return null;
+        return mailList;
     }
 
-    private IMailService getMailServicePort(MailService mailService) {
+    private IMailService getMailServicePort() {
+        if(mailService==null)mailService = new MailService();
         return mailService.getMailServicePort();
     }
 
-    private List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) {
+    List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) {
         List<Mail> mailList = new ArrayList<>();
 
-        for (MailTypeOut mout : response.getMailListType().getMailTypeOut()) {
+        for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
             Mail mail = new Mail();
-            mail.setEmail(mout.getEmail());
-            mail.setFirstname(mout.getFirstName());
-            mail.setLastname(mout.getLastName());
-            mail.setIsbn(mout.getIsbn());
-            mail.setTitle(mout.getTitle());
-            mail.setAuthor(mout.getAuthor());
-            mail.setDiffdays(mout.getDiffDays());
-            mail.setDueDate(convertGregorianCalendarIntoDate(mout.getDueDate().toGregorianCalendar()));
-            mail.setEdition(mout.getEdition());
+            mail.setEmail(mailTypeOut.getEmail());
+            mail.setFirstname(mailTypeOut.getFirstName());
+            mail.setLastname(mailTypeOut.getLastName());
+            mail.setIsbn(mailTypeOut.getIsbn());
+            mail.setTitle(mailTypeOut.getTitle());
+            mail.setAuthor(mailTypeOut.getAuthor());
+            mail.setDiffdays(mailTypeOut.getDiffDays());
+            mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate().toGregorianCalendar()));
+            mail.setEdition(mailTypeOut.getEdition());
 
             mailList.add(mail);
         }
@@ -288,17 +289,17 @@ public class EmailManagerImpl {
 
 
     private String getPassword() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        String tempkey;
+        String tempKey;
         String password;
         Properties prop = new Properties();
         InputStream input;
         input = new FileInputStream("/usr/app/resources/mail.properties");
         // load a properties file
         prop.load(input);
-        tempkey = prop.getProperty("Key");
+        tempKey = prop.getProperty("Key");
         password = prop.getProperty("Encrypted_Password");
 
-        byte[] bytekey = hexStringToByteArray(tempkey);
+        byte[] bytekey = hexStringToByteArray(tempKey);
         SecretKeySpec sks = new SecretKeySpec(bytekey, AES);
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.DECRYPT_MODE, sks);
