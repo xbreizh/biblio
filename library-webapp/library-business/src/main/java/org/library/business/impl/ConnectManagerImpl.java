@@ -23,18 +23,16 @@ import java.util.Set;
 public class ConnectManagerImpl implements AuthenticationProvider {
 
     private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
-    private static final  String ROLE = "USER";
-    private String token;
+    private static final String ROLE = "USER";
+    private ConnectService connectService;
 
     public void setConnectService(ConnectService connectService) {
         this.connectService = connectService;
     }
 
-    private ConnectService connectService;
-
-
     @Override
     public UsernamePasswordAuthenticationToken authenticate(Authentication authentication) {
+        String token = "";
         logger.info(authentication.getPrincipal().toString());
         GetTokenRequestType getTokenRequestType = new GetTokenRequestType();
         String login = authentication.getName().toUpperCase();
@@ -42,22 +40,25 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         getTokenRequestType.setLogin(login);
         getTokenRequestType.setPassword(password);
         logger.info("login: " + login + " \n passwordd: " + password);
+        String exception = "";
+        GetTokenResponseType responseType;
         try {
-            GetTokenResponseType responseType = getConnectServicePort().getToken(getTokenRequestType);
+            responseType = getConnectServicePort().getToken(getTokenRequestType);
             token = responseType.getReturn();
         } catch (BusinessExceptionConnect businessExceptionConnect) {
-            logger.error("issue while trying to get the token");
+            exception = "issue while trying to get the token";
+            logger.error(exception);
         }
+
         logger.info("token found: " + token);
 
 
-        if (!token.equals("wrong login or pwd")) {
+        if (!token.equals("wrong login or pwd") && exception.isEmpty()) {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());
             logger.info("login: " + auth.getName());
 
-            /*((UsernamePasswordAuthenticationToken) auth).setDetails(token);*/
             auth.setDetails(token);
             return auth;
         } else {
@@ -69,7 +70,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
     private IConnectService getConnectServicePort() {
-        if(connectService==null)connectService = new ConnectService();
+        if (connectService == null) connectService = new ConnectService();
         return connectService.getConnectServicePort();
     }
 

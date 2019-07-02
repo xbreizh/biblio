@@ -22,7 +22,6 @@ class BookManagerImplIntegrationTest {
     private BookManagerImpl bookManager;
 
 
-
     @Test
     @DisplayName("should return books")
     void searchBooks() throws BusinessExceptionBook {
@@ -33,14 +32,12 @@ class BookManagerImplIntegrationTest {
     }
 
 
-
     @Test
     @DisplayName("should return number available")
     void getNbAvailable() throws BusinessExceptionBook {
         assertEquals(4, bookManager.getNbAvailable("", "12345678OK"));
 
     }
-
 
 
 }

@@ -12,13 +12,11 @@ import javax.inject.Named;
 @Named
 public class LoanManagerImpl implements LoanManager {
     private static final Logger logger = Logger.getLogger(LoanManager.class.toString());
+    private LoanService loanService;
 
     void setLoanService(LoanService loanService) {
         this.loanService = loanService;
     }
-
-    private LoanService loanService;
-
 
     @Override
     public boolean renewLoan(String token, int id) throws BusinessExceptionLoan {

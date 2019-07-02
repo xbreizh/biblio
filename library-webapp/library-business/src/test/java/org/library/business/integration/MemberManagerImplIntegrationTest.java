@@ -1,37 +1,30 @@
 package org.library.business.integration;
 
-import com.sun.org.apache.xerces.internal.jaxp.datatype.XMLGregorianCalendarImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.library.business.impl.ConnectManagerImpl;
 import org.library.business.impl.LoanManagerImpl;
 import org.library.business.impl.MemberManagerImpl;
-import org.library.model.Loan;
 import org.library.model.Member;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.troparo.entities.loan.GetLoanStatusRequestType;
 import org.troparo.entities.member.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
 import org.troparo.services.memberservice.MemberService;
 
-import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
@@ -45,7 +38,7 @@ class MemberManagerImplIntegrationTest {
     private MemberService memberService;
 
     @BeforeEach
-    void init(){
+    void init() {
         memberManager = spy(MemberManagerImpl.class);
         loanManager = mock(LoanManagerImpl.class);
         memberService = mock(MemberService.class);
@@ -98,12 +91,12 @@ class MemberManagerImplIntegrationTest {
         XMLGregorianCalendar xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
         memberTypeOut.setDateJoin(xmlGregorianCalendar);
         assertAll(
-                ()-> assertEquals(email, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getEmail()),
-                ()-> assertEquals(firstName, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getFirstName()),
-                ()-> assertEquals(lastName, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getLastName()),
-                ()-> assertEquals(role, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getRole()),
-                ()-> assertEquals(login, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getLogin()),
-                ()-> assertEquals(memberManager.convertGregorianCalendarIntoDate(c), memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getDateJoin())
+                () -> assertEquals(email, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getEmail()),
+                () -> assertEquals(firstName, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getFirstName()),
+                () -> assertEquals(lastName, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getLastName()),
+                () -> assertEquals(role, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getRole()),
+                () -> assertEquals(login, memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getLogin()),
+                () -> assertEquals(memberManager.convertGregorianCalendarIntoDate(c), memberManager.convertMemberTypeOutIntoMember("", memberTypeOut).getDateJoin())
         );
     }
 
@@ -112,10 +105,10 @@ class MemberManagerImplIntegrationTest {
         LoanListType loanListType = new LoanListType();
         LoanTypeOut loanTypeOut = new LoanTypeOut();
         BookTypeOut bookTypeOut = new BookTypeOut();
-        String author= "Joricho";
-        String title= "le temps des pruneaux";
-        String edition= "duchat";
-        String isbn= "njahsui2";
+        String author = "Joricho";
+        String title = "le temps des pruneaux";
+        String edition = "duchat";
+        String isbn = "njahsui2";
         String keywords = "pluie, eau";
         int nbPages = 231;
         int publicationYear = 1982;
@@ -148,7 +141,7 @@ class MemberManagerImplIntegrationTest {
         when(loanManager.isRenewable("", id)).thenReturn(true);
         when(loanManager.getStatus("", id)).thenReturn("plouf");
         assertAll(
-                ()-> assertEquals(edition, memberManager.convertLoanListTypeIntoList("", loanListType).get(0).getBook().getEdition())
+                () -> assertEquals(edition, memberManager.convertLoanListTypeIntoList("", loanListType).get(0).getBook().getEdition())
         );
 
 
@@ -157,10 +150,10 @@ class MemberManagerImplIntegrationTest {
     @Test
     void convertBookTypeOutIntoBook() {
         BookTypeOut bookTypeOut = new BookTypeOut();
-        String author= "Joricho";
-        String title= "le temps des pruneaux";
-        String edition= "duchat";
-        String isbn= "njahsui2";
+        String author = "Joricho";
+        String title = "le temps des pruneaux";
+        String edition = "duchat";
+        String isbn = "njahsui2";
         String keywords = "pluie, eau";
         int nbPages = 231;
         int publicationYear = 1982;
@@ -173,13 +166,13 @@ class MemberManagerImplIntegrationTest {
         bookTypeOut.setPublicationYear(publicationYear);
 
         assertAll(
-                ()-> assertEquals(title, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getTitle()),
-                ()-> assertEquals(author, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getAuthor()),
-                ()-> assertEquals(edition, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getEdition()),
-                ()-> assertEquals(publicationYear, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getPublicationYear()),
-                ()-> assertEquals(keywords, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getKeywords()),
-                ()-> assertEquals(nbPages, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getNbPages()),
-                ()-> assertEquals(isbn, memberManager.convertBookTypeOutIntoBook( bookTypeOut).getIsbn())
+                () -> assertEquals(title, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getTitle()),
+                () -> assertEquals(author, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getAuthor()),
+                () -> assertEquals(edition, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getEdition()),
+                () -> assertEquals(publicationYear, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getPublicationYear()),
+                () -> assertEquals(keywords, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getKeywords()),
+                () -> assertEquals(nbPages, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getNbPages()),
+                () -> assertEquals(isbn, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getIsbn())
 
         );
     }

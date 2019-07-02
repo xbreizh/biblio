@@ -1,11 +1,9 @@
 package org.library.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.library.business.contract.LoanManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.loan.*;
@@ -69,7 +67,7 @@ class LoanManagerImplTest {
         when(responseType.isReturn()).thenReturn(true);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
-        assertTrue( loanManager.isRenewable("", 2));
+        assertTrue(loanManager.isRenewable("", 2));
 
     }
 
@@ -82,7 +80,7 @@ class LoanManagerImplTest {
         when(responseType.isReturn()).thenReturn(true);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
-        assertTrue( loanManager.isRenewable("", 2));
+        assertTrue(loanManager.isRenewable("", 2));
 
     }
 

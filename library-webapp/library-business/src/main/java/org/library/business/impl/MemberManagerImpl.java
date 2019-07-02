@@ -26,21 +26,17 @@ import java.util.List;
 @Named
 public class MemberManagerImpl implements MemberManager {
     private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
-
+    @Inject
+    LoanManager loanManager;
+    private MemberService memberService;
 
     public void setLoanManager(LoanManager loanManager) {
         this.loanManager = loanManager;
     }
 
-    @Inject
-    LoanManager loanManager;
-
     public void setMemberService(MemberService memberService) {
         this.memberService = memberService;
     }
-
-    private MemberService memberService;
-
 
     @Override
     public Member getMember(String token, String login) {
@@ -57,7 +53,7 @@ public class MemberManagerImpl implements MemberManager {
             memberTypeOut = responseType.getMemberTypeOut();
             // converting into Member
             Member member = convertMemberTypeOutIntoMember(token, memberTypeOut);
-            logger.info("member: "+member);
+            logger.info("member: " + member);
             logger.info("trying to pass loan to member");
 
             logger.info("member loan size: " + member.getLoanList());
@@ -74,11 +70,11 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     private IMemberService getMemberServicePort() {
-        if( memberService == null)memberService = new MemberService();
+        if (memberService == null) memberService = new MemberService();
         return memberService.getMemberServicePort();
     }
 
-     public Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan {
+    public Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan {
         Member member = new Member();
         member.setFirstName(memberTypeOut.getFirstName());
         member.setLastName(memberTypeOut.getLastName());
