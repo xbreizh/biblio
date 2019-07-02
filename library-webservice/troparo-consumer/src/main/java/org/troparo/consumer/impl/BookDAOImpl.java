@@ -186,9 +186,10 @@ public class BookDAOImpl implements BookDAO {
         logger.info("id passed: " + id);
 
         // checking if currently borrowed
-        String request1 = "select book.id from Loan where endDate is null and book.id = :id";
+        String request1 = "select book.id from Loan where  book.id = :id";
         Query query1 = sessionFactory.getCurrentSession().createQuery(request1);
         query1.setParameter("id", id);
+        System.out.println(query1.getResultList().size());
         return query1.getResultList().isEmpty();// if not currently borrowed, then available
 
     }
