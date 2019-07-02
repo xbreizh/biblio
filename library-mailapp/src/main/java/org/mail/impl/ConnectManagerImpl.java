@@ -6,6 +6,7 @@ import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.connect.GetTokenResponseType;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
+import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Named;
 
@@ -13,18 +14,20 @@ import javax.inject.Named;
 public class ConnectManagerImpl implements ConnectManager {
 
     private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
-    private String token;
+
     private static final String LOGIN = "lokii";
     private static final String PWD = "123";
 
+    private ConnectService connectService;
+
     @Override
     public String authenticate() {
-        ConnectService cs = new ConnectService();
-        GetTokenRequestType t = new GetTokenRequestType();
-        t.setLogin(LOGIN);
-        t.setPassword(PWD);
+        String token="";
+        GetTokenRequestType getTokenRequestType = new GetTokenRequestType();
+        getTokenRequestType.setLogin(LOGIN);
+        getTokenRequestType.setPassword(PWD);
         try {
-            GetTokenResponseType responseType = cs.getConnectServicePort().getToken(t);
+            GetTokenResponseType responseType = getConnectServicePort(connectService).getToken(getTokenRequestType);
             token = responseType.getReturn();
         } catch (BusinessExceptionConnect businessExceptionConnect) {
             logger.error("issue while trying to get the token");
@@ -41,6 +44,19 @@ public class ConnectManagerImpl implements ConnectManager {
 
         }
 
+    }
+
+    ConnectService getConnectService() {
+        return connectService;
+    }
+
+    void setConnectService(ConnectService connectService) {
+        this.connectService = connectService;
+    }
+
+    IConnectService getConnectServicePort(ConnectService connectService) {
+        if(connectService==null)connectService=new ConnectService();
+        return connectService.getConnectServicePort();
     }
 
 
