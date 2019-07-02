@@ -55,14 +55,12 @@ public class MemberManagerImpl implements MemberManager {
             GetMemberByLoginResponseType responseType = getMemberServicePort().getMemberByLogin(requestType);
             logger.info("response: " + responseType.getMemberTypeOut().getEmail());
             memberTypeOut = responseType.getMemberTypeOut();
-            System.out.println("membertypeout: "+memberTypeOut);
             // converting into Member
             Member member = convertMemberTypeOutIntoMember(token, memberTypeOut);
             logger.info("member: "+member);
             logger.info("trying to pass loan to member");
 
             logger.info("member loan size: " + member.getLoanList());
-            //logger.info("loan list for that member: " + memberTypeOut.getLoanListType().getLoanTypeOut().get(0).getBookTypeOut().getTitle());
             return member;
         } catch (NullPointerException e) {
             logger.info("Issue while trying to get member details");

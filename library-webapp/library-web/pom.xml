@@ -164,7 +164,7 @@
                 <version>0.7.7.201606060606</version>
                 <configuration>
                     <excludes>
-                        <exclude>src/main/java/org/library/security/config/*</exclude>
+                        <exclude>**/config/*.class</exclude>
                     </excludes>
                 </configuration>
                 <executions>

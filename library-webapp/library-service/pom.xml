@@ -241,7 +241,7 @@
                 </configuration>
             </plugin>
             <!-- plugin 4- apache cxf codegen wsdl2java goal -->
-            <plugin>
+           <!-- <plugin>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-codegen-plugin</artifactId>
                 <version>3.0.2</version>
@@ -277,7 +277,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
