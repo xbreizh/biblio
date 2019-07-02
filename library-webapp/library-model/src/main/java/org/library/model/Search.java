@@ -11,6 +11,14 @@ public class Search {
         book=new Book();
     }
 
+    public Book getBook() {
+        return book;
+    }
+
+    public void setBook(Book book) {
+        this.book = book;
+    }
+
     public String getIsbn() {
         return book.getIsbn();
     }

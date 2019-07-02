@@ -12,6 +12,7 @@ import org.troparo.entities.mail.GetOverdueMailListResponse;
 import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.mailservice.BusinessExceptionMail;
+import org.troparo.services.mailservice.IMailService;
 import org.troparo.services.mailservice.MailService;
 
 import javax.crypto.BadPaddingException;
@@ -44,19 +45,18 @@ public class EmailManagerImpl {
     private String mailFrom = "xavier.lamourec@gmail.com";
 
 
-
     private String subject = "mail Reminder ** LOAN OVERDUE **";
-
-
-
 
 
     private String mailServer = "smtp.gmail.com";
 
     private String port = "587";
 
+    private MailService mailService;
+
 
     private boolean test;
+
 
    /* @Value("${sender}")
     private String mailFrom;
@@ -73,14 +73,13 @@ public class EmailManagerImpl {
     @Value("${mailServerPort}")
     private String port;*/
 
-
-
     private static final String AES = "AES";
 
 
     // */10 * * * * *
     // "* 00 11 * * *"
     //@Scheduled(cron = "* 00 11 * * *")
+
     @Scheduled(fixedRate = 500000)
     public void sendMail() throws BusinessExceptionConnect {
         String token;
@@ -96,18 +95,7 @@ public class EmailManagerImpl {
             props.put("mail.smtp.host", mailServer);
             props.put("mail.smtp.port", port);
             logger.info("properties passed ok");
-            Session session = Session.getInstance(props,
-                    new Authenticator() {
-                        protected PasswordAuthentication getPasswordAuthentication() {
-                            try {
-                                return new PasswordAuthentication(username, getPassword());
-
-                            } catch (Exception e) {
-                                logger.error(e.getMessage());
-                            }
-                            return null;
-                        }
-                    });
+            Session session = getSession(username, props);
 
             try {
                 logger.info("authentication ok");
@@ -119,7 +107,7 @@ public class EmailManagerImpl {
 
                 List<Mail> overdueList = getOverdueList(token);
 
-                if (overdueList!=null && !overdueList.isEmpty()) {
+                if (overdueList != null && !overdueList.isEmpty()) {
                     for (Mail mail : overdueList
                     ) {
 
@@ -130,24 +118,12 @@ public class EmailManagerImpl {
                         if (test) {
                             recipient = "dontkillewok@gmail.com";
                         }
-                        try {
-                        message.setRecipients(Message.RecipientType.TO,
-                                InternetAddress.parse(recipient));
-                        //HTML mail content
-                        String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
-
-                        message.setContent(htmlText, "text/html");
-
-                            logger.info("mail content: " + message.getContent().toString());
-                        } catch (IOException e) {
-                            logger.error(e.getMessage());
-                        }
+                        getMessage(message, mail, recipient);
                         Transport.send(message);
 
 
                     }
                 }
-
 
 
             } catch (MessagingException e) {
@@ -156,10 +132,40 @@ public class EmailManagerImpl {
         }
     }
 
+    private void getMessage(Message message, Mail mail, String recipient) throws MessagingException {
+        try {
+            message.setRecipients(Message.RecipientType.TO,
+                    InternetAddress.parse(recipient));
+            //HTML mail content
+            String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
+
+            message.setContent(htmlText, "text/html");
+
+            logger.info("mail content: " + message.getContent().toString());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+    private Session getSession(String username, Properties props) {
+        return Session.getInstance(props,
+                        new Authenticator() {
+                            protected PasswordAuthentication getPasswordAuthentication() {
+                                try {
+                                    return new PasswordAuthentication(username, getPassword());
+
+                                } catch (Exception e) {
+                                    logger.error(e.getMessage());
+                                }
+                                return null;
+                            }
+                        });
+    }
 
     //Method to replace the values for keys
-    private String readEmailFromHtml(String filePath, Mail mail) {
-        Map<String, String> input ;
+
+    String readEmailFromHtml(String filePath, Mail mail) {
+        Map<String, String> input;
         input = getTemplateItems(mail);
 
         logger.info("trying to get content from file");
@@ -175,8 +181,7 @@ public class EmailManagerImpl {
         }
         return msg;
     }
-
-    private Map<String, String> getTemplateItems(Mail mail) {
+    Map<String, String> getTemplateItems(Mail mail) {
 
         //Set key values
         Map<String, String> input = new HashMap<>();
@@ -197,7 +202,8 @@ public class EmailManagerImpl {
     }
 
     //Method to read HTML file as a String
-    private String readContentFromFile(String fileName) {
+
+    String readContentFromFile(String fileName) {
         logger.info("trying to buffer file");
         StringBuilder contents = new StringBuilder();
 
@@ -205,7 +211,7 @@ public class EmailManagerImpl {
             //use buffering, reading one line at a time
             BufferedReader reader = new BufferedReader(new FileReader(fileName));
             try {
-                String line ;
+                String line;
                 while ((line = reader.readLine()) != null) {
                     contents.append(line);
                     contents.append(System.getProperty("line.separator"));
@@ -218,19 +224,6 @@ public class EmailManagerImpl {
         }
         return contents.toString();
     }
-
-
-  /*  private String byteArrayToHexString(byte[] b) {
-        StringBuffer sb = new StringBuffer(b.length * 2);
-        for (int i = 0; i < b.length; i++) {
-            int v = b[i] & 0xff;
-            if (v < 16) {
-                sb.append('0');
-            }
-            sb.append(Integer.toHexString(v));
-        }
-        return sb.toString().toUpperCase();
-    }*/
 
     private byte[] hexStringToByteArray(String s) {
         byte[] b = new byte[s.length() / 2];
@@ -248,12 +241,16 @@ public class EmailManagerImpl {
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
         try {
-            GetOverdueMailListResponse response = mailService.getMailServicePort().getOverdueMailList(requestType);
+            GetOverdueMailListResponse response = getMailServicePort(mailService).getOverdueMailList(requestType);
             return convertMailingListTypeIntoMailList(response);
         } catch (BusinessExceptionMail businessExceptionMail) {
             logger.error(businessExceptionMail.getMessage());
         }
         return null;
+    }
+
+    private IMailService getMailServicePort(MailService mailService) {
+        return mailService.getMailServicePort();
     }
 
     private List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) {
@@ -288,54 +285,10 @@ public class EmailManagerImpl {
         return null;
 
     }
-   /* @Override
-    public String getStatus(String token, int id) {
-        LoanService loanService = new LoanService();
-        GetLoanStatusRequestType requestType = new GetLoanStatusRequestType();
-        requestType.setToken(token);
-        requestType.setId(id);
-
-        try {
-            GetLoanStatusResponseType responseType = loanService.getLoanServicePort().getLoanStatus(requestType);
-            return responseType.getStatus();
-        } catch (BusinessExceptionLoan businessExceptionLoan) {
-            logger.error(businessExceptionLoan.getMessage());
-        }
-
-        return null;
-    }*/
-
-   /* private int calculateDaysBetweenDates(Date d1, Date d2) {
-        String format = "MM/dd/yyyy hh:mm a";
-        SimpleDateFormat sdf = new SimpleDateFormat(format);
-        long diff = d2.getTime() - d1.getTime();
-        int diffDays = (int) (diff / (24 * 60 * 60 * 1000));
-        return diffDays;
-    }*/
-
-    private String createMailContent(Mail mail) {
-       /* Member member = loan.getBorrower();
-        Book book = loan.getBook();
-        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");*/
-
-        String body = "Dear " + mail.getFirstname() + " " + mail.getLastname() + "<br><br>" +
-                "This is to inform you that the following loan is overdue by " + mail.getDiffdays() + " days as you were supposed to return the following item by " +
-                mail.getDueDate() + ".<br>   " +
-                "ISBN: " + mail.getIsbn() + "<br>" +
-                "Title: " + mail.getTitle() + "<br>" +
-                "Author: " + mail.getAuthor() + "<br>" +
-                "Edition: " + mail.getEdition() + "<br>" +
-                "As a reminder, according to our policy, a fee of 1 euro is applied per day per item.<br>" +
-                "Please return that item as soon as possible <br>" +
-                "Best Regards<br>" +
-                "mail Loan Manager";
-
-        return null;
-    }
 
 
     private String getPassword() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        String tempkey ;
+        String tempkey;
         String password;
         Properties prop = new Properties();
         InputStream input;
@@ -355,34 +308,13 @@ public class EmailManagerImpl {
         return new String(decrypted);
     }
 
-  /*  @Override
-    public List<Mail> getOverdueEmailList() {
-        HashMap<String, String> criterias = new HashMap<>();
-        criterias.put("status", "OVERDUE");
-        logger.info("getting overdue list");
-        List<org.mail.model.Loan> loans = loanManager.getLoansByCriterias(criterias);
-        List<Mail> mailList = new ArrayList<>();
 
-        return createMailListfromLoans(loans);
-    }*/
-/*
-    private List<Mail> createMailListfromLoans(List<Loan> loans) {
-        List<Mail> mailList = new ArrayList<>();
-        for (Loan loan : loans
-        ) {
-            Mail mail = new Mail();
-            mail.setEmail(loan.getBorrower().getEmail());
-            mail.setFirstname(loan.getBorrower().getFirstName());
-            mail.setLastname(loan.getBorrower().getLastName());
-            mail.setIsbn(loan.getBook().getIsbn());
-            mail.setTitle(loan.getBook().getTitle());
-            mail.setAuthor(loan.getBook().getAuthor());
-            mail.setEdition(loan.getBook().getEdition());
-            mail.setDueDate(loan.getPlannedEndDate());
-            int overDays = calculateDaysBetweenDates(new Date(), loan.getPlannedEndDate());
-            mail.setDiffdays(overDays);
-            mailList.add(mail);
-        }
-        return mailList;
-    }*/
+
+    public MailService getMailService() {
+        return mailService;
+    }
+
+    public void setMailService(MailService mailService) {
+        this.mailService = mailService;
+    }
 }

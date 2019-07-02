@@ -50,7 +50,7 @@ public class Book {
         this.id = id;
     }
 
-    int getNbAvailable() {
+    public int getNbAvailable() {
         return nbAvailable;
     }
 
@@ -82,11 +82,11 @@ public class Book {
         this.author = author;
     }
 
-    Date getInsertDate() {
+    public Date getInsertDate() {
         return insertDate;
     }
 
-    void setInsertDate(Date insertDate) {
+    public void setInsertDate(Date insertDate) {
         this.insertDate = insertDate;
     }
 
@@ -122,11 +122,11 @@ public class Book {
         this.keywords = keywords;
     }
 
-    List<Loan> getLoanList() {
+    public List<Loan> getLoanList() {
         return loanList;
     }
 
-    void setLoanList(List<Loan> loanList) {
+    public void setLoanList(List<Loan> loanList) {
         this.loanList = loanList;
     }
 
