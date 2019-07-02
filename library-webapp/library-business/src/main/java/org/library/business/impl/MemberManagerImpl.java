@@ -10,6 +10,7 @@ import org.library.model.Member;
 import org.troparo.entities.member.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
+import org.troparo.services.memberservice.IMemberService;
 import org.troparo.services.memberservice.MemberService;
 
 import javax.inject.Inject;
@@ -27,8 +28,18 @@ public class MemberManagerImpl implements MemberManager {
     private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
 
+    public void setLoanManager(LoanManager loanManager) {
+        this.loanManager = loanManager;
+    }
+
     @Inject
     LoanManager loanManager;
+
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
+    private MemberService memberService;
 
 
     @Override
@@ -37,21 +48,21 @@ public class MemberManagerImpl implements MemberManager {
         logger.info("token: " + token);
         logger.info("login: " + login);
         try {
-            MemberService memberService = new MemberService();
             GetMemberByLoginRequestType requestType = new GetMemberByLoginRequestType();
             requestType.setToken(token);
             requestType.setLogin(login);
 
-            GetMemberByLoginResponseType responseType = memberService.getMemberServicePort().getMemberByLogin(requestType);
+            GetMemberByLoginResponseType responseType = getMemberServicePort().getMemberByLogin(requestType);
             logger.info("response: " + responseType.getMemberTypeOut().getEmail());
             memberTypeOut = responseType.getMemberTypeOut();
-
+            System.out.println("membertypeout: "+memberTypeOut);
             // converting into Member
             Member member = convertMemberTypeOutIntoMember(token, memberTypeOut);
+            logger.info("member: "+member);
             logger.info("trying to pass loan to member");
 
             logger.info("member loan size: " + member.getLoanList());
-            logger.info("loan list for that member: " + memberTypeOut.getLoanListType().getLoanTypeOut().get(0).getBookTypeOut().getTitle());
+            //logger.info("loan list for that member: " + memberTypeOut.getLoanListType().getLoanTypeOut().get(0).getBookTypeOut().getTitle());
             return member;
         } catch (NullPointerException e) {
             logger.info("Issue while trying to get member details");
@@ -64,7 +75,12 @@ public class MemberManagerImpl implements MemberManager {
         return null;
     }
 
-    private Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan {
+    private IMemberService getMemberServicePort() {
+        if( memberService == null)memberService = new MemberService();
+        return memberService.getMemberServicePort();
+    }
+
+     public Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan {
         Member member = new Member();
         member.setFirstName(memberTypeOut.getFirstName());
         member.setLastName(memberTypeOut.getLastName());
@@ -79,7 +95,7 @@ public class MemberManagerImpl implements MemberManager {
         return member;
     }
 
-    private List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan {
+    public List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert LoanListType into List<Loan>");
         for (LoanTypeOut loanTypeOut : loanListType.getLoanTypeOut()
@@ -95,6 +111,7 @@ public class MemberManagerImpl implements MemberManager {
                     date = convertGregorianCalendarIntoDate(loanTypeOut.getEndDate().toGregorianCalendar());
                     loan.setEndDate(date);
                 }
+                //logger.info(loan);
                 loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
                 loan.setStatus(loanManager.getStatus(token, loan.getId()));
                 loan.setBook(convertBookTypeOutIntoBook(loanTypeOut.getBookTypeOut()));
@@ -107,7 +124,7 @@ public class MemberManagerImpl implements MemberManager {
         return loanList;
     }
 
-    private Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
+    public Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
         logger.info("trying to convert book");
         Book book = new Book();
         book.setId(bookTypeOut.getId());
@@ -122,7 +139,7 @@ public class MemberManagerImpl implements MemberManager {
         return book;
     }
 
-    private Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+    public Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
         if (gDate != null) {
             XMLGregorianCalendar xmlCalendar;
             try {
