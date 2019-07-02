@@ -12,7 +12,6 @@ public class Book {
 
     private int id;
 
-
     private String isbn;
 
 
@@ -38,6 +37,8 @@ public class Book {
 
     private String keywords;
 
+   private Book book;
+
 
     private List<Loan> loanList = new ArrayList<>();
 
@@ -51,7 +52,7 @@ public class Book {
         this.id = id;
     }
 
-    public int getNbAvailable() {
+    int getNbAvailable() {
         return nbAvailable;
     }
 
@@ -83,11 +84,11 @@ public class Book {
         this.author = author;
     }
 
-    public Date getInsertDate() {
+    Date getInsertDate() {
         return insertDate;
     }
 
-    public void setInsertDate(Date insertDate) {
+    void setInsertDate(Date insertDate) {
         this.insertDate = insertDate;
     }
 
@@ -123,7 +124,7 @@ public class Book {
         this.keywords = keywords;
     }
 
-    public List<Loan> getLoanList() {
+    List<Loan> getLoanList() {
         return loanList;
     }
 

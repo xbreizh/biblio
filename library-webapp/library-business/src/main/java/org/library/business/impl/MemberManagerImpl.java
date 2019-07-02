@@ -105,7 +105,6 @@ public class MemberManagerImpl implements MemberManager {
                     date = convertGregorianCalendarIntoDate(loanTypeOut.getEndDate().toGregorianCalendar());
                     loan.setEndDate(date);
                 }
-                //logger.info(loan);
                 loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
                 loan.setStatus(loanManager.getStatus(token, loan.getId()));
                 loan.setBook(convertBookTypeOutIntoBook(loanTypeOut.getBookTypeOut()));
