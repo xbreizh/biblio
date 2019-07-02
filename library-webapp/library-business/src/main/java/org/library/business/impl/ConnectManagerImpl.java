@@ -11,6 +11,7 @@ import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.connect.GetTokenResponseType;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
+import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -25,18 +26,24 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     private static final  String ROLE = "USER";
     private String token;
 
+    public void setConnectService(ConnectService connectService) {
+        this.connectService = connectService;
+    }
+
+    private ConnectService connectService;
+
+
     @Override
-    public Authentication authenticate(Authentication authentication) {
+    public UsernamePasswordAuthenticationToken authenticate(Authentication authentication) {
         logger.info(authentication.getPrincipal().toString());
-        ConnectService cs = new ConnectService();
-        GetTokenRequestType t = new GetTokenRequestType();
+        GetTokenRequestType getTokenRequestType = new GetTokenRequestType();
         String login = authentication.getName().toUpperCase();
         String password = (String) authentication.getCredentials();
-        t.setLogin(login);
-        t.setPassword(password);
+        getTokenRequestType.setLogin(login);
+        getTokenRequestType.setPassword(password);
         logger.info("login: " + login + " \n passwordd: " + password);
         try {
-            GetTokenResponseType responseType = cs.getConnectServicePort().getToken(t);
+            GetTokenResponseType responseType = getConnectServicePort().getToken(getTokenRequestType);
             token = responseType.getReturn();
         } catch (BusinessExceptionConnect businessExceptionConnect) {
             logger.error("issue while trying to get the token");
@@ -45,12 +52,13 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
 
         if (!token.equals("wrong login or pwd")) {
-            Authentication auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());
             logger.info("login: " + auth.getName());
 
-            ((UsernamePasswordAuthenticationToken) auth).setDetails(token);
+            /*((UsernamePasswordAuthenticationToken) auth).setDetails(token);*/
+            auth.setDetails(token);
             return auth;
         } else {
             throw new
@@ -60,23 +68,25 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
     }
 
+    private IConnectService getConnectServicePort() {
+        if(connectService==null)connectService = new ConnectService();
+        return connectService.getConnectServicePort();
+    }
+
 
     public boolean supports(Class<?> auth) {
         return auth.equals(UsernamePasswordAuthenticationToken.class);
     }
 
 
-    private Collection<GrantedAuthority> buildUserAuthority() {
+    public Collection<GrantedAuthority> buildUserAuthority() {
 
         Set<GrantedAuthority> setAuths = new HashSet<>();
 
         // Build user's authorities
         setAuths.add(new SimpleGrantedAuthority(ROLE));
 
-        Collection<GrantedAuthority> result = new ArrayList<>(setAuths);
-        logger.info("result: " + ((ArrayList<GrantedAuthority>) result).get(0));
-
-        return result;
+        return new ArrayList<>(setAuths);
     }
 
 
