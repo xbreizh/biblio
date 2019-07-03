@@ -1,7 +1,6 @@
 package org.mail.impl;
 
 import javax.inject.Named;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
@@ -13,16 +12,10 @@ public class PropertiesLoad {
     private InputStream input;
 
 
-    public PropertiesLoad() {
-        try {
-            input = PropertiesLoad.class.getClassLoader().getResourceAsStream("mail.properties");
-            prop.load(input);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        // load a properties file
+    public PropertiesLoad() throws IOException {
+        input = PropertiesLoad.class.getClassLoader().getResourceAsStream("mail.properties");
+        prop.load(input);
+
     }
 
     String getProperty(String str) {

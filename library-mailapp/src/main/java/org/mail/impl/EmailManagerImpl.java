@@ -46,24 +46,6 @@ public class EmailManagerImpl {
     @Inject
     PropertiesLoad propertiesLoad;
 
-
-
-
-   /* @Value("${sender}")
-    private String mailFrom;
-    @Value("${fileLocation}")
-    private String fileLocation;
-    @Value("${subject}")
-    private String subject;
-    @Value("${body}")
-    private String body;
-    @Value("${mailTemplateLocation}")
-    private String templateLocation;
-    @Value("${mailServer}")
-    private String mailServer;
-    @Value("${mailServerPort}")
-    private String port;*/
-
     private static final String AES = "AES";
 
 
@@ -72,7 +54,7 @@ public class EmailManagerImpl {
     //@Scheduled(cron = "* 00 11 * * *")
 
     @Scheduled(fixedRate = 500000)
-    public void sendMail() throws BusinessExceptionConnect {
+    public void sendMail() throws BusinessExceptionConnect, MessagingException, IOException {
         String token;
         token = connectManager.authenticate();
         if (token != null) {
@@ -86,41 +68,38 @@ public class EmailManagerImpl {
             props.put("mail.smtp.port", propertiesLoad.getProperty("mailServerPort"));
             Session session = getSession(username, props);
 
-            try {
-                Message message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(username));
 
-                message.setSubject(propertiesLoad.getProperty("subjectOverDue"));
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
 
-
-                List<Mail> overdueList = getOverdueList(token);
-
-                if (overdueList != null && !overdueList.isEmpty()) {
-                    for (Mail mail : overdueList
-                    ) {
+            message.setSubject(propertiesLoad.getProperty("subjectOverDue"));
 
 
-                        String recipient = mail.getEmail();
+            List<Mail> overdueList = getOverdueList(token);
 
-                        // adding condition for testign purposes
-                        if (propertiesLoad.getProperty("test").equalsIgnoreCase("true")) {
-                            recipient = propertiesLoad.getProperty("testRecipient");
-                        }
-                        getMessage(message, mail, recipient);
-                        Transport.send(message);
+            if (overdueList != null && !overdueList.isEmpty()) {
+                for (Mail mail : overdueList
+                ) {
 
 
+                    String recipient = mail.getEmail();
+
+                    // adding condition for testign purposes
+                    if (propertiesLoad.getProperty("test").equalsIgnoreCase("true")) {
+                        recipient = propertiesLoad.getProperty("testRecipient");
                     }
+                    getMessage(message, mail, recipient);
+                    Transport.send(message);
+
+
                 }
-
-
-            } catch (MessagingException e) {
-                throw new RuntimeException(e);
             }
+
+
         }
     }
 
-    private void getMessage(Message message, Mail mail, String recipient) throws MessagingException {
+    private void getMessage(Message message, Mail mail, String recipient) throws MessagingException, IOException {
 
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(recipient));
@@ -144,7 +123,7 @@ public class EmailManagerImpl {
 
     //Method to replace the values for keys
 
-    String readEmailFromHtml(String filePath, Mail mail) {
+    String readEmailFromHtml(String filePath, Mail mail) throws IOException {
         Map<String, String> input;
         input = getTemplateItems(mail);
 
@@ -168,7 +147,6 @@ public class EmailManagerImpl {
         String dueDate = dt1.format(mail.getDueDate());
         input.put("DUEDATE", dueDate);
 
-        //  logger.info("date: " + dueDate);
         int overDays = mail.getDiffdays();
         input.put("Isbn", mail.getIsbn());
         input.put("DIFFDAYS", Integer.toString(overDays));
@@ -180,24 +158,23 @@ public class EmailManagerImpl {
 
     //Method to read HTML file as a String
 
-    String readContentFromFile(String fileName) {
-        //  logger.info("trying to buffer file");
+    String readContentFromFile(String fileName) throws IOException {
         StringBuilder contents = new StringBuilder();
 
+        //use buffering, reading one line at a time
+        BufferedReader reader = new BufferedReader(new FileReader(fileName));
         try {
-            //use buffering, reading one line at a time
-            BufferedReader reader = new BufferedReader(new FileReader(fileName));
-            try {
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    contents.append(line);
-                    contents.append(System.getProperty("line.separator"));
-                }
-            } finally {
-                reader.close();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contents.append(line);
+                contents.append(System.getProperty("line.separator"));
             }
-        } catch (IOException ex) {
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            reader.close();
         }
+
         return contents.toString();
     }
 

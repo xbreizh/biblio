@@ -15,7 +15,6 @@ import javax.inject.Named;
 @PropertySource("classpath:mail.properties")
 public class ConnectManagerImpl implements ConnectManager {
 
-    //private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
 
 
     public PropertiesLoad getPropertiesLoad() {

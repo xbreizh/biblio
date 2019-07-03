@@ -23,7 +23,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @Transactional
 class BookManagerImplIntegrationTest {
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private Logger logger = Logger.getLogger(BookManagerImplIntegrationTest.class.getName());
     @Inject
     private BookManager bookManager;
 

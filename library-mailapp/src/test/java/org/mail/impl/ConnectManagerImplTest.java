@@ -13,6 +13,8 @@ import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.connectservice.IConnectService;
 
+import java.io.IOException;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -26,7 +28,7 @@ class ConnectManagerImplTest {
     private PropertiesLoad propertiesLoad;
 
     @BeforeEach
-    void init() {
+    void init() throws IOException {
         connectManager = spy(ConnectManagerImpl.class);
         connectService = mock(ConnectService.class);
         connectManager.setConnectService(connectService);
