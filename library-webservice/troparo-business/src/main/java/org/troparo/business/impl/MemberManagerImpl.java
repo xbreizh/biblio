@@ -30,9 +30,9 @@ public class MemberManagerImpl implements MemberManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public MemberManagerImpl() {
-        /*if (pepper == null)
+        if (pepper == null)
             System.out.println("peppper was null");
-            pepper = "TIPIAK";*/
+            pepper = "TIPIAK";
     }
 
     public void setMemberDAO(MemberDAO memberDAO) {
@@ -106,7 +106,7 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public List<Member> getMembers() {
-        System.out.println("pepper: " + pepper);
+        logger.info("pepper: " + pepper);
         return memberDAO.getAllMembers();
     }
 
@@ -265,10 +265,7 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkToken(String token) {
         Member member = memberDAO.getMemberByToken(token);
         Date now = new Date();
-        if(member!=null && member.getTokenExpiration().after(now)){
-            return true;
-        }
-        return false;
+        return (member!=null && member.getTokenExpiration().after(now));
     }
 
     @Override

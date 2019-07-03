@@ -3,7 +3,6 @@ package org.troparo.web.service;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.connect.*;
-import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Inject;
@@ -53,9 +52,9 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
     @Override
-    public RequestPasswordResetLinkResponseType requestPasswordResetLink(RequestPasswordResetLinkRequestType parameters)  {
-       RequestPasswordResetLinkResponseType ar = new RequestPasswordResetLinkResponseType();
-       ar.setReturn(memberManager.requestPasswordLink(parameters.getLogin(), parameters.getEmail()));
+    public RequestPasswordResetLinkResponseType requestPasswordResetLink(RequestPasswordResetLinkRequestType parameters) {
+        RequestPasswordResetLinkResponseType ar = new RequestPasswordResetLinkResponseType();
+        ar.setReturn(memberManager.requestPasswordLink(parameters.getLogin(), parameters.getEmail()));
         return ar;
     }
 

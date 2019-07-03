@@ -13,8 +13,6 @@ import java.util.*;
 
 @Named("memberDAO")
 public class MemberDAOImpl implements MemberDAO {
-    private static final int MILLI_TO_HOUR = 1000 * 60 * 60;
-    private static final int MAX_TIME_TOKEN_VALIDITY = 3;
     private static final String LOGIN = "login";
     private static final String FIRSTNAME = "firstname";
     private static final String LASTNAME = "lastname";
@@ -153,32 +151,6 @@ public class MemberDAOImpl implements MemberDAO {
         return true;
     }
 
-   /* @Override
-    public boolean checkToken(String token) {
-        logger.info("token received: " + token);
-        request = "From Member where token = :token";
-
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
-        query.setParameter(TOKEN, token);
-        List<Member> memberList = query.getResultList();
-        if (!memberList.isEmpty()) {
-            Member m = memberList.get(0);
-            Date now = new Date();
-            // calculating time since last connect
-            int time = Math.toIntExact((now.getTime() - m.getDateConnect().getTime()) / MILLI_TO_HOUR);
-            logger.info("time since last connect: " + time);
-            if (time > MAX_TIME_TOKEN_VALIDITY) {
-                logger.info("invalid token");
-                invalidateToken(token);
-                return false;
-            }
-            logger.info("token valid");
-            return true;
-        } else {
-            logger.info("invalid token");
-            return false;
-        }
-    }*/
 
     @Override
     public boolean invalidateToken(String token) {
