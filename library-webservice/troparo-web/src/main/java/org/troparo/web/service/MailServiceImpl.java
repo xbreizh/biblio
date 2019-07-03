@@ -3,10 +3,7 @@ package org.troparo.web.service;
 
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.MailManager;
-import org.troparo.entities.mail.GetOverdueMailListRequest;
-import org.troparo.entities.mail.GetOverdueMailListResponse;
-import org.troparo.entities.mail.MailListType;
-import org.troparo.entities.mail.MailTypeOut;
+import org.troparo.entities.mail.*;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
@@ -34,6 +31,28 @@ public class MailServiceImpl implements IMailService {
 
     void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
         this.dateConvertedHelper = dateConvertedHelper;
+    }
+
+    @Override
+    public GetPasswordResetListResponse getPasswordResetList(GetPasswordResetListRequest parameters)  {
+        GetPasswordResetListResponse ar = new GetPasswordResetListResponse();
+        List<Mail> mailList = mailManager.getPasswordResetList(parameters.getToken());
+        ar.setPasswordResetListType(convertmailListIntoPasswordResetlistType(mailList));
+
+        return ar;
+    }
+
+    private PasswordResetListType convertmailListIntoPasswordResetlistType(List<Mail> mailList) {
+        PasswordResetListType passwordResetListType = new PasswordResetListType();
+        for (Mail mail: mailList) {
+            PasswordResetTypeOut passwordResetTypeOut = new PasswordResetTypeOut();
+            passwordResetTypeOut.setEmail(mail.getEmail());
+            passwordResetTypeOut.setLogin(mail.getLogin());
+            passwordResetTypeOut.setToken(mail.getToken());
+
+            passwordResetListType.getPasswordResetTypeOut().add(passwordResetTypeOut);
+        }
+        return passwordResetListType;
     }
 
     @Override

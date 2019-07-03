@@ -28,4 +28,6 @@ public interface MemberDAO {
 
 
     boolean invalidateToken(String token);
+
+    List<Member> getPasswordResetList();
 }

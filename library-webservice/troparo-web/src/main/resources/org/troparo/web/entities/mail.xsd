@@ -3,6 +3,24 @@
             xmlns:tns="http://troparo.org/entities/mail" targetNamespace="http://troparo.org/entities/mail"
             elementFormDefault="qualified">
 
+    <!-- Get Mail by Criterias Request Type -->
+    <xsd:element name="getPasswordResetListRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Mail by Criterias Response Type -->
+    <xsd:element name="getPasswordResetListResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:PasswordResetListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
 
     <!-- Get Mail by Criterias Request Type -->
     <xsd:element name="getOverdueMailListRequest">
@@ -25,11 +43,31 @@
 
     <!--Types-->
 
+    <!-- List of Password Reset  -->
+    <xsd:element name="PasswordResetListType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:PasswordResetTypeOut" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
     <!-- List of Mails -->
     <xsd:element name="MailListType">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:MailTypeOut" maxOccurs="unbounded"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Mail Type Out-->
+    <xsd:element name="PasswordResetTypeOut">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Email" type="xsd:string"/>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element name="Login" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

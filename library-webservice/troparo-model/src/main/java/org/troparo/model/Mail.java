@@ -15,6 +15,21 @@ public class Mail {
         member = new Member();
     }
 
+    public String getToken() {
+        return member.getToken();
+    }
+
+    public void setToken(String token) {
+        member.setToken(token);
+    }
+
+    public String getLogin() {
+        return member.getLogin();
+    }
+
+    public void setLogin(String login) {
+        member.setLogin(login);
+    }
 
     public String getEmail() {
         return member.getEmail();

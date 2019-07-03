@@ -167,6 +167,19 @@ public class MemberDAOImpl implements MemberDAO {
         return true;
     }
 
+    @Override
+    public List<Member> getPasswordResetList() {
+        List<Member> memberList = new ArrayList<>();
+        logger.info("getting in dao");
+        try {
+            logger.info(sessionFactory);
+            return sessionFactory.getCurrentSession().createQuery("from Member where token like 'TEMP%' AND tokenExpiration > CURRENT_TIMESTAMP", cl).getResultList();
+        } catch (Exception e) {
+            logger.error("SessionFactory possibly not initialized!");
+        }
+        return memberList;
+    }
+
 
     @Override
     public Member getMemberByLogin(String login) {

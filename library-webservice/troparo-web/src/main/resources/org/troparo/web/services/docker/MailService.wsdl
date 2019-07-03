@@ -17,6 +17,12 @@
     <wsdl:message name="getOverdueMailListResponse">
         <wsdl:part element="mail:getOverdueMailListResponse" name="parameters"/>
     </wsdl:message>
+    <wsdl:message name="getPasswordResetListRequest">
+        <wsdl:part element="mail:getPasswordResetListRequest" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getPasswordResetListResponse">
+        <wsdl:part element="mail:getPasswordResetListResponse" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="BusinessExceptionMail">
         <wsdl:part element="mail:BusinessMailFaultType" name="parameters"/>
     </wsdl:message>
@@ -27,11 +33,29 @@
             <wsdl:output message="tns:getOverdueMailListResponse"/>
             <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
         </wsdl:operation>
+        <wsdl:operation name="getPasswordResetList">
+            <wsdl:input message="tns:getPasswordResetListRequest"/>
+            <wsdl:output message="tns:getPasswordResetListResponse"/>
+            <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
+        </wsdl:operation>
     </wsdl:portType>
 
     <wsdl:binding name="MailServiceSOAPBinding" type="tns:IMailService">
         <soap:binding style="document"
                       transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="getPasswordResetList">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMail">
+                <soap:fault name="businessExceptionMail" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
 
         <wsdl:operation name="getOverdueMailList">
             <soap:operation

@@ -310,6 +310,17 @@ class MemberManagerImplTest {
         assertEquals("wrong credentials", memberManager.getToken(login, password));
     }
 
+    @Test
+    @DisplayName("should add 20mn to current date")
+    void adding20MnToCurrentDate(){
+        Date now = memberManager.getNow();
+        Calendar c = Calendar.getInstance();
+        c.setTime(now);
+        c.add(Calendar.MINUTE, 20);  // number of mn to add
+
+        assertEquals(c.getTime(), memberManager.adding20MnToCurrentDate());
+    }
+
 
     @Test
     void checkToken() throws ParseException {

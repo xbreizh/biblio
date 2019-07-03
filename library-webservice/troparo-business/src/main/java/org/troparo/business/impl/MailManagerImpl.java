@@ -4,8 +4,11 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
+import org.troparo.business.contract.MemberManager;
+import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Loan;
 import org.troparo.model.Mail;
+import org.troparo.model.Member;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,6 +20,8 @@ import java.util.*;
 public class MailManagerImpl implements MailManager {
     @Inject
     LoanManager loanManager;
+    @Inject
+    MemberDAO memberDAO;
 
     private Logger logger = Logger.getLogger(MailManagerImpl.class);
 
@@ -70,6 +75,35 @@ public class MailManagerImpl implements MailManager {
     @Override
     public void setLoanManager(LoanManager loanManager) {
         this.loanManager = loanManager;
+    }
+
+    @Override
+    public List<Mail> getPasswordResetList(String token) {
+        List<Member> memberList =memberDAO.getPasswordResetList();
+        for (Member member: memberList
+             ) {
+            member.setToken(removeTempFromToken(member.getToken()));
+            member.setTokenExpiration(getTodaySDate());
+            memberDAO.updateMember(member);
+        }
+        return convertMemberListIntoMailList(memberList);
+    }
+
+    public String removeTempFromToken(String token) {
+       return token.replace("TEMP", "");
+    }
+
+    public List<Mail> convertMemberListIntoMailList(List<Member> memberList) {
+        List<Mail> mailList = new ArrayList<>();
+        for (Member member: memberList
+             ) {
+            Mail mail = new Mail();
+            mail.setToken(member.getToken());
+            mail.setLogin(member.getLogin());
+            mail.setEmail(member.getEmail());
+            mailList.add(mail);
+        }
+        return mailList;
     }
 
 }

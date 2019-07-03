@@ -56,7 +56,7 @@ public class MemberManagerImpl implements MemberManager {
         }
         member.setPassword(encryptPassword(member.getPassword())); // encrypting password
         // setting dateJoin
-        member.setDateJoin(new Date());
+        member.setDateJoin(getNow());
         memberDAO.addMember(member);
         logger.info("exception: " + exception);
         return exception;
@@ -251,7 +251,8 @@ public class MemberManagerImpl implements MemberManager {
         if (checkPassword(password, member.getPassword())) {
             String token = generateToken();
             member.setToken(token);
-            member.setDateConnect(new Date());
+            member.setTokenExpiration(adding20MnToCurrentDate());
+            member.setDateConnect(getNow());
             memberDAO.updateMember(member);
             return token;
         }
@@ -260,10 +261,22 @@ public class MemberManagerImpl implements MemberManager {
         return wrongCredentials;
     }
 
+    Date adding20MnToCurrentDate(){
+        Date now = getNow();
+        Calendar c = Calendar.getInstance();
+        c.setTime(now);
+        c.add(Calendar.MINUTE, 20);  // number of mn to add
+        return c.getTime();
+    }
+
+    Date getNow() {
+        return new Date();
+    }
+
     @Override
     public boolean checkToken(String token) {
         Member member = memberDAO.getMemberByToken(token);
-        Date now = new Date();
+        Date now = getNow();
         return (member!=null && member.getTokenExpiration().after(now));
     }
 
@@ -336,6 +349,7 @@ public class MemberManagerImpl implements MemberManager {
         if(member==null)return false;
         if(member.getEmail().equalsIgnoreCase(email)) {
             member.setToken("TEMP" + generateToken());
+            member.setTokenExpiration(adding20MnToCurrentDate());
             return memberDAO.updateMember(member);
         }
 

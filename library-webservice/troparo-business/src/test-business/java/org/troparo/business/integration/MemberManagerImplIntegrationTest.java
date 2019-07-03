@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:application-context-test.xml")
 @ExtendWith(SpringExtension.class)
-@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class MemberManagerImplIntegrationTest {
 
@@ -32,6 +31,7 @@ class MemberManagerImplIntegrationTest {
 
 
     @BeforeEach
+    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         logger.info("reset db");
     }

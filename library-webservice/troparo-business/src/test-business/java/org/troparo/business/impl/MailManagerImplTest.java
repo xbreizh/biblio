@@ -48,6 +48,28 @@ class MailManagerImplTest {
         assertEquals(new Date(), mailManager.getTodaySDate());
     }
 
+    @Test
+    @DisplayName("should return password ResetList")
+    void convertMemberListIntoMailList(){
+        MailManagerImpl mailManager = new MailManagerImpl();
+        List<Member> memberList = new ArrayList<>();
+        Member member = new Member();
+        String login = "logni";
+        String token = "dededkfkfk";
+        String email = "ffr@frfr.fr";
+        member.setLogin(login);
+        member.setToken(token);
+        member.setEmail(email);
+        memberList.add(member);
+        assertAll(
+                ()-> assertEquals(login,mailManager.convertMemberListIntoMailList(memberList).get(0).getLogin() ),
+                ()-> assertEquals(token,mailManager.convertMemberListIntoMailList(memberList).get(0).getToken() ),
+                ()-> assertEquals(email,mailManager.convertMemberListIntoMailList(memberList).get(0).getEmail() )
+
+        );
+
+    }
+
 
     @Test
     @DisplayName("should return the overdue mailing list")
@@ -61,6 +83,16 @@ class MailManagerImplTest {
     void getOverdueEmailList1() {
 
         assertNotNull(mailManager.getOverdueEmailList());
+    }
+
+    @Test
+    @DisplayName("should remove TEMP from token")
+    void removeTempFromToken(){
+        MailManagerImpl mailManager = new MailManagerImpl();
+        String newToken="dedekbnkjnkjn4nln4kl";
+        String oldToken="TEMP"+newToken;
+        assertEquals(newToken, mailManager.removeTempFromToken(oldToken));
+
     }
 
     @Test

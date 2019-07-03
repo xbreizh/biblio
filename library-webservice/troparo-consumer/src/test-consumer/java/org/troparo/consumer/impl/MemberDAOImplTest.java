@@ -201,9 +201,9 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should invalidate token")
     void invalidateToken() {
-        String token = "62751f44-b7db-49f5-a19c-5b98edef50db";
-        Member member = memberDAO.getMemberByToken(token);
-        member.setDateConnect(new Date()); // setting last connectDate to now
+        Member member = memberDAO.getMemberByLogin("LOKII");
+        String token = member.getToken();
+        member.setTokenExpiration(new Date()); // setting last connectDate to now
         memberDAO.updateMember(member);
         assertAll(
                 () -> assertNotNull(memberDAO.getMemberByToken(token)),
@@ -250,7 +250,9 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return member if token exists")
     void getMemberByToken() {
-        assertNotNull(memberDAO.getMemberByToken("62751f44-b7db-49f5-a19c-5b98edef50db"));
+        Member member = memberDAO.getMemberByLogin("LOKII");
+        String token = member.getToken();
+        assertNotNull(memberDAO.getMemberByToken(token));
     }
 
     @Test

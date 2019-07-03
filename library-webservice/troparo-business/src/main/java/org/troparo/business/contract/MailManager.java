@@ -1,9 +1,11 @@
 package org.troparo.business.contract;
 
 import org.troparo.model.Mail;
+import org.troparo.model.Member;
 
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Future;
 
 
 public interface MailManager {
@@ -16,4 +18,7 @@ public interface MailManager {
     LoanManager getLoanManager();
 
     void setLoanManager(LoanManager loanManager);
+
+    List<Mail> getPasswordResetList(String token);
+
 }
