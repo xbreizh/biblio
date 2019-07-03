@@ -106,7 +106,7 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public List<Member> getMembers() {
-        System.out.println("pepper: "+pepper);
+        System.out.println("pepper: " + pepper);
         return memberDAO.getAllMembers();
     }
 
@@ -263,7 +263,12 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public boolean checkToken(String token) {
-        return memberDAO.checkToken(token);
+        Member member = memberDAO.getMemberByToken(token);
+        Date now = new Date();
+        if(member!=null && member.getTokenExpiration().after(now)){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -297,23 +302,21 @@ public class MemberManagerImpl implements MemberManager {
 
     // Update Password
     @Override
-    public boolean updatePassword(String login, String email, String password) {
+    public boolean resetPassword(String login, String password) {
         logger.info("here");
         logger.info("member received: " + login);
-        logger.info("email received: " + email);
         logger.info("pwd received: " + password);
-        if (login == null || email == null || password == null) return false;
+        if (login == null || password == null) return false;
 
         Member m = getMemberByLogin(login.toUpperCase());
         if (m != null) {
-            logger.info(m.getEmail() + " / " + email);
-            if (m.getEmail().equalsIgnoreCase(email)) {
-                logger.info("member not null");
-                logger.info("email passed: " + m.getEmail());
-                m.setPassword(encryptPassword(password));
 
-                return memberDAO.updateMember(m);
-            }
+
+            logger.info("member not null");
+            m.setPassword(encryptPassword(password));
+
+            return memberDAO.updateMember(m);
+
 
         } else {
             logger.info("member couldn't be found");
@@ -326,6 +329,18 @@ public class MemberManagerImpl implements MemberManager {
         Member m = memberDAO.getMemberByToken(token);
         if (m != null && m.getRole() != null) {
             return m.getRole().equals("Admin");
+        }
+
+        return false;
+    }
+
+    @Override
+    public boolean requestPasswordLink(String login, String email) {
+        Member member = memberDAO.getMemberByLogin(login.toUpperCase());
+        if(member==null)return false;
+        if(member.getEmail().equalsIgnoreCase(email)) {
+            member.setToken("TEMP" + generateToken());
+            return memberDAO.updateMember(member);
         }
 
         return false;

@@ -41,9 +41,9 @@ public interface MemberManager {
 
     boolean checkPassword(String pwd1, String pwd2);
 
-    boolean updatePassword(String login, String email, String password);
+    boolean resetPassword(String login, String password);
 
     boolean checkAdmin(String token);
 
-
+    boolean requestPasswordLink(String login, String email);
 }

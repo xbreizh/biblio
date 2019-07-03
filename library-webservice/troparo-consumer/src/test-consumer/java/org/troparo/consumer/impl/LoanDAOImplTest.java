@@ -23,7 +23,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:resetDb.sql")
 class LoanDAOImplTest {
 
     private Logger logger = Logger.getLogger(LoanDAOImplTest.class);
@@ -75,7 +74,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should update loan")
     void updateLoan() {
-        int loanId = 4;
+        int loanId = 14;
         int bookId=1;
         Loan loan = loanDAO.getLoanById(loanId);
         Book newBook = bookDAO.getBookById(bookId);
@@ -101,7 +100,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return loan if existing id")
     void getLoanById() {
-        assertNotNull(loanDAO.getLoanById(4));
+        assertNotNull(loanDAO.getLoanById(14));
     }
 
     @Test

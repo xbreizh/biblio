@@ -33,14 +33,13 @@ class ConnectServiceImplTest {
     @BeforeEach
     void init() {
         connectService = new ConnectServiceImpl();
-        //memberManager = mock(MemberManager.class);
         connectService.setMemberManager(memberManager);
 
     }
 
     @Test
     @DisplayName("should return true if existing token")
-    void invalidateToken() throws BusinessExceptionConnect {
+    void invalidateToken() {
         String token = "7ca1c74f-02cd-41d9-82f4-5f717a96bcf3";
         InvalidateTokenRequestType parameters = new InvalidateTokenRequestType();
         parameters.setToken(token);
@@ -50,7 +49,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return false if none-existing token")
-    void invalidateToken1() throws BusinessExceptionConnect {
+    void invalidateToken1() {
         String token = "7ca1c74f-02cd-41d9-82f4-5f717a96bcf3";
         InvalidateTokenRequestType parameters = new InvalidateTokenRequestType();
         parameters.setToken(token);
@@ -60,7 +59,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return a token")
-    void getToken() throws BusinessExceptionConnect {
+    void getToken()  {
         GetTokenRequestType parameters = new GetTokenRequestType();
         String token = "token123";
         parameters.setLogin("lokii");
@@ -71,7 +70,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return wrong login or password when wrong credentials")
-    void getToken1() throws BusinessExceptionConnect {
+    void getToken1()  {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("Lokii");
         parameters.setPassword("1243");
@@ -82,7 +81,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return \"something went wrong\" when token is null")
-    void getToken2() throws BusinessExceptionConnect {
+    void getToken2(){
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin(null);
         parameters.setPassword(null);
@@ -111,35 +110,31 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return true if credentials are correct")
-    void resetPassword() throws BusinessExceptionConnect {
+    void resetPassword(){
         ResetPasswordRequestType parameters = new ResetPasswordRequestType();
-        parameters.setEmail("POLI@KOL.FR");
         parameters.setLogin("jpolino");
         parameters.setPassword("mik");
-        when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(true);
+        when(memberManager.resetPassword(anyString(),  anyString())).thenReturn(true);
         assertTrue(connectService.resetPassword(parameters).isReturn());
     }
 
     @Test
     @DisplayName("should return false if credentials are incorrect")
-    void resetPassword1() throws BusinessExceptionConnect {
+    void resetPassword1() {
         ResetPasswordRequestType parameters = new ResetPasswordRequestType();
-        parameters.setEmail("POLI@KOLs.FR");
         parameters.setLogin("jpolino");
         parameters.setPassword("mik");
-        when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(false);
+        when(memberManager.resetPassword(anyString(),  anyString())).thenReturn(false);
         assertFalse(connectService.resetPassword(parameters).isReturn());
     }
 
 
     @Test
     @DisplayName("should return false if one of the credentials is null")
-    void resetPassword12() throws BusinessExceptionConnect {
+    void resetPassword12()  {
         ResetPasswordRequestType parameters = new ResetPasswordRequestType();
-        parameters.setEmail("POLI@KOLs.FR");
         parameters.setLogin(null);
         parameters.setPassword("mik");
-        //when(memberManager.updatePassword(anyString(), anyString(), anyString())).thenReturn(false);
         assertFalse(connectService.resetPassword(parameters).isReturn());
     }
 }

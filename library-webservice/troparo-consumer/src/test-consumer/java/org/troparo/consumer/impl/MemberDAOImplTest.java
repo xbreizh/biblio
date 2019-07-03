@@ -195,33 +195,8 @@ class MemberDAOImplTest {
     }
 
 
-    @Test
-    @DisplayName("should return true if token valid")
-    void checkToken() {
-        Member member = memberDAO.getMemberByToken("62751f44-b7db-49f5-a19c-5b98edef50db");
-        member.setDateConnect(new Date()); // setting last connectDate to now
-        memberDAO.updateMember(member);
-        assertTrue(memberDAO.checkToken("62751f44-b7db-49f5-a19c-5b98edef50db"));
-    }
 
-    @Test
-    @DisplayName("should return false if token invalid")
-    void checkToken1() {
-        assertFalse(memberDAO.checkToken("62751f44-b7db-49f5-a19c-5b98edef50dbss"));
-    }
 
-    @Test
-    @DisplayName("should return false if token expired")
-    void checkToken2() throws ParseException {
-        Member member = memberDAO.getMemberByToken("62751f44-b7db-49f5-a19c-5b98edef50db");
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-        Date date = simpleDateFormat.parse("2018-09-09");
-        member.setDateConnect(date); // setting last connectDate to now
-        memberDAO.updateMember(member);
-        assertFalse(memberDAO.checkToken("62751f44-b7db-49f5-a19c-5b98edef50db"));
-    }
 
     @Test
     @DisplayName("should invalidate token")
@@ -231,9 +206,9 @@ class MemberDAOImplTest {
         member.setDateConnect(new Date()); // setting last connectDate to now
         memberDAO.updateMember(member);
         assertAll(
-                () -> assertTrue(memberDAO.checkToken(token)),
+                () -> assertNotNull(memberDAO.getMemberByToken(token)),
                 () -> assertTrue(memberDAO.invalidateToken(token)),
-                () -> assertFalse(memberDAO.checkToken(token))
+                () -> assertNull(memberDAO.getMemberByToken(token))
         );
 
     }
@@ -243,7 +218,6 @@ class MemberDAOImplTest {
     void invalidateToken1() {
         String token = "62751f44-b7db-49f5-a1dd9c-5b98edef50db";
         assertFalse(memberDAO.invalidateToken(token));
-        assertFalse(memberDAO.checkToken(token));
     }
 
     @Test

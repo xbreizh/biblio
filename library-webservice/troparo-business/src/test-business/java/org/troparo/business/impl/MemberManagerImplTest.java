@@ -12,10 +12,9 @@ import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Member;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -313,9 +312,17 @@ class MemberManagerImplTest {
 
 
     @Test
-    void checkToken() {
-        when(memberDAO.checkToken(anyString())).thenReturn(true);
-        assertTrue(memberManager.checkToken(anyString()));
+    void checkToken() throws ParseException {
+        Member member = new Member();
+        String token = "token123";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date = simpleDateFormat.parse("2020-09-09");
+        member.setToken(token);
+        member.setTokenExpiration(date);
+        when(memberDAO.getMemberByToken(token)).thenReturn(member);
+        assertTrue(memberManager.checkToken(token));
     }
 
     // GENERATE TOKEN
@@ -403,10 +410,9 @@ class MemberManagerImplTest {
     void updatePasswords() {
         String login = "KOL";
         String password = "kokl";
-        String email = "cdcd@test.fr";
         memberManager.setMemberDAO(memberDAO);
         memberManager.getMemberByLogin(login);
-        assertFalse(memberManager.updatePassword(login, password, email));
+        assertFalse(memberManager.resetPassword(login, password));
 
     }
 
@@ -415,12 +421,10 @@ class MemberManagerImplTest {
     void updatePasswordNoLogin() {
         MemberManagerImpl mgr = new MemberManagerImpl();
         String login = "login";
-        String email = "email";
         String password = "password";
         assertAll(
-                () -> assertFalse(mgr.updatePassword(null, email, password)),
-                () -> assertFalse(mgr.updatePassword(login, null, password)),
-                () -> assertFalse(mgr.updatePassword(login, email, null))
+                () -> assertFalse(mgr.resetPassword(null, password)),
+                () -> assertFalse(mgr.resetPassword(login,  null))
         );
 
 
@@ -431,12 +435,10 @@ class MemberManagerImplTest {
     void updatePassword3() {
         String login = "KOL";
         String password = "kokl";
-        String email = "cdcd@test.fr";
         Member member = new Member();
         member.setLogin(login);
-        member.setEmail("different@email.com");
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
-        assertFalse(memberManager.updatePassword(login, password, email));
+        assertFalse(memberManager.resetPassword(login, password));
 
     }
 
@@ -449,7 +451,7 @@ class MemberManagerImplTest {
         member.setEmail(email);
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         when(memberDAO.updateMember(member)).thenReturn(true);
-        assertTrue(memberManager.updatePassword(login, email, anyString()));
+        assertTrue(memberManager.resetPassword(login,  anyString()));
 
     }
 
@@ -459,14 +461,12 @@ class MemberManagerImplTest {
     void updatePassword2() {
         String login = "KOL";
         String password = "kokl";
-        String email = "cdcd@test.fr";
         Member member = new Member();
         member.setLogin(login);
-        member.setEmail(email);
         memberManager.setMemberDAO(memberDAO);
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         memberManager.getMemberByLogin(login);
-        assertFalse(memberManager.updatePassword(login, password, email));
+        assertFalse(memberManager.resetPassword(login, password));
 
     }
 

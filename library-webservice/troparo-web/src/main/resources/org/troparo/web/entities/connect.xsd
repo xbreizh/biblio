@@ -4,6 +4,31 @@
             elementFormDefault="qualified">
 
     <!-- checkToken Request Type -->
+    <xsd:element name="requestPasswordResetLinkRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Login" type="xsd:string"/>
+                <xsd:element name="Email">
+                    <xsd:simpleType>
+                        <xsd:restriction base="xsd:string">
+                            <xsd:pattern value="[^@]+@[^\.]+\..+"/>
+                        </xsd:restriction>
+                    </xsd:simpleType>
+                </xsd:element>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- checkToken  Response Type -->
+    <xsd:element name="requestPasswordResetLinkResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- checkToken Request Type -->
     <xsd:element name="checkTokenRequestType">
         <xsd:complexType>
             <xsd:sequence>
@@ -63,13 +88,6 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="Login" type="xsd:string"/>
-                <xsd:element name="Email">
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:string">
-                            <xsd:pattern value="[^@]+@[^\.]+\..+"/>
-                        </xsd:restriction>
-                    </xsd:simpleType>
-                </xsd:element>
                 <xsd:element name="Password" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>

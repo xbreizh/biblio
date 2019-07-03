@@ -22,7 +22,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
 @Transactional
-@Sql(executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD, scripts = "classpath:resetDb.sql")
 class BookDAOImplTest {
     private Logger logger = Logger.getLogger(BookDAOImplTest.class);
 

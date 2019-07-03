@@ -265,7 +265,7 @@ class MemberManagerImplIntegrationTest {
     void getToken1() {
         String login = "lokii";
         String password = "123";
-        memberManager.updatePassword("lokii", "LOKI@LOKI.LOKII", "123");
+        memberManager.resetPassword("lokii", "123");
         assertNotEquals("wrong credentials", memberManager.getToken(login, password));
     }
 

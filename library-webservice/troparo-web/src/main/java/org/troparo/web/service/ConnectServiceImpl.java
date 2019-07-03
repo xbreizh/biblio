@@ -3,6 +3,7 @@ package org.troparo.web.service;
 import org.apache.log4j.Logger;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.entities.connect.*;
+import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Inject;
@@ -52,6 +53,13 @@ public class ConnectServiceImpl implements IConnectService {
     }
 
     @Override
+    public RequestPasswordResetLinkResponseType requestPasswordResetLink(RequestPasswordResetLinkRequestType parameters)  {
+       RequestPasswordResetLinkResponseType ar = new RequestPasswordResetLinkResponseType();
+       ar.setReturn(memberManager.requestPasswordLink(parameters.getLogin(), parameters.getEmail()));
+        return ar;
+    }
+
+    @Override
     public ResetPasswordResponseType resetPassword(ResetPasswordRequestType parameters) {
         ResetPasswordResponseType ar = new ResetPasswordResponseType();
         boolean result;
@@ -59,8 +67,7 @@ public class ConnectServiceImpl implements IConnectService {
         logger.info("trying to reset pwd for: " + parameters.getLogin());
         String login = parameters.getLogin();
         String password = parameters.getPassword();
-        String email = parameters.getEmail();
-        result = memberManager.updatePassword(login, email, password);
+        result = memberManager.resetPassword(login, password);
 
         ar.setReturn(result);
         return ar;

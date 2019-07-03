@@ -46,6 +46,9 @@ public class Member {
     @Column(name = "DATECONNECT")
     private Date dateConnect;
 
+    @Column(name = "TOKENEXPIRATION")
+    private Date tokenExpiration;
+
     @OneToMany(mappedBy = "borrower", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private List<Loan> loanList = new ArrayList<>();
 
@@ -138,6 +141,14 @@ public class Member {
 
     public void setLoanList(List<Loan> loanList) {
         this.loanList = loanList;
+    }
+
+    public Date getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(Date tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
     }
 
     @Override

@@ -29,7 +29,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @ExtendWith(SpringExtension.class)
-@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class BookServiceIntegrationTest {
     private Logger logger = Logger.getLogger(BookServiceIntegrationTest.class.getName());
@@ -40,6 +39,7 @@ class BookServiceIntegrationTest {
     private String token = "";
 
     @BeforeEach
+    @Sql(scripts = "classpath:resetDb.sql")
     void getToken() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("LOKII");

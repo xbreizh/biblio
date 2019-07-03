@@ -153,7 +153,7 @@ public class MemberDAOImpl implements MemberDAO {
         return true;
     }
 
-    @Override
+   /* @Override
     public boolean checkToken(String token) {
         logger.info("token received: " + token);
         request = "From Member where token = :token";
@@ -178,7 +178,7 @@ public class MemberDAOImpl implements MemberDAO {
             logger.info("invalid token");
             return false;
         }
-    }
+    }*/
 
     @Override
     public boolean invalidateToken(String token) {

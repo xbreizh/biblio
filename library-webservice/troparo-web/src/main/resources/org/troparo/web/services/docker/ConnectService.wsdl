@@ -35,6 +35,12 @@
     <wsdl:message name="invalidateTokenResponse">
         <wsdl:part element="connect:invalidateTokenResponseType" name="parameters"/>
     </wsdl:message>
+    <wsdl:message name="requestPasswordResetLinkRequest">
+        <wsdl:part element="connect:requestPasswordResetLinkRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="requestPasswordResetLinkResponse">
+        <wsdl:part element="connect:requestPasswordResetLinkResponseType" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="BusinessExceptionConnect">
         <wsdl:part element="connect:BusinessConnectFaultType" name="parameters"/>
     </wsdl:message>
@@ -52,11 +58,17 @@
         </wsdl:operation>
         <wsdl:operation name="checkToken">
             <wsdl:input message="tns:checkTokenRequest"/>
-            <wsdl:output message="tns:checkTokenResponse"/>
+            <wsdl:output message="tns:checkTokenResponse"/><!--
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>-->
         </wsdl:operation>
         <wsdl:operation name="invalidateToken">
             <wsdl:input message="tns:invalidateTokenRequest"/>
             <wsdl:output message="tns:invalidateTokenResponse"/>
+            <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
+        </wsdl:operation>
+        <wsdl:operation name="requestPasswordResetLink">
+            <wsdl:input message="tns:requestPasswordResetLinkRequest"/>
+            <wsdl:output message="tns:requestPasswordResetLinkResponse"/>
             <wsdl:fault name="businessExceptionConnect" message="tns:BusinessExceptionConnect"/>
         </wsdl:operation>
     </wsdl:portType>
@@ -103,6 +115,19 @@
             </wsdl:fault>
         </wsdl:operation>
         <wsdl:operation name="invalidateToken">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionConnect">
+                <soap:fault name="businessExceptionConnect" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="requestPasswordResetLink">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>
