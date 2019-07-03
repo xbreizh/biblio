@@ -1,7 +1,6 @@
 package org.mail.impl;
 
 
-import org.apache.log4j.Logger;
 import org.mail.contract.ConnectManager;
 import org.mail.model.Mail;
 import org.springframework.context.annotation.PropertySource;
@@ -27,7 +26,9 @@ import javax.mail.internet.MimeMessage;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -36,26 +37,16 @@ import java.util.*;
 @Component
 @PropertySource("classpath:mail.properties")
 public class EmailManagerImpl {
-    private Logger logger = Logger.getLogger(EmailManagerImpl.class);
 
     @Inject
     ConnectManager connectManager;
 
-
-    private String mailFrom = "xavier.lamourec@gmail.com";
-
-
-    private String subject = "mail Reminder ** LOAN OVERDUE **";
-
-
-    private String mailServer = "smtp.gmail.com";
-
-    private String port = "587";
-
     private MailService mailService;
 
+    @Inject
+    PropertiesLoad propertiesLoad;
 
-    private boolean test;
+
 
 
    /* @Value("${sender}")
@@ -86,23 +77,20 @@ public class EmailManagerImpl {
         token = connectManager.authenticate();
         if (token != null) {
 
-            final String username = "xavier.lamourec@gmail.com";
-            logger.info("trying to send mail");
+            final String username = propertiesLoad.getProperty("mailFrom");
 
             Properties props = new Properties();
-            props.put("mail.smtp.auth", "true");
-            props.put("mail.smtp.starttls.enable", "true");
-            props.put("mail.smtp.host", mailServer);
-            props.put("mail.smtp.port", port);
-            logger.info("properties passed ok");
+            props.put("mail.smtp.auth", propertiesLoad.getProperty("mail.smtp.auth"));
+            props.put("mail.smtp.starttls.enable", propertiesLoad.getProperty("mail.smtp.starttls.enable"));
+            props.put("mail.smtp.host", propertiesLoad.getProperty("mailServer"));
+            props.put("mail.smtp.port", propertiesLoad.getProperty("mailServerPort"));
             Session session = getSession(username, props);
 
             try {
-                logger.info("authentication ok");
                 Message message = new MimeMessage(session);
-                message.setFrom(new InternetAddress(mailFrom));
+                message.setFrom(new InternetAddress(username));
 
-                message.setSubject(subject);
+                message.setSubject(propertiesLoad.getProperty("subjectOverDue"));
 
 
                 List<Mail> overdueList = getOverdueList(token);
@@ -115,8 +103,8 @@ public class EmailManagerImpl {
                         String recipient = mail.getEmail();
 
                         // adding condition for testign purposes
-                        if (test) {
-                            recipient = "dontkillewok@gmail.com";
+                        if (propertiesLoad.getProperty("test").equalsIgnoreCase("true")) {
+                            recipient = propertiesLoad.getProperty("testRecipient");
                         }
                         getMessage(message, mail, recipient);
                         Transport.send(message);
@@ -133,18 +121,14 @@ public class EmailManagerImpl {
     }
 
     private void getMessage(Message message, Mail mail, String recipient) throws MessagingException {
-        try {
-            message.setRecipients(Message.RecipientType.TO,
-                    InternetAddress.parse(recipient));
-            //HTML mail content
-            String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
 
-            message.setContent(htmlText, "text/html");
+        message.setRecipients(Message.RecipientType.TO,
+                InternetAddress.parse(recipient));
+        //HTML mail content
+        String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
 
-            logger.info("mail content: " + message.getContent().toString());
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        }
+        message.setContent(htmlText, "text/html");
+
     }
 
     private Session getSession(String username, Properties props) {
@@ -152,13 +136,8 @@ public class EmailManagerImpl {
                 new Authenticator() {
                     @Override
                     protected PasswordAuthentication getPasswordAuthentication() {
-                        try {
-                            return new PasswordAuthentication(username, getPassword());
 
-                        } catch (Exception e) {
-                            logger.error(e.getMessage());
-                        }
-                        return null;
+                        return new PasswordAuthentication(propertiesLoad.getProperty("mailUserName"), propertiesLoad.getProperty("mailPwd"));
                     }
                 });
     }
@@ -169,17 +148,13 @@ public class EmailManagerImpl {
         Map<String, String> input;
         input = getTemplateItems(mail);
 
-        logger.info("trying to get content from file");
         String msg = readContentFromFile(filePath);
-        try {
-            Set<Map.Entry<String, String>> entries = input.entrySet();
-            for (Map.Entry<String, String> entry : entries) {
-                logger.info("entry: " + entry.getKey() + " / " + entry.getValue());
-                msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
-            }
-        } catch (Exception exception) {
-            logger.error(exception.getMessage());
+
+        Set<Map.Entry<String, String>> entries = input.entrySet();
+        for (Map.Entry<String, String> entry : entries) {
+            msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
         }
+
         return msg;
     }
 
@@ -193,7 +168,7 @@ public class EmailManagerImpl {
         String dueDate = dt1.format(mail.getDueDate());
         input.put("DUEDATE", dueDate);
 
-        logger.info("date: " + dueDate);
+        //  logger.info("date: " + dueDate);
         int overDays = mail.getDiffdays();
         input.put("Isbn", mail.getIsbn());
         input.put("DIFFDAYS", Integer.toString(overDays));
@@ -206,7 +181,7 @@ public class EmailManagerImpl {
     //Method to read HTML file as a String
 
     String readContentFromFile(String fileName) {
-        logger.info("trying to buffer file");
+        //  logger.info("trying to buffer file");
         StringBuilder contents = new StringBuilder();
 
         try {
@@ -222,7 +197,6 @@ public class EmailManagerImpl {
                 reader.close();
             }
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
         }
         return contents.toString();
     }
@@ -238,7 +212,6 @@ public class EmailManagerImpl {
     }
 
     private List<Mail> getOverdueList(String token) {
-        logger.info("getting overdue list");
         List<Mail> mailList = new ArrayList<>();
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
@@ -246,7 +219,6 @@ public class EmailManagerImpl {
             GetOverdueMailListResponse response = getMailServicePort().getOverdueMailList(requestType);
             return convertMailingListTypeIntoMailList(response);
         } catch (BusinessExceptionMail businessExceptionMail) {
-            logger.error(businessExceptionMail.getMessage());
         }
         return mailList;
     }
@@ -283,23 +255,15 @@ public class EmailManagerImpl {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             return xmlCalendar.toGregorianCalendar().getTime();
         } catch (DatatypeConfigurationException e) {
-            logger.error(e.getMessage());
         }
         return null;
 
     }
 
 
-    private String getPassword() throws IOException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        String tempKey;
-        String password;
-        Properties prop = new Properties();
-        InputStream input;
-        input = new FileInputStream("/usr/app/resources/mail.properties");
-        // load a properties file
-        prop.load(input);
-        tempKey = prop.getProperty("Key");
-        password = prop.getProperty("Encrypted_Password");
+    private String getPassword() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        String tempKey = propertiesLoad.getProperty("Key");
+        String password = propertiesLoad.getProperty("Encrypted_Password");
 
         byte[] bytekey = hexStringToByteArray(tempKey);
         SecretKeySpec sks = new SecretKeySpec(bytekey, AES);

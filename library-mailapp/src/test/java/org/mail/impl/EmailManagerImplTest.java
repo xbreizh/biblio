@@ -29,13 +29,12 @@ import static org.mockito.Mockito.spy;
 
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {EmailManagerImpl.class, ConnectManagerImpl.class})
+@ContextConfiguration(classes = {EmailManagerImpl.class, ConnectManagerImpl.class, PropertiesLoad.class})
 class EmailManagerImplTest {
 
     private EmailManagerImpl emailManager;
     private MailService mailService;
-    @Inject
-    private ConnectManagerImpl connectManager;
+
 
     @BeforeEach
     void init(){

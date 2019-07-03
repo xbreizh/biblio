@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.connect.GetTokenRequestType;
@@ -16,17 +17,21 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = ConnectManagerImpl.class)
+@ContextConfiguration(classes = {ConnectManagerImpl.class, PropertiesLoad.class})
+@PropertySource("classpath:mail.properties")
 class ConnectManagerImplTest {
 
     private ConnectManagerImpl connectManager;
     private ConnectService connectService;
+    private PropertiesLoad propertiesLoad;
 
     @BeforeEach
     void init() {
         connectManager = spy(ConnectManagerImpl.class);
         connectService = mock(ConnectService.class);
         connectManager.setConnectService(connectService);
+        propertiesLoad = new PropertiesLoad();
+        connectManager.setPropertiesLoad(propertiesLoad);
     }
 
     @Test
