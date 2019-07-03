@@ -26,8 +26,10 @@ import javax.mail.internet.MimeMessage;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.*;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -54,7 +56,7 @@ public class EmailManagerImpl {
     //@Scheduled(cron = "* 00 11 * * *")
 
     @Scheduled(fixedRate = 500000)
-    public void sendMail() throws BusinessExceptionConnect, MessagingException, IOException {
+    public void sendMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
         String token;
         token = connectManager.authenticate();
         if (token != null) {
@@ -66,7 +68,7 @@ public class EmailManagerImpl {
             props.put("mail.smtp.starttls.enable", propertiesLoad.getProperty("mail.smtp.starttls.enable"));
             props.put("mail.smtp.host", propertiesLoad.getProperty("mailServer"));
             props.put("mail.smtp.port", propertiesLoad.getProperty("mailServerPort"));
-            Session session = getSession( props);
+            Session session = getSession(props);
 
 
             Message message = new MimeMessage(session);
@@ -111,7 +113,7 @@ public class EmailManagerImpl {
 
     }
 
-    private Session getSession( Properties props) {
+    private Session getSession(Properties props) {
         return Session.getInstance(props,
                 new Authenticator() {
                     @Override
@@ -190,16 +192,12 @@ public class EmailManagerImpl {
         return b;
     }
 
-    private List<Mail> getOverdueList(String token) {
-        List<Mail> mailList = new ArrayList<>();
+    private List<Mail> getOverdueList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
-        try {
             GetOverdueMailListResponse response = getMailServicePort().getOverdueMailList(requestType);
             return convertMailingListTypeIntoMailList(response);
-        } catch (BusinessExceptionMail businessExceptionMail) {
-        }
-        return mailList;
+
     }
 
     private IMailService getMailServicePort() {
@@ -207,7 +205,7 @@ public class EmailManagerImpl {
         return mailService.getMailServicePort();
     }
 
-    List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) {
+    List<Mail> convertMailingListTypeIntoMailList(GetOverdueMailListResponse response) throws DatatypeConfigurationException {
         List<Mail> mailList = new ArrayList<>();
 
         for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
@@ -228,14 +226,12 @@ public class EmailManagerImpl {
     }
 
 
-    Date convertGregorianCalendarIntoDate(GregorianCalendar gregorianCalendar) {
+    Date convertGregorianCalendarIntoDate(GregorianCalendar gregorianCalendar) throws DatatypeConfigurationException {
         XMLGregorianCalendar xmlCalendar;
-        try {
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
             return xmlCalendar.toGregorianCalendar().getTime();
-        } catch (DatatypeConfigurationException e) {
-        }
-        return null;
+
+
 
     }
 
