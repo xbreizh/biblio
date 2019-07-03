@@ -26,9 +26,8 @@ import javax.mail.internet.MimeMessage;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Paths;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -36,6 +35,7 @@ import java.util.*;
 
 @Component
 @PropertySource("classpath:mail.properties")
+@PropertySource("classpath:HTMLTemplate.html")
 public class EmailManagerImpl {
 
     @Inject
@@ -66,7 +66,7 @@ public class EmailManagerImpl {
             props.put("mail.smtp.starttls.enable", propertiesLoad.getProperty("mail.smtp.starttls.enable"));
             props.put("mail.smtp.host", propertiesLoad.getProperty("mailServer"));
             props.put("mail.smtp.port", propertiesLoad.getProperty("mailServerPort"));
-            Session session = getSession(username, props);
+            Session session = getSession( props);
 
 
             Message message = new MimeMessage(session);
@@ -103,14 +103,15 @@ public class EmailManagerImpl {
 
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(recipient));
-        //HTML mail content
-        String htmlText = readEmailFromHtml("/usr/app/resources/HTMLTemplate.html", mail);
+
+        File file = new File(EmailManagerImpl.class.getClassLoader().getResource("HTMLTemplate.html").getFile());
+        String htmlText = readEmailFromHtml(file, mail);
 
         message.setContent(htmlText, "text/html");
 
     }
 
-    private Session getSession(String username, Properties props) {
+    private Session getSession( Properties props) {
         return Session.getInstance(props,
                 new Authenticator() {
                     @Override
@@ -123,11 +124,11 @@ public class EmailManagerImpl {
 
     //Method to replace the values for keys
 
-    String readEmailFromHtml(String filePath, Mail mail) throws IOException {
+    String readEmailFromHtml(File file, Mail mail) throws IOException {
         Map<String, String> input;
         input = getTemplateItems(mail);
 
-        String msg = readContentFromFile(filePath);
+        String msg = readContentFromFile(file);
 
         Set<Map.Entry<String, String>> entries = input.entrySet();
         for (Map.Entry<String, String> entry : entries) {
@@ -158,11 +159,12 @@ public class EmailManagerImpl {
 
     //Method to read HTML file as a String
 
-    String readContentFromFile(String fileName) throws IOException {
+    String readContentFromFile(File file) throws IOException {
         StringBuilder contents = new StringBuilder();
 
         //use buffering, reading one line at a time
-        BufferedReader reader = new BufferedReader(new FileReader(fileName));
+
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         try {
             String line;
             while ((line = reader.readLine()) != null) {

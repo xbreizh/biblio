@@ -41,7 +41,6 @@ public class ConnectManagerImpl implements ConnectManager {
 
 
         if (!token.equals("wrong LOGIN or pwd")) {
-           // logger.info("token: " + token);
             return token;
         } else {
             return null;
