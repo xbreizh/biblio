@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
-import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Loan;
 import org.troparo.model.Mail;
@@ -79,9 +78,9 @@ public class MailManagerImpl implements MailManager {
 
     @Override
     public List<Mail> getPasswordResetList(String token) {
-        List<Member> memberList =memberDAO.getPasswordResetList();
-        for (Member member: memberList
-             ) {
+        List<Member> memberList = memberDAO.getPasswordResetList();
+        for (Member member : memberList
+        ) {
             member.setToken(removeTempFromToken(member.getToken()));
             member.setTokenExpiration(getTodaySDate());
             memberDAO.updateMember(member);
@@ -90,13 +89,13 @@ public class MailManagerImpl implements MailManager {
     }
 
     public String removeTempFromToken(String token) {
-       return token.replace("TEMP", "");
+        return token.replace("TEMP", "");
     }
 
     public List<Mail> convertMemberListIntoMailList(List<Member> memberList) {
         List<Mail> mailList = new ArrayList<>();
-        for (Member member: memberList
-             ) {
+        for (Member member : memberList
+        ) {
             Mail mail = new Mail();
             mail.setToken(member.getToken());
             mail.setLogin(member.getLogin());

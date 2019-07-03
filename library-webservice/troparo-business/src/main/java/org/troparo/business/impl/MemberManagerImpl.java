@@ -30,8 +30,8 @@ public class MemberManagerImpl implements MemberManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public MemberManagerImpl() {
-            logger.info("peppper was null");
-            pepper = "TIPIAK";
+        logger.info("peppper was null");
+        pepper = "TIPIAK";
     }
 
     public void setMemberDAO(MemberDAO memberDAO) {
@@ -261,7 +261,7 @@ public class MemberManagerImpl implements MemberManager {
         return wrongCredentials;
     }
 
-    Date adding20MnToCurrentDate(){
+    Date adding20MnToCurrentDate() {
         Date now = getNow();
         Calendar c = Calendar.getInstance();
         c.setTime(now);
@@ -277,7 +277,7 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkToken(String token) {
         Member member = memberDAO.getMemberByToken(token);
         Date now = getNow();
-        return (member!=null && member.getTokenExpiration().after(now));
+        return (member != null && member.getTokenExpiration().after(now));
     }
 
     @Override
@@ -346,8 +346,8 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public boolean requestPasswordLink(String login, String email) {
         Member member = memberDAO.getMemberByLogin(login.toUpperCase());
-        if(member==null)return false;
-        if(member.getEmail().equalsIgnoreCase(email)) {
+        if (member == null) return false;
+        if (member.getEmail().equalsIgnoreCase(email)) {
             member.setToken("TEMP" + generateToken());
             member.setTokenExpiration(adding20MnToCurrentDate());
             return memberDAO.updateMember(member);
