@@ -30,8 +30,7 @@ public class MemberManagerImpl implements MemberManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public MemberManagerImpl() {
-        if (pepper == null)
-            System.out.println("peppper was null");
+            logger.info("peppper was null");
             pepper = "TIPIAK";
     }
 
