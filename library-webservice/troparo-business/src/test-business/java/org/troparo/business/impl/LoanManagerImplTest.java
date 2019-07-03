@@ -12,7 +12,6 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
-import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
@@ -290,6 +289,42 @@ class LoanManagerImplTest {
         when(loanDAO.getLoanById(anyInt())).thenReturn(null);
         assertNull(loanManager.getLoanStatus(55));
 
+    }
+
+    @Test
+    @DisplayName("should return bookManager")
+    void getBookManager() {
+        LoanManagerImpl loanManager = new LoanManagerImpl();
+        BookManagerImpl bookManager = new BookManagerImpl();
+        loanManager.setBookManager(bookManager);
+        assertEquals(bookManager, loanManager.getBookManager());
+    }
+
+    @Test
+    @DisplayName("should set bookManager")
+    void setBookManager() {
+        LoanManagerImpl loanManager = new LoanManagerImpl();
+        BookManagerImpl bookManager = new BookManagerImpl();
+        loanManager.setBookManager(bookManager);
+        assertEquals(bookManager, loanManager.getBookManager());
+    }
+
+    @Test
+    @DisplayName("should return memberManager")
+    void getMemberManager() {
+        LoanManagerImpl loanManager = new LoanManagerImpl();
+        MemberManagerImpl memberManager = new MemberManagerImpl();
+        loanManager.setMemberManager(memberManager);
+        assertEquals(memberManager, loanManager.getMemberManager());
+    }
+
+    @Test
+    @DisplayName("should set memberManager")
+    void setMemberManager() {
+        LoanManagerImpl loanManager = new LoanManagerImpl();
+        MemberManagerImpl memberManager = new MemberManagerImpl();
+        loanManager.setMemberManager(memberManager);
+        assertEquals(memberManager, loanManager.getMemberManager());
     }
 
 

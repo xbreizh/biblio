@@ -230,10 +230,14 @@ public class LoanManagerImpl implements LoanManager {
         this.loanDAO = loanDAO;
     }
 
-    public int getLoanDuration() {
-        return loanDuration;
+
+    public BookManager getBookManager() {
+        return bookManager;
     }
 
+    public MemberManager getMemberManager() {
+        return memberManager;
+    }
 
     public void setBookManager(BookManager bookManager) {
         this.bookManager = bookManager;
