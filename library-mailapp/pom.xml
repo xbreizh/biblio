@@ -33,7 +33,7 @@
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/6528c20e50b02d8baa8ddbc0c378961b5cb857c1/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
@@ -68,7 +68,7 @@
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/6528c20e50b02d8baa8ddbc0c378961b5cb857c1/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/MailService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>

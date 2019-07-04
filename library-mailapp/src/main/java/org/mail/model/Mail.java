@@ -13,7 +13,24 @@ public class Mail {
     private String title;
     private String author;
     private String edition;
+    private String token;
+    private String login;
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
 
     public String getEmail() {
         return email;

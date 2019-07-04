@@ -12,7 +12,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@PropertySource("classpath:mail.properties")
+@PropertySource("classpath:docker/mail.properties")
 public class ConnectManagerImpl implements ConnectManager {
 
 

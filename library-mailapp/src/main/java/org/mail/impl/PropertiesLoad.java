@@ -13,7 +13,7 @@ public class PropertiesLoad {
 
 
     public PropertiesLoad() throws IOException {
-        input = PropertiesLoad.class.getClassLoader().getResourceAsStream("mail.properties");
+        input = PropertiesLoad.class.getClassLoader().getResourceAsStream("docker/mail.properties");
         prop.load(input);
 
     }

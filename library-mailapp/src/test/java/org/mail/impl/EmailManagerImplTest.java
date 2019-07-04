@@ -4,16 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mail.contract.ConnectManager;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.troparo.entities.mail.GetOverdueMailListRequest;
 import org.troparo.entities.mail.GetOverdueMailListResponse;
 import org.troparo.entities.mail.MailListType;
 import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.services.mailservice.MailService;
 
-import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -105,15 +102,15 @@ class EmailManagerImplTest {
         getOverdueMailListResponse.setMailListType(mailListType);
 
         assertAll(
-                ()-> assertEquals(title, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getTitle()),
-                ()-> assertEquals(author, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getAuthor()),
-                ()-> assertEquals(email, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getEmail()),
-                ()-> assertEquals(edition, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getEdition()),
-                ()-> assertEquals(firstName, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getFirstname()),
-                ()-> assertEquals(lastName, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getLastname()),
-                ()-> assertEquals(diffDays, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getDiffdays()),
-                ()-> assertEquals(isbn, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getIsbn()),
-                ()-> assertEquals(date1, emailManager.convertMailingListTypeIntoMailList(getOverdueMailListResponse).get(0).getDueDate())
+                ()-> assertEquals(title, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getTitle()),
+                ()-> assertEquals(author, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getAuthor()),
+                ()-> assertEquals(email, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getEmail()),
+                ()-> assertEquals(edition, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getEdition()),
+                ()-> assertEquals(firstName, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getFirstname()),
+                ()-> assertEquals(lastName, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getLastname()),
+                ()-> assertEquals(diffDays, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getDiffdays()),
+                ()-> assertEquals(isbn, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getIsbn()),
+                ()-> assertEquals(date1, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getDueDate())
         );
 
 
