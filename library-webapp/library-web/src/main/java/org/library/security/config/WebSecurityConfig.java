@@ -35,6 +35,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .formLogin().loginPage("/login").permitAll()
                 .and()
+                .authorizeRequests().antMatchers("/resetPasswordForm**").permitAll()
+                .and()
                 .logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"));
     }
 

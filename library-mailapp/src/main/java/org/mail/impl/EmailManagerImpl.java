@@ -66,7 +66,7 @@ public class EmailManagerImpl {
 
     @Scheduled(fixedRate = 500000)
     public void sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
-        String template = "docker/PasswordReset.html";
+        String template = "docker/resetPassword.html";
         String subject = "subjectPasswordReset";
         String token = connectManager.authenticate();
         if (token != null) {

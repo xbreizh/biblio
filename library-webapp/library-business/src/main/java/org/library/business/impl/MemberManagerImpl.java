@@ -69,6 +69,13 @@ public class MemberManagerImpl implements MemberManager {
         return null;
     }
 
+    @Override
+    public boolean resetPassword(String login, String password, String token) {
+
+        System.out.println("Manager /d login: "+login+" / password: "+password+" / token: "+token);
+        return false;
+    }
+
     private IMemberService getMemberServicePort() {
         if (memberService == null) memberService = new MemberService();
         return memberService.getMemberServicePort();

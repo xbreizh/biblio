@@ -7,4 +7,6 @@ public interface MemberManager {
 
 
     public Member getMember(String token, String login);
+
+    boolean resetPassword(String login, String password, String token);
 }

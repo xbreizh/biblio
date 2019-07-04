@@ -59,6 +59,45 @@ public class UserController {
         return mv;
     }
 
+    @GetMapping("/passwordReset")
+    public ModelAndView passwordReset() throws BusinessExceptionLoan {
+       /* Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();*/
+       /* System.out.println("View  /d login: "+login+" / password: "+password+" / token: "+token);
+        logger.info("trying to resetPassword: " + login);
+       // memberManager.renewLoan(token, login);
+        memberManager.resetPassword(login, password, token);*/
+
+
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("passwordReset");
+        return mv;
+    }
+
+    @PostMapping("/passwordReset1")
+    public ModelAndView passwordReset1( String login, String password, String confirmPassword, String token){
+       /* Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        logger.info("trying to renew: " + id);
+        int idLoan = Integer.parseInt(id);
+        loanManager.renewLoan(token, idLoan);*/
+        ModelAndView mv = new ModelAndView();
+        if(!password.equals(confirmPassword)){
+            mv.setViewName("passwordReset");
+            System.out.println("View  /d login: "+login+" / password: "+password+" / password2: "+confirmPassword+" / token: "+token);
+            return mv;
+        }else{
+            mv.setViewName("redirect:/");
+            System.out.println("pwd ok");
+            return new ModelAndView("redirect:/");
+        }
+
+
+
+    }
+
+
     @PostMapping("/renew")
     public ModelAndView renew(ModelAndView mv, String id) throws BusinessExceptionLoan {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,8 +106,8 @@ public class UserController {
         int idLoan = Integer.parseInt(id);
         loanManager.renewLoan(token, idLoan);
 
-
         return new ModelAndView("redirect:/");
+
     }
 
 
