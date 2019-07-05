@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.troparo.services.bookservice.BusinessExceptionBook;
+import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
@@ -59,43 +60,85 @@ public class UserController {
         return mv;
     }
 
+
     @GetMapping("/passwordReset")
-    public ModelAndView passwordReset() throws BusinessExceptionLoan {
+    public ModelAndView passwordReset(String login,  String token) throws BusinessExceptionLoan {
        /* Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();*/
        /* System.out.println("View  /d login: "+login+" / password: "+password+" / token: "+token);
         logger.info("trying to resetPassword: " + login);
        // memberManager.renewLoan(token, login);
         memberManager.resetPassword(login, password, token);*/
-
-
+        System.out.println("login: "+login);
+        System.out.println("token: "+token);
         ModelAndView mv = new ModelAndView();
+        mv.addObject("login", login);
+        mv.addObject("token", token);
 
         mv.setViewName("passwordReset");
         return mv;
     }
 
+    @PostMapping("/passwordResetSendEmail")
+    public ModelAndView passwordResetSendEmail1(String login,  String email) throws BusinessExceptionConnect {
+        System.out.println("login: "+login);
+        System.out.println("email: "+email);
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("login", login);
+        mv.addObject("email", email);
+        if(memberManager.sendResetPasswordlink(login, email)){
+
+            mv.setViewName("passwordResetLinkOk");
+        }else{
+            mv.setViewName("passwordResetLinkKo");
+        }
+        return mv;
+    }
+
+
+    @GetMapping("/passwordResetSendEmail")
+    public ModelAndView passwordResetSendEmail(String login,  String email) throws BusinessExceptionConnect {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("passwordResetSendEmail");
+        return mv;
+    }
+
+
+
     @PostMapping("/passwordReset1")
     public ModelAndView passwordReset1( String login, String password, String confirmPassword, String token){
-       /* Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
-        logger.info("trying to renew: " + id);
-        int idLoan = Integer.parseInt(id);
-        loanManager.renewLoan(token, idLoan);*/
         ModelAndView mv = new ModelAndView();
-        if(!password.equals(confirmPassword)){
-            mv.setViewName("passwordReset");
+        mv.addObject("login", login);
+        mv.addObject("token", token);
+        if(!passwordCheck(password, confirmPassword)){
+            mv.setViewName("redirect:/passwordReset");
             System.out.println("View  /d login: "+login+" / password: "+password+" / password2: "+confirmPassword+" / token: "+token);
             return mv;
         }else{
-            mv.setViewName("redirect:/");
-            System.out.println("pwd ok");
-            return new ModelAndView("redirect:/");
+            try {
+                memberManager.resetPassword(login, password, token);
+            } catch (BusinessExceptionConnect businessExceptionConnect) {
+                businessExceptionConnect.printStackTrace();
+            }
+            return new ModelAndView("passwordResetOk");
         }
 
+    }
 
+    private boolean passwordCheck(String password, String confirmPassword) {
+        if(password.isEmpty() || !password.equals(confirmPassword))return false;
+        return true;
 
     }
+
+   /* @GetMapping("/passwordResetOk")
+    public ModelAndView passwordResetOk() {
+        logger.info("passwordResetOk");
+        ModelAndView mv = new ModelAndView();
+
+        mv.setViewName("passwordResetOk");
+        return mv;
+    }*/
 
 
     @PostMapping("/renew")

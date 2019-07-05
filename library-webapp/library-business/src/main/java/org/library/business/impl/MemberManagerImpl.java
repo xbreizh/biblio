@@ -7,7 +7,13 @@ import org.library.business.contract.MemberManager;
 import org.library.model.Book;
 import org.library.model.Loan;
 import org.library.model.Member;
+import org.troparo.entities.connect.CheckTokenRequestType;
+import org.troparo.entities.connect.RequestPasswordResetLinkRequestType;
+import org.troparo.entities.connect.RequestPasswordResetLinkResponseType;
+import org.troparo.entities.connect.ResetPasswordRequestType;
 import org.troparo.entities.member.*;
+import org.troparo.services.connectservice.BusinessExceptionConnect;
+import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
@@ -30,12 +36,11 @@ public class MemberManagerImpl implements MemberManager {
     LoanManager loanManager;
     private MemberService memberService;
 
-    public void setLoanManager(LoanManager loanManager) {
-        this.loanManager = loanManager;
-    }
 
-    public void setMemberService(MemberService memberService) {
-        this.memberService = memberService;
+
+    public MemberManagerImpl() {
+        this.memberService = new MemberService();
+        this.connectService = new ConnectService();
     }
 
     @Override
@@ -70,10 +75,30 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public boolean resetPassword(String login, String password, String token) {
+    public boolean resetPassword(String login, String password, String token) throws BusinessExceptionConnect {
 
         System.out.println("Manager /d login: "+login+" / password: "+password+" / token: "+token);
-        return false;
+        //System.out.println("password has been reset");
+        CheckTokenRequestType checkTokenRequestType = new CheckTokenRequestType();
+        checkTokenRequestType.setToken(token);
+        //if(connectService.getConnectServicePort().checkToken(checkTokenRequestType).isReturn()) {
+            ResetPasswordRequestType resetPasswordRequestType = new ResetPasswordRequestType();
+            resetPasswordRequestType.setLogin(login);
+            resetPasswordRequestType.setPassword(password);
+        logger.info("trying to reset");
+        System.out.println(connectService);
+            return connectService.getConnectServicePort().resetPassword(resetPasswordRequestType).isReturn();
+       // }
+       // return false;
+    }
+
+    @Override
+    public boolean sendResetPasswordlink(String login, String email) throws BusinessExceptionConnect {
+        RequestPasswordResetLinkRequestType requestPasswordResetLinkRequestType = new RequestPasswordResetLinkRequestType();
+        requestPasswordResetLinkRequestType.setEmail(email);
+        requestPasswordResetLinkRequestType.setLogin(login);
+
+        return connectService.getConnectServicePort().requestPasswordResetLink(requestPasswordResetLinkRequestType).isReturn();
     }
 
     private IMemberService getMemberServicePort() {
@@ -152,5 +177,24 @@ public class MemberManagerImpl implements MemberManager {
         return null;
 
     }
+
+    public ConnectService getConnectService() {
+        return connectService;
+    }
+
+    public void setConnectService(ConnectService connectService) {
+        this.connectService = connectService;
+    }
+
+    private ConnectService connectService;
+
+    public void setLoanManager(LoanManager loanManager) {
+        this.loanManager = loanManager;
+    }
+
+    public void setMemberService(MemberService memberService) {
+        this.memberService = memberService;
+    }
+
 
 }
