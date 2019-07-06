@@ -54,7 +54,7 @@ class LoanServiceIntegrationTest {
     void getLoansById() throws BusinessExceptionLoan {
         GetLoanByIdRequestType loanListRequestType = new GetLoanByIdRequestType();
         loanListRequestType.setToken(token);
-        loanListRequestType.setId(11);
+        loanListRequestType.setId(1);
         assertEquals("JPOLINO", loanService.getLoanById(loanListRequestType).getLoanTypeOut().getLogin());
     }
 

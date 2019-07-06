@@ -36,10 +36,10 @@ public class BookManagerImpl implements BookManager {
         if (bookDAO.existingISBN(book.getIsbn())) {
             return "ISBN already existing";
         }
-
         book.setInsertDate(new Date());
         book.setIsbn(book.getIsbn().toUpperCase());
         if (bookDAO.addBook(book)) return "";
+
         return "there was an issue while inserting the book";
     }
 

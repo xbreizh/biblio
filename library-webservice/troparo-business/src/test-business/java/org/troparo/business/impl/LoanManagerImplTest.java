@@ -6,12 +6,15 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.consumer.impl.LoanDAOImpl;
+import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
@@ -25,18 +28,20 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.*;
 
+
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql("classpath:resetDb.sql")
 @Transactional
 class LoanManagerImplTest {
 
-    @Inject
-    private LoanManager loanManager;
-    @Inject
+
+    private LoanManagerImpl loanManager;
+
     private LoanDAO loanDAO;
-    @Inject
+
     private BookManager bookManager1;
-    @Inject
+
     private MemberManager memberManager1;
     private MemberManager memberManager;
 
@@ -45,28 +50,16 @@ class LoanManagerImplTest {
 
 
 
-   /* @Value("${loanDuration}")
-    private int loanDuration;
-    @Value("${renewDuration}")
-    private int renewDuration;
-    @Value("${maxBooks}")
-    private int maxBooks;*/
-
-    @BeforeAll
-    static void initAll() {
-
-
-        //  applicationContext.getBean("emailManagerImpl", MailManagerImpl.class);
-    }
 
     @BeforeEach
     void init() {
         loanDAO = mock(LoanDAO.class);
+        loanManager = new LoanManagerImpl();
         loanManager.setLoanDAO(loanDAO);
         bookManager = mock(BookManagerImpl.class);
+        loanManager.setBookManager(bookManager);
         memberManager = mock(MemberManagerImpl.class);
-        /*loanManager.setBookManager(bookManager);
-        loanManager.setMemberManager(memberManager);*/
+        loanManager.setMemberManager(memberManager);
 
     }
 
@@ -102,18 +95,30 @@ class LoanManagerImplTest {
     @Test
     @DisplayName("should return \"max number of books rented reached\" when member has reached the max possible loans")
     void addLoan3() {
-        /*LoanManager loanManager = new LoanManagerImpl();
-        bookManager = mock(BookManagerImpl.class);
-        memberManager = mock(MemberManagerImpl.class);*/
+        LoanManagerImpl loanManager1 = new LoanManagerImpl();
+        MemberManagerImpl memberManager2 = mock(MemberManagerImpl.class);
+        loanManager1.setMemberManager(memberManager2);
+        Member member = new Member();
+        member.setId(2);
+        member.getLoanList().add(new Loan());
+        member.getLoanList().add(new Loan());
+        member.getLoanList().add(new Loan());
+        member.getLoanList().add(new Loan());
+        member.setLogin("george");
         Loan loan = new Loan();
-        Member member = memberManager1.getMemberById(1);
-        System.out.println(member.getLogin());
         loan.setBorrower(member);
-        Book book = bookManager1.getBookById(1);
+        Book book = new Book();
+        book.setId(3);
+        book.setTitle("borring");
         loan.setBook(book);
-        //when(bookManager.isAvailable(1)).thenReturn(true);
-        //when(memberManager.getMemberById(2)).thenReturn(member);
-        assertEquals("max number of books rented reached", loanManager.addLoan(loan));
+        loanManager1.setBookManager(bookManager);
+        when(bookManager.isAvailable(anyInt())).thenReturn(true);
+        loanManager1.setMemberManager(memberManager2);
+        when(memberManager2.getMemberById(2)).thenReturn(member);
+        System.out.println("loan: "+member.getLoanList().size());
+        LoanDAOImpl loanDAO = mock(LoanDAOImpl.class);
+        loanManager1.setLoanDAO(loanDAO);
+        assertEquals("max number of books rented reached", loanManager1.addLoan(loan));
     }
 
     @Test

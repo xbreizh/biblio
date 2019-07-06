@@ -312,7 +312,7 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should add 20mn to current date")
-    void adding20MnToCurrentDate(){
+    void adding20MnToCurrentDate() {
         Date now = memberManager.getNow();
         Calendar c = Calendar.getInstance();
         c.setTime(now);
@@ -435,7 +435,7 @@ class MemberManagerImplTest {
         String password = "password";
         assertAll(
                 () -> assertFalse(mgr.resetPassword(null, password)),
-                () -> assertFalse(mgr.resetPassword(login,  null))
+                () -> assertFalse(mgr.resetPassword(login, null))
         );
 
 
@@ -462,7 +462,7 @@ class MemberManagerImplTest {
         member.setEmail(email);
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         when(memberDAO.updateMember(member)).thenReturn(true);
-        assertTrue(memberManager.resetPassword(login,  anyString()));
+        assertTrue(memberManager.resetPassword(login, anyString()));
 
     }
 

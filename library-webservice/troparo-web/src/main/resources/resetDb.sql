@@ -70,6 +70,8 @@ VALUES (current_timestamp, '2019-01-17 17:22:58.013', 'POLI@KOL.FR', 'JOHN', 'PO
         '$2a$10$h0swcQCaOyuJ2CffLkVRn.vj.L2VaAqXCH2rRFGhGArN0YjVGktFK', 'USER', '62751f44-b7db-49f5-a19c-5b98edef50db')
      , ('2019-05-27 13:24:46.270', '2019-01-16 18:58:19.604', 'LOKI@LOKI.LOKII', 'JEAN', 'MOKOTI', 'LOKII',
         '$2a$10$cG0Byw7K1qHl8yBa71T4UOjDUevz4XKueiRO3rLW9BjOMBwRIdpcu', 'ADMIN', '1b0e0a5b-ae4f-41cf-a600-b8b26e2ec013')
+     , ('2019-07-06 10:43:55', '2019-07-06 10:42:06', 'mom.o56@gmail.rok', 'MAURICE', 'LOMBARD', 'MOMO56',
+        '$2a$10$BtyyTuY/Gt9fxZwSW5wINuapTewFUqxwomwXrsI/GQoUpI93YQvoy', 'REGULAR', '24ef3fb5-e487-4d37-872b-822470a14556')
 ;
 
 INSERT INTO public.book (author, edition, insert_date, isbn, keywords, nb_pages, publicationyear, title)

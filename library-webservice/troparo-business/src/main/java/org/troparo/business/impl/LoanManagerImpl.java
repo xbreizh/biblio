@@ -10,6 +10,7 @@ import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
+import org.troparo.model.Member;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -79,6 +80,8 @@ public class LoanManagerImpl implements LoanManager {
             return "book is not available: " + loan.getBook().getId();
         }
         // checks if borrower can borrow
+        System.out.println(memberManager);
+        System.out.println(memberManager.getMemberById(loan.getBorrower().getId()));
         if (memberManager.getMemberById(loan.getBorrower().getId()).getLoanList().size() < maxBooks) {
             loanDAO.addLoan(loan);
         } else {

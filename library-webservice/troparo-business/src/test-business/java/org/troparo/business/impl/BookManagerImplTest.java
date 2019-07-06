@@ -32,8 +32,8 @@ class BookManagerImplTest {
     void init() {
         bookDAO = mock(BookDAO.class);
         bookManager = new BookManagerImpl();
-        bookManager.setBookDAO(bookDAO);
         stringValidatorBook = mock(StringValidatorBook.class);
+        bookManager.setBookDAO(bookDAO);
         bookManager.setStringValidatorBook(stringValidatorBook);
     }
 
@@ -68,6 +68,7 @@ class BookManagerImplTest {
         book.setKeywords("un");
         when(stringValidatorBook.validateExpression(anyString(), anyString())).thenReturn(true);
         when(bookDAO.existingISBN("ISBN234")).thenReturn(false);
+        when(bookDAO.addBook(book)).thenReturn(true);
         assertEquals("", bookManager.addBook(book));
 
     }

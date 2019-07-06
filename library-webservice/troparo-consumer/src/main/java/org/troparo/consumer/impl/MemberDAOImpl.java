@@ -62,7 +62,7 @@ public class MemberDAOImpl implements MemberDAO {
     public Member getMemberById(int id) {
         logger.info("id passed: " + id);
         request = "From Member where id = :id";
-
+        System.out.println("session: "+sessionFactory);
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
         query.setParameter("id", id);
         try {

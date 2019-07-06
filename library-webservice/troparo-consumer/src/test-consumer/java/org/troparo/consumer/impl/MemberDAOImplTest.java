@@ -13,8 +13,6 @@ import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -48,13 +46,13 @@ class MemberDAOImplTest {
     @DisplayName("should not insert null member")
     void addMember1() {
         memberDAO.addMember(null);
-        assertEquals(2, memberDAO.getAllMembers().size());
+        assertEquals(3, memberDAO.getAllMembers().size());
     }
 
     @Test
     @DisplayName("should return all members")
     void getAllMembers() {
-        assertEquals(2, memberDAO.getAllMembers().size());
+        assertEquals(3, memberDAO.getAllMembers().size());
     }
 
     @Test
@@ -81,7 +79,7 @@ class MemberDAOImplTest {
     @Test
     @DisplayName("should return null if id not existing")
     void getMemberById1() {
-        assertNull(memberDAO.getMemberById(3));
+        assertNull(memberDAO.getMemberById(33));
 
     }
 
@@ -135,7 +133,7 @@ class MemberDAOImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("login", "o");
         map.put("email", "@");
-        assertEquals(2, memberDAO.getMembersByCriterias(map).size());
+        assertEquals(3, memberDAO.getMembersByCriterias(map).size());
     }
 
     @Test

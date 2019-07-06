@@ -6,10 +6,14 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
+import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
+import org.troparo.model.Mail;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
@@ -23,21 +27,28 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Transactional
 class MailManagerImplTest {
 
-    @Inject
+    /*@Inject*/
     private MailManager mailManager;
 
-    @BeforeEach
-    void init() {
+    private LoanManagerImpl loanManager;
 
+    @BeforeEach
+    void init(){
+        mailManager = new MailManagerImpl();
+        loanManager = new LoanManagerImpl();
+        mailManager.setLoanManager(loanManager);
+        LoanDAO loanDAO = new LoanDAOImpl();
+        loanManager.setLoanDAO(loanDAO);
     }
+
 
     @Test
     @DisplayName("should set loanmanager")
     void setLoanManager() {
-        LoanManager loanManager = new LoanManagerImpl();
-        mailManager.setLoanManager(loanManager);
+
         assertEquals(loanManager, mailManager.getLoanManager());
     }
 
@@ -50,7 +61,7 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should return password ResetList")
-    void convertMemberListIntoMailList(){
+    void convertMemberListIntoMailList() {
         MailManagerImpl mailManager = new MailManagerImpl();
         List<Member> memberList = new ArrayList<>();
         Member member = new Member();
@@ -62,9 +73,9 @@ class MailManagerImplTest {
         member.setEmail(email);
         memberList.add(member);
         assertAll(
-                ()-> assertEquals(login,mailManager.convertMemberListIntoMailList(memberList).get(0).getLogin() ),
-                ()-> assertEquals(token,mailManager.convertMemberListIntoMailList(memberList).get(0).getToken() ),
-                ()-> assertEquals(email,mailManager.convertMemberListIntoMailList(memberList).get(0).getEmail() )
+                () -> assertEquals(login, mailManager.convertMemberListIntoMailList(memberList).get(0).getLogin()),
+                () -> assertEquals(token, mailManager.convertMemberListIntoMailList(memberList).get(0).getToken()),
+                () -> assertEquals(email, mailManager.convertMemberListIntoMailList(memberList).get(0).getEmail())
 
         );
 
@@ -87,10 +98,10 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should remove TEMP from token")
-    void removeTempFromToken(){
+    void removeTempFromToken() {
         MailManagerImpl mailManager = new MailManagerImpl();
-        String newToken="dedekbnkjnkjn4nln4kl";
-        String oldToken="TEMP"+newToken;
+        String newToken = "dedekbnkjnkjn4nln4kl";
+        String oldToken = "TEMP" + newToken;
         assertEquals(newToken, mailManager.removeTempFromToken(oldToken));
 
     }

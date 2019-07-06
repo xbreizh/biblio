@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
@@ -12,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Transactional
 class StringValidatorMemberTest {
     @Inject
     private StringValidatorMember stringValidatorMember;
@@ -43,7 +45,7 @@ class StringValidatorMemberTest {
     @Test
     @DisplayName("should not validate Password")
     void invalidatePassword() {
-        String[] passwordList = {null, "?", "", "2", "ed.", "frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?", "ba", "Gee44", "bastien34$", "dededAd33$5"};
+        String[] passwordList = {null, "?", "", "2", "ed.", "frfr@fr", "/e3e3e3e3e3e3e3dfgdffgfgf", "?", "ba", "Gee44", "bastien34$", "dededAd$"};
         for (String password : passwordList
         ) {
             System.out.println("password: " + password);
@@ -210,7 +212,7 @@ class StringValidatorMemberTest {
                 () -> assertEquals("FirstName must be between 2 or 20 characters: ", stringValidatorMember.getException("firstName")),
                 () -> assertEquals("LastName must be between 2 or 20 characters: ", stringValidatorMember.getException("lastName")),
                 () -> assertEquals("Invalid Email: ", stringValidatorMember.getException("email")),
-                () -> assertEquals("Password should have between 2 and 10 characters, have at least a lower case, an upper case, a special character and a number", stringValidatorMember.getException("password")),
+                () -> assertEquals("Password should have between 2 and 10 characters, have at least a lower case, an upper case, a special character and a number: ", stringValidatorMember.getException("password")),
                 () -> assertEquals("Invalid entry", stringValidatorMember.getException("ploc"))
         );
     }

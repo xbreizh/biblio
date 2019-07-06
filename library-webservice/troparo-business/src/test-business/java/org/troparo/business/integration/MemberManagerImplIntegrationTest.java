@@ -1,6 +1,7 @@
 package org.troparo.business.integration;
 
 import org.apache.log4j.Logger;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql("classpath:resetDb.sql")
 @Transactional
 class MemberManagerImplIntegrationTest {
 
@@ -31,9 +33,13 @@ class MemberManagerImplIntegrationTest {
 
 
     @BeforeEach
-    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         logger.info("reset db");
+    }
+
+    @AfterEach
+    void finish(){
+        System.out.println("Size: "+memberManager.getMembers().size());
     }
 
     @Test
@@ -250,14 +256,14 @@ class MemberManagerImplIntegrationTest {
     void updateMember4() {
         Member member1 = memberManager.getMemberById(2);
         String email = "email@111.222.333.44444";
-        member1.setEmail(email);
+        member1.setEmail(email.toUpperCase());
         assertEquals("", memberManager.updateMember(member1));
     }
 
     @Test
     @DisplayName("should return \\wrong credentials\\ ")
     void getToken() {
-        assertEquals("wrong credentials", memberManager.getToken("LOKII", "123"));
+        assertEquals("wrong credentials", memberManager.getToken("LOKII", "222"));
     }
 
     @Test
