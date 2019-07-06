@@ -14,6 +14,7 @@ import org.troparo.entities.connect.ResetPasswordRequestType;
 import org.troparo.entities.member.*;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
+import org.troparo.services.connectservice.IConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
@@ -87,7 +88,7 @@ public class MemberManagerImpl implements MemberManager {
             resetPasswordRequestType.setPassword(password);
         logger.info("trying to reset");
         System.out.println(connectService);
-            return connectService.getConnectServicePort().resetPassword(resetPasswordRequestType).isReturn();
+            return getConnectServicePort().resetPassword(resetPasswordRequestType).isReturn();
        // }
        // return false;
     }
@@ -98,7 +99,13 @@ public class MemberManagerImpl implements MemberManager {
         requestPasswordResetLinkRequestType.setEmail(email);
         requestPasswordResetLinkRequestType.setLogin(login);
 
-        return connectService.getConnectServicePort().requestPasswordResetLink(requestPasswordResetLinkRequestType).isReturn();
+        return getConnectServicePort().requestPasswordResetLink(requestPasswordResetLinkRequestType).isReturn();
+    }
+
+
+
+    private IConnectService getConnectServicePort() {
+        return connectService.getConnectServicePort();
     }
 
     private IMemberService getMemberServicePort() {

@@ -348,8 +348,14 @@ public class MemberManagerImpl implements MemberManager {
         Member member = memberDAO.getMemberByLogin(login.toUpperCase());
         logger.info("member received: "+member);
         logger.info("generating password reset link");
-        if (member == null) {
+
+        if (member == null ) {
             logger.error("member not found / login probably incorrect");
+            return false;
+        }
+        // THAT PROCESS CAN'T BE USED FOR RESETTING SUPERADMIN ACCESS
+        if(member.getRole().equalsIgnoreCase("superAdmin")){
+            logger.error("that process can't be used for resetting superAdmin password");
             return false;
         }
         if (member.getEmail().equalsIgnoreCase(email)) {
