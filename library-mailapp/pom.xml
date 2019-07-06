@@ -50,6 +50,11 @@
                         </executions>
                     </plugin>
                 </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/main/resources/local</directory>
+                    </testResource>
+                </testResources>
             </build>
         </profile>
         <profile>
@@ -85,6 +90,11 @@
                         </executions>
                     </plugin>
                 </plugins>
+                <testResources>
+                    <testResource>
+                        <directory>src/main/resources/docker</directory>
+                    </testResource>
+                </testResources>
             </build>
         </profile>
     </profiles>

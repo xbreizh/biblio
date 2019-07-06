@@ -81,8 +81,8 @@ public class UserController {
 
     @PostMapping("/passwordResetSendEmail")
     public ModelAndView passwordResetSendEmail1(String login,  String email) throws BusinessExceptionConnect {
-        System.out.println("login: "+login);
-        System.out.println("email: "+email);
+        logger.info("login: "+login);
+        logger.info("email: "+email);
         ModelAndView mv = new ModelAndView();
         mv.addObject("login", login);
         mv.addObject("email", email);
@@ -95,9 +95,9 @@ public class UserController {
         return mv;
     }
 
-
-    @GetMapping("/passwordResetSendEmail")
+    @GetMapping("/redirectPasswordResetSendEmailForm")
     public ModelAndView passwordResetSendEmail(String login,  String email) throws BusinessExceptionConnect {
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("passwordResetSendEmail");
         return mv;

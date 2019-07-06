@@ -67,7 +67,7 @@ public class MemberServiceImpl implements IMemberService {
         member.setLogin(memberTypeIn.getLogin().toUpperCase());
         member.setFirstName(memberTypeIn.getFirstName().toUpperCase());
         member.setLastName(memberTypeIn.getLastName().toUpperCase());
-        member.setPassword(memberTypeIn.getPassword().toUpperCase());
+        member.setPassword(memberTypeIn.getPassword());
         member.setEmail(memberTypeIn.getEmail().toUpperCase());
         member.setRole(memberTypeIn.getRole().toUpperCase());
         logger.info("conversion memberType into member done");

@@ -134,7 +134,7 @@ class StringValidatorMemberTest {
         };
         for (String mail : mailListValid
         ) {
-            assertTrue(stringValidatorMember.validateExpression("email", mail));
+            assertTrue(stringValidatorMember.validateExpression("email", mail.toUpperCase()));
         }
     }
 
@@ -162,7 +162,7 @@ class StringValidatorMemberTest {
         for (String mail : mailListInvalid
         ) {
 
-            assertFalse(stringValidatorMember.validateExpression("email", mail));
+            assertFalse(stringValidatorMember.validateExpression("email", mail.toUpperCase()));
         }
     }
 

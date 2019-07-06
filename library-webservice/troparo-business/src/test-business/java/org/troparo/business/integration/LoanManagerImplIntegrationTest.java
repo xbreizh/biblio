@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
-@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class LoanManagerImplIntegrationTest {
     private Logger logger = Logger.getLogger(this.getClass().getName());
@@ -30,6 +29,7 @@ class LoanManagerImplIntegrationTest {
 
 
     @BeforeEach
+    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         System.out.println("db size loans : "+loanManager.getLoans().size());
         logger.info("reset db");

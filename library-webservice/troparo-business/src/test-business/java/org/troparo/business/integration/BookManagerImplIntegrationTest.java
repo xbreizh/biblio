@@ -19,7 +19,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
-@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class BookManagerImplIntegrationTest {
 
@@ -32,6 +31,7 @@ class BookManagerImplIntegrationTest {
 
 
     @BeforeEach
+    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         System.out.println("db size books: "+bookManager.getBooks().size());
         System.out.println("db size loans: "+loanManager.getLoans().size());

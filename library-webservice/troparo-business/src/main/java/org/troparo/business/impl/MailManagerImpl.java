@@ -79,11 +79,14 @@ public class MailManagerImpl implements MailManager {
     @Override
     public List<Mail> getPasswordResetList(String token) {
         List<Member> memberList = memberDAO.getPasswordResetList();
+        logger.info("number of member pwd to reset: "+memberList.size());
         for (Member member : memberList
         ) {
-            member.setToken(removeTempFromToken(member.getToken()));
-            member.setTokenExpiration(getTodaySDate());
-            memberDAO.updateMember(member);
+            if(member.getToken().startsWith("TEMP")) {
+                member.setToken(removeTempFromToken(member.getToken()));
+                member.setTokenExpiration(getTodaySDate());
+                memberDAO.updateMember(member);
+            }
         }
         return convertMemberListIntoMailList(memberList);
     }

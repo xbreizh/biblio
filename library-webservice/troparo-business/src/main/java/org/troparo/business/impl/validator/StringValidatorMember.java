@@ -77,7 +77,7 @@ public class StringValidatorMember {
             case "email":
                 return "Invalid Email: ";
             case "password":
-                return "Password should have between 2 and 10 characters, have at least a lower case, an upper case, a special character and a number";
+                return "Password should have between 2 and 10 characters, have at least a lower case, an upper case, a special character and a number: ";
             default:
                 return "Invalid entry";
         }

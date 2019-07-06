@@ -64,13 +64,16 @@ public class EmailManagerImpl {
         }
     }
 
-    @Scheduled(fixedRate = 500000)
+    @Scheduled(fixedRate = 2000000000)
     public void sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         String template = "docker/resetPassword.html";
         String subject = "subjectPasswordReset";
         String token = connectManager.authenticate();
         if (token != null) {
             List<Mail> passwordResetList = getPasswordResetList(token);
+            if(passwordResetList.size() > 0){
+                System.out.println("member received: "+passwordResetList.get(0));
+            }
             System.out.println("trying stuff: "+passwordResetList.size());
             sendEmail(template, subject, passwordResetList);
         }
