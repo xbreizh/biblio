@@ -71,10 +71,7 @@ public class EmailManagerImpl {
         String token = connectManager.authenticate();
         if (token != null) {
             List<Mail> passwordResetList = getPasswordResetList(token);
-            if(passwordResetList.size() > 0){
-                System.out.println("member received: "+passwordResetList.get(0));
-            }
-            System.out.println("trying stuff: "+passwordResetList.size());
+
             sendEmail(template, subject, passwordResetList);
         }
     }
@@ -189,7 +186,7 @@ public class EmailManagerImpl {
     //Method to read HTML file as a String
     String readContentFromFile(File file) throws IOException {
         StringBuilder contents = new StringBuilder();
-
+        String todelete = "";
         //use buffering, reading one line at a time
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -200,7 +197,7 @@ public class EmailManagerImpl {
                 contents.append(System.getProperty("line.separator"));
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            todelete = e.getMessage();
         } finally {
             reader.close();
         }

@@ -55,7 +55,6 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public boolean addBook(Book book) {
         logger.info("Book: " + book);
-        System.out.println("till here");
         try {
             sessionFactory.getCurrentSession().persist(book);
         } catch (Exception e) {
