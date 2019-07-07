@@ -53,7 +53,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         logger.info("token found: " + token);
 
 
-        if (!token.equals("wrong login or pwd") && exception.isEmpty()) {
+        if (!token.equals("wrong credentials") && exception.isEmpty()) {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());

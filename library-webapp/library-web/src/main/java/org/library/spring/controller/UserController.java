@@ -11,12 +11,14 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -41,15 +43,40 @@ public class UserController {
         logger.info("controller: " + authentication.getName());
 
         Member member = memberManager.getMember(token, login);
-        logger.info("Member retrieved: " + member);
-        logger.info("loan list: " + member.getLoanList());
-
         ModelAndView mv = new ModelAndView();
-        mv.addObject("loanList", member.getLoanList());
-        mv.addObject("member", member);
-        mv.setViewName("home");
+        if(member!=null) {
+            logger.info("Member retrieved: " + member);
+            logger.info("loan list: " + member.getLoanList());
+
+            mv.addObject("loanList", member.getLoanList());
+            mv.addObject("member", member);
+            mv.setViewName("home");
+        }else{
+            mv.setViewName("login");
+        }
         return mv;
     }
+
+    @RequestMapping("/error")
+    public ModelAndView error(Principal user, HttpServletRequest req) {
+        logger.info("error");
+        ModelAndView model = new ModelAndView();
+        model.addObject("errorCode", "Error 403");
+
+        logger.info(req.getAttribute("javax.servlet.error.status_code"));
+        if (user != null) {
+            model.addObject("msg", "Hi " + user.getName()
+                    + ", you do not have permission to access this page!");
+        } else {
+            model.addObject("msg",
+                    "You do not have permission to access this page!");
+        }
+
+        model.setViewName("403");
+        return model;
+    }
+
+
 
     @GetMapping("/login")
     public ModelAndView login() {
@@ -62,20 +89,12 @@ public class UserController {
 
 
     @GetMapping("/passwordReset")
-    public ModelAndView passwordReset(String login,  String token) throws BusinessExceptionLoan {
-       /* Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();*/
-       /* System.out.println("View  /d login: "+login+" / password: "+password+" / token: "+token);
-        logger.info("trying to resetPassword: " + login);
-       // memberManager.renewLoan(token, login);
-        memberManager.resetPassword(login, password, token);*/
-        System.out.println("login: "+login);
-        System.out.println("token: "+token);
+    public ModelAndView passwordReset(String login,  String token) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("login", login);
         mv.addObject("token", token);
 
-        mv.setViewName("passwordReset");
+        mv.setViewName("passwordReset/passwordReset");
         return mv;
     }
 
@@ -88,18 +107,18 @@ public class UserController {
         mv.addObject("email", email);
         if(memberManager.sendResetPasswordlink(login, email)){
 
-            mv.setViewName("passwordResetLinkOk");
+            mv.setViewName("passwordReset/passwordResetLinkOk");
         }else{
-            mv.setViewName("passwordResetLinkKo");
+            mv.setViewName("passwordReset/passwordResetLinkKo");
         }
         return mv;
     }
 
-    @GetMapping("/redirectPasswordResetSendEmailForm")
-    public ModelAndView passwordResetSendEmail(String login,  String email) throws BusinessExceptionConnect {
+    @GetMapping("/recover")
+    public ModelAndView passwordResetSendEmail() {
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("passwordResetSendEmail");
+        mv.setViewName("passwordReset/passwordResetSendEmail");
         return mv;
     }
 
@@ -120,7 +139,7 @@ public class UserController {
             } catch (BusinessExceptionConnect businessExceptionConnect) {
                 businessExceptionConnect.printStackTrace();
             }
-            return new ModelAndView("passwordResetOk");
+            return new ModelAndView("passwordReset/passwordResetOk");
         }
 
     }
@@ -131,14 +150,6 @@ public class UserController {
 
     }
 
-   /* @GetMapping("/passwordResetOk")
-    public ModelAndView passwordResetOk() {
-        logger.info("passwordResetOk");
-        ModelAndView mv = new ModelAndView();
-
-        mv.setViewName("passwordResetOk");
-        return mv;
-    }*/
 
 
     @PostMapping("/renew")
@@ -168,7 +179,6 @@ public class UserController {
     @GetMapping("/mySpace")
     public ModelAndView mySpace() {
         ModelAndView mv = new ModelAndView();
-        // Get authenticated user name from SecurityContext
 
         mv.setViewName("mySpace");
 

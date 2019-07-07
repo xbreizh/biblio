@@ -11,6 +11,7 @@ CREATE TABLE public."member" (
         "password" varchar(255) NULL,
         "role" varchar(255) NULL,
         "token" varchar(255) NULL,
+        "tokenexpiration" timestamp NULL,
         CONSTRAINT member_pkey PRIMARY KEY (id)
 );
 

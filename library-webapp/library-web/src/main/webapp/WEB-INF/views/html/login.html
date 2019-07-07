@@ -2,13 +2,11 @@
 <html layout:decorate="~{fragments/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
 
-<div th:replace="fragments/header :: head1"></div>
+<div th:replace="fragments/header :: head-box"></div>
+
 <body>
 
 <div class="container">
-    <div class="row">
-        <div class="col-lg-3"></div>
-        <div class="col-lg-3">
             <div layout:fragment="content" th:remove="tag">
 
                 <h1></h1>
@@ -47,20 +45,17 @@
                                        name="login-submit"
                                        type="submit"
                                        value="Log In">
+                                <a href="recover">Password Reset</a>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
+</div>
 
-        </div>
-    </div>
-    <div class="col-lg-3">
-        <a href="redirectPasswordResetSendEmailForm">Password Reset</a>
-    </div>
 
 
 </div>
-<div th:replace="fragments/header :: foot"></div>
-
+<!--<div th:replace="fragments/header :: foot"></div>-->
+</body>
 </html>
