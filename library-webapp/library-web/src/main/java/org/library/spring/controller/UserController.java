@@ -9,24 +9,21 @@ import org.library.model.Member;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.io.IOException;
 import java.security.Principal;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
 @Controller
+@ControllerAdvice
 public class UserController {
     @Inject
     MemberManager memberManager;
@@ -38,12 +35,15 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(UserController.class);
 
-    @ExceptionHandler({IOException.class, SQLException.class})
-    public ModelAndView handleException(Exception ex) {
-
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handleNoHandlerFoundException(NoHandlerFoundException ex) {
         ModelAndView model = new ModelAndView();
         model.addObject("exception", ex.getMessage());
-        model.setViewName("error");
+        if (ex.getMessage().startsWith("No handler found")) {
+            model.setViewName("404");
+        } else {
+            model.setViewName("error");
+        }
 
         return model;
     }
