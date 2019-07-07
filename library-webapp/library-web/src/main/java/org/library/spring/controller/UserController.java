@@ -7,6 +7,7 @@ import org.library.business.contract.MemberManager;
 import org.library.model.Book;
 import org.library.model.Member;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,6 +21,7 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import java.security.Principal;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -35,25 +37,41 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(UserController.class);
 
+
     @GetMapping("/")
     public ModelAndView home() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
         logger.info("controller: " + authentication.getName());
-
         Member member = memberManager.getMember(token, login);
         ModelAndView mv = new ModelAndView();
-        if(member!=null) {
+        if (member != null) {
             logger.info("Member retrieved: " + member);
             logger.info("loan list: " + member.getLoanList());
 
             mv.addObject("loanList", member.getLoanList());
             mv.addObject("member", member);
             mv.setViewName("home");
-        }else{
+        } else {
             mv.setViewName("login");
         }
+        return mv;
+    }
+
+    @GetMapping("/login")
+    public ModelAndView login() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("login");
+
+        // check if user already logged in
+        if (!authentication.getPrincipal().toString().equals("anonymousUser")){
+            mv.addObject("login",authentication.getPrincipal().toString());
+            mv.setViewName("connected");
+        }
+
         return mv;
     }
 
@@ -77,19 +95,8 @@ public class UserController {
     }
 
 
-
-    @GetMapping("/login")
-    public ModelAndView login() {
-        logger.info("login");
-        ModelAndView mv = new ModelAndView();
-
-        mv.setViewName("login");
-        return mv;
-    }
-
-
     @GetMapping("/passwordReset")
-    public ModelAndView passwordReset(String login,  String token) {
+    public ModelAndView passwordReset(String login, String token) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("login", login);
         mv.addObject("token", token);
@@ -99,16 +106,16 @@ public class UserController {
     }
 
     @PostMapping("/passwordResetSendEmail")
-    public ModelAndView passwordResetSendEmail1(String login,  String email) throws BusinessExceptionConnect {
-        logger.info("login: "+login);
-        logger.info("email: "+email);
+    public ModelAndView passwordResetSendEmail1(String login, String email) throws BusinessExceptionConnect {
+        logger.info("login: " + login);
+        logger.info("email: " + email);
         ModelAndView mv = new ModelAndView();
         mv.addObject("login", login);
         mv.addObject("email", email);
-        if(memberManager.sendResetPasswordlink(login, email)){
+        if (memberManager.sendResetPasswordlink(login, email)) {
 
             mv.setViewName("passwordReset/passwordResetLinkOk");
-        }else{
+        } else {
             mv.setViewName("passwordReset/passwordResetLinkKo");
         }
         return mv;
@@ -123,17 +130,16 @@ public class UserController {
     }
 
 
-
     @PostMapping("/passwordReset1")
-    public ModelAndView passwordReset1( String login, String password, String confirmPassword, String token){
+    public ModelAndView passwordReset1(String login, String password, String confirmPassword, String token) {
         ModelAndView mv = new ModelAndView();
         mv.addObject("login", login);
         mv.addObject("token", token);
-        if(!passwordCheck(password, confirmPassword)){
+        if (!passwordCheck(password, confirmPassword)) {
             mv.setViewName("redirect:/passwordReset");
-            System.out.println("View  /d login: "+login+" / password: "+password+" / password2: "+confirmPassword+" / token: "+token);
+            System.out.println("View  /d login: " + login + " / password: " + password + " / password2: " + confirmPassword + " / token: " + token);
             return mv;
-        }else{
+        } else {
             try {
                 memberManager.resetPassword(login, password, token);
             } catch (BusinessExceptionConnect businessExceptionConnect) {
@@ -145,11 +151,10 @@ public class UserController {
     }
 
     private boolean passwordCheck(String password, String confirmPassword) {
-        if(password.isEmpty() || !password.equals(confirmPassword))return false;
+        if (password.isEmpty() || !password.equals(confirmPassword)) return false;
         return true;
 
     }
-
 
 
     @PostMapping("/renew")
