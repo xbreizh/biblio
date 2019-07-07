@@ -7,9 +7,9 @@ import org.library.business.contract.MemberManager;
 import org.library.model.Book;
 import org.library.model.Member;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,8 +20,9 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Principal;
-import java.util.Collection;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +37,16 @@ public class UserController {
 
 
     private Logger logger = Logger.getLogger(UserController.class);
+
+    @ExceptionHandler({IOException.class, SQLException.class})
+    public ModelAndView handleException(Exception ex) {
+
+        ModelAndView model = new ModelAndView();
+        model.addObject("exception", ex.getMessage());
+        model.setViewName("error");
+
+        return model;
+    }
 
 
     @GetMapping("/")
@@ -67,15 +78,15 @@ public class UserController {
         mv.setViewName("login");
 
         // check if user already logged in
-        if (!authentication.getPrincipal().toString().equals("anonymousUser")){
-            mv.addObject("login",authentication.getPrincipal().toString());
+        if (!authentication.getPrincipal().toString().equals("anonymousUser")) {
+            mv.addObject("login", authentication.getPrincipal().toString());
             mv.setViewName("connected");
         }
 
         return mv;
     }
 
-    @RequestMapping("/error")
+    @RequestMapping("/denied")
     public ModelAndView error(Principal user, HttpServletRequest req) {
         logger.info("error");
         ModelAndView model = new ModelAndView();

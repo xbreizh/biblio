@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html layout:decorate="~{fragments/layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
+
+<div th:replace="fragments/header :: head-box"></div>
+
+<body>
+
+<div class="container">
+
+    <h1>Something went wrong</h1>
+    <img th:src="@{/img/error.png}" alt="error"/>
+</div>
+</body>
+</html>
