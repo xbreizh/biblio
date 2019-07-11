@@ -1,5 +1,4 @@
 <div th:fragment="alert" xmlns:th="http://www.w3.org/1999/xhtml">
-   <!-- <div style="display:none; height: 50px; background-color: blue" id="popup">plokplok</div>-->
 
     <div th:if="${overdue}">
         <script>
@@ -12,92 +11,9 @@
                     }, document.getElementById("myLoans").style.display = "block");
                     sessionStorage.setItem('popState','shown')
                 }
-
-                /* $('#popup-close').click(function(e) // You are clicking the close button
-                 {
-                     $('#popup').fadeOut(); // Now the pop up is hiden.
-                 });
-                 $('#popup').click(function(e)
-                 {
-                     $('#popup').fadeOut();
-                 });*/
             });
         </script>
-
     </div>
 
-
-
-    <!-- <div th:with="popupValue = ${popup}">
-         <div th:if="${popupValue}">
-             <h2>Something else</h2>
-         </div>
-         <div th:unless="${popupValue}">
-
-
-                 <form method="post" th:action="@{/}">
-                     <input
-                             id="popup"
-                             name="popup"
-                             th:value="true"
-                             type="text">
-                     <div th:if="${not #lists.isEmpty(member.loanList)}">
-                     <input class="form-control btn btn-info"
-                            id="reset-submit"
-                            name="reset-submit"
-                            type="submit"
-                            value="You have some Overdue Items">
-                     </div>
-                     <div th:if="${#lists.isEmpty(member.loanList)}">
-                         <input class="form-control btn btn-info"
-                                id="welcome"
-                                name="welcome"
-                                type="submit"
-                                value="Welcome back!">
-                     </div>
-                 </form>
-
-
-         </div>
-     </div>-->
 </div>
-    <!--    <h2>Value for popup: <td th:text="${popup}"></td> </h2>
-        <td>
-        <div th:if="${!popup}">
-            <div th:if="${not #lists.isEmpty(member.loanList)}">
 
-                &lt;!&ndash;   <script>
-                       window.onload = function popup() {
-                           alert("You have some overdue items!");
-                       }
-                   </script>&ndash;&gt;
-                &lt;!&ndash; <form method="post" th:action="@{/}">
-                         <input
-                                id="popup"
-                                name="popup"
-                                th:value="true"
-                                type="text">
-                                 <input class="form-control btn btn-info"
-                                        id="reset-submit"
-                                        name="reset-submit"
-                                        type="submit"
-                                        value="You have some Overdue Items">
-
-                 </form>&ndash;&gt;
-
-            </div>
-        </div>
-        <div th:unless="${popup}">
-            &lt;!&ndash; <form method="post" th:action="@{/}">
-                 <input
-                         name="popup"
-                         th:value="true"
-                         type="text">
-                 <input class="form-control btn btn-info"
-                        name="reset-submit"
-                        type="submit"
-                        value="Welcome back!">
-
-             </form>&ndash;&gt;
-        </div>
-    </td></div>-->

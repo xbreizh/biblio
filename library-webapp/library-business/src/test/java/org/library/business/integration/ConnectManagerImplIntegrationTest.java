@@ -72,7 +72,7 @@ class ConnectManagerImplIntegrationTest {
         Authentication auth1 = new UsernamePasswordAuthenticationToken(login, pwd, result);
         IConnectService iConnectService = mock(IConnectService.class);
         GetTokenResponseType responseType = new GetTokenResponseType();
-        String token = "wrong login or pwd";
+        String token = "wrong credentials";
         responseType.setReturn(token);
         when(connectService.getConnectServicePort()).thenReturn(iConnectService);
         when(connectService.getConnectServicePort().getToken(any(GetTokenRequestType.class))).thenReturn(responseType);
