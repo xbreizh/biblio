@@ -2,6 +2,7 @@ package org.troparo.consumer.impl;
 
 
 import org.apache.log4j.Logger;
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.troparo.consumer.contract.BookDAO;
@@ -45,18 +46,22 @@ public class BookDAOImpl implements BookDAO {
     public List<Book> getBooks() {
         List<Book> bookList = new ArrayList<>();
         try {
-            return sessionFactory.getCurrentSession().createQuery("From Book", cl).getResultList();
+            return getCurrentSession().createQuery("From Book", cl).getResultList();
         } catch (Exception e) {
             return bookList;
         }
 
     }
 
+    Session getCurrentSession() {
+        return sessionFactory.getCurrentSession();
+    }
+
     @Override
     public boolean addBook(Book book) {
         logger.info("Book: " + book);
         try {
-            sessionFactory.getCurrentSession().persist(book);
+            getCurrentSession().persist(book);
         } catch (Exception e) {
             logger.error("error while persisting: " + e.getMessage());
             return false;
@@ -70,7 +75,7 @@ public class BookDAOImpl implements BookDAO {
         logger.info("id: " + id);
         request = "From Book where id = :id";
 
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+        Query query = getCurrentSession().createQuery(request, cl);
         query.setParameter("id", id);
         try {
             return (Book) query.getSingleResult();
@@ -86,7 +91,7 @@ public class BookDAOImpl implements BookDAO {
         isbn = isbn.toUpperCase();
         request = "From Book where isbn = :isbn";
 
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+        Query query = getCurrentSession().createQuery(request, cl);
         query.setParameter("isbn", isbn);
         if (!query.getResultList().isEmpty()) {
             logger.info("records found: " + query.getResultList().size());
@@ -114,8 +119,9 @@ public class BookDAOImpl implements BookDAO {
         Query query;
         try {
             logger.info("request: " + request);
-            sessionFactory.getCurrentSession().clear();
-            query = sessionFactory.getCurrentSession().createNativeQuery(request, Book.class);
+            getCurrentSession().clear();
+            query = getCurrentSession().createNativeQuery(request, this.cl);
+
             for (Map.Entry<String, String> entry : map.entrySet()
             ) {
                 logger.info("criteria: " + entry.getValue());
@@ -147,7 +153,7 @@ public class BookDAOImpl implements BookDAO {
         logger.info("Book title: " + book.getTitle() +
                 "\nBook author: " + book.getAuthor());
         try {
-            sessionFactory.getCurrentSession().update(book);
+            getCurrentSession().update(book);
         } catch (Exception e) {
             logger.error("error while updating: " + e.getMessage());
             return false;
@@ -159,7 +165,7 @@ public class BookDAOImpl implements BookDAO {
     public boolean remove(Book book) {
         logger.info("Trying to delete" + book);
         try {
-            sessionFactory.getCurrentSession().delete(book);
+            getCurrentSession().delete(book);
         } catch (Exception e) {
             logger.error("error while removing: " + e.getMessage());
             return false;
@@ -171,7 +177,7 @@ public class BookDAOImpl implements BookDAO {
     public int getAvailable(String isbn) {
         logger.info("isbn passed: " + isbn);
         String request = "select count(*) from Book where isbn = :isbn and id not in(select book.id from Loan where endDate is null)";
-        Query query = sessionFactory.getCurrentSession().createQuery(request);
+        Query query = getCurrentSession().createQuery(request);
         query.setParameter("isbn", isbn);
         long count = (long) query.getSingleResult();
         logger.info("result found: " + count);
@@ -186,7 +192,7 @@ public class BookDAOImpl implements BookDAO {
 
         // checking if currently borrowed
         String request1 = "select book.id from Loan where  book.id = :id";
-        Query query1 = sessionFactory.getCurrentSession().createQuery(request1);
+        Query query1 = getCurrentSession().createQuery(request1);
         query1.setParameter("id", id);
         logger.info("size: "+query1.getResultList().size());
         return query1.getResultList().isEmpty();// if not currently borrowed, then available
@@ -199,7 +205,7 @@ public class BookDAOImpl implements BookDAO {
         isbn = isbn.toUpperCase();
         request = "From Book where isbn = :isbn";
 
-        Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+        Query query = getCurrentSession().createQuery(request, cl);
         query.setParameter("isbn", isbn);
         try {
             return (Book) query.getResultList().get(0);

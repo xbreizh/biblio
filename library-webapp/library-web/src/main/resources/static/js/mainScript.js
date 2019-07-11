@@ -16,3 +16,7 @@ function toggle_display(id) {
     else
         e.style.display = 'none';
 }
+
+
+
+

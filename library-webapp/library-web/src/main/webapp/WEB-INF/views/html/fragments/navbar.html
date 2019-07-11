@@ -9,9 +9,11 @@
                      width="42"/>
                 Troparo
             </div>
+
             <form method="post" th:action="@{/logout}">
-                <input type="submit" value="Sign Out"/>
+                <div id="button" onClick="sessionStorage.setItem('popState', 'hide')"><input type="submit" value="Sign Out"/></div>
             </form>
+
         </div>
     </div>
 

@@ -5,6 +5,7 @@ import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
 import org.library.model.Book;
+import org.library.model.Loan;
 import org.library.model.Member;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,6 +33,8 @@ public class UserController {
     @Inject
     LoanManager loanManager;
 
+    static final String LOGIN = "login";
+
 
     private Logger logger = Logger.getLogger(UserController.class);
 
@@ -49,7 +52,7 @@ public class UserController {
     }
 
 
-    @GetMapping("/")
+    @RequestMapping("/")
     public ModelAndView home() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
@@ -59,15 +62,30 @@ public class UserController {
         ModelAndView mv = new ModelAndView();
         if (member != null) {
             logger.info("Member retrieved: " + member);
-            logger.info("loan list: " + member.getLoanList());
-
+            checkOverdue(member, mv);
             mv.addObject("loanList", member.getLoanList());
             mv.addObject("member", member);
+            addingPopup(mv);
             mv.setViewName("home");
         } else {
-            mv.setViewName("login");
+            mv.setViewName(LOGIN);
         }
         return mv;
+    }
+
+    private void checkOverdue(Member member, ModelAndView mv) {
+        for (Loan loan : member.getLoanList()
+        ) {
+            if (loan.getStatus().equalsIgnoreCase("OVERDUE")) {
+                mv.addObject("overdue", true);
+                logger.info("overdue found");
+                break;
+            }
+        }
+    }
+
+    private void addingPopup(ModelAndView mv) {
+        mv.addObject("popup", true);
     }
 
     @GetMapping("/login")
@@ -75,11 +93,11 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("login");
+        mv.setViewName(LOGIN);
 
         // check if user already logged in
         if (!authentication.getPrincipal().toString().equals("anonymousUser")) {
-            mv.addObject("login", authentication.getPrincipal().toString());
+            mv.addObject(LOGIN, authentication.getPrincipal().toString());
             mv.setViewName("connected");
         }
 
@@ -109,7 +127,7 @@ public class UserController {
     @GetMapping("/passwordReset")
     public ModelAndView passwordReset(String login, String token) {
         ModelAndView mv = new ModelAndView();
-        mv.addObject("login", login);
+        mv.addObject(LOGIN, login);
         mv.addObject("token", token);
 
         mv.setViewName("passwordReset/passwordReset");
@@ -118,10 +136,10 @@ public class UserController {
 
     @PostMapping("/passwordResetSendEmail")
     public ModelAndView passwordResetSendEmail1(String login, String email) throws BusinessExceptionConnect {
-        logger.info("login: " + login);
+        logger.info(LOGIN + login);
         logger.info("email: " + email);
         ModelAndView mv = new ModelAndView();
-        mv.addObject("login", login);
+        mv.addObject(LOGIN, login);
         mv.addObject("email", email);
         if (memberManager.sendResetPasswordlink(login, email)) {
 
@@ -144,17 +162,17 @@ public class UserController {
     @PostMapping("/passwordReset1")
     public ModelAndView passwordReset1(String login, String password, String confirmPassword, String token) {
         ModelAndView mv = new ModelAndView();
-        mv.addObject("login", login);
+        mv.addObject(LOGIN, login);
         mv.addObject("token", token);
         if (!passwordCheck(password, confirmPassword)) {
             mv.setViewName("redirect:/passwordReset");
-            System.out.println("View  /d login: " + login + " / password: " + password + " / password2: " + confirmPassword + " / token: " + token);
+            logger.info("View  /d login: " + login + " / password: " + password + " / password2: " + confirmPassword + " / token: " + token);
             return mv;
         } else {
             try {
                 memberManager.resetPassword(login, password, token);
             } catch (BusinessExceptionConnect businessExceptionConnect) {
-                businessExceptionConnect.printStackTrace();
+                logger.error(businessExceptionConnect.getMessage());
             }
             return new ModelAndView("passwordReset/passwordResetOk");
         }
@@ -191,6 +209,7 @@ public class UserController {
         logger.info("principal: " + principal);
         return "home";
     }
+
 
     @GetMapping("/mySpace")
     public ModelAndView mySpace() {
