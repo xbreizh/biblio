@@ -10,7 +10,7 @@
             <th>ISBN</th>
             <th>Title</th>
             <th>Status</th>
-            <th></th>
+            <th>Renewable</th>
         </tr>
         </thead>
 
@@ -36,22 +36,19 @@
                     <div>
                         <form method="post" th:action="@{/renew}" th:object="${renew}">
 
-                            <button class="btn btn-outline-info">
+
                                 <input id="id" name="id" th:value="${loan.id}" type="hidden">
+
+
+                            <button type="submit" class="btn btn-outline-info">Renew
                             </button>
-
-
-                            <input type="submit" value="Renew">
-
 
                         </form>
                     </div>
 
                 </div>
                 <div th:unless="${loan.renewable}">
-                    <button class="btn btn-outline-warning">
-                        Renewed
-                    </button>
+                    <img th:src="@{/img/forbidden.jpg}" alt="forbidden" style="width: 80px;height: auto"/>
                 </div>
             </td>
             </tr>

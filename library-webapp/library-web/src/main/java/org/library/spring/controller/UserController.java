@@ -19,6 +19,7 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.soap.SOAPFaultException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +39,7 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(UserController.class);
 
-    @ExceptionHandler(NoHandlerFoundException.class)
+    @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class})
     public ModelAndView handleNoHandlerFoundException(NoHandlerFoundException ex) {
         ModelAndView model = new ModelAndView();
         model.addObject("exception", ex.getMessage());
@@ -50,6 +51,8 @@ public class UserController {
 
         return model;
     }
+
+
 
 
     @RequestMapping("/")

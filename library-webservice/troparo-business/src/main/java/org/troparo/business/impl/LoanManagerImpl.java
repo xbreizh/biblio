@@ -13,6 +13,7 @@ import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -141,22 +142,18 @@ public class LoanManagerImpl implements LoanManager {
         if (loan.getEndDate() != null) {
             return "loan already terminated: " + loan.getEndDate();
         }
-        Date start = loan.getStartDate();
-        Date end = loan.getPlannedEndDate();
 
-        int diffInDays = (int) ((end.getTime() - start.getTime())
-                / (1000 * 60 * 60 * 24));
-        logger.info("diff days is: " + diffInDays);
-        if (diffInDays > loanDuration) {
-            return "loan has already been renewed";
-        } else {
+        if (isRenewable(id)) {
             Calendar cal = Calendar.getInstance();
             cal.setTime(loan.getPlannedEndDate());
             cal.add(Calendar.DATE, renewDuration);
             loan.setPlannedEndDate(cal.getTime());
             loanDAO.updateLoan(loan);
+            return "";
+
         }
-        return "";
+        return "loan has already been renewed";
+
     }
 
 
@@ -173,11 +170,20 @@ public class LoanManagerImpl implements LoanManager {
 
         Date start = loan.getStartDate();
         Date end = loan.getPlannedEndDate();
+
         //we get the number of days between the start and the planned end date
         //if difference > loanDuration, it means the loan has already been renewed(return false)
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diffDays: " + diffInDays);
+
+
+        Calendar cal = Calendar.getInstance();
+        cal.setTime( end );
+        cal.add( Calendar.DATE, diffInDays );
+        Date dato = cal.getTime();
+
+        if(dato.before(new Date()))return false;
         return diffInDays < (loanDuration + renewDuration);
 
     }
