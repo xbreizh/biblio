@@ -177,14 +177,24 @@ public class LoanManagerImpl implements LoanManager {
         logger.info("diffDays: " + diffInDays);
 
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(end);
-        cal.add(Calendar.DATE, diffInDays);
-        Date dato = cal.getTime();
 
-        if (dato.before(new Date())) return false;
+        // we check that by adding the renewDuration to the plannedEndDate, we have a later date than today
+        if (checkAddingRenewDurationGivesLaterThanToday(end)) return false;
+
         return diffInDays < (loanDuration + renewDuration);
 
+    }
+
+    boolean checkAddingRenewDurationGivesLaterThanToday(Date end) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(end);
+        cal.add(Calendar.DATE, renewDuration);
+        Date date = cal.getTime();
+
+        if (date.before(getTodayDate())) {
+            return true;
+        }
+        return false;
     }
 
     @Override

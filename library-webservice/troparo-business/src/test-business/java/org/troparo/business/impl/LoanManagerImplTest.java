@@ -201,11 +201,15 @@ class LoanManagerImplTest {
     @Test
     @DisplayName("should return true if renewable")
     void isRenewable1() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        loanManager.setLoanDAO(loanDAO);
         Loan loan = new Loan();
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         loan.setStartDate(format.parse("01-01-2019"));
         loan.setPlannedEndDate(format.parse("10-01-2019"));
+        Date today = format.parse("02-02-2019");
+        when(loanManager.getTodayDate()).thenReturn(today);
         when(loanDAO.getLoanById(2)).thenReturn(loan);
         assertTrue(loanManager.isRenewable(2));
     }
