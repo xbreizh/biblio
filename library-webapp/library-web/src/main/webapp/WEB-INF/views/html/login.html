@@ -3,58 +3,70 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <div th:replace="fragments/header :: head-box"></div>
-
 <body>
 
-<div class="container">
-    <div layout:fragment="content" th:remove="tag">
 
-        <h1></h1>
-        <h2>Connect</h2>
-        <form method="post" th:action="@{/login}">
-            <div th:if="${param.error}">
-                <div class="alert alert-danger">
-                    Invalid username or password.
-                </div>
-            </div>
-            <div th:if="${param.logout}">
-                <div class="alert alert-info">
-                    You have been logged out.
-                </div>
-            </div>
-            <div class="form-group">
-                <input autofocus="autofocus"
-                       class="form-control"
-                       id="username"
-                       name="username"
-                       placeholder="Username"
-                       type="text">
-            </div>
-            <div class="form-group">
-                <input class="form-control"
-                       id="password"
-                       name="password"
-                       placeholder="Password"
-                       type="password">
-            </div>
-            <div class="form-group">
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3">
-                        <input class="form-control btn btn-info"
-                               id="login-submit"
-                               name="login-submit"
-                               type="submit"
-                               value="Log In">
-                        <a href="recover">Password Reset</a>
+<div id="errors" th:if="${(param.error != null) and (param.error[0] == 'true')}">
+    Input is incorrect
+</div>
+
+<div class="container">
+    <div class="row ">
+
+    </div>
+    <div class="row ">
+        <div class="col-4 "></div>
+        <div class="col-4 ">
+            <h2>Connect</h2>
+            <form method="post" th:action="@{/login}">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">
+                        Invalid username or password.
                     </div>
                 </div>
-            </div>
-        </form>
+                <div th:if="${param.logout}">
+                    <div class="alert alert-info">
+                        You have been logged out.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input autofocus="autofocus"
+                           class="form-control"
+                           id="username"
+                           name="username"
+                           placeholder="Username"
+                           type="text">
+                </div>
+                <div class="form-group">
+                    <input class="form-control"
+                           id="password"
+                           name="password"
+                           placeholder="Password"
+                           type="password">
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-sm-6 col-sm-offset-3">
+                            <input class="form-control btn btn-info"
+                                   id="login-submit"
+                                   name="login-submit"
+                                   type="submit"
+                                   value="Log In">
+                            <a href="recover">Password Reset</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-4 "></div>
+    </div>
+    <div class="row ">
+
     </div>
 </div>
-
-
-</div>
-<!--<div th:replace="fragments/header :: foot"></div>-->
 </body>
+
+
+<div th:replace="fragments/header :: foot"></div>
+
 </html>

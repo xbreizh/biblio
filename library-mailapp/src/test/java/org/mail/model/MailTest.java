@@ -34,6 +34,34 @@ public class MailTest {
     }
 
     @Test
+    public void getToken() {
+        String token = "dede343fgfgfgf";
+        mail.setToken(token);
+        assertEquals(token, mail.getToken());
+    }
+
+    @Test
+    public void setToken() {
+        String token = "dede343fgfgfgf";
+        mail.setToken(token);
+        assertEquals(token, mail.getToken());
+    }
+
+    @Test
+    public void getLogin() {
+        String login = "George1";
+        mail.setLogin(login);
+        assertEquals(login, mail.getLogin());
+    }
+
+    @Test
+    public void setLogin() {
+        String login = "George1";
+        mail.setLogin(login);
+        assertEquals(login, mail.getLogin());
+    }
+
+    @Test
     public void getFirstname() {
         String firstName = "George";
         mail.setFirstname(firstName);

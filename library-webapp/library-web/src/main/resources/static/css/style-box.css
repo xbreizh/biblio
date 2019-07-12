@@ -1,31 +1,15 @@
-html, body {
-    height: 100%;
-    padding: 0;
-    margin: 0;
+.container{
+    margin-top: 10vh;
+    height: 80vh;
 }
 
-* {
-    box-sizing: border-box;
+.row{
+    height:30%;
 }
 
-.box {
-    width: 100px;
-    height: 100px;
-    background-color: red;
+h2{
+    text-align:  center;
 }
-
-.container {
-
-    width: 100%;
-    height: 100%;
-    background-color: #ccc;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-
 
 
 
