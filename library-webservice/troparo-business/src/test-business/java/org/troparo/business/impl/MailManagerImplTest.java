@@ -7,16 +7,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
-import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
-import org.troparo.model.Mail;
 import org.troparo.model.Member;
 
-import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -36,7 +33,7 @@ class MailManagerImplTest {
     private LoanManagerImpl loanManager;
 
     @BeforeEach
-    void init(){
+    void init() {
         mailManager = new MailManagerImpl();
         loanManager = new LoanManagerImpl();
         mailManager.setLoanManager(loanManager);

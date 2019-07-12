@@ -1,16 +1,15 @@
 package org.troparo.business.integration;
 
 import org.apache.log4j.Logger;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
-import org.troparo.business.impl.LoanManagerImpl;
-import org.troparo.consumer.contract.LoanDAO;
-import org.troparo.consumer.impl.LoanDAOImpl;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -26,18 +25,15 @@ class LoanManagerImplIntegrationTest {
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
 
-
     @Inject
     private LoanManager loanManager;
 
 
-
     @BeforeEach
     void reset() {
-        System.out.println("db size loans : "+loanManager.getLoans().size());
+        System.out.println("db size loans : " + loanManager.getLoans().size());
         logger.info("reset db");
     }
-
 
 
     @Test

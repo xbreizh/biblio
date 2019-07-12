@@ -34,7 +34,7 @@ public class MemberManagerImpl implements MemberManager {
     @Inject
     LoanManager loanManager;
     private MemberService memberService;
-
+    private ConnectService connectService;
 
     public MemberManagerImpl() {
         this.memberService = new MemberService();
@@ -90,7 +90,6 @@ public class MemberManagerImpl implements MemberManager {
 
         return getConnectServicePort().requestPasswordResetLink(requestPasswordResetLinkRequestType).isReturn();
     }
-
 
     private IConnectService getConnectServicePort() {
         return connectService.getConnectServicePort();
@@ -180,8 +179,6 @@ public class MemberManagerImpl implements MemberManager {
     public void setConnectService(ConnectService connectService) {
         this.connectService = connectService;
     }
-
-    private ConnectService connectService;
 
     public void setLoanManager(LoanManager loanManager) {
         this.loanManager = loanManager;

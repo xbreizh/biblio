@@ -346,25 +346,25 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public boolean requestPasswordLink(String login, String email) {
         Member member = memberDAO.getMemberByLogin(login.toUpperCase());
-        logger.info("member received: "+member);
+        logger.info("member received: " + member);
         logger.info("generating password reset link");
 
-        if (member == null ) {
+        if (member == null) {
             logger.error("member not found / login probably incorrect");
             return false;
         }
         // THAT PROCESS CAN'T BE USED FOR RESETTING SUPERADMIN ACCESS
-        if(member.getRole().equalsIgnoreCase("superAdmin")){
+        if (member.getRole().equalsIgnoreCase("superAdmin")) {
             logger.error("that process can't be used for resetting superAdmin password");
             return false;
         }
         if (member.getEmail().equalsIgnoreCase(email)) {
             member.setToken("TEMP" + generateToken());
             member.setTokenExpiration(adding20MnToCurrentDate());
-            logger.info("Token to be passed: "+member.getToken());
+            logger.info("Token to be passed: " + member.getToken());
             return memberDAO.updateMember(member);
-        }else{
-            logger.error("mail is different: "+member.getEmail());
+        } else {
+            logger.error("mail is different: " + member.getEmail());
         }
 
         return false;

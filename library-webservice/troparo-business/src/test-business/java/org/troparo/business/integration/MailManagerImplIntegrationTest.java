@@ -12,10 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MailManager;
 import org.troparo.business.impl.LoanManagerImpl;
 import org.troparo.business.impl.MailManagerImpl;
-import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
-
-import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 

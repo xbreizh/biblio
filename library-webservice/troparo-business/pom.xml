@@ -72,9 +72,9 @@
                     </plugin>
                 </plugins>
                 <testResources>
-                   <!-- <testResource>
-                        <directory>src/main/resources</directory>
-                    </testResource>-->
+                    <!-- <testResource>
+                         <directory>src/main/resources</directory>
+                     </testResource>-->
                     <testResource>
                         <directory>src/test-business/resources/local</directory>
                     </testResource>

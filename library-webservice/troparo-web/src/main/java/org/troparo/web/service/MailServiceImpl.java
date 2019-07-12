@@ -34,7 +34,7 @@ public class MailServiceImpl implements IMailService {
     }
 
     @Override
-    public GetPasswordResetListResponse getPasswordResetList(GetPasswordResetListRequest parameters)  {
+    public GetPasswordResetListResponse getPasswordResetList(GetPasswordResetListRequest parameters) {
         GetPasswordResetListResponse ar = new GetPasswordResetListResponse();
         List<Mail> mailList = mailManager.getPasswordResetList(parameters.getToken());
         ar.setPasswordResetListType(convertmailListIntoPasswordResetlistType(mailList));
@@ -44,7 +44,7 @@ public class MailServiceImpl implements IMailService {
 
     private PasswordResetListType convertmailListIntoPasswordResetlistType(List<Mail> mailList) {
         PasswordResetListType passwordResetListType = new PasswordResetListType();
-        for (Mail mail: mailList) {
+        for (Mail mail : mailList) {
             PasswordResetTypeOut passwordResetTypeOut = new PasswordResetTypeOut();
             passwordResetTypeOut.setEmail(mail.getEmail());
             passwordResetTypeOut.setLogin(mail.getLogin());

@@ -48,19 +48,29 @@
                                     <sourceRoot>src/main/java/</sourceRoot>
                                     <wsdlOptions>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/BookService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/docker/BookService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/MemberService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/docker/MemberService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/ConnectService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/docker/ConnectService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/docker/MailService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/docker/MailService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>
                                 </configuration>
@@ -114,19 +124,29 @@
                                     <sourceRoot>src/main/java/</sourceRoot>
                                     <wsdlOptions>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/BookService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/local/BookService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/MemberService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/local/MemberService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/LoanService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
-                                            <wsdl>${basedir}/src/main/resources/org/troparo/web/services/local/MailService.wsdl</wsdl>
+                                            <wsdl>
+                                                ${basedir}/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                            </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>
                                 </configuration>

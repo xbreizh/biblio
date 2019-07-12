@@ -193,9 +193,6 @@ class MemberDAOImplTest {
     }
 
 
-
-
-
     @Test
     @DisplayName("should invalidate token")
     void invalidateToken() {

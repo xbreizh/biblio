@@ -13,7 +13,6 @@ import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 
@@ -179,11 +178,11 @@ public class LoanManagerImpl implements LoanManager {
 
 
         Calendar cal = Calendar.getInstance();
-        cal.setTime( end );
-        cal.add( Calendar.DATE, diffInDays );
+        cal.setTime(end);
+        cal.add(Calendar.DATE, diffInDays);
         Date dato = cal.getTime();
 
-        if(dato.before(new Date()))return false;
+        if (dato.before(new Date())) return false;
         return diffInDays < (loanDuration + renewDuration);
 
     }
@@ -241,12 +240,12 @@ public class LoanManagerImpl implements LoanManager {
         return bookManager;
     }
 
-    public MemberManager getMemberManager() {
-        return memberManager;
-    }
-
     public void setBookManager(BookManager bookManager) {
         this.bookManager = bookManager;
+    }
+
+    public MemberManager getMemberManager() {
+        return memberManager;
     }
 
     public void setMemberManager(MemberManager memberManager) {

@@ -37,10 +37,10 @@
                         <form method="post" th:action="@{/renew}" th:object="${renew}">
 
 
-                                <input id="id" name="id" th:value="${loan.id}" type="hidden">
+                            <input id="id" name="id" th:value="${loan.id}" type="hidden">
 
 
-                            <button type="submit" class="btn btn-outline-info">Renew
+                            <button class="btn btn-outline-info" type="submit">Renew
                             </button>
 
                         </form>
@@ -48,7 +48,7 @@
 
                 </div>
                 <div th:unless="${loan.renewable}">
-                    <img th:src="@{/img/forbidden.jpg}" alt="forbidden" style="width: 80px;height: auto"/>
+                    <img alt="forbidden" style="width: 80px;height: auto" th:src="@{/img/forbidden.jpg}"/>
                 </div>
             </td>
             </tr>

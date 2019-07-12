@@ -27,16 +27,13 @@ import java.util.List;
 @Controller
 @ControllerAdvice
 public class UserController {
+    static final String LOGIN = "login";
     @Inject
     MemberManager memberManager;
     @Inject
     BookManager bookManager;
     @Inject
     LoanManager loanManager;
-
-    static final String LOGIN = "login";
-
-
     private Logger logger = Logger.getLogger(UserController.class);
 
     @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class})
@@ -51,8 +48,6 @@ public class UserController {
 
         return model;
     }
-
-
 
 
     @RequestMapping("/")

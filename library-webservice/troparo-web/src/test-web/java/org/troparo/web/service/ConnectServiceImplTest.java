@@ -11,7 +11,6 @@ import org.troparo.entities.connect.CheckTokenRequestType;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.connect.InvalidateTokenRequestType;
 import org.troparo.entities.connect.ResetPasswordRequestType;
-import org.troparo.services.connectservice.BusinessExceptionConnect;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -59,7 +58,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return a token")
-    void getToken()  {
+    void getToken() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         String token = "token123";
         parameters.setLogin("lokii");
@@ -70,7 +69,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return wrong login or password when wrong credentials")
-    void getToken1()  {
+    void getToken1() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("Lokii");
         parameters.setPassword("1243");
@@ -81,7 +80,7 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return \"something went wrong\" when token is null")
-    void getToken2(){
+    void getToken2() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin(null);
         parameters.setPassword(null);
@@ -110,11 +109,11 @@ class ConnectServiceImplTest {
 
     @Test
     @DisplayName("should return true if credentials are correct")
-    void resetPassword(){
+    void resetPassword() {
         ResetPasswordRequestType parameters = new ResetPasswordRequestType();
         parameters.setLogin("jpolino");
         parameters.setPassword("mik");
-        when(memberManager.resetPassword(anyString(),  anyString())).thenReturn(true);
+        when(memberManager.resetPassword(anyString(), anyString())).thenReturn(true);
         assertTrue(connectService.resetPassword(parameters).isReturn());
     }
 
@@ -124,14 +123,14 @@ class ConnectServiceImplTest {
         ResetPasswordRequestType parameters = new ResetPasswordRequestType();
         parameters.setLogin("jpolino");
         parameters.setPassword("mik");
-        when(memberManager.resetPassword(anyString(),  anyString())).thenReturn(false);
+        when(memberManager.resetPassword(anyString(), anyString())).thenReturn(false);
         assertFalse(connectService.resetPassword(parameters).isReturn());
     }
 
 
     @Test
     @DisplayName("should return false if one of the credentials is null")
-    void resetPassword12()  {
+    void resetPassword12() {
         ResetPasswordRequestType parameters = new ResetPasswordRequestType();
         parameters.setLogin(null);
         parameters.setPassword("mik");

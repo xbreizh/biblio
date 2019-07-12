@@ -1,6 +1,5 @@
 package org.troparo.business.impl;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,16 +9,13 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
-import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
-import org.troparo.consumer.impl.MemberDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
 
-import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,9 +42,6 @@ class LoanManagerImplTest {
     private MemberManager memberManager;
 
     private BookManager bookManager;
-
-
-
 
 
     @BeforeEach
@@ -115,7 +108,7 @@ class LoanManagerImplTest {
         when(bookManager.isAvailable(anyInt())).thenReturn(true);
         loanManager1.setMemberManager(memberManager2);
         when(memberManager2.getMemberById(2)).thenReturn(member);
-        System.out.println("loan: "+member.getLoanList().size());
+        System.out.println("loan: " + member.getLoanList().size());
         LoanDAOImpl loanDAO = mock(LoanDAOImpl.class);
         loanManager1.setLoanDAO(loanDAO);
         assertEquals("max number of books rented reached", loanManager1.addLoan(loan));
