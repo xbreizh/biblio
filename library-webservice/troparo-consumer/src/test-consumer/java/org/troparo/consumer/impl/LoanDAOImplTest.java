@@ -162,7 +162,7 @@ class LoanDAOImplTest {
     void getLoansByCriterias() {
         Map<String, String> map = new HashMap<>();
         map.put("plouf", "jpolinfo");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -170,13 +170,13 @@ class LoanDAOImplTest {
     void getLoansByCriterias_bookId() {
         Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
-        assertEquals(1, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(1, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return empty list of loans if criterias null")
     void getLoansByCriterias2() {
-        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(null).size());
     }
 
     @Test
@@ -184,14 +184,14 @@ class LoanDAOImplTest {
     void getLoansByCriterias3() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "");
-        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(null).size());
     }
 
     @Test
     @DisplayName("should return empty list of loans if empty map passed")
     void getLoansByCriterias4() {
         Map<String, String> map = new HashMap<>();
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -199,7 +199,7 @@ class LoanDAOImplTest {
     void getLoansByCriterias_login() {
         Map<String, String> map = new HashMap<>();
         map.put("login", "lokii");
-        assertEquals(1, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(1, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -207,7 +207,7 @@ class LoanDAOImplTest {
     void getLoansByCriterias_login1() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
 
@@ -216,7 +216,7 @@ class LoanDAOImplTest {
     void getLoansByCriterias_Status() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
-        assertEquals(3, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(3, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -224,7 +224,7 @@ class LoanDAOImplTest {
     void getLoansByCriterias_Status1() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "wrongOne");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -235,7 +235,7 @@ class LoanDAOImplTest {
         map.put("book_id", "5");
         LoanDAOImpl loanDAO1 = new LoanDAOImpl();
         loanDAO1.setSessionFactory(null);
-        assertEquals(0, loanDAO1.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO1.getLoansByCriteria(map).size());
     }
 
 
@@ -245,7 +245,7 @@ class LoanDAOImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
         map.put("status", "terminated");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -363,7 +363,14 @@ class LoanDAOImplTest {
     @DisplayName("should return true")
     void checkValidStatus() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        assertTrue(loanDAO.checkValidStatus("terminated"));
+        assertAll(
+                ()->assertTrue(loanDAO.checkValidStatus("overdue")),
+                ()-> assertTrue(loanDAO.checkValidStatus("terminated")),
+                ()-> assertTrue(loanDAO.checkValidStatus("RESERVED")),
+                ()-> assertTrue(loanDAO.checkValidStatus("PROGRESS"))
+
+        );
+
     }
 
     @Test

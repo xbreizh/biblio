@@ -131,7 +131,7 @@ public class LoanManagerImpl implements LoanManager {
         logger.info("map: " + criterias);
         logger.info("map: " + map);
         logger.info("criterias: " + criterias);
-        return loanDAO.getLoansByCriterias(criterias);
+        return loanDAO.getLoansByCriteria(criterias);
     }
 
     @Override
@@ -190,11 +190,7 @@ public class LoanManagerImpl implements LoanManager {
         cal.setTime(end);
         cal.add(Calendar.DATE, renewDuration);
         Date date = cal.getTime();
-
-        if (date.before(getTodayDate())) {
-            return true;
-        }
-        return false;
+        return date.before(getTodayDate());
     }
 
     @Override

@@ -146,6 +146,32 @@ class LoanManagerImplTest {
         assertEquals(0, loanManager.getLoansByCriterias(map).size());
     }
 
+    @Test
+    void checkAddingRenewDurationGivesLaterThanTodayReturnsTrue() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date today = simpleDateFormat.parse("2018-09-09");
+        Date loanDate = simpleDateFormat.parse("2018-06-19");
+
+        when(loanManager.getTodayDate()).thenReturn(today);
+        assertTrue(loanManager.checkAddingRenewDurationGivesLaterThanToday(loanDate));
+
+    }
+
+    @Test
+    void checkAddingRenewDurationGivesLaterThanTodayReturnsFalse() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date loanDate = simpleDateFormat.parse("2018-09-09");
+        Date today = simpleDateFormat.parse("2018-06-19");
+
+        when(loanManager.getTodayDate()).thenReturn(today);
+        assertFalse(loanManager.checkAddingRenewDurationGivesLaterThanToday(loanDate));
+    }
 
     @Test
     @DisplayName("should return \"loan already terminated\"")

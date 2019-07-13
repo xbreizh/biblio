@@ -6,13 +6,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Loan;
-
+import org.apache.commons.lang3.EnumUtils;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
@@ -23,7 +20,7 @@ public class LoanDAOImpl implements LoanDAO {
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
     @Inject
     private SessionFactory sessionFactory;
-    private Class cl = Loan.class;
+    private static final Class cl = Loan.class;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -89,7 +86,6 @@ public class LoanDAOImpl implements LoanDAO {
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
             query.setParameter(ISBN, isbn);
-
             return query.getResultList();
         } catch (Exception e) {
             return loanList;
@@ -116,7 +112,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     @Override
-    public List<Loan> getLoansByCriterias(Map<String, String> map) {
+    public List<Loan> getLoansByCriteria(Map<String, String> map) {
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
         if (map == null) return loanList;
@@ -209,9 +205,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     boolean checkValidStatus(String status) {
-        String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};
-        List<String> authorizedList = Arrays.asList(authorized);
-        return authorizedList.contains(status.toUpperCase());
+        return EnumUtils.isValidEnum(LoanStatus.class, status.toUpperCase());
     }
 
     String addStatusToRequest(Map<String, String> map) {

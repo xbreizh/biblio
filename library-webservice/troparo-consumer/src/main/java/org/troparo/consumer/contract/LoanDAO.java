@@ -16,12 +16,11 @@ public interface LoanDAO {
 
     Loan getLoanById(int id);
 
-    List<Loan> getLoanByIsbn(String isbn);
+    List getLoanByIsbn(String isbn);
 
     List<Loan> getLoanByLogin(String login);
 
-
-    List<Loan> getLoansByCriterias(Map<String, String> map);
+    List<Loan> getLoansByCriteria(Map<String, String> map);
 
 
 }
