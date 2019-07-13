@@ -15,7 +15,7 @@ public interface LoanManager {
 
     Loan getLoanById(int id);
 
-    List<Loan> getLoansByCriterias(Map<String, String> map);
+    List<Loan> getLoansByCriteria(Map<String, String> map);
 
     String renewLoan(int id);
 
@@ -23,8 +23,9 @@ public interface LoanManager {
 
     String terminate(int id);
 
-
     String getLoanStatus(int id);
 
     void setLoanDAO(LoanDAO loanDAO);
+
+    String reserve(Loan loan);
 }

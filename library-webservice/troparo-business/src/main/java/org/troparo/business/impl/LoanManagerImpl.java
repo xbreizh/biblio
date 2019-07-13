@@ -9,6 +9,7 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.consumer.impl.LoanStatus;
 import org.troparo.model.Loan;
 
 import javax.inject.Inject;
@@ -35,6 +36,15 @@ public class LoanManagerImpl implements LoanManager {
     @Value("${maxBooks}")
     private String maxBooksString;
     private int maxBooks;
+    @Value("${maxReserve}")
+    private String maxReserveString;
+    private int maxReserve;
+
+
+    public int getMaxReserve() {
+        return maxReserve;
+    }
+
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -58,21 +68,28 @@ public class LoanManagerImpl implements LoanManager {
         } else {
             maxBooks = 4;
         }
+        if (maxReserveString != null && !maxReserveString.isEmpty()) {
+            maxReserve = Integer.parseInt(maxReserveString);
+        } else {
+            maxReserve = 3;
+        }
     }
 
     @Override
     public String addLoan(Loan loan) {
-        loan.setStartDate(new Date());
+        if(loan.getStartDate()!=null){
+            System.out.println("it's a reservation!!");
+            return "reservation";
+        }
+        return "new Booking";
+
+      /*  loan.setStartDate(getTodayDate());
         Calendar cal = Calendar.getInstance();
         cal.setTime(loan.getStartDate());
         cal.add(Calendar.DATE, loanDuration);
         loan.setPlannedEndDate(cal.getTime());
-        if (loan.getBorrower() == null) {
-            return "invalid member";
-        }
-        if (loan.getBook() == null) {
-            return "invalid book";
-        }
+        String x = checkBookAndMemberValidity(loan);
+        if (x != null) return x;
 
         // checks if loan is possible
         if (!bookManager.isAvailable(loan.getBook().getId())) {
@@ -84,8 +101,84 @@ public class LoanManagerImpl implements LoanManager {
         } else {
             return "max number of books rented reached";
         }
-        return "";
+        return "";*/
 
+    }
+
+    @Override
+    public String reserve(Loan loan) {
+        String x1 = checkReserveLoanDetailsAreValid(loan);
+        System.out.println(x1);
+        if (x1 != null) return x1;
+        if(!(loanDAO.addLoan(loan)))return "Issue while reserving";
+        return "";
+    }
+
+    String checkReserveLoanDetailsAreValid(Loan loan) {
+        String x;
+        x = checkBookAndMemberValidity(loan);
+        if (!x.isEmpty()) return x;
+        x = checkStartDateIsTodayOrFuture(loan);
+        if (!x.isEmpty()) return x;
+        x = checkIfReserveLimitNotReached(loan);
+        if (!x.isEmpty()) return x;
+        if(checkIfOverDue(loan))return "There are Overdue Items preventing the reservation";
+        return "";
+    }
+
+    boolean checkIfOverDue(Loan loan) {
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        if (loanDAO.getLoansByCriteria(map).isEmpty())return false;
+        return true;
+    }
+
+    String checkIfReserveLimitNotReached(Loan loan) {
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.RESERVED.toString());
+        List<Loan> loanList = loanDAO.getLoansByCriteria(map);
+        if (loanList.size() >= maxReserve)
+            return "You have already reached the maximum number of reservation: " + maxReserve;
+        return "";
+    }
+
+    private String checkStartDateIsTodayOrFuture(Loan loan) {
+        if (loan.getStartDate() == null) return "You must specify a start Date";
+        Calendar startDate = Calendar.getInstance();
+        Calendar today = Calendar.getInstance();
+        startDate.setTime(loan.getStartDate());
+        today.setTime(getTodayDate());
+        if (
+                (startDate.get(Calendar.YEAR) < today.get(Calendar.YEAR)) &&
+                        (startDate.get(Calendar.MONTH) < today.get(Calendar.MONTH)) &&
+                        (startDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))) {
+            return "the booking date cannot be in the past";
+        }
+        return "";
+    }
+
+
+    String checkBookAndMemberValidity(Loan loan) {
+        if (loan.getBorrower() == null) {
+            return "invalid member";
+        }
+        if (loan.getBook() == null) {
+            return "invalid book";
+        }
+        if (checkIfLoanAlreadyInProgress(loan)) return "loan already in progress";
+        return "";
+    }
+
+    private boolean checkIfLoanAlreadyInProgress(Loan loan) {
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("BOOK_ID", Integer.toString(loan.getBook().getId()));
+        if (loanDAO.getLoansByCriteria(map)!=null&&!loanDAO.getLoansByCriteria(map).isEmpty()) {
+            return true;
+        }
+        return false;
     }
 
 
@@ -102,7 +195,7 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public List<Loan> getLoansByCriterias(Map<String, String> map) {
+    public List<Loan> getLoansByCriteria(Map<String, String> map) {
         String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS"};
         List<String> validCriteriasList = Arrays.asList(validCriterias);
         Map<String, String> criterias = new HashMap<>();
@@ -175,7 +268,6 @@ public class LoanManagerImpl implements LoanManager {
         int diffInDays = (int) ((end.getTime() - start.getTime())
                 / (1000 * 60 * 60 * 24));
         logger.info("diffDays: " + diffInDays);
-
 
 
         // we check that by adding the renewDuration to the plannedEndDate, we have a later date than today

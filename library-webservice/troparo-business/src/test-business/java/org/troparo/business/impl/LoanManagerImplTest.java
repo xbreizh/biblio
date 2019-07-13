@@ -12,6 +12,7 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
+import org.troparo.consumer.impl.LoanStatus;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
@@ -143,7 +144,114 @@ class LoanManagerImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("price", "3.4");
-        assertEquals(0, loanManager.getLoansByCriterias(map).size());
+        assertEquals(0, loanManager.getLoansByCriteria(map).size());
+    }
+
+    @Test
+    @DisplayName("should return false if overdue")
+    void checkIfOverDue(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        List<Loan> loanList = new ArrayList<>();
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertFalse(loanManager.checkIfOverDue(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return true if overdue")
+    void checkIfOverDue1(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        List<Loan> loanList = new ArrayList<>();
+        Loan loan1 = new Loan();
+        loanList.add(loan1);
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertTrue(loanManager.checkIfOverDue(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return empty string if limit not reached")
+    void checkIfReserveLimitNotReached(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.RESERVED.toString());
+        List<Loan> loanList = new ArrayList<>();
+        for (int i = 0; i < loanManager.getMaxReserve(); i++) {
+            Loan loan1 = new Loan();
+            loanList.add(loan1);
+        }
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertEquals("You have already reached the maximum number of reservation: "+loanManager.getMaxReserve(), loanManager.checkIfReserveLimitNotReached(loan));
+    }
+
+    @Test
+    @DisplayName("should return empty string if limit is reached")
+    void checkIfReserveLimitNotReached1(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.RESERVED.toString());
+        List<Loan> loanList = new ArrayList<>();
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertEquals("", loanManager.checkIfReserveLimitNotReached(loan));
+    }
+
+
+    @Test
+    @DisplayName("should return error while reserving")
+    void reserve() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        loanManager.setLoanDAO(loanDAO);
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        assertEquals("You must specify a start Date", loanManager.reserve(loan));
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date today = simpleDateFormat.parse("2018-09-09");
+        loan.setStartDate(today);
+        assertEquals("Issue while reserving", loanManager.reserve(loan));
+        when(loanDAO.addLoan(loan)).thenReturn(true);
+        assertEquals("", loanManager.reserve(loan));
+        fail();
+        // should be failing but isn't
+
     }
 
     @Test

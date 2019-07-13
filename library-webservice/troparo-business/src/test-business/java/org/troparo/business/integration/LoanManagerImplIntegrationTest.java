@@ -47,7 +47,7 @@ class LoanManagerImplIntegrationTest {
     void getLoansByCriterias1() {
         Map<String, String> map = new HashMap<>();
         map.put("login", "JPOLINO");
-        assertEquals(4, loanManager.getLoansByCriterias(map).size());
+        assertEquals(4, loanManager.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -55,7 +55,7 @@ class LoanManagerImplIntegrationTest {
     void getLoansByCriterias2() {
         Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
-        assertEquals(1, loanManager.getLoansByCriterias(map).size());
+        assertEquals(1, loanManager.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -64,7 +64,7 @@ class LoanManagerImplIntegrationTest {
         Map<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("status", "termindeated");
-        assertEquals(0, loanManager.getLoansByCriterias(map).size());
+        assertEquals(0, loanManager.getLoansByCriteria(map).size());
     }
 
 }

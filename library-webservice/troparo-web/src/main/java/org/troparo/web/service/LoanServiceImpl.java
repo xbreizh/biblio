@@ -63,9 +63,6 @@ public class LoanServiceImpl implements ILoanService {
     }
 
 
-    // Update
-
-
     // Get One
     @Override
     public GetLoanByIdResponseType getLoanById(GetLoanByIdRequestType parameters) throws BusinessExceptionLoan {
@@ -144,7 +141,7 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("map: " + map);
         logger.info(map);
 
-        loanList = loanManager.getLoansByCriterias(map);
+        loanList = loanManager.getLoansByCriteria(map);
         logger.info("stuff");
 
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
@@ -247,6 +244,9 @@ public class LoanServiceImpl implements ILoanService {
         Loan loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
         loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
+
+        loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeIn.getStartDate()));
+
         logger.info("conversion loanType into loan done");
         return loan;
     }

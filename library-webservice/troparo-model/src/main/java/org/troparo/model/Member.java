@@ -55,10 +55,6 @@ public class Member {
     @OneToMany(mappedBy = "borrower", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private List<Loan> loanList = new ArrayList<>();
 
-    public Member() {
-
-    }
-
 
     @Override
     public String toString() {

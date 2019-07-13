@@ -29,4 +29,8 @@ public class DateConvertedHelper {
     }
 
 
+    public Date convertXmlDateIntoDate(XMLGregorianCalendar startDate)  {
+        if(startDate==null)return null;
+        return startDate.toGregorianCalendar().getTime();
+    }
 }

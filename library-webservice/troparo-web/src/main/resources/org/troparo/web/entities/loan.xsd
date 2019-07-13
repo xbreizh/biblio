@@ -171,6 +171,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Login"/>
+                <xsd:element name="startDate" nillable="true" type="xsd:date"/>
                 <xsd:element ref="tns:Id"/>
             </xsd:sequence>
         </xsd:complexType>

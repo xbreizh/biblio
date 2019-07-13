@@ -36,7 +36,7 @@ public class MailManagerImpl implements MailManager {
         Map<String, String> criterias = new HashMap<>();
         criterias.put("status", "OVERDUE");
         logger.info("getting overdue list");
-        List<Loan> loans = loanManager.getLoansByCriterias(criterias);
+        List<Loan> loans = loanManager.getLoansByCriteria(criterias);
 
         logger.info("loans: " + loans.size());
         return gettingDataForLoan(loans);
