@@ -10,6 +10,7 @@ import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanStatus;
+import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
 import javax.inject.Inject;
@@ -77,19 +78,17 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String addLoan(Loan loan) {
-        if(loan.getStartDate()!=null){
-            System.out.println("it's a reservation!!");
-            return "reservation";
+        if (loan.getStartDate() != null) {
+            return reserve(loan);
         }
-        return "new Booking";
+        return newBooking(loan);
+    }
 
-      /*  loan.setStartDate(getTodayDate());
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(loan.getStartDate());
-        cal.add(Calendar.DATE, loanDuration);
-        loan.setPlannedEndDate(cal.getTime());
+    String newBooking(Loan loan) {
+        loan.setStartDate(getTodayDate());
+        setPlannedEndDate(loan);
         String x = checkBookAndMemberValidity(loan);
-        if (x != null) return x;
+        if (!x.isEmpty()) return x;
 
         // checks if loan is possible
         if (!bookManager.isAvailable(loan.getBook().getId())) {
@@ -101,42 +100,72 @@ public class LoanManagerImpl implements LoanManager {
         } else {
             return "max number of books rented reached";
         }
-        return "";*/
+        return "";
+    }
 
+    void setPlannedEndDate(Loan loan) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(loan.getStartDate());
+        cal.add(Calendar.DATE, loanDuration);
+        loan.setPlannedEndDate(cal.getTime());
     }
 
     @Override
     public String reserve(Loan loan) {
         String x1 = checkReserveLoanDetailsAreValid(loan);
-        System.out.println(x1);
-        if (x1 != null) return x1;
-        if(!(loanDAO.addLoan(loan)))return "Issue while reserving";
+        if (!x1.isEmpty()) return x1;
+        if (!(loanDAO.addLoan(loan))) return "Issue while reserving";
         return "";
     }
 
     String checkReserveLoanDetailsAreValid(Loan loan) {
         String x;
+        x = checkLoanStartDateIsNotInPastOrNull(loan.getStartDate());
+        if (!x.isEmpty()) return x;
         x = checkBookAndMemberValidity(loan);
         if (!x.isEmpty()) return x;
-        x = checkStartDateIsTodayOrFuture(loan);
+        x = checkStartDateIsTodayOrFuture(loan.getStartDate());
         if (!x.isEmpty()) return x;
-        x = checkIfReserveLimitNotReached(loan);
+        x = checkIfReserveLimitNotReached(loan.getBorrower().getLogin());
         if (!x.isEmpty()) return x;
-        if(checkIfOverDue(loan))return "There are Overdue Items preventing the reservation";
+        x = checkIfNoOverLapping(loan);
+        if (!x.isEmpty()) return x;
+        x = checkIfOverDue(loan);
+        if (!x.isEmpty()) return x;
         return "";
     }
 
-    boolean checkIfOverDue(Loan loan) {
+    String checkLoanStartDateIsNotInPastOrNull(Date date) {
+        if (date == null || date.before(getTodayDate()))return "startDate should be in the future";
+        return "";
+    }
+
+    String checkIfNoOverLapping(Loan loan) {
+        Date startDate = loan.getStartDate();
+        Date plannedEndDate = loan.getPlannedEndDate();
+        if(startDate == null || plannedEndDate==null)return "startDate and plannedEndDate should be filled";
+        List<Book> bookList = loanDAO.getListBooksAvailableOnThoseDates(loan);
+
+        if (!bookList.isEmpty()) {
+            loan.setBook(bookList.get(0));
+            return "";
+        }
+        return "No book available for those dates";
+    }
+
+
+
+    String checkIfOverDue(Loan loan) {
         Map<String, String> map = new HashMap<>();
         map.put("login", loan.getBorrower().getLogin());
         map.put("status", LoanStatus.OVERDUE.toString());
-        if (loanDAO.getLoansByCriteria(map).isEmpty())return false;
-        return true;
+        if (!loanDAO.getLoansByCriteria(map).isEmpty()) return "There are Overdue Items";
+        return "";
     }
 
-    String checkIfReserveLimitNotReached(Loan loan) {
+    String checkIfReserveLimitNotReached(String login) {
         Map<String, String> map = new HashMap<>();
-        map.put("login", loan.getBorrower().getLogin());
+        map.put("login", login);
         map.put("status", LoanStatus.RESERVED.toString());
         List<Loan> loanList = loanDAO.getLoansByCriteria(map);
         if (loanList.size() >= maxReserve)
@@ -144,11 +173,11 @@ public class LoanManagerImpl implements LoanManager {
         return "";
     }
 
-    private String checkStartDateIsTodayOrFuture(Loan loan) {
-        if (loan.getStartDate() == null) return "You must specify a start Date";
+    private String checkStartDateIsTodayOrFuture(Date date) {
+        if (date == null) return "No startDate passed";
         Calendar startDate = Calendar.getInstance();
         Calendar today = Calendar.getInstance();
-        startDate.setTime(loan.getStartDate());
+        startDate.setTime(date);
         today.setTime(getTodayDate());
         if (
                 (startDate.get(Calendar.YEAR) < today.get(Calendar.YEAR)) &&
@@ -167,6 +196,7 @@ public class LoanManagerImpl implements LoanManager {
         if (loan.getBook() == null) {
             return "invalid book";
         }
+        // if borrower already has the book in renting, he can't reserve it
         if (checkIfLoanAlreadyInProgress(loan)) return "loan already in progress";
         return "";
     }
@@ -175,7 +205,7 @@ public class LoanManagerImpl implements LoanManager {
         Map<String, String> map = new HashMap<>();
         map.put("login", loan.getBorrower().getLogin());
         map.put("BOOK_ID", Integer.toString(loan.getBook().getId()));
-        if (loanDAO.getLoansByCriteria(map)!=null&&!loanDAO.getLoansByCriteria(map).isEmpty()) {
+        if (loanDAO.getLoansByCriteria(map) != null && !loanDAO.getLoansByCriteria(map).isEmpty()) {
             return true;
         }
         return false;
@@ -201,7 +231,7 @@ public class LoanManagerImpl implements LoanManager {
         Map<String, String> criterias = new HashMap<>();
 
         String[] validStatus = {"terminated", "progress", "overdue"};
-        List<String> validStatuslist = Arrays.asList(validStatus);
+        List<String> validStatusList = Arrays.asList(validStatus);
 
         List<Loan> loanList = new ArrayList<>();
 
@@ -211,7 +241,7 @@ public class LoanManagerImpl implements LoanManager {
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                if (entry.getKey().equalsIgnoreCase("status") && !validStatuslist.contains(entry.getValue().toLowerCase())) {
+                if (entry.getKey().equalsIgnoreCase("status") && !validStatusList.contains(entry.getValue().toLowerCase())) {
                     return loanList;
                 }
                 criterias.put(entry.getKey(), entry.getValue());

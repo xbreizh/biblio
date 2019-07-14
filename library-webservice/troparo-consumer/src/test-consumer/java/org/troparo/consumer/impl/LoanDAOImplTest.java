@@ -15,6 +15,9 @@ import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -358,6 +361,43 @@ class LoanDAOImplTest {
         assertEquals("where book_id = :book_id and borrower.login = :login", loanDAO.createRequestFromMap(map));
     }
 
+
+    @Test
+    @DisplayName("should return emptyList when no book available for dates")
+    void getListBooksAvailableOnThoseDates() throws ParseException {
+        Loan loan = new Loan();
+        Book book = new Book();
+        String title = "test";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-01-14");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
+        book.setTitle(title);
+        loan.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+
+        System.out.println("swed: "+loanDAO.getListBooksAvailableOnThoseDates(loan).size());
+        assertTrue( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+    }
+
+
+    @Test
+    @DisplayName("should return bookList when book(s) available for dates")
+    void getListBooksAvailableOnThoseDates1() throws ParseException {
+        Loan loan = new Loan();
+        Book book = new Book();
+        String title = "LA GRANDE AVENTURE";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-07-14");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
+        book.setTitle(title);
+        loan.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+        assertFalse( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+    }
 
     @Test
     @DisplayName("should return true")

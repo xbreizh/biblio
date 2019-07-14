@@ -1,15 +1,18 @@
 package org.troparo.consumer.impl;
 
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.model.Book;
 import org.troparo.model.Loan;
-import org.apache.commons.lang3.EnumUtils;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
+
 
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
@@ -112,6 +115,43 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     @Override
+    public List<Book> getListBooksAvailableOnThoseDates(Loan loan) {
+        String request;
+        List<Book> bookList = new ArrayList<>();
+        logger.info("Title received: " + loan.getBook().getTitle());
+        String title = "'"+loan.getBook().getTitle().toUpperCase()+"'";
+        String loanStartDate = "'"+loan.getStartDate().toString()+"'";
+        String loanPlannedEndDate = "'"+loan.getPlannedEndDate()+"'";
+
+        request = "select * from Book where " +
+                "title = "+title+" and id not in" +
+                " ( select Book.id from Loan where end_date is null and(" +
+                "book.id in (select id from Book where title = "+title+") and " +
+                "start_date < "+loanStartDate+" and " +
+                "planned_end_date > "+loanStartDate+
+                ") or (" +
+                "start_date < "+loanPlannedEndDate+") and " +
+                "planned_end_date > "+loanPlannedEndDate+
+                ") ";
+       //String d = "'"+new Date()+"'";
+        //request = "select * from  Loan where start_date < "+d;
+        System.out.println(request);
+        try {
+            Query query = sessionFactory.getCurrentSession().createNativeQuery(request);
+            System.out.println("query: " + query);
+            //query.setParameter("title", title);
+            /*query.setParameter("loanStartDate", loan.getStartDate());
+            query.setParameter("loanPlannedEndDate", loan.getPlannedEndDate());*/
+
+            List<Loan> list = query.getResultList();
+            logger.info("size of list: " + list.size());
+            return query.getResultList();
+        } catch (Exception e) {
+            return bookList;
+        }
+    }
+
+    @Override
     public List<Loan> getLoansByCriteria(Map<String, String> map) {
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
@@ -141,6 +181,7 @@ public class LoanDAOImpl implements LoanDAO {
         }
 
     }
+
 
     private void addingParametersToCriteriasQuery(Map<String, String> map, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()

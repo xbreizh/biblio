@@ -1,5 +1,6 @@
 package org.troparo.consumer.contract;
 
+import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
 import java.util.List;
@@ -22,5 +23,5 @@ public interface LoanDAO {
 
     List<Loan> getLoansByCriteria(Map<String, String> map);
 
-
+    List<Book> getListBooksAvailableOnThoseDates(Loan loan);
 }

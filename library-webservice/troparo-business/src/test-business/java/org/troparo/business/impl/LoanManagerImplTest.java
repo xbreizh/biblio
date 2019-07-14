@@ -82,7 +82,7 @@ class LoanManagerImplTest {
         Book book = new Book();
         book.setId(2);
         loan.setBook(book);
-        when(bookManager.isAvailable(anyInt())).thenReturn(false);
+        when(bookManager.isAvailable(2)).thenReturn(false);
         assertEquals("book is not available: " + book.getId(), loanManager.addLoan(loan));
     }
 
@@ -103,7 +103,7 @@ class LoanManagerImplTest {
         loan.setBorrower(member);
         Book book = new Book();
         book.setId(3);
-        book.setTitle("borring");
+        book.setTitle("boring");
         loan.setBook(book);
         loanManager1.setBookManager(bookManager);
         when(bookManager.isAvailable(anyInt())).thenReturn(true);
@@ -114,6 +114,8 @@ class LoanManagerImplTest {
         loanManager1.setLoanDAO(loanDAO);
         assertEquals("max number of books rented reached", loanManager1.addLoan(loan));
     }
+
+
 
     @Test
     @DisplayName("should return the list of loans")
@@ -148,7 +150,82 @@ class LoanManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return false if overdue")
+    @DisplayName("should return error if overlapping")
+    void checkIfNoOverLapping() throws ParseException {
+        Loan loan = new Loan();
+        Loan loanS = new Loan();
+        Book book = new Book();
+        book.setTitle("title");
+        loan.setBook(book);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2019-07-14");
+        loan.setStartDate(today);
+        loanManager.setPlannedEndDate(loan);
+        Date start = simpleDateFormat.parse("2019-07-12");
+        loan.setStartDate(today);
+        Date plannedEnd = simpleDateFormat.parse("2019-07-22");
+        loanS.setStartDate(start);
+        loanS.setPlannedEndDate(plannedEnd);
+        List<Book> bookList = new ArrayList<>();
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        assertEquals("No book available for those dates", loanManager.checkIfNoOverLapping(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return empty string if not overlapping")
+    void checkIfNoOverLapping1() throws ParseException {
+        LoanManagerImpl loanManager = new LoanManagerImpl();
+        loanManager.setLoanDAO(loanDAO);
+        Loan loan = new Loan();
+        Loan loanS = new Loan();
+        Book book = new Book();
+        book.setTitle("title");
+        loan.setBook(book);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2019-09-14");
+        loan.setStartDate(today);
+        loanManager.setPlannedEndDate(loan);
+        Date start = simpleDateFormat.parse("2019-07-12");
+        loan.setStartDate(today);
+        Date plannedEnd = simpleDateFormat.parse("2019-07-22");
+        loanS.setStartDate(start);
+        loanS.setPlannedEndDate(plannedEnd);
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book());
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        assertEquals("", loanManager.checkIfNoOverLapping(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return error if date in past")
+    void checkLoanStartDateIsNotInPastOrNull() throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-02-14");
+        assertEquals("startDate should be in the future", loanManager.checkLoanStartDateIsNotInPastOrNull(startDate));
+    }
+
+    @Test
+    @DisplayName("should return error if date null")
+    void checkLoanStartDateIsNotInPastOrNull1() {
+        assertEquals("startDate should be in the future", loanManager.checkLoanStartDateIsNotInPastOrNull(null));
+    }
+
+    @Test
+    @DisplayName("should return empty string if date in future")
+    void checkLoanStartDateIsNotInPastOrNull2() throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2069-02-14");
+        assertEquals("", loanManager.checkLoanStartDateIsNotInPastOrNull(startDate));
+    }
+
+    @Test
+    @DisplayName("should return empty string if nothing overdue")
     void checkIfOverDue(){
         Loan loan = new Loan();
         Book book = new Book();
@@ -162,12 +239,12 @@ class LoanManagerImplTest {
         map.put("status", LoanStatus.OVERDUE.toString());
         List<Loan> loanList = new ArrayList<>();
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertFalse(loanManager.checkIfOverDue(loan));
+        assertTrue(loanManager.checkIfOverDue(loan).isEmpty());
 
     }
 
     @Test
-    @DisplayName("should return true if overdue")
+    @DisplayName("should return error if overdue")
     void checkIfOverDue1(){
         Loan loan = new Loan();
         Book book = new Book();
@@ -183,7 +260,7 @@ class LoanManagerImplTest {
         Loan loan1 = new Loan();
         loanList.add(loan1);
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertTrue(loanManager.checkIfOverDue(loan));
+        assertEquals("There are Overdue Items", loanManager.checkIfOverDue(loan));
 
     }
 
@@ -206,7 +283,7 @@ class LoanManagerImplTest {
             loanList.add(loan1);
         }
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertEquals("You have already reached the maximum number of reservation: "+loanManager.getMaxReserve(), loanManager.checkIfReserveLimitNotReached(loan));
+        assertEquals("You have already reached the maximum number of reservation: "+loanManager.getMaxReserve(), loanManager.checkIfReserveLimitNotReached(loan.getBorrower().getLogin()));
     }
 
     @Test
@@ -224,7 +301,7 @@ class LoanManagerImplTest {
         map.put("status", LoanStatus.RESERVED.toString());
         List<Loan> loanList = new ArrayList<>();
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertEquals("", loanManager.checkIfReserveLimitNotReached(loan));
+        assertEquals("", loanManager.checkIfReserveLimitNotReached(loan.getBorrower().getLogin()));
     }
 
 
@@ -240,17 +317,21 @@ class LoanManagerImplTest {
         member.setLogin("John");
         loan.setBook(book);
         loan.setBorrower(member);
-        assertEquals("You must specify a start Date", loanManager.reserve(loan));
+
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-        Date today = simpleDateFormat.parse("2018-09-09");
-        loan.setStartDate(today);
+        Date startDate = simpleDateFormat.parse("2019-09-09");
+        Date plannedEndDate = simpleDateFormat.parse("2019-10-02");
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+        System.out.println(loanDAO);
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book());
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        when(loanDAO.addLoan(loan)).thenReturn(false);
         assertEquals("Issue while reserving", loanManager.reserve(loan));
-        when(loanDAO.addLoan(loan)).thenReturn(true);
-        assertEquals("", loanManager.reserve(loan));
-        fail();
-        // should be failing but isn't
+
 
     }
 
