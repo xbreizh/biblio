@@ -9,7 +9,7 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
-import org.troparo.consumer.impl.LoanStatus;
+import org.troparo.consumer.enums.LoanStatus;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
@@ -40,6 +40,8 @@ public class LoanManagerImpl implements LoanManager {
     @Value("${maxReserve}")
     private String maxReserveString;
     private int maxReserve;
+    private static final String STATUS = "status";
+    private static final String LOGIN = "login";
 
 
     public int getMaxReserve() {
@@ -157,16 +159,16 @@ public class LoanManagerImpl implements LoanManager {
 
     String checkIfOverDue(Loan loan) {
         Map<String, String> map = new HashMap<>();
-        map.put("login", loan.getBorrower().getLogin());
-        map.put("status", LoanStatus.OVERDUE.toString());
+        map.put(LOGIN, loan.getBorrower().getLogin());
+        map.put(STATUS, LoanStatus.OVERDUE.toString());
         if (!loanDAO.getLoansByCriteria(map).isEmpty()) return "There are Overdue Items";
         return "";
     }
 
     String checkIfReserveLimitNotReached(String login) {
         Map<String, String> map = new HashMap<>();
-        map.put("login", login);
-        map.put("status", LoanStatus.RESERVED.toString());
+        map.put(LOGIN, login);
+        map.put(STATUS, LoanStatus.RESERVED.toString());
         List<Loan> loanList = loanDAO.getLoansByCriteria(map);
         if (loanList.size() >= maxReserve)
             return "You have already reached the maximum number of reservation: " + maxReserve;
@@ -203,7 +205,7 @@ public class LoanManagerImpl implements LoanManager {
 
     private boolean checkIfLoanAlreadyInProgress(Loan loan) {
         Map<String, String> map = new HashMap<>();
-        map.put("login", loan.getBorrower().getLogin());
+        map.put(LOGIN, loan.getBorrower().getLogin());
         map.put("BOOK_ID", Integer.toString(loan.getBook().getId()));
         if (loanDAO.getLoansByCriteria(map) != null && !loanDAO.getLoansByCriteria(map).isEmpty()) {
             return true;
@@ -241,7 +243,7 @@ public class LoanManagerImpl implements LoanManager {
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
                     && validCriteriasList.contains(entry.getKey().toUpperCase())) {
-                if (entry.getKey().equalsIgnoreCase("status") && !validStatusList.contains(entry.getValue().toLowerCase())) {
+                if (entry.getKey().equalsIgnoreCase(STATUS) && !validStatusList.contains(entry.getValue().toLowerCase())) {
                     return loanList;
                 }
                 criterias.put(entry.getKey(), entry.getValue());

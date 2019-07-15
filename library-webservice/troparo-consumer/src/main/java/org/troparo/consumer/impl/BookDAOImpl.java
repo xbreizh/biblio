@@ -10,6 +10,10 @@ import org.troparo.model.Book;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -53,7 +57,7 @@ public class BookDAOImpl implements BookDAO {
 
     }
 
-    Session getCurrentSession() {
+    private Session getCurrentSession() {
         return sessionFactory.getCurrentSession();
     }
 
@@ -71,15 +75,15 @@ public class BookDAOImpl implements BookDAO {
 
     @Override
     public Book getBookById(int id) {
-        String request;
-        logger.info("id: " + id);
-        request = "From Book where id = :id";
-
-        Query query = getCurrentSession().createQuery(request, cl);
-        query.setParameter("id", id);
+        CriteriaBuilder cb = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Book> cr = cb.createQuery(Book.class);
+        Root<Book> root = cr.from(Book.class);
+        cr.select(root);
+        cr.where(cb.equal(root.get("id"), id));
+        Query<Book> query = getCurrentSession().createQuery(cr);
         try {
-            return (Book) query.getSingleResult();
-        } catch (Exception e) {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
             return null;
         }
     }
@@ -87,12 +91,14 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public boolean existingISBN(String isbn) {
         logger.info("ISBN: " + isbn);
-        String request;
-        isbn = isbn.toUpperCase();
-        request = "From Book where isbn = :isbn";
+        CriteriaBuilder cb = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Book> cr = cb.createQuery(Book.class);
+        Root<Book> root = cr.from(Book.class);
+        cr.select(root);
+        cr.where(cb.equal(root.get("isbn"), isbn.toUpperCase()));
+        Query<Book> query = getCurrentSession().createQuery(cr);
 
-        Query query = getCurrentSession().createQuery(request, cl);
-        query.setParameter("isbn", isbn);
+
         if (!query.getResultList().isEmpty()) {
             logger.info("records found: " + query.getResultList().size());
             return true;
@@ -110,7 +116,7 @@ public class BookDAOImpl implements BookDAO {
         List<Book> bookList = new ArrayList<>();
         if (map == null || map.isEmpty()) return bookList;
         int mapSizeBeforeCleaning = map.size();
-        cleanInvaliMapEntries(map);
+        cleanInvalidMapEntries(map);
         int mapSizeAfterCleaning = map.size();
         if (mapSizeBeforeCleaning != mapSizeAfterCleaning) return bookList;
         createRequestFromMap(map, criteria);
@@ -136,7 +142,7 @@ public class BookDAOImpl implements BookDAO {
         return query.getResultList();
     }
 
-    private Map<String, String> cleanInvaliMapEntries(Map<String, String> map) {
+    private Map<String, String> cleanInvalidMapEntries(Map<String, String> map) {
         String[] authorizedCriteria = {"isbn", "author", "title"};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -191,27 +197,26 @@ public class BookDAOImpl implements BookDAO {
         logger.info("id passed: " + id);
 
         // checking if currently borrowed
-        String request1 = "select book.id from Loan where  book.id = :id";
-        Query query1 = getCurrentSession().createQuery(request1);
-        query1.setParameter("id", id);
-        logger.info("size: " + query1.getResultList().size());
-        return query1.getResultList().isEmpty();// if not currently borrowed, then available
+        String request = "select book.id from Loan where  book.id = ?1";
+        Query query = getCurrentSession().createQuery(request);
+        query.setParameter(1, id);
+        logger.info("size: " + query.getResultList().size());
+
+        return query.getResultList().isEmpty();
 
     }
 
     @Override
     public Book getBookByIsbn(String isbn) {
-        String request;
-        isbn = isbn.toUpperCase();
-        request = "From Book where isbn = :isbn";
 
-        Query query = getCurrentSession().createQuery(request, cl);
-        query.setParameter("isbn", isbn);
-        try {
-            return (Book) query.getResultList().get(0);
-        } catch (Exception e) {
-            return null;
-        }
+        CriteriaBuilder cb = getCurrentSession().getCriteriaBuilder();
+        CriteriaQuery<Book> cr = cb.createQuery(Book.class);
+        Root<Book> root = cr.from(Book.class);
+        cr.select(root);
+        cr.where(cb.equal(root.get("isbn"), isbn.toUpperCase()));
+        Query<Book> query = getCurrentSession().createQuery(cr);
+        if (query.getResultList().isEmpty()) return null;
+        return query.getResultList().get(0);
     }
 
 }

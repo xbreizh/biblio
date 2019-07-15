@@ -1,4 +1,4 @@
-package org.troparo.consumer.impl;
+package org.troparo.consumer.enums;
 
 public enum LoanStatus {
     PROGRESS, TERMINATED, OVERDUE, RESERVED

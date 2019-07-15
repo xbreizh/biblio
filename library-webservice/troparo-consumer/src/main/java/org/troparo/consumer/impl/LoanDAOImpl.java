@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.consumer.enums.LoanStatus;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
@@ -133,15 +134,8 @@ public class LoanDAOImpl implements LoanDAO {
                 "start_date < "+loanPlannedEndDate+") and " +
                 "planned_end_date > "+loanPlannedEndDate+
                 ") ";
-       //String d = "'"+new Date()+"'";
-        //request = "select * from  Loan where start_date < "+d;
-        System.out.println(request);
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request);
-            System.out.println("query: " + query);
-            //query.setParameter("title", title);
-            /*query.setParameter("loanStartDate", loan.getStartDate());
-            query.setParameter("loanPlannedEndDate", loan.getPlannedEndDate());*/
 
             List<Loan> list = query.getResultList();
             logger.info("size of list: " + list.size());

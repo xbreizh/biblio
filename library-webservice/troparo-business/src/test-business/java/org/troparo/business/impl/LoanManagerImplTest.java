@@ -12,7 +12,7 @@ import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
-import org.troparo.consumer.impl.LoanStatus;
+import org.troparo.consumer.enums.LoanStatus;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;

@@ -83,6 +83,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return null if id invalid")
     void getBookById1() {
+        System.out.println("ress: "+bookDAO.getBookById(33));
         assertNull(bookDAO.getBookById(33));
     }
 
