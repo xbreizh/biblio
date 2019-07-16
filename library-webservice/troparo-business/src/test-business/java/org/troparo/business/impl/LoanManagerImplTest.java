@@ -83,13 +83,13 @@ class LoanManagerImplTest {
         book.setId(2);
         loan.setBook(book);
         when(bookManager.isAvailable(2)).thenReturn(false);
-        assertEquals("book is not available: " + book.getId(), loanManager.addLoan(loan));
+        assertEquals("the book is unavailable for that date", loanManager.addLoan(loan));
     }
 
     @Test
     @DisplayName("should return \"max number of books rented reached\" when member has reached the max possible loans")
-    void addLoan3() {
-        LoanManagerImpl loanManager1 = new LoanManagerImpl();
+    void addLoan3() throws ParseException {
+        LoanManagerImpl loanManager1 = spy(LoanManagerImpl.class);
         MemberManagerImpl memberManager2 = mock(MemberManagerImpl.class);
         loanManager1.setMemberManager(memberManager2);
         Member member = new Member();
@@ -109,8 +109,14 @@ class LoanManagerImplTest {
         when(bookManager.isAvailable(anyInt())).thenReturn(true);
         loanManager1.setMemberManager(memberManager2);
         when(memberManager2.getMemberById(2)).thenReturn(member);
-        System.out.println("loan: " + member.getLoanList().size());
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2021-02-12");
+        when(loanManager1.getTodayDate()).thenReturn(today);
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book());
         LoanDAOImpl loanDAO = mock(LoanDAOImpl.class);
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
         loanManager1.setLoanDAO(loanDAO);
         assertEquals("max number of books rented reached", loanManager1.addLoan(loan));
     }
@@ -166,7 +172,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return error if book unavailable")
-    void checkBookAndMemberValidity(){
+    void checkBookAndMemberValidity() throws ParseException {
         Loan loan = new Loan();
         Member member = new Member();
         String login = "momo56";
@@ -174,10 +180,17 @@ class LoanManagerImplTest {
         Book book = new Book();
         book.setId(2);
         book.setIsbn("1234567824");
+        book.setTitle("title");
         loan.setBook(book);
         loan.setBorrower(member);
         loan.setStartDate(new Date());
-        when(bookManager.isAvailable(2)).thenReturn(false);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2019-02-12");
+        loan.setStartDate(today);
+        loanManager.setPlannedEndDate(loan);
+        List<Book> bookList = new ArrayList<>();
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
         assertEquals("the book is unavailable for that date", loanManager.checkBookAndMemberValidity(loan));
     }
 
@@ -211,7 +224,7 @@ class LoanManagerImplTest {
         loanS.setPlannedEndDate(plannedEnd);
         List<Book> bookList = new ArrayList<>();
         when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
-        assertEquals("No book available for those dates", loanManager.checkIfNoOverLapping(loan));
+        assertEquals("No book available for those dates!", loanManager.checkIfNoOverLapping(loan));
 
     }
 
@@ -363,13 +376,15 @@ class LoanManagerImplTest {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
-        Date startDate = simpleDateFormat.parse("2019-09-09");
-        Date plannedEndDate = simpleDateFormat.parse("2019-10-02");
+        Date startDate = simpleDateFormat.parse("2020-04-09");
+        Date plannedEndDate = simpleDateFormat.parse("2020-05-10");
         loan.setStartDate(startDate);
         loan.setPlannedEndDate(plannedEndDate);
         System.out.println(loanDAO);
         List<Book> bookList = new ArrayList<>();
         bookList.add(new Book());
+        Date today = simpleDateFormat.parse("2019-03-09");
+        when(loanManager.getTodayDate()).thenReturn(today);
         when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
         when(loanDAO.addLoan(loan)).thenReturn(false);
         assertEquals("Issue while reserving", loanManager.reserve(loan));

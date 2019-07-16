@@ -123,7 +123,6 @@ public class LoanDAOImpl implements LoanDAO {
         String title = "'"+loan.getBook().getTitle().toUpperCase()+"'";
         String loanStartDate = "'"+loan.getStartDate().toString()+"'";
         String loanPlannedEndDate = "'"+loan.getPlannedEndDate()+"'";
-
         request = "select * from Book b where " +
                 "b.title = "+title+" and b.id not in" +
                 " ( select l.book_id from Loan l where l.end_date is null and(" +
@@ -136,7 +135,6 @@ public class LoanDAOImpl implements LoanDAO {
                 ") ";
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
-
             return query.getResultList();
         } catch (Exception e) {
             return bookList;

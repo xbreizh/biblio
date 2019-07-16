@@ -13,6 +13,7 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
+import org.troparo.model.Member;
 
 import javax.inject.Inject;
 import java.text.ParseException;
@@ -374,14 +375,16 @@ class LoanDAOImplTest {
         String title = "test";
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date startDate = simpleDateFormat.parse("2019-01-14");
-        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
+        Date startDate = simpleDateFormat.parse("2019-02-12");
+        Date plannedEndDate = simpleDateFormat.parse("2019-03-11");
         book.setTitle(title);
+        Member member = new Member();
+        member.setLogin("jo");
+        loan.setBorrower(member);
         loan.setBook(book);
         loan.setStartDate(startDate);
         loan.setPlannedEndDate(plannedEndDate);
 
-        System.out.println("swed: "+loanDAO.getListBooksAvailableOnThoseDates(loan).size());
         assertTrue( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
     }
 
@@ -394,7 +397,7 @@ class LoanDAOImplTest {
         String title = "LA GRANDE AVENTURE";
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date startDate = simpleDateFormat.parse("2019-07-14");
+        Date startDate = simpleDateFormat.parse("2019-07-16");
         Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
         book.setTitle(title);
         loan.setBook(book);

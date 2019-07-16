@@ -153,7 +153,7 @@ public class LoanManagerImpl implements LoanManager {
             loan.setBook(bookList.get(0));
             return "";
         }
-        return "No book available for those dates";
+        return "No book available for those dates!";
     }
 
 
@@ -199,7 +199,10 @@ public class LoanManagerImpl implements LoanManager {
         if (loan.getBook() == null) {
             return "invalid book";
         }
-        if (!loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty())return "the book is unavailable for that date";
+        if (loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty()){
+            return "the book is unavailable for that date";
+    }
+
         // if borrower already has the book in renting, he can't reserve it
         if (checkIfSimilarLoanPlannedOrInProgress(loan)) return "That book is already has a renting in progress or planned for that user";
         return "";
