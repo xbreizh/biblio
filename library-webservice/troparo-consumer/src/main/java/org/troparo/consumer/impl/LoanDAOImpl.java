@@ -124,21 +124,19 @@ public class LoanDAOImpl implements LoanDAO {
         String loanStartDate = "'"+loan.getStartDate().toString()+"'";
         String loanPlannedEndDate = "'"+loan.getPlannedEndDate()+"'";
 
-        request = "select * from Book where " +
-                "title = "+title+" and id not in" +
-                " ( select Book.id from Loan where end_date is null and(" +
-                "book.id in (select id from Book where title = "+title+") and " +
-                "start_date < "+loanStartDate+" and " +
-                "planned_end_date > "+loanStartDate+
+        request = "select * from Book b where " +
+                "b.title = "+title+" and b.id not in" +
+                " ( select l.book_id from Loan l where l.end_date is null and(" +
+                "l.book_id in (select b1.id from Book b1 where b1.title = "+title+") and " +
+                "l.start_date < "+loanStartDate+" and " +
+                "l.planned_end_date > "+loanStartDate+
                 ") or (" +
-                "start_date < "+loanPlannedEndDate+") and " +
-                "planned_end_date > "+loanPlannedEndDate+
+                "l.start_date < "+loanPlannedEndDate+") and " +
+                "l.planned_end_date > "+loanPlannedEndDate+
                 ") ";
         try {
-            Query query = sessionFactory.getCurrentSession().createNativeQuery(request);
+            Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
 
-            List<Loan> list = query.getResultList();
-            logger.info("size of list: " + list.size());
             return query.getResultList();
         } catch (Exception e) {
             return bookList;

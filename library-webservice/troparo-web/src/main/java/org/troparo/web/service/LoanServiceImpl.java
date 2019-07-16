@@ -243,7 +243,8 @@ public class LoanServiceImpl implements ILoanService {
         logger.info(loanTypeIn);
         Loan loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
-        loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
+        loan.setBook(bookManager.getBookByIsbn(loanTypeIn.getISBN().toUpperCase()));
+
 
         loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeIn.getStartDate()));
 
@@ -269,7 +270,7 @@ public class LoanServiceImpl implements ILoanService {
         this.bookManager = bookManager;
     }
 
-    public void setMemberManager(MemberManager memberManager) {
+    void setMemberManager(MemberManager memberManager) {
         this.memberManager = memberManager;
     }
 

@@ -25,6 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class LoanDAOImplTest {
 
@@ -36,7 +37,6 @@ class LoanDAOImplTest {
     private BookDAO bookDAO;
 
     @BeforeEach
-    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         logger.info("size: " + loanDAO.getLoans().size());
         logger.info("reset db");
@@ -176,6 +176,7 @@ class LoanDAOImplTest {
         assertEquals(1, loanDAO.getLoansByCriteria(map).size());
     }
 
+
     @Test
     @DisplayName("should return empty list of loans if criterias null")
     void getLoansByCriterias2() {
@@ -250,6 +251,9 @@ class LoanDAOImplTest {
         map.put("status", "terminated");
         assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
+
+
+
 
     @Test
     @DisplayName("should return nothing if invalid status")
@@ -396,6 +400,7 @@ class LoanDAOImplTest {
         loan.setBook(book);
         loan.setStartDate(startDate);
         loan.setPlannedEndDate(plannedEndDate);
+        System.out.println(loanDAO.getListBooksAvailableOnThoseDates(loan).get(0).getClass());
         assertFalse( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
     }
 

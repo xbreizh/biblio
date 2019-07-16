@@ -227,7 +227,7 @@ public class BookServiceImpl implements IBookService {
             return getBookByCriteriasResponseType;
         }
 
-        bookList = bookManager.getBooksByCriterias(newMap);
+        bookList = bookManager.getBooksByCriteria(newMap);
         logger.info("bookListType beg: " + bookListType.getBookTypeOut().size());
 
         convertBookIntoBookTypeOut();

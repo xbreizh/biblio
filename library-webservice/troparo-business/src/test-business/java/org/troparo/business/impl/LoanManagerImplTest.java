@@ -140,6 +140,30 @@ class LoanManagerImplTest {
         assertNull(loanManager.getLoanById(2));
     }
 
+
+
+
+    @Test
+    @DisplayName("should return true if loan already in progress")
+    void checkIfSimilarLoanPlannedOrInProgress(){
+        Loan loan = new Loan();
+        Member member = new Member();
+        String login = "momo56";
+        member.setLogin(login);
+        Book book = new Book();
+        book.setId(2);
+        book.setIsbn("1223443");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        List<Loan> loanList = new ArrayList<>();
+        Loan loan1 = new Loan();
+        loan1.setBook(book);
+        loanList.add(loan1);
+        when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
+        assertTrue( loanManager.checkIfSimilarLoanPlannedOrInProgress(loan));
+    }
+
+
     @Test
     @DisplayName("should return an empty list")
     void getLoansByCriterias() {

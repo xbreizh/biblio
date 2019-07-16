@@ -55,6 +55,7 @@ class LoanServiceImplTest {
         parameters.setToken("derr");
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
+        loanTypeIn.setISBN("12345");
         parameters.setLoanTypeIn(loanTypeIn);
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         loanService.setDateConvertedHelper(dateConvertedHelper);
@@ -70,6 +71,7 @@ class LoanServiceImplTest {
         parameters.setToken("derr");
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
+        loanTypeIn.setISBN("12345");
         parameters.setLoanTypeIn(loanTypeIn);
         String exception = "exception";
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();

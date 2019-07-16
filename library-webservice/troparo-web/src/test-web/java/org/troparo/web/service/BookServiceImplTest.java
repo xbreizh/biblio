@@ -266,7 +266,7 @@ class BookServiceImplTest {
         List<Book> list = new ArrayList<>();
         Book book = new Book();
         list.add(book);
-        when(bookManager.getBooksByCriterias(map)).thenReturn(list);
+        when(bookManager.getBooksByCriteria(map)).thenReturn(list);
         assertEquals(1, bookService.getBookByCriterias(parameters).getBookListType().getBookTypeOut().size());
     }
 
@@ -285,7 +285,7 @@ class BookServiceImplTest {
         List<Book> list = new ArrayList<>();
         Book book = new Book();
         list.add(book);
-        when(bookManager.getBooksByCriterias(map)).thenReturn(list);
+        when(bookManager.getBooksByCriteria(map)).thenReturn(list);
         assertEquals(1, bookService.getBookByCriterias(parameters).getBookListType().getBookTypeOut().size());
     }
 

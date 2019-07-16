@@ -114,6 +114,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String reserve(Loan loan) {
+        setPlannedEndDate(loan);
         String x1 = checkReserveLoanDetailsAreValid(loan);
         if (!x1.isEmpty()) return x1;
         if (!(loanDAO.addLoan(loan))) return "Issue while reserving";
@@ -199,18 +200,22 @@ public class LoanManagerImpl implements LoanManager {
             return "invalid book";
         }
         // if borrower already has the book in renting, he can't reserve it
-        if (checkIfLoanAlreadyInProgress(loan)) return "loan already in progress";
+        if (checkIfSimilarLoanPlannedOrInProgress(loan)) return "That book is already has a renting in progress or planned for that user";
         return "";
     }
 
-    private boolean checkIfLoanAlreadyInProgress(Loan loan) {
-        Map<String, String> map = new HashMap<>();
-        map.put(LOGIN, loan.getBorrower().getLogin());
-        map.put("BOOK_ID", Integer.toString(loan.getBook().getId()));
-        if (loanDAO.getLoansByCriteria(map) != null && !loanDAO.getLoansByCriteria(map).isEmpty()) {
-            return true;
-        }
-        return false;
+    boolean checkIfSimilarLoanPlannedOrInProgress(Loan loan) {
+       List<Loan> loanList = loanDAO.getLoanByLogin(loan.getBorrower().getLogin());
+
+       if(loanList!=null && !loanList.isEmpty()){
+           for(Loan loan1: loanList){
+               if (loan1.getBook().getIsbn().equals(loan.getBook().getIsbn()) && loan.getEndDate() ==null){
+                   logger.error("there is already a loan with that book and that login");
+                   return true;
+               }
+           }
+       }
+       return false;
     }
 
 
@@ -228,7 +233,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public List<Loan> getLoansByCriteria(Map<String, String> map) {
-        String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS"};
+        String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS", "ISBN"};
         List<String> validCriteriasList = Arrays.asList(validCriterias);
         Map<String, String> criterias = new HashMap<>();
 

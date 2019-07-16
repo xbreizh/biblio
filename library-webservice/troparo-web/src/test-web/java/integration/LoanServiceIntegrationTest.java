@@ -24,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class LoanServiceIntegrationTest {
     private Logger logger = Logger.getLogger(LoanServiceIntegrationTest.class.getName());
@@ -34,7 +35,6 @@ class LoanServiceIntegrationTest {
     private String token = "";
 
     @BeforeEach
-    @Sql(scripts = "classpath:resetDb.sql")
     void getToken() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("LOKII");

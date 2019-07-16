@@ -15,7 +15,7 @@ public interface BookManager {
 
     Book getBookById(int id);
 
-    List<Book> getBooksByCriterias(Map<String, String> map);
+    List<Book> getBooksByCriteria(Map<String, String> map);
 
     String updateBook(Book book);
 
