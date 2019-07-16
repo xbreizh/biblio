@@ -165,6 +165,24 @@ class LoanManagerImplTest {
 
 
     @Test
+    @DisplayName("should return error if book unavailable")
+    void checkBookAndMemberValidity(){
+        Loan loan = new Loan();
+        Member member = new Member();
+        String login = "momo56";
+        member.setLogin(login);
+        Book book = new Book();
+        book.setId(2);
+        book.setIsbn("1234567824");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        loan.setStartDate(new Date());
+        when(bookManager.isAvailable(2)).thenReturn(false);
+        assertEquals("the book is unavailable for that date", loanManager.checkBookAndMemberValidity(loan));
+    }
+
+
+    @Test
     @DisplayName("should return an empty list")
     void getLoansByCriterias() {
         Map<String, String> map = new HashMap<>();

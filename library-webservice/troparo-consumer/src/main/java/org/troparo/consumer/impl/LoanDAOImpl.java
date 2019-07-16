@@ -128,7 +128,7 @@ public class LoanDAOImpl implements LoanDAO {
                 "b.title = "+title+" and b.id not in" +
                 " ( select l.book_id from Loan l where l.end_date is null and(" +
                 "l.book_id in (select b1.id from Book b1 where b1.title = "+title+") and " +
-                "l.start_date < "+loanStartDate+" and " +
+                "l.start_date <= "+loanStartDate+" and " +
                 "l.planned_end_date > "+loanStartDate+
                 ") or (" +
                 "l.start_date < "+loanPlannedEndDate+") and " +
