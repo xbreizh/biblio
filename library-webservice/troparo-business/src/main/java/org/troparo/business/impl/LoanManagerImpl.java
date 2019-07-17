@@ -93,7 +93,7 @@ public class LoanManagerImpl implements LoanManager {
         if (!x.isEmpty()) return x;
 
         // checks if loan is possible
-        if (!bookManager.isAvailable(loan.getBook().getId())) {
+        if(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty()){
             return "book is not available: " + loan.getBook().getId();
         }
         // checks if borrower can borrow
@@ -365,7 +365,7 @@ public class LoanManagerImpl implements LoanManager {
         }
     }
 
-    Date getTodayDate() {
+    public Date getTodayDate() {
         return new Date();
     }
 

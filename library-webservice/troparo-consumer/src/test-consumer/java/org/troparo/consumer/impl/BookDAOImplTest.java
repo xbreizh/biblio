@@ -38,7 +38,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return the books from db (checking the number)")
     void getBooks() {
-        assertEquals(5, bookDAO.getBooks().size());
+        assertEquals(6, bookDAO.getBooks().size());
     }
 
     @Test
@@ -218,7 +218,7 @@ class BookDAOImplTest {
     void getAvailable1() {
         assertAll(
                 () -> assertEquals(0, bookDAO.getAvailable("1234567824")),
-                () -> assertEquals(3, bookDAO.getAvailable("12345678OK")),
+                () -> assertEquals(4, bookDAO.getAvailable("12345678OK")),
                 () -> assertEquals(0, bookDAO.getAvailable("fr"))
 
         );
@@ -228,7 +228,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return false if book not available")
     void isAvailable() {
-        assertFalse(bookDAO.isAvailable(5));
+        assertFalse(bookDAO.isAvailable(6));
     }
 
     @Test

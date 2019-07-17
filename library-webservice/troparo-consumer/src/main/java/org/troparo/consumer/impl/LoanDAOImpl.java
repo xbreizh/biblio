@@ -115,6 +115,10 @@ public class LoanDAOImpl implements LoanDAO {
         }
     }
 
+    Date getTodayDate() {
+        return new Date();
+    }
+
     @Override
     public List<Book> getListBooksAvailableOnThoseDates(Loan loan) {
         String request;
@@ -123,16 +127,16 @@ public class LoanDAOImpl implements LoanDAO {
         String title = "'"+loan.getBook().getTitle().toUpperCase()+"'";
         String loanStartDate = "'"+loan.getStartDate().toString()+"'";
         String loanPlannedEndDate = "'"+loan.getPlannedEndDate()+"'";
-        request = "select * from Book b where " +
-                "b.title = "+title+" and b.id not in" +
-                " ( select l.book_id from Loan l where l.end_date is null and(" +
-                "l.book_id in (select b1.id from Book b1 where b1.title = "+title+") and " +
-                "l.start_date <= "+loanStartDate+" and " +
-                "l.planned_end_date > "+loanStartDate+
-                ") or (" +
-                "l.start_date < "+loanPlannedEndDate+") and " +
-                "l.planned_end_date > "+loanPlannedEndDate+
-                ") ";
+        request =  "select * from Book b where b.title = "+title+" and b.id not in ( " +
+                "select l.book_id from Loan l where l.end_date is null and l.book_id in (" +
+                " select b1.id from Book b1 where b1.title = "+title+" and(" +
+                "l.start_date <= "+loanStartDate+" and" +
+                        " l.planned_end_date > "+loanStartDate+") or("+
+                " l.start_date < "+loanPlannedEndDate+" and"+
+                " l.planned_end_date > "+loanPlannedEndDate+
+                ") or ("+
+                "l.planned_end_date < "+loanStartDate+" and"+
+                " l.end_date is null)))";
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
             return query.getResultList();
@@ -158,7 +162,7 @@ public class LoanDAOImpl implements LoanDAO {
         }
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
-            addingParametersToCriteriasQuery(map, query);
+            addingParametersToCriteriaQuery(map, query);
             logger.info("map again: " + map);
 
             logger.info("map: " + request);
@@ -173,7 +177,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
 
-    private void addingParametersToCriteriasQuery(Map<String, String> map, Query query) {
+    private void addingParametersToCriteriaQuery(Map<String, String> map, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {

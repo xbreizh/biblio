@@ -173,7 +173,7 @@ class LoanDAOImplTest {
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_bookId() {
         Map<String, String> map = new HashMap<>();
-        map.put("book_id", "5");
+        map.put("book_id", "6");
         assertEquals(1, loanDAO.getLoansByCriteria(map).size());
     }
 
@@ -375,8 +375,8 @@ class LoanDAOImplTest {
         String title = "test";
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date startDate = simpleDateFormat.parse("2019-02-12");
-        Date plannedEndDate = simpleDateFormat.parse("2019-03-11");
+        Date startDate = simpleDateFormat.parse("2019-08-12");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-19");
         book.setTitle(title);
         Member member = new Member();
         member.setLogin("jo");
@@ -405,6 +405,23 @@ class LoanDAOImplTest {
         loan.setPlannedEndDate(plannedEndDate);
         System.out.println(loanDAO.getListBooksAvailableOnThoseDates(loan).get(0).getClass());
         assertFalse( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return bookList when book(s) available for dates")
+    void getListBooksAvailableOnThoseDates2() throws ParseException {
+        Loan loan = new Loan();
+        Book book = new Book();
+        String title = "bokana";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-07-16");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
+        book.setTitle(title);
+        loan.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+        assertTrue( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
     }
 
     @Test
