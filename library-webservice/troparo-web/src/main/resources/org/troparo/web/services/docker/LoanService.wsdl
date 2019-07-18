@@ -59,6 +59,12 @@
     <wsdl:message name="terminateLoanResponse">
         <wsdl:part element="loan:terminateLoanResponseType" name="parameters"/>
     </wsdl:message>
+    <wsdl:message name="checkInLoanRequest">
+        <wsdl:part element="loan:checkInLoanRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="checkInLoanResponse">
+        <wsdl:part element="loan:checkInLoanResponseType" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="BusinessExceptionLoan">
         <wsdl:part element="loan:BusinessLoanFaultType" name="parameters"/>
     </wsdl:message>
@@ -102,6 +108,11 @@
         <wsdl:operation name="terminateLoan">
             <wsdl:input message="tns:terminateLoanRequest"/>
             <wsdl:output message="tns:terminateLoanResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="checkInLoan">
+            <wsdl:input message="tns:checkInLoanRequest"/>
+            <wsdl:output message="tns:checkInLoanResponse"/>
             <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
         </wsdl:operation>
     </wsdl:portType>
@@ -202,6 +213,19 @@
             </wsdl:fault>
         </wsdl:operation>
         <wsdl:operation name="terminateLoan">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="checkInLoan">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>
