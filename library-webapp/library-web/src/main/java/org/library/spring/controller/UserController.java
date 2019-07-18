@@ -20,6 +20,7 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
+import java.net.UnknownHostException;
 import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
@@ -36,10 +37,14 @@ public class UserController {
     LoanManager loanManager;
     private Logger logger = Logger.getLogger(UserController.class);
 
-    @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class})
-    public ModelAndView handleNoHandlerFoundException(NoHandlerFoundException ex) {
+    @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class})
+    public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {
         ModelAndView model = new ModelAndView();
+        System.out.println("getting here");
         model.addObject("exception", ex.getMessage());
+
+
+        System.out.println("excc: "+ex.getMessage());
         if (ex.getMessage().startsWith("No handler found")) {
             model.setViewName("404");
         } else {
@@ -48,6 +53,8 @@ public class UserController {
 
         return model;
     }
+
+
 
 
     @RequestMapping("/")

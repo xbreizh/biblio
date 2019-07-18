@@ -196,6 +196,14 @@ public class LoanServiceImpl implements ILoanService {
         return ar;
     }
 
+    @Override
+    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters) throws BusinessExceptionLoan {
+        CheckInLoanResponseType ar = new CheckInLoanResponseType();
+        boolean feedback = loanManager.checkinBooking(parameters.getToken(), parameters.getId());
+        ar.setReturn(feedback);
+        return ar;
+    }
+
 
     // Delete
 

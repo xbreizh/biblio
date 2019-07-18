@@ -124,9 +124,13 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public void checkBooking(Loan loan) {
+    public boolean checkinBooking(String token, int id) {
+        if (!memberManager.checkAdmin(token))return false;
+
+        Loan loan = loanDAO.getLoanById(id);
         loan.setChecked(true);
-        loanDAO.updateLoan(loan);
+        return loanDAO.updateLoan(loan);
+
     }
 
     String checkReserveLoanDetailsAreValid(Loan loan) {

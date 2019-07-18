@@ -3,6 +3,26 @@
             xmlns:tns="http://troparo.org/entities/loan" targetNamespace="http://troparo.org/entities/loan"
             elementFormDefault="qualified">
 
+
+    <!-- Check Loan Request Type -->
+    <xsd:element name="checkInLoanRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Check Loan  Response Type -->
+    <xsd:element name="checkInLoanResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
     <!-- Add Loan Request Type -->
     <xsd:element name="addLoanRequestType">
         <xsd:complexType>

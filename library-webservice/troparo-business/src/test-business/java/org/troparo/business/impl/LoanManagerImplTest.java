@@ -134,10 +134,23 @@ class LoanManagerImplTest {
 
 
     @Test
+    @DisplayName("should book")
     void checkBooking(){
         Loan loan = new Loan();
-        loanManager.checkBooking(loan);
-        assertTrue(loan.isChecked());
+        when(memberManager.checkAdmin(anyString())).thenReturn(true);
+        when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertTrue(loanManager.checkinBooking("", 3));
+    }
+
+    @Test
+    @DisplayName("should not book if user not admin")
+    void checkBooking1(){
+        Loan loan = new Loan();
+        when(memberManager.checkAdmin(anyString())).thenReturn(false);
+        when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertFalse(loanManager.checkinBooking("", 3));
     }
 
 

@@ -29,5 +29,5 @@ public interface LoanManager {
 
     String reserve(Loan loan);
 
-    void checkBooking(Loan loan);
+    boolean checkinBooking( String token, int id);
 }

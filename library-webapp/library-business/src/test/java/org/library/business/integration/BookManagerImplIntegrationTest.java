@@ -35,7 +35,7 @@ class BookManagerImplIntegrationTest {
     @Test
     @DisplayName("should return number available")
     void getNbAvailable() throws BusinessExceptionBook {
-        assertEquals(3, bookManager.getNbAvailable("", "12345678OK"));
+        assertEquals(4, bookManager.getNbAvailable("", "12345678OK"));
 
     }
 

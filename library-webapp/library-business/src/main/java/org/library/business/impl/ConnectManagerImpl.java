@@ -14,6 +14,7 @@ import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Named;
+import javax.xml.ws.WebServiceException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -45,13 +46,16 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         try {
             responseType = getConnectServicePort().getToken(getTokenRequestType);
             token = responseType.getReturn();
+        } catch (WebServiceException e) {
+            exception="issue connecting to remote API";
+            logger.error(exception);
+
         } catch (BusinessExceptionConnect businessExceptionConnect) {
             exception = "issue while trying to get the token";
-            logger.error(exception);
+
         }
 
         logger.info("token found: " + token);
-
 
         if (!token.equals("wrong credentials") && exception.isEmpty()) {
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
