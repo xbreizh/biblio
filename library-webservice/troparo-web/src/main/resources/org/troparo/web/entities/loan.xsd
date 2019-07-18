@@ -257,6 +257,7 @@
                 <xsd:element ref="tns:Login" minOccurs="0"/>
                 <xsd:element name="bookId" type="xsd:int" default="-1"/>
                 <xsd:element ref="tns:Status" minOccurs="0"/>
+                <xsd:element ref="tns:ISBN"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

@@ -1,0 +1,28 @@
+<div th:fragment="reservePreForm" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <form method="post" th:action="@{/reservePreForm}" th:object="${search}">
+       <div class="form-group">
+            <input class="form-control"
+                   id="Author"
+                   name="author"
+                   placeholder="ISBN"
+                   th:value="${book.isbn}"
+                   type="text">
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-sm-6 col-sm-offset-3">
+                    <input class="form-control btn btn-info"
+                           id="search-submit"
+                           name="search-submit"
+                           type="submit"
+                           value="Reservation">
+                </div>
+            </div>
+        </div>
+    </form>
+
+    <br><br>
+
+
+</div>

@@ -1,9 +1,11 @@
 package org.library.business.contract;
 
 
+import org.library.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.List;
 
 public interface LoanManager {
 
@@ -17,4 +19,5 @@ public interface LoanManager {
     boolean renew(String token, String isbn, String login, XMLGregorianCalendar startDate) throws BusinessExceptionLoan;
 
 
+    List<Loan> getLoansForIsbn(String token, String isbn);
 }

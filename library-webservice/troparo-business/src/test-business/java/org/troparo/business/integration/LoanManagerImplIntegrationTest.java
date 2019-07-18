@@ -83,6 +83,13 @@ class LoanManagerImplIntegrationTest {
         map.put("status", "termindeated");
         assertEquals(0, loanManager.getLoansByCriteria(map).size());
     }
+    @Test
+    @DisplayName("should return an empty list when wrong status")
+    void getLoansByCriteria4() {
+        Map<String, String> map = new HashMap<>();
+        map.put("isbn", "8574596258");
+        assertEquals(1, loanManager.getLoansByCriteria(map).size());
+    }
 
 
     @Test

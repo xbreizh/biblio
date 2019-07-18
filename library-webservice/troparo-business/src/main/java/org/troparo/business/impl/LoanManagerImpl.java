@@ -247,9 +247,9 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public List<Loan> getLoansByCriteria(Map<String, String> map) {
-        String[] validCriterias = {"LOGIN", "BOOK_ID", "STATUS", "ISBN"};
-        List<String> validCriteriasList = Arrays.asList(validCriterias);
-        Map<String, String> criterias = new HashMap<>();
+        String[] validCriteria = {"LOGIN", "BOOK_ID", "STATUS", "ISBN"};
+        List<String> validCriteriaList = Arrays.asList(validCriteria);
+        Map<String, String> criteria = new HashMap<>();
 
         String[] validStatus = {"terminated", "progress", "overdue"};
         List<String> validStatusList = Arrays.asList(validStatus);
@@ -261,21 +261,21 @@ public class LoanManagerImpl implements LoanManager {
 
             if (entry.getKey() != null && entry.getValue() != null &&
                     !entry.getValue().equals("?") && !entry.getValue().equals("") && !entry.getValue().equals("-1")
-                    && validCriteriasList.contains(entry.getKey().toUpperCase())) {
+                    && validCriteriaList.contains(entry.getKey().toUpperCase())) {
                 if (entry.getKey().equalsIgnoreCase(STATUS) && !validStatusList.contains(entry.getValue().toLowerCase())) {
                     return loanList;
                 }
-                criterias.put(entry.getKey(), entry.getValue());
+                criteria.put(entry.getKey(), entry.getValue());
 
             }
 
         }
 
 
-        logger.info("map: " + criterias);
+        logger.info("map: " + criteria);
         logger.info("map: " + map);
-        logger.info("criterias: " + criterias);
-        return loanDAO.getLoansByCriteria(criterias);
+        logger.info("criteria: " + criteria);
+        return loanDAO.getLoansByCriteria(criteria);
     }
 
     @Override

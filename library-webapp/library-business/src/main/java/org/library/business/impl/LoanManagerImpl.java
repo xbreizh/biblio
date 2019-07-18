@@ -3,6 +3,10 @@ package org.library.business.impl;
 import org.apache.log4j.Logger;
 import org.library.business.contract.LoanManager;
 import org.library.model.Loan;
+import org.troparo.entities.book.BookCriterias;
+import org.troparo.entities.book.BookListType;
+import org.troparo.entities.book.GetBookByCriteriasRequestType;
+import org.troparo.entities.book.GetBookByCriteriasResponseType;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
@@ -10,7 +14,9 @@ import org.troparo.services.loanservice.LoanService;
 
 import javax.inject.Named;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
@@ -67,6 +73,29 @@ public class LoanManagerImpl implements LoanManager {
         AddLoanResponseType responseType =  getLoanServicePort().addLoan(addLoanRequestType);
         return responseType.isReturn();
     }
+
+    @Override
+    public List<Loan> getLoansForIsbn(String token, String isbn) {
+        GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
+        GetLoanByCriteriasRequestType getLoanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
+        List<Loan> loans = new ArrayList<>();
+        getLoanByCriteriasRequestType.setToken(token);
+        LoanCriterias loanCriterias = new LoanCriterias();
+        /*loanCriterias.getBookIsbn
+        getBookByCriteriasRequestType.setBookCriterias(bookCriteria);*/
+        return loans;
+    }
+
+  /*  private List<Loan> convertBookByCriteriaIntoBookList(LoanListType loanListType) {
+        List<Loan> loanList = new ArrayList<>();
+        if (loanListType.getLoanTypeOut().isEmpty()) return loanList;
+
+        for (LoanTypeOut loanTypeOut: loanListType.getLoanTypeOut()
+             ) {
+            Loan loan = new Loan();
+            loan.setStartDate(loanTypeOut.);
+        }
+    }*/
 
 
 }

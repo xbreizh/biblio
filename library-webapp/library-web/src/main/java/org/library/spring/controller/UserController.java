@@ -225,6 +225,19 @@ public class UserController {
         return mv;
     }
 
+    @PostMapping("/reservePreForm")
+    public ModelAndView reservePreForm(String ISBN) throws BusinessExceptionLoan {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        logger.info("trying to get loans for: " + ISBN);
+        List<Loan> loanList = loanManager.getLoansForIsbn(token, ISBN);
+        ModelAndView mv = new ModelAndView();
+        mv.addObject("loanList", loanList);
+        mv.setViewName("reserve");
+        return mv;
+
+    }
+
     @PostMapping("/search")
     public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {
         logger.info("getting into search");

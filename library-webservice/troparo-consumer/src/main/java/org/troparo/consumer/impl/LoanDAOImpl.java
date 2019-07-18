@@ -147,6 +147,7 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public List<Loan> getLoansByCriteria(Map<String, String> map) {
+
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
         if (map == null) return loanList;
@@ -189,6 +190,9 @@ public class LoanDAOImpl implements LoanDAO {
                 if (entry.getKey().toLowerCase().contains(BOOK_ID)) {
                     query.setParameter(BOOK_ID, +Integer.parseInt(entry.getValue()));
                 }
+                if (entry.getKey().toLowerCase().contains(ISBN)) {
+                    query.setParameter(ISBN, entry.getValue().toUpperCase());
+                }
 
             }
         }
@@ -214,6 +218,11 @@ public class LoanDAOImpl implements LoanDAO {
                     criteria.append(" = :");
                     criteria.append(entry.getKey());
                 }
+                if (entry.getKey().equalsIgnoreCase(ISBN)) {
+                    criteria.append("book.isbn");
+                    criteria.append(" = :");
+                    criteria.append(entry.getKey());
+                }
 
             } else {
                 logger.info("status has been passed: " + entry.getValue());
@@ -224,7 +233,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private boolean checkValidMapEntries(Map<String, String> map) {
-        String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
+        String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN, ISBN};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
