@@ -118,31 +118,38 @@ public class LoanServiceImpl implements ILoanService {
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
 
         checkAuthentication(parameters.getToken());
-        logger.info("troko");
+        logger.info("getting parameters: "+parameters.getLoanCriterias().getISBN());
+        logger.info("getting parameters: "+parameters.getLoanCriterias().getStatus());
+        logger.info("getting parameters: "+parameters.getLoanCriterias().getBookId());
+        logger.info("getting parameters: "+parameters.getLoanCriterias().getISBN());
         Map<String, String> map = new HashMap<>();
+        System.out.println("here");
         if (parameters.getLoanCriterias() == null) {
             responseType.setLoanListType(loanListType);
             return responseType;
         }
-        if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null)
+        if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null && parameters.getLoanCriterias().getISBN() == null)
             return null;
 
-        if (parameters.getLoanCriterias().getLogin() != null && !parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
+        if (parameters.getLoanCriterias().getLogin() != null && !parameters.getLoanCriterias().getLogin().equals("") && !parameters.getLoanCriterias().getLogin().equals("?") && !parameters.getLoanCriterias().getLogin().equalsIgnoreCase("null")) {
             map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
         }
 
         if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
             map.put("book.bookId", Integer.toString(parameters.getLoanCriterias().getBookId()));
         }
-        if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("")) {
+        System.out.println("until here");
+        if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("") && !parameters.getLoanCriterias().getStatus().equalsIgnoreCase("null")) {
             map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
+        }
+        if (parameters.getLoanCriterias().getISBN() != null && !parameters.getLoanCriterias().getISBN().equals("")) {
+            map.put("isbn", parameters.getLoanCriterias().getISBN().toUpperCase());
         }
 
         logger.info("map: " + map);
         logger.info(map);
 
         loanList = loanManager.getLoansByCriteria(map);
-        logger.info("stuff");
 
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
         logger.info(loanList);

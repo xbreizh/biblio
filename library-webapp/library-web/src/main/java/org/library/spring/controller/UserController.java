@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
+import org.library.business.impl.DateConvertedHelper;
 import org.library.model.Book;
 import org.library.model.Loan;
 import org.library.model.Member;
@@ -35,6 +36,7 @@ public class UserController {
     BookManager bookManager;
     @Inject
     LoanManager loanManager;
+
     private Logger logger = Logger.getLogger(UserController.class);
 
     @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class})
@@ -226,11 +228,12 @@ public class UserController {
     }
 
     @PostMapping("/reservePreForm")
-    public ModelAndView reservePreForm(String ISBN) throws BusinessExceptionLoan {
+    public ModelAndView reservePreForm(String isbn) throws BusinessExceptionLoan {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
-        logger.info("trying to get loans for: " + ISBN);
-        List<Loan> loanList = loanManager.getLoansForIsbn(token, ISBN);
+        logger.info("trying to get loans for: " + isbn);
+        List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
+        logger.info("loanList here: "+loanList.size());
         ModelAndView mv = new ModelAndView();
         mv.addObject("loanList", loanList);
         mv.setViewName("reserve");

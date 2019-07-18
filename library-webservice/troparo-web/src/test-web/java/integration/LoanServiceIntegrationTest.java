@@ -72,5 +72,17 @@ class LoanServiceIntegrationTest {
         System.out.println("size: " + loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
         assertEquals(4, loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
     }
+
+    @Test
+    @DisplayName("should return loans for a member")
+    void getLoansByCriterias1() throws BusinessExceptionLoan {
+        GetLoanByCriteriasRequestType loanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
+        loanByCriteriasRequestType.setToken(token);
+        LoanCriterias loanCriterias = new LoanCriterias();
+        loanCriterias.setLogin("jpolino");
+        loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
+        System.out.println("size: " + loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+        assertEquals(4, loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+    }
 }
 

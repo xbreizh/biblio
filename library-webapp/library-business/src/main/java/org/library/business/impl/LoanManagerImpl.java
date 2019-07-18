@@ -2,11 +2,8 @@ package org.library.business.impl;
 
 import org.apache.log4j.Logger;
 import org.library.business.contract.LoanManager;
+import org.library.model.Book;
 import org.library.model.Loan;
-import org.troparo.entities.book.BookCriterias;
-import org.troparo.entities.book.BookListType;
-import org.troparo.entities.book.GetBookByCriteriasRequestType;
-import org.troparo.entities.book.GetBookByCriteriasResponseType;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
@@ -15,13 +12,19 @@ import org.troparo.services.loanservice.LoanService;
 import javax.inject.Named;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
     private static final Logger logger = Logger.getLogger(LoanManager.class.toString());
     private LoanService loanService;
+
+
+    DateConvertedHelper dateConvertedHelper;
+
+    public LoanManagerImpl() {
+        dateConvertedHelper = new DateConvertedHelper();
+    }
 
     void setLoanService(LoanService loanService) {
         this.loanService = loanService;
@@ -70,32 +73,52 @@ public class LoanManagerImpl implements LoanManager {
         loanTypeIn.setLogin(login);
         loanTypeIn.setStartDate(startDate);
         addLoanRequestType.setLoanTypeIn(loanTypeIn);
-        AddLoanResponseType responseType =  getLoanServicePort().addLoan(addLoanRequestType);
+        AddLoanResponseType responseType = getLoanServicePort().addLoan(addLoanRequestType);
         return responseType.isReturn();
     }
 
     @Override
     public List<Loan> getLoansForIsbn(String token, String isbn) {
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
+        logger.info("getting into manager: " + isbn);
         GetLoanByCriteriasRequestType getLoanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
         List<Loan> loans = new ArrayList<>();
         getLoanByCriteriasRequestType.setToken(token);
         LoanCriterias loanCriterias = new LoanCriterias();
-        /*loanCriterias.getBookIsbn
-        getBookByCriteriasRequestType.setBookCriterias(bookCriteria);*/
+        loanCriterias.setISBN(isbn);
+        getLoanByCriteriasRequestType.setLoanCriterias(loanCriterias);
+        logger.info("getting feedback: " + loanCriterias);
+        try {
+            responseType = getLoanServicePort().getLoanByCriterias(getLoanByCriteriasRequestType);
+            logger.info("size returned: " + responseType.getLoanListType().getLoanTypeOut().size());
+            //logger.info("tof: "+loanTypeOutList.get(0));
+            loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType(), isbn);
+        } catch (BusinessExceptionLoan businessExceptionLoan) {
+            businessExceptionLoan.printStackTrace();
+        }
+        logger.info("returning loanList");
         return loans;
     }
 
-  /*  private List<Loan> convertBookByCriteriaIntoBookList(LoanListType loanListType) {
+    private List<Loan> convertLoanByCriteriaIntoLoanList(LoanListType list, String isbn) {
         List<Loan> loanList = new ArrayList<>();
-        if (loanListType.getLoanTypeOut().isEmpty()) return loanList;
+        logger.info("trying to convert");
+        if (list.getLoanTypeOut().isEmpty()) return loanList;
 
-        for (LoanTypeOut loanTypeOut: loanListType.getLoanTypeOut()
-             ) {
+        for (LoanTypeOut loanTypeOut : list.getLoanTypeOut()
+        ) {
             Loan loan = new Loan();
-            loan.setStartDate(loanTypeOut.);
+            loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
+            loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
+            Book book = new Book();
+            book.setIsbn(isbn);
+            loan.setBook(book);
+            loanList.add(loan);
         }
-    }*/
+
+        logger.info("converted " + loanList.size() + " items");
+        return loanList;
+    }
 
 
 }

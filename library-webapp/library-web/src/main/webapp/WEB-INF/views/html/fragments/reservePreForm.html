@@ -1,10 +1,10 @@
 <div th:fragment="reservePreForm" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <form method="post" th:action="@{/reservePreForm}" th:object="${search}">
+    <form method="post" th:action="@{/reservePreForm}" th:object="${reservePreForm}">
        <div class="form-group">
             <input class="form-control"
-                   id="Author"
-                   name="author"
+                   id="Isbn"
+                   name="isbn"
                    placeholder="ISBN"
                    th:value="${book.isbn}"
                    type="text">
