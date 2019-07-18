@@ -118,10 +118,6 @@ public class LoanServiceImpl implements ILoanService {
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
 
         checkAuthentication(parameters.getToken());
-        logger.info("getting parameters: "+parameters.getLoanCriterias().getISBN());
-        logger.info("getting parameters: "+parameters.getLoanCriterias().getStatus());
-        logger.info("getting parameters: "+parameters.getLoanCriterias().getBookId());
-        logger.info("getting parameters: "+parameters.getLoanCriterias().getISBN());
         Map<String, String> map = new HashMap<>();
         System.out.println("here");
         if (parameters.getLoanCriterias() == null) {
