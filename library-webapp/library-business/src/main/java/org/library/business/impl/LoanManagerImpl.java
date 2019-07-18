@@ -2,12 +2,15 @@ package org.library.business.impl;
 
 import org.apache.log4j.Logger;
 import org.library.business.contract.LoanManager;
+import org.library.model.Loan;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
 
 import javax.inject.Named;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
@@ -50,6 +53,19 @@ public class LoanManagerImpl implements LoanManager {
         requestType.setToken(token);
         requestType.setId(id);
         return getLoanServicePort().getLoanStatus(requestType).getStatus();
+    }
+
+    @Override
+    public boolean renew(String token, String isbn, String login, XMLGregorianCalendar startDate) throws BusinessExceptionLoan {
+        AddLoanRequestType addLoanRequestType = new AddLoanRequestType();
+        addLoanRequestType.setToken(token);
+        LoanTypeIn loanTypeIn = new LoanTypeIn();
+        loanTypeIn.setISBN(isbn);
+        loanTypeIn.setLogin(login);
+        loanTypeIn.setStartDate(startDate);
+        addLoanRequestType.setLoanTypeIn(loanTypeIn);
+        AddLoanResponseType responseType =  getLoanServicePort().addLoan(addLoanRequestType);
+        return responseType.isReturn();
     }
 
 

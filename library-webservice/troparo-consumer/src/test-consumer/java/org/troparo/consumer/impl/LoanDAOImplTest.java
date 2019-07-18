@@ -194,14 +194,14 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return empty list of loans if empty map passed")
-    void getLoansByCriterias4() {
+    void getLoansByCriteria4() {
         Map<String, String> map = new HashMap<>();
         assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias_login() {
+    void getLoansByCriteria_login() {
         Map<String, String> map = new HashMap<>();
         map.put("login", "lokii");
         assertEquals(1, loanDAO.getLoansByCriteria(map).size());
@@ -209,7 +209,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias_login1() {
+    void getLoansByCriteria_login1() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "");
         assertEquals(0, loanDAO.getLoansByCriteria(map).size());
@@ -218,7 +218,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias_Status() {
+    void getLoansByCriteria_Status() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         assertEquals(3, loanDAO.getLoansByCriteria(map).size());
@@ -226,7 +226,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return empty list if loan status invalid")
-    void getLoansByCriterias_Status1() {
+    void getLoansByCriteria_Status1() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "wrongOne");
         assertEquals(0, loanDAO.getLoansByCriteria(map).size());
@@ -234,7 +234,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return empty list if loan is null")
-    void getLoansByCriterias_Status2() {
+    void getLoansByCriteria_Status2() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         map.put("book_id", "5");
@@ -246,7 +246,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return list if several valid criterias")
-    void getLoansByCriterias_Status3() {
+    void getLoansByCriteria_Status3() {
         Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
         map.put("status", "terminated");
@@ -444,6 +444,7 @@ class LoanDAOImplTest {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         assertFalse(loanDAO.checkValidStatus("fini"));
     }
+
 
 
 }

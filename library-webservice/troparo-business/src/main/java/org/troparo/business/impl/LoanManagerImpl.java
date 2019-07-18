@@ -97,12 +97,14 @@ public class LoanManagerImpl implements LoanManager {
             return "book is not available: " + loan.getBook().getId();
         }
         // checks if borrower can borrow
-        if (memberManager.getMemberById(loan.getBorrower().getId()).getLoanList().size() < maxBooks) {
-            loanDAO.addLoan(loan);
-        } else {
-            return "max number of books rented reached";
-        }
+        if (checkIfBorrowerHasNotReachedMaxLoan(loan)) return "max number of books rented reached";
         return "";
+    }
+
+    private boolean checkIfBorrowerHasNotReachedMaxLoan(Loan loan) {
+
+      return memberManager.getMemberById(loan.getBorrower().getId()).getLoanList().size() >= maxBooks;
+
     }
 
     void setPlannedEndDate(Loan loan) {
@@ -121,6 +123,12 @@ public class LoanManagerImpl implements LoanManager {
         return "";
     }
 
+    @Override
+    public void checkBooking(Loan loan) {
+        loan.setChecked(true);
+        loanDAO.updateLoan(loan);
+    }
+
     String checkReserveLoanDetailsAreValid(Loan loan) {
         String x;
         x = checkLoanStartDateIsNotInPastOrNull(loan.getStartDate());
@@ -132,8 +140,6 @@ public class LoanManagerImpl implements LoanManager {
         x = checkIfReserveLimitNotReached(loan.getBorrower().getLogin());
         if (!x.isEmpty()) return x;
         x = checkIfNoOverLapping(loan);
-        if (!x.isEmpty()) return x;
-        x = checkIfOverDue(loan);
         if (!x.isEmpty()) return x;
         return "";
     }
@@ -158,12 +164,11 @@ public class LoanManagerImpl implements LoanManager {
 
 
 
-    String checkIfOverDue(Loan loan) {
+    boolean checkIfOverDue(Loan loan) {
         Map<String, String> map = new HashMap<>();
         map.put(LOGIN, loan.getBorrower().getLogin());
         map.put(STATUS, LoanStatus.OVERDUE.toString());
-        if (!loanDAO.getLoansByCriteria(map).isEmpty()) return "There are Overdue Items";
-        return "";
+        return !loanDAO.getLoansByCriteria(map).isEmpty();
     }
 
     String checkIfReserveLimitNotReached(String login) {
@@ -202,6 +207,7 @@ public class LoanManagerImpl implements LoanManager {
         if (loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty()){
             return "the book is unavailable for that date";
     }
+        if(checkIfOverDue(loan))return "There are Overdue Items";
 
         // if borrower already has the book in renting, he can't reserve it
         if (checkIfSimilarLoanPlannedOrInProgress(loan)) return "That book is already has a renting in progress or planned for that user";

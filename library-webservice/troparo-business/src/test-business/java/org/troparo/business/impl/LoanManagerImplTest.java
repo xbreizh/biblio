@@ -116,11 +116,29 @@ class LoanManagerImplTest {
         List<Book> bookList = new ArrayList<>();
         bookList.add(new Book());
         LoanDAOImpl loanDAO = mock(LoanDAOImpl.class);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        List<Loan> loanList = new ArrayList<>();
+        loanList.add(new Loan());
         when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
         loanManager1.setLoanDAO(loanDAO);
+        loanList.remove(0);
+        Map<String, String> map1 = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+       when(loanDAO.getLoansByCriteria(map1)).thenReturn(loanList);
         assertEquals("max number of books rented reached", loanManager1.addLoan(loan));
     }
 
+
+    @Test
+    void checkBooking(){
+        Loan loan = new Loan();
+        loanManager.checkBooking(loan);
+        assertTrue(loan.isChecked());
+    }
 
 
     @Test
@@ -294,7 +312,7 @@ class LoanManagerImplTest {
         map.put("status", LoanStatus.OVERDUE.toString());
         List<Loan> loanList = new ArrayList<>();
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertTrue(loanManager.checkIfOverDue(loan).isEmpty());
+        assertFalse(loanManager.checkIfOverDue(loan));
 
     }
 
@@ -315,7 +333,7 @@ class LoanManagerImplTest {
         Loan loan1 = new Loan();
         loanList.add(loan1);
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertEquals("There are Overdue Items", loanManager.checkIfOverDue(loan));
+        assertTrue(loanManager.checkIfOverDue(loan));
 
     }
 
@@ -380,7 +398,6 @@ class LoanManagerImplTest {
         Date plannedEndDate = simpleDateFormat.parse("2020-05-10");
         loan.setStartDate(startDate);
         loan.setPlannedEndDate(plannedEndDate);
-        System.out.println(loanDAO);
         List<Book> bookList = new ArrayList<>();
         bookList.add(new Book());
         Date today = simpleDateFormat.parse("2019-03-09");

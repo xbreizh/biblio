@@ -28,4 +28,6 @@ public interface LoanManager {
     void setLoanDAO(LoanDAO loanDAO);
 
     String reserve(Loan loan);
+
+    void checkBooking(Loan loan);
 }

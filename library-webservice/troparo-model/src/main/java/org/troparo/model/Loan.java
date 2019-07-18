@@ -29,6 +29,9 @@ public class Loan {
     @Column(name = "END_DATE")
     private Date endDate;
 
+    @Column(name = "CHECKED")
+    private boolean checked;
+
     @ManyToOne
     private Member borrower;
 
@@ -46,6 +49,7 @@ public class Loan {
                 ", endDate=" + endDate +
                 ", borrower=" + borrower.getLogin() +
                 ", book=" + book.getTitle() +
+                ", checked=" + checked +
                 '}';
     }
 

@@ -60,6 +60,7 @@ CREATE TABLE public.loan
     start_date       timestamp NULL,
     book_id          int4      NULL,
     borrower_id      int4      NULL,
+    checked          boolean   NOT NULL,
     CONSTRAINT loan_pkey PRIMARY KEY (id),
     CONSTRAINT fkckf2g131el3qunjs9afsf6265 FOREIGN KEY (borrower_id) REFERENCES member (id),
     CONSTRAINT fkllwvq8yhcx4uqka3jay8a53o2 FOREIGN KEY (book_id) REFERENCES book (id)
@@ -93,10 +94,10 @@ VALUES ('MAURICE MOSS', 'GALLIMARD', '2019-01-18 15:25:33.546', '12345678OK', 'I
         'BOKANA')
 ;
 
-INSERT INTO public.loan (end_date, planned_end_date, start_date, book_id, borrower_id)
-VALUES ('2019-01-25 16:25:26.422', '2019-01-25 00:00:00.000', '2019-01-18 15:26:17.468', 3, 1)
-     , ('2019-02-25 17:11:43.224', '2019-02-19 00:00:00.000', '2019-02-12 16:21:22.005', 3, 1)
-     , ('2018-12-24 17:17:24.356', '2018-12-29 00:00:00.000', '2018-12-22 17:15:46.294', 3, 1)
-     , (NULL, '2019-03-23 00:00:00.000', '2019-03-15 17:08:20.767', 6, 2)
-     , (NULL, '2019-08-19 00:00:00.000', '2019-08-12 00:00:00.000', 2, 1)
+INSERT INTO public.loan (end_date, planned_end_date, start_date, book_id, borrower_id, checked)
+VALUES ('2019-01-25 16:25:26.422', '2019-01-25 00:00:00.000', '2019-01-18 15:26:17.468', 3, 1, true)
+     , ('2019-02-25 17:11:43.224', '2019-02-19 00:00:00.000', '2019-02-12 16:21:22.005', 3, 1, true)
+     , ('2018-12-24 17:17:24.356', '2018-12-29 00:00:00.000', '2018-12-22 17:15:46.294', 3, 1, true)
+     , (NULL, '2019-03-23 00:00:00.000', '2019-03-15 17:08:20.767', 6, 2, false)
+     , (NULL, '2019-08-19 00:00:00.000', '2019-08-12 00:00:00.000', 2, 1, false)
 ;
