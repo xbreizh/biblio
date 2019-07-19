@@ -1,12 +1,35 @@
 <div th:fragment="resaCalendar" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <input id="datepicker" width="312" />
+
+
+    <form method="post" th:action="@{/reserve}" th:object="${reservePreForm}">
+
+        <input id="datepicker" name="startDate" width="312" />
+
+        <input class="form-control"
+               id="Isbn"
+               name="isbn"
+               placeholder="ISBN"
+               th:value="${book.isbn}"
+               type="hidden">
+
+        <input class="form-control btn btn-info"
+               id="search-submit"
+               name="search-submit"
+               type="submit"
+               value="Book it!">
+
+    </form>
+
+
+
 
     <script th:inline="javascript">
         /*<![CDATA[*/
         var date = new Date();
         var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
         var disabled = [[${disabled}]];
+
         $('#datepicker').datepicker({
             format: "mm/dd/yyyy",
             minDate: today,

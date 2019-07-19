@@ -5,6 +5,7 @@ import org.library.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.Date;
 import java.util.List;
 
 public interface LoanManager {
@@ -22,4 +23,6 @@ public interface LoanManager {
     List<Loan> getLoansForIsbn(String token, String isbn);
 
     String[] createArrayFromLoanDates(List<Loan> loanList);
+
+    boolean reserve(String token, String login, String isbn, Date startDate);
 }

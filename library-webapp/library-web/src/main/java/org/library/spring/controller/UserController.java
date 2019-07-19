@@ -23,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.UnknownHostException;
 import java.security.Principal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -220,11 +221,11 @@ public class UserController {
 
     @GetMapping("/mySpace")
     public ModelAndView mySpace() {
-        ModelAndView mv = new ModelAndView();
+     /*   ModelAndView mv =
 
-        mv.setViewName("mySpace");
+        mv.setViewName();*/
 
-        return mv;
+        return new ModelAndView("mySpace");
     }
 
     @PostMapping("/reservePreForm")
@@ -234,16 +235,42 @@ public class UserController {
         logger.info("trying to get loans for: " + isbn);
         List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
         logger.info("loanList here: "+loanList.size());
-        logger.info("title: "+loanList.get(0).getBook().getTitle());
-        String[] disabled = loanManager.createArrayFromLoanDates(loanList);
         ModelAndView mv = new ModelAndView();
-        mv.addObject("loanList", loanList);
-        mv.addObject("book", loanList.get(0).getBook());
-        mv.addObject("disabled",disabled );
-        mv.setViewName("reserve");
+        if(!loanList.isEmpty()) {
+            String[] disabled = loanManager.createArrayFromLoanDates(loanList);
+            mv.addObject("loanList", loanList);
+            mv.addObject("book", loanList.get(0).getBook());
+            mv.addObject("disabled",disabled );
+            mv.setViewName("reserve");
+        }else{
+
+            mv.setViewName("home");
+        }
         return mv;
 
     }
+
+    @PostMapping("/reserve")
+    public ModelAndView reserve(Date startDate, String isbn)  {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        String login = authentication.getPrincipal().toString();
+
+        logger.info("login: "+login);
+        logger.info("token: "+token);
+        logger.info("isbn: "+isbn);
+        logger.info("startDate: "+startDate);
+
+
+        if(loanManager.reserve(token, login, isbn, startDate)){
+            return new ModelAndView("bookingOk");
+        }
+        return new ModelAndView("bookingKo");
+
+    }
+
+
+
 
     @PostMapping("/search")
     public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {

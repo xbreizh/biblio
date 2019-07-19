@@ -80,9 +80,16 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String addLoan(Loan loan) {
+
+        System.out.println("loan received: "+loan.getBorrower().getLogin());
+        System.out.println("startDate: "+loan.getStartDate());
+        System.out.println("book; "+loan.getBook().getIsbn());
+
         if (loan.getStartDate() != null) {
+            logger.info("reservation");
             return reserve(loan);
         }
+        logger.info("new Booking");
         return newBooking(loan);
     }
 
@@ -366,6 +373,9 @@ public class LoanManagerImpl implements LoanManager {
             }
             if (loan.getPlannedEndDate().before(today)) {
                 return "OVERDUE";
+            }
+            if (loan.getStartDate().after(today)) {
+                return "PLANNED";
             } else {
                 return "PROGRESS";
             }

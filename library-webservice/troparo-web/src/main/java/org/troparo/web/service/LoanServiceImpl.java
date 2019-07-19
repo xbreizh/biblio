@@ -55,8 +55,8 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("loanManager: " + loanManager);
         exception = loanManager.addLoan(loan);
         if (!exception.equals("")) {
-            logger.info("exception found: " + exception);
-            throw new BusinessExceptionLoan(exception);
+            logger.error("exception found: " + exception);
+            ar.setReturn(false);
         }
 
         return ar;

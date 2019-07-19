@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
@@ -83,7 +82,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public List<Loan> getLoansForIsbn(String token, String isbn) {
-        GetLoanByCriteriasResponseType responseType ;
+        GetLoanByCriteriasResponseType responseType;
         logger.info("getting into manager: " + isbn);
         GetLoanByCriteriasRequestType getLoanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
         List<Loan> loans = new ArrayList<>();
@@ -97,7 +96,7 @@ public class LoanManagerImpl implements LoanManager {
             logger.info("size returned: " + responseType.getLoanListType().getLoanTypeOut().size());
             loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType());
         } catch (BusinessExceptionLoan businessExceptionLoan) {
-            businessExceptionLoan.printStackTrace();
+           logger.error(businessExceptionLoan.getMessage());
         }
         logger.info("returning loanList");
         return loans;
@@ -110,12 +109,14 @@ public class LoanManagerImpl implements LoanManager {
 
         for (LoanTypeOut loanTypeOut : list.getLoanTypeOut()
         ) {
-            Loan loan = new Loan();
-            loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
-            loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
-            Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
-            loan.setBook(book);
-            loanList.add(loan);
+            if(loanTypeOut.getEndDate()!=null) { // we exclude the none-returned items
+                Loan loan = new Loan();
+                loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
+                loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
+                Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
+                loan.setBook(book);
+                loanList.add(loan);
+            }
         }
 
         logger.info("converted " + loanList.size() + " items");
@@ -123,7 +124,7 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
-    private Book convertLoanBookIntoBook(LoanBook loanBook){
+    private Book convertLoanBookIntoBook(LoanBook loanBook) {
         Book book = new Book();
         book.setTitle(loanBook.getTitle());
         book.setAuthor(loanBook.getAuthor());
@@ -136,18 +137,17 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String[] createArrayFromLoanDates(List<Loan> loanList) {
-        String[] dateArray = null;
-        if(loanList.isEmpty())return dateArray;
+        if (loanList.isEmpty()) return new String[0];
         List<String> dateList = new ArrayList<>();
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        for (Loan loan: loanList){
+        for (Loan loan : loanList) {
             Date start = loan.getStartDate();
             Date end = loan.getPlannedEndDate();
 
             Calendar c = Calendar.getInstance();
             c.setTime(loan.getStartDate());
-            Date dateToAdd= start;
-            while(!format.format(dateToAdd).equals(format.format(end))) {
+            Date dateToAdd = start;
+            while (!format.format(dateToAdd).equals(format.format(end))) {
                 dateList.add(format.format(dateToAdd));
                 c.add(Calendar.DAY_OF_MONTH, 1);
                 dateToAdd = c.getTime();
@@ -155,9 +155,28 @@ public class LoanManagerImpl implements LoanManager {
         }
 
 
-        
         return dateList.toArray(new String[dateList.size()]);
-        
+
     }
-    
+
+    @Override
+    public boolean reserve(String token, String login, String isbn, Date startDate) {
+        AddLoanRequestType requestType = new AddLoanRequestType();
+        requestType.setToken(token);
+        LoanTypeIn loanTypeIn = new LoanTypeIn();
+        loanTypeIn.setStartDate(dateConvertedHelper.convertDateIntoXmlDate(startDate));
+        loanTypeIn.setLogin(login);
+        loanTypeIn.setISBN(isbn);
+        requestType.setLoanTypeIn(loanTypeIn);
+
+        AddLoanResponseType responseType;
+        try {
+            responseType = getLoanServicePort().addLoan(requestType);
+            return responseType.isReturn();
+        } catch (BusinessExceptionLoan businessExceptionLoan) {
+            logger.error(businessExceptionLoan.getMessage());
+        }
+        return false;
+    }
+
 }
