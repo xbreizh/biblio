@@ -79,7 +79,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public List<Loan> getLoansForIsbn(String token, String isbn) {
-        GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
+        GetLoanByCriteriasResponseType responseType ;
         logger.info("getting into manager: " + isbn);
         GetLoanByCriteriasRequestType getLoanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
         List<Loan> loans = new ArrayList<>();
@@ -91,7 +91,6 @@ public class LoanManagerImpl implements LoanManager {
         try {
             responseType = getLoanServicePort().getLoanByCriterias(getLoanByCriteriasRequestType);
             logger.info("size returned: " + responseType.getLoanListType().getLoanTypeOut().size());
-            //logger.info("tof: "+loanTypeOutList.get(0));
             loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType(), isbn);
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             businessExceptionLoan.printStackTrace();

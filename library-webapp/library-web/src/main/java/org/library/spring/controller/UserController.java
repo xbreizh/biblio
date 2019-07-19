@@ -257,11 +257,11 @@ public class UserController {
         logger.info("title received: " + title);
         logger.info("author received: " + author);
 
-        HashMap criterias = new HashMap<String, String>();
-        criterias.put("isbn", isbn);
-        criterias.put("TITLE", title);
-        criterias.put("AUTHOR", author);
-        books = bookManager.searchBooks(token, criterias);
+        HashMap criteria = new HashMap<String, String>();
+        criteria.put("isbn", isbn);
+        criteria.put("TITLE", title);
+        criteria.put("AUTHOR", author);
+        books = bookManager.searchBooks(token, criteria);
 
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);

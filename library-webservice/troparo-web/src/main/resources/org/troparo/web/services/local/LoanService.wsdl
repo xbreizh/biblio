@@ -85,7 +85,7 @@
             <wsdl:output message="tns:getLoanByIdResponse"/>
             <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
         </wsdl:operation>
-        <wsdl:operation name="getLoanByCriterias">
+        <wsdl:operation name="getLoanByCriteria">
             <wsdl:input message="tns:getLoanByCriteriasRequest"/>
             <wsdl:output message="tns:getLoanByCriteriasResponse"/>
             <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
@@ -160,7 +160,7 @@
                 <soap:fault name="businessExceptionLoan" use="literal"/>
             </wsdl:fault>
         </wsdl:operation>
-        <wsdl:operation name="getLoanByCriterias">
+        <wsdl:operation name="getLoanByCriteria">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>

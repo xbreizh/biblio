@@ -127,7 +127,7 @@ class LoanServiceImplTest {
         parameters.setToken("token123");
         parameters.setLoanCriterias(null);
 
-        assertDoesNotThrow(() -> loanService.getLoanByCriterias(parameters));
+        assertDoesNotThrow(() -> loanService.getLoanByCriteria(parameters));
     }
 
     @Test
@@ -142,7 +142,7 @@ class LoanServiceImplTest {
         map.put("login", "KOLIO");
         List<Loan> loanList = new ArrayList<>();
         when(loanManager.getLoansByCriteria(map)).thenReturn(loanList);
-        assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
+        assertEquals(0, loanService.getLoanByCriteria(parameters).getLoanListType().getLoanTypeOut().size());
     }
 
     @Test
@@ -155,7 +155,7 @@ class LoanServiceImplTest {
         parameters.setLoanCriterias(loanCriterias);
         Map<String, String> map = new HashMap<>();
         map.put("invalid.criteria", "invalid");
-        assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
+        assertEquals(0, loanService.getLoanByCriteria(parameters).getLoanListType().getLoanTypeOut().size());
     }
 
 

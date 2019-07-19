@@ -77,6 +77,7 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setBookId(loan.getBook().getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
+
             loanTypeOut.setStartDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate()));
             loanTypeOut.setPlannedEndDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate()));
             if (loan.getEndDate() != null) {
@@ -112,14 +113,13 @@ public class LoanServiceImpl implements ILoanService {
 
     // Get List By Criterias
     @Override
-    public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
+    public GetLoanByCriteriasResponseType getLoanByCriteria(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
         List<Loan> loanList;
         LoanListType loanListType = new LoanListType();
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
 
         checkAuthentication(parameters.getToken());
         Map<String, String> map = new HashMap<>();
-        System.out.println("here");
         if (parameters.getLoanCriterias() == null) {
             responseType.setLoanListType(loanListType);
             return responseType;
@@ -134,7 +134,6 @@ public class LoanServiceImpl implements ILoanService {
         if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
             map.put("book.bookId", Integer.toString(parameters.getLoanCriterias().getBookId()));
         }
-        System.out.println("until here");
         if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("") && !parameters.getLoanCriterias().getStatus().equalsIgnoreCase("null")) {
             map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
         }
@@ -200,7 +199,7 @@ public class LoanServiceImpl implements ILoanService {
     }
 
     @Override
-    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters) throws BusinessExceptionLoan {
+    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters)  {
         CheckInLoanResponseType ar = new CheckInLoanResponseType();
         boolean feedback = loanManager.checkinBooking(parameters.getToken(), parameters.getId());
         ar.setReturn(feedback);
@@ -224,6 +223,15 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
             loanTypeOut.setBookId(loan.getBook().getId());
+            LoanBook bookLoan = new LoanBook();
+            bookLoan.setAuthor(loan.getBook().getAuthor());
+            bookLoan.setTitle(loan.getBook().getTitle());
+            bookLoan.setISBN(loan.getBook().getIsbn());
+            bookLoan.setEdition(loan.getBook().getEdition());
+            bookLoan.setKeywords(loan.getBook().getKeywords());
+            bookLoan.setNbPages(loan.getBook().getNbPages());
+            bookLoan.setPublicationYear(loan.getBook().getPublicationYear());
+            loanTypeOut.setLoanBook(bookLoan);
             XMLGregorianCalendar startDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate());
             XMLGregorianCalendar plannedEndDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate());
             if (loan.getEndDate() != null) {

@@ -21,11 +21,11 @@ public class BookManagerImpl implements BookManager {
 
 
     @Override
-    public List<Book> searchBooks(String token, Map<String, String> criterias) throws BusinessExceptionBook {
+    public List<Book> searchBooks(String token, Map<String, String> criteria) throws BusinessExceptionBook {
         List<Book> result;
         GetBookByCriteriasRequestType requestType = new GetBookByCriteriasRequestType();
         requestType.setToken(token);
-        requestType.setBookCriterias(convertCriteriasIntoCriteriasRequest(criterias));
+        requestType.setBookCriterias(convertCriteriasIntoCriteriasRequest(criteria));
         GetBookByCriteriasResponseType responseType;
         logger.info(requestType.getBookCriterias().getAuthor());
         logger.info(requestType.getToken());
