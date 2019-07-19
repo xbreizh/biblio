@@ -1,5 +1,9 @@
 <div th:fragment="reservePreForm" xmlns:th="http://www.w3.org/1999/xhtml">
-    <!--<a th:href="@{'/reservePreForm?isbn=' + ${book.isbn}}">Book it!</a>-->
+
+    <td th:if="${overdue}">
+        <button class="btn btn-info first" onclick="overdue()">Book it!</button>
+    </td>
+    <td th:if="!${overdue}">
     <form method="post" th:action="@{/reservePreForm}" th:object="${reservePreForm}">
 
             <input class="form-control"
@@ -16,6 +20,7 @@
                            value="Book it!">
 
     </form>
-
+    </td>
 
 </div>
+

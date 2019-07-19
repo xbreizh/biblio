@@ -1,6 +1,5 @@
 <div th:fragment="loans" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <h2>Loans table</h2>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -18,10 +17,10 @@
         <tbody>
         <th:block data-th-each="loan : ${member.loanList}">
             <div th:if="${loan.status} == 'OVERDUE'">
-                <tr style="color: red">
+                <td style="color: red"></td>
             </div>
             <div th:unless="${loan.status}">
-                <tr style="color: blue">
+                <td style="color: blue"></td>
             </div>
 
 
@@ -32,7 +31,7 @@
             <td data-th-text="${loan.book.title}"></td>
             <td data-th-text="${loan.status}"></td>
             <td>
-                <div th:if="${loan.renewable} == true">
+                <div th:if="${loan.renewable}">
                     <div>
                         <form method="post" th:action="@{/renew}" th:object="${renew}">
 
@@ -51,22 +50,10 @@
                     <img alt="forbidden" style="width: 80px;height: auto" th:src="@{/img/forbidden.jpg}"/>
                 </div>
             </td>
-            </tr>
 
         </th:block>
         </tbody>
     </table>
-    <script>
-        function toggle_table(t) {
-            var x = document.getElementById(t);
-
-            if (x.style.display === "none") {
-                x.style.display = "table";
-            } else {
-                x.style.display = "none";
-            }
-        }
-    </script>
 
 
 </div>

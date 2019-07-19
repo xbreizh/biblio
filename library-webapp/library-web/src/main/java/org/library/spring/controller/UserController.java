@@ -30,7 +30,7 @@ import java.util.List;
 @Controller
 @ControllerAdvice
 public class UserController {
-    static final String LOGIN = "login";
+    private static final String LOGIN = "login";
     @Inject
     MemberManager memberManager;
     @Inject
@@ -40,7 +40,7 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(UserController.class);
 
-    @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class})
+    @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
     public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {
         ModelAndView model = new ModelAndView();
         System.out.println("getting here");
@@ -221,9 +221,6 @@ public class UserController {
 
     @GetMapping("/mySpace")
     public ModelAndView mySpace() {
-     /*   ModelAndView mv =
-
-        mv.setViewName();*/
 
         return new ModelAndView("mySpace");
     }
@@ -300,6 +297,7 @@ public class UserController {
         mv.addObject("isbn", isbn);
         mv.addObject("title", title);
         mv.addObject("author", author);
+        checkOverdue(member, mv);
         mv.setViewName("home");
         logger.info("going back to home");
 

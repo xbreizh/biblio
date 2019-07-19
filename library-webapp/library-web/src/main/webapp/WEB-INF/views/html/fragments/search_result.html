@@ -15,7 +15,9 @@
                 <td data-th-text="${book.title}"></td>
                 <td data-th-text="${book.author}"></td>
                 <td data-th-text="${book.nbAvailable}"></td>
-                <td><td th:replace="fragments/reservePreForm :: reservePreForm"></td></td>
+
+                    <td th:replace="fragments/reservePreForm :: reservePreForm"></td>
+
             </tr>
 
         </th:block>
@@ -24,4 +26,4 @@
 </div>
 
 
-</div>
+

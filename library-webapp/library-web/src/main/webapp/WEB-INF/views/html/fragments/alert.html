@@ -1,8 +1,9 @@
+<!--
 <div th:fragment="alert" xmlns:th="http://www.w3.org/1999/xhtml">
 
     <div th:if="${overdue}">
         <script>
-            $(document).ready(function () {
+           /* $(document).ready(function () {
                 if (sessionStorage.getItem('popState') != 'shown') {
                     Swal.fire({
                         title: 'You have some overdue items!',
@@ -12,8 +13,16 @@
                     sessionStorage.setItem('popState', 'shown')
                 }
             });
+            function overdue() {
+                Swal.fire({
+                    title: 'You can\'t book while having overdue items!',
+                    type: 'error',
+                    confirmButtonText: 'Ok, I ll take care of it!'
+                });
+            };*/
         </script>
     </div>
 
 </div>
 
+-->
