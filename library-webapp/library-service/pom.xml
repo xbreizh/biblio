@@ -33,7 +33,7 @@
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/3d4e21eaaaf3b9fcab286ec57fa5af14476b9d04/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/5ab125c32f6d3a14d10cb302bc3b3456b75cd5b8/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/LoanService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
@@ -77,7 +77,7 @@
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/3d4e21eaaaf3b9fcab286ec57fa5af14476b9d04/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/5ab125c32f6d3a14d10cb302bc3b3456b75cd5b8/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/LoanService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>

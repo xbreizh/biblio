@@ -89,7 +89,7 @@ public class LoanManagerImpl implements LoanManager {
         getLoanByCriteriasRequestType.setLoanCriterias(loanCriterias);
         logger.info("getting feedback: " + loanCriterias);
         try {
-            responseType = getLoanServicePort().getLoanByCriterias(getLoanByCriteriasRequestType);
+            responseType = getLoanServicePort().getLoanByCriteria(getLoanByCriteriasRequestType);
             logger.info("size returned: " + responseType.getLoanListType().getLoanTypeOut().size());
             loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType(), isbn);
         } catch (BusinessExceptionLoan businessExceptionLoan) {
@@ -109,8 +109,7 @@ public class LoanManagerImpl implements LoanManager {
             Loan loan = new Loan();
             loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
             loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
-            Book book = new Book();
-            book.setIsbn(isbn);
+            Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
             loan.setBook(book);
             loanList.add(loan);
         }
@@ -119,5 +118,16 @@ public class LoanManagerImpl implements LoanManager {
         return loanList;
     }
 
+
+    private Book convertLoanBookIntoBook(LoanBook loanBook){
+        Book book = new Book();
+        book.setTitle(loanBook.getTitle());
+        book.setAuthor(loanBook.getAuthor());
+        book.setIsbn(loanBook.getISBN());
+        book.setKeywords(loanBook.getKeywords());
+        book.setPublicationYear(loanBook.getPublicationYear());
+        book.setEdition(loanBook.getEdition());
+        return book;
+    }
 
 }

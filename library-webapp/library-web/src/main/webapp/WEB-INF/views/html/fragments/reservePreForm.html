@@ -1,28 +1,21 @@
 <div th:fragment="reservePreForm" xmlns:th="http://www.w3.org/1999/xhtml">
-
+    <!--<a th:href="@{'/reservePreForm?isbn=' + ${book.isbn}}">Book it!</a>-->
     <form method="post" th:action="@{/reservePreForm}" th:object="${reservePreForm}">
-       <div class="form-group">
+
             <input class="form-control"
                    id="Isbn"
                    name="isbn"
                    placeholder="ISBN"
                    th:value="${book.isbn}"
-                   type="text">
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col-sm-6 col-sm-offset-3">
+                   type="hidden">
+
                     <input class="form-control btn btn-info"
                            id="search-submit"
                            name="search-submit"
                            type="submit"
-                           value="Reservation">
-                </div>
-            </div>
-        </div>
-    </form>
+                           value="Book it!">
 
-    <br><br>
+    </form>
 
 
 </div>

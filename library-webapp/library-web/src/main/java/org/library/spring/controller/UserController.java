@@ -228,14 +228,16 @@ public class UserController {
     }
 
     @PostMapping("/reservePreForm")
-    public ModelAndView reservePreForm(String isbn) throws BusinessExceptionLoan {
+    public ModelAndView reservePreForm(String isbn)  {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         logger.info("trying to get loans for: " + isbn);
         List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
         logger.info("loanList here: "+loanList.size());
+        logger.info("title: "+loanList.get(0).getBook().getTitle());
         ModelAndView mv = new ModelAndView();
         mv.addObject("loanList", loanList);
+        mv.addObject("book", loanList.get(0).getBook());
         mv.setViewName("reserve");
         return mv;
 

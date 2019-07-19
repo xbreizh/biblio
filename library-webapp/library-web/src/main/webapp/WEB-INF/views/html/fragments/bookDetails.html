@@ -1,0 +1,26 @@
+<div th:fragment="bookDetails" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <table class="table table-striped">
+        <tr>
+            <th>ISBN</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Edition</th>
+            <th>Number pages</th>
+            <th>Publication Year</th>
+            <th>Keywords</th>
+        </tr>
+        <tr>
+            <td data-th-text="${book.isbn}"></td>
+            <td data-th-text="${book.title}"></td>
+            <td data-th-text="${book.author}"></td>
+            <td data-th-text="${book.edition}"></td>
+            <td data-th-text="${book.nbPages}"></td>
+            <td data-th-text="${book.publicationYear}"></td>
+            <td data-th-text="${book.keywords}"></td>
+        </tr>
+
+    </table>
+
+</div>
+
