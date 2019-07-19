@@ -11,8 +11,12 @@ import org.troparo.services.loanservice.LoanService;
 
 import javax.inject.Named;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
@@ -20,7 +24,7 @@ public class LoanManagerImpl implements LoanManager {
     private LoanService loanService;
 
 
-    DateConvertedHelper dateConvertedHelper;
+    private DateConvertedHelper dateConvertedHelper;
 
     public LoanManagerImpl() {
         dateConvertedHelper = new DateConvertedHelper();
@@ -91,7 +95,7 @@ public class LoanManagerImpl implements LoanManager {
         try {
             responseType = getLoanServicePort().getLoanByCriteria(getLoanByCriteriasRequestType);
             logger.info("size returned: " + responseType.getLoanListType().getLoanTypeOut().size());
-            loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType(), isbn);
+            loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType());
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             businessExceptionLoan.printStackTrace();
         }
@@ -99,7 +103,7 @@ public class LoanManagerImpl implements LoanManager {
         return loans;
     }
 
-    private List<Loan> convertLoanByCriteriaIntoLoanList(LoanListType list, String isbn) {
+    private List<Loan> convertLoanByCriteriaIntoLoanList(LoanListType list) {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert");
         if (list.getLoanTypeOut().isEmpty()) return loanList;
@@ -130,4 +134,30 @@ public class LoanManagerImpl implements LoanManager {
         return book;
     }
 
+    @Override
+    public String[] createArrayFromLoanDates(List<Loan> loanList) {
+        String[] dateArray = null;
+        if(loanList.isEmpty())return dateArray;
+        List<String> dateList = new ArrayList<>();
+        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+        for (Loan loan: loanList){
+            Date start = loan.getStartDate();
+            Date end = loan.getPlannedEndDate();
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(loan.getStartDate());
+            Date dateToAdd= start;
+            while(!format.format(dateToAdd).equals(format.format(end))) {
+                dateList.add(format.format(dateToAdd));
+                c.add(Calendar.DAY_OF_MONTH, 1);
+                dateToAdd = c.getTime();
+            }
+        }
+
+
+        
+        return dateList.toArray(new String[dateList.size()]);
+        
+    }
+    
 }

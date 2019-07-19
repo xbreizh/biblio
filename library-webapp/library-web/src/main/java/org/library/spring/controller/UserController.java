@@ -235,9 +235,11 @@ public class UserController {
         List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
         logger.info("loanList here: "+loanList.size());
         logger.info("title: "+loanList.get(0).getBook().getTitle());
+        String[] disabled = loanManager.createArrayFromLoanDates(loanList);
         ModelAndView mv = new ModelAndView();
         mv.addObject("loanList", loanList);
         mv.addObject("book", loanList.get(0).getBook());
+        mv.addObject("disabled",disabled );
         mv.setViewName("reserve");
         return mv;
 

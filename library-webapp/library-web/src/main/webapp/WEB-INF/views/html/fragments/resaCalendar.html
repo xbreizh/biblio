@@ -1,18 +1,18 @@
 <div th:fragment="resaCalendar" xmlns:th="http://www.w3.org/1999/xhtml">
 
     <input id="datepicker" width="312" />
-    <script>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var date = new Date();
+        var today = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        var disabled = [[${disabled}]];
         $('#datepicker').datepicker({
-            value: '11/11/2017',
-            disableDates:  function (date) {
-                var disabled = [10,15,20,25];
-                if (disabled.indexOf(date.getDate()) == -1 ) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
+            format: "mm/dd/yyyy",
+            minDate: today,
+            disableDates: disabled
         });
+        /*]]>*/
     </script>
 
 
