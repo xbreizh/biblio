@@ -1,18 +1,19 @@
 package org.troparo.consumer.impl;
 
 
+import org.apache.commons.lang3.EnumUtils;
 import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.troparo.consumer.contract.LoanDAO;
+import org.troparo.consumer.enums.LoanStatus;
+import org.troparo.model.Book;
 import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 
 @Named("loanDAO")
 public class LoanDAOImpl implements LoanDAO {
@@ -23,7 +24,7 @@ public class LoanDAOImpl implements LoanDAO {
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
     @Inject
     private SessionFactory sessionFactory;
-    private Class cl = Loan.class;
+    private static final Class cl = Loan.class;
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -89,7 +90,6 @@ public class LoanDAOImpl implements LoanDAO {
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
             query.setParameter(ISBN, isbn);
-
             return query.getResultList();
         } catch (Exception e) {
             return loanList;
@@ -115,8 +115,39 @@ public class LoanDAOImpl implements LoanDAO {
         }
     }
 
+    Date getTodayDate() {
+        return new Date();
+    }
+
     @Override
-    public List<Loan> getLoansByCriterias(Map<String, String> map) {
+    public List<Book> getListBooksAvailableOnThoseDates(Loan loan) {
+        String request;
+        List<Book> bookList = new ArrayList<>();
+        logger.info("Title received: " + loan.getBook().getTitle());
+        String title = "'"+loan.getBook().getTitle().toUpperCase()+"'";
+        String loanStartDate = "'"+loan.getStartDate().toString()+"'";
+        String loanPlannedEndDate = "'"+loan.getPlannedEndDate()+"'";
+        request =  "select * from Book b where b.title = "+title+" and b.id not in ( " +
+                "select l.book_id from Loan l where l.end_date is null and l.book_id in (" +
+                " select b1.id from Book b1 where b1.title = "+title+" and(" +
+                "l.start_date <= "+loanStartDate+" and" +
+                        " l.planned_end_date > "+loanStartDate+") or("+
+                " l.start_date < "+loanPlannedEndDate+" and"+
+                " l.planned_end_date > "+loanPlannedEndDate+
+                ")/* or ("+
+                "l.planned_end_date < "+loanStartDate+" and"+
+                " l.end_date is null)*/))";
+        try {
+            Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
+            return query.getResultList();
+        } catch (Exception e) {
+            return bookList;
+        }
+    }
+
+    @Override
+    public List<Loan> getLoansByCriteria(Map<String, String> map) {
+
         StringBuilder request = new StringBuilder();
         List<Loan> loanList = new ArrayList<>();
         if (map == null) return loanList;
@@ -132,7 +163,7 @@ public class LoanDAOImpl implements LoanDAO {
         }
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
-            addingParametersToCriteriasQuery(map, query);
+            addingParametersToCriteriaQuery(map, query);
             logger.info("map again: " + map);
 
             logger.info("map: " + request);
@@ -146,7 +177,8 @@ public class LoanDAOImpl implements LoanDAO {
 
     }
 
-    private void addingParametersToCriteriasQuery(Map<String, String> map, Query query) {
+
+    private void addingParametersToCriteriaQuery(Map<String, String> map, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
@@ -157,6 +189,9 @@ public class LoanDAOImpl implements LoanDAO {
                 }
                 if (entry.getKey().toLowerCase().contains(BOOK_ID)) {
                     query.setParameter(BOOK_ID, +Integer.parseInt(entry.getValue()));
+                }
+                if (entry.getKey().toLowerCase().contains(ISBN)) {
+                    query.setParameter(ISBN, entry.getValue().toUpperCase());
                 }
 
             }
@@ -183,6 +218,11 @@ public class LoanDAOImpl implements LoanDAO {
                     criteria.append(" = :");
                     criteria.append(entry.getKey());
                 }
+                if (entry.getKey().equalsIgnoreCase(ISBN)) {
+                    criteria.append("book.isbn");
+                    criteria.append(" = :");
+                    criteria.append(entry.getKey());
+                }
 
             } else {
                 logger.info("status has been passed: " + entry.getValue());
@@ -193,7 +233,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     private boolean checkValidMapEntries(Map<String, String> map) {
-        String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN};
+        String[] authorizedCriteria = {STATUS, BOOK_ID, LOGIN, ISBN};
         List<String> list = Arrays.asList(authorizedCriteria);
         for (Map.Entry<String, String> entry : map.entrySet()) {
             if (!list.contains(entry.getKey().toLowerCase())) {
@@ -209,9 +249,7 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     boolean checkValidStatus(String status) {
-        String[] authorized = {"PROGRESS", "TERMINATED", "OVERDUE"};
-        List<String> authorizedList = Arrays.asList(authorized);
-        return authorizedList.contains(status.toUpperCase());
+        return EnumUtils.isValidEnum(LoanStatus.class, status.toUpperCase());
     }
 
     String addStatusToRequest(Map<String, String> map) {

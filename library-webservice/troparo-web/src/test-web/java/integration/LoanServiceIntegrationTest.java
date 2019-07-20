@@ -10,7 +10,10 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.entities.connect.GetTokenRequestType;
-import org.troparo.entities.loan.*;
+import org.troparo.entities.loan.GetLoanByCriteriasRequestType;
+import org.troparo.entities.loan.GetLoanByIdRequestType;
+import org.troparo.entities.loan.LoanCriterias;
+import org.troparo.entities.loan.LoanListRequestType;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.web.service.ConnectServiceImpl;
 import org.troparo.web.service.LoanServiceImpl;
@@ -21,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ContextConfiguration("classpath:/spring-hibernate-jax-ws-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class LoanServiceIntegrationTest {
     private Logger logger = Logger.getLogger(LoanServiceIntegrationTest.class.getName());
@@ -31,7 +35,6 @@ class LoanServiceIntegrationTest {
     private String token = "";
 
     @BeforeEach
-    @Sql(scripts = "classpath:resetDb.sql")
     void getToken() {
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("LOKII");
@@ -66,8 +69,20 @@ class LoanServiceIntegrationTest {
         LoanCriterias loanCriterias = new LoanCriterias();
         loanCriterias.setLogin("jpolino");
         loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
-        System.out.println("size: " + loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
-        assertEquals(4, loanService.getLoanByCriterias(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+        System.out.println("size: " + loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+        assertEquals(4, loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+    }
+
+    @Test
+    @DisplayName("should return loans for a member")
+    void getLoansByCriterias1() throws BusinessExceptionLoan {
+        GetLoanByCriteriasRequestType loanByCriteriasRequestType = new GetLoanByCriteriasRequestType();
+        loanByCriteriasRequestType.setToken(token);
+        LoanCriterias loanCriterias = new LoanCriterias();
+        loanCriterias.setLogin("jpolino");
+        loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
+        System.out.println("size: " + loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+        assertEquals(4, loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
     }
 }
 

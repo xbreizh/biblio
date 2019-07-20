@@ -2,19 +2,23 @@
 
 
     <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <img alt="book" class="navbar-brand" height="42"
+
+        <div class="navbar-header">
+            <a th:href="@{'/'}" style="text-decoration: none; color: black" >
+                <img alt="book" class="navbar-brand"
+                     height="42"
                      src="https://d3n8a8pro7vhmx.cloudfront.net/sundayassemblyla/pages/2543/attachments/original/1528303608/book.jpg?1528303608"
                      width="42"/>
-                Troparo
-            </div>
-
-            <form method="post" th:action="@{/logout}">
-                <div id="button" onClick="sessionStorage.setItem('popState', 'hide')"><input type="submit" value="Sign Out"/></div>
-            </form>
-
+                Troparo</a>
         </div>
-    </div>
+        <button class="btn btn-info" onclick="toggle_displays('myLoans', 'myProfile')">Loans</button>
+        <button class="btn btn-info" onclick="toggle_displays('myProfile', 'myLoans')">Profile</button>
 
+        <form method="post" th:action="@{/logout}">
+            <input class="btn btn-secondary" onClick="sessionStorage.setItem('popState', 'hide')" type="submit"
+                   value="Sign Out"/>
+        </form>
+
+
+    </div>
 </div>

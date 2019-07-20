@@ -8,7 +8,7 @@ public class Search {
     private Book book;
 
     public Search() {
-        book=new Book();
+        book = new Book();
     }
 
     public Book getBook() {
@@ -24,7 +24,7 @@ public class Search {
     }
 
     public void setIsbn(String isbn) {
-       book.setIsbn(isbn);
+        book.setIsbn(isbn);
     }
 
     public String getTitle() {

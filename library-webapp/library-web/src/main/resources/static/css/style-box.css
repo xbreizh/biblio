@@ -1,29 +1,23 @@
-html,body{
-    height:100%;
-    padding:0;
-    margin:0;
-}
-*{
-    box-sizing:border-box;
-}
-.box{
-    width:100px;
-    height:100px;
-    background-color:red;
-}
-
 .container{
+    margin-top: 10vh;
+    height: 80vh;
+}
 
-    width:100%;
-    height:100%;
-    background-color:#ccc;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+.row{
+    height:30%;
+}
 
+h2, h4, h5{
+    text-align:  center;
+}
+a{
+    text-decoration: none;
 }
 
 
-
+roundBorder{
+    border-radius: 5px;
+    border: 2px solid lightslategrey;
+}
 
 

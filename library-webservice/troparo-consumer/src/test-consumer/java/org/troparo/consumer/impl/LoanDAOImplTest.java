@@ -13,8 +13,12 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
+import org.troparo.model.Member;
 
 import javax.inject.Inject;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class LoanDAOImplTest {
 
@@ -33,7 +38,6 @@ class LoanDAOImplTest {
     private BookDAO bookDAO;
 
     @BeforeEach
-    @Sql(scripts = "classpath:resetDb.sql")
     void reset() {
         logger.info("size: " + loanDAO.getLoans().size());
         logger.info("reset db");
@@ -75,7 +79,7 @@ class LoanDAOImplTest {
     @DisplayName("should update loan")
     void updateLoan() {
         int loanId = 4;
-        int bookId=1;
+        int bookId = 1;
         Loan loan = loanDAO.getLoanById(loanId);
         Book newBook = bookDAO.getBookById(bookId);
         assertNotEquals(newBook, loanDAO.getLoanById(loanId).getBook());
@@ -162,21 +166,22 @@ class LoanDAOImplTest {
     void getLoansByCriterias() {
         Map<String, String> map = new HashMap<>();
         map.put("plouf", "jpolinfo");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
     void getLoansByCriterias_bookId() {
         Map<String, String> map = new HashMap<>();
-        map.put("book_id", "5");
-        assertEquals(1, loanDAO.getLoansByCriterias(map).size());
+        map.put("book_id", "6");
+        assertEquals(1, loanDAO.getLoansByCriteria(map).size());
     }
+
 
     @Test
     @DisplayName("should return empty list of loans if criterias null")
     void getLoansByCriterias2() {
-        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(null).size());
     }
 
     @Test
@@ -184,69 +189,72 @@ class LoanDAOImplTest {
     void getLoansByCriterias3() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "");
-        assertEquals(0, loanDAO.getLoansByCriterias(null).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(null).size());
     }
 
     @Test
     @DisplayName("should return empty list of loans if empty map passed")
-    void getLoansByCriterias4() {
+    void getLoansByCriteria4() {
         Map<String, String> map = new HashMap<>();
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias_login() {
+    void getLoansByCriteria_login() {
         Map<String, String> map = new HashMap<>();
         map.put("login", "lokii");
-        assertEquals(1, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(1, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias_login1() {
+    void getLoansByCriteria_login1() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
 
     @Test
     @DisplayName("should return list of loans if valid criteria and result")
-    void getLoansByCriterias_Status() {
+    void getLoansByCriteria_Status() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
-        assertEquals(3, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(3, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return empty list if loan status invalid")
-    void getLoansByCriterias_Status1() {
+    void getLoansByCriteria_Status1() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "wrongOne");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
 
     @Test
     @DisplayName("should return empty list if loan is null")
-    void getLoansByCriterias_Status2() {
+    void getLoansByCriteria_Status2() {
         Map<String, String> map = new HashMap<>();
         map.put("status", "terminated");
         map.put("book_id", "5");
         LoanDAOImpl loanDAO1 = new LoanDAOImpl();
         loanDAO1.setSessionFactory(null);
-        assertEquals(0, loanDAO1.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO1.getLoansByCriteria(map).size());
     }
 
 
     @Test
     @DisplayName("should return list if several valid criterias")
-    void getLoansByCriterias_Status3() {
+    void getLoansByCriteria_Status3() {
         Map<String, String> map = new HashMap<>();
         map.put("book_id", "5");
         map.put("status", "terminated");
-        assertEquals(0, loanDAO.getLoansByCriterias(map).size());
+        assertEquals(0, loanDAO.getLoansByCriteria(map).size());
     }
+
+
+
 
     @Test
     @DisplayName("should return nothing if invalid status")
@@ -360,10 +368,74 @@ class LoanDAOImplTest {
 
 
     @Test
+    @DisplayName("should return emptyList when no book available for dates")
+    void getListBooksAvailableOnThoseDates() throws ParseException {
+        Loan loan = new Loan();
+        Book book = new Book();
+        String title = "test";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-08-12");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-19");
+        book.setTitle(title);
+        Member member = new Member();
+        member.setLogin("jo");
+        loan.setBorrower(member);
+        loan.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+
+        assertTrue( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+    }
+
+
+    @Test
+    @DisplayName("should return bookList when book(s) available for dates")
+    void getListBooksAvailableOnThoseDates1() throws ParseException {
+        Loan loan = new Loan();
+        Book book = new Book();
+        String title = "LA GRANDE AVENTURE";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-07-16");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
+        book.setTitle(title);
+        loan.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+        System.out.println(loanDAO.getListBooksAvailableOnThoseDates(loan).get(0).getClass());
+        assertFalse( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+    }
+
+    @Test
+    @DisplayName("should return bookList when book(s) available for dates")
+    void getListBooksAvailableOnThoseDates2() throws ParseException {
+        Loan loan = new Loan();
+        Book book = new Book();
+        String title = "bokana";
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-07-16");
+        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
+        book.setTitle(title);
+        loan.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+        assertTrue( loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+    }
+
+    @Test
     @DisplayName("should return true")
     void checkValidStatus() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
-        assertTrue(loanDAO.checkValidStatus("terminated"));
+        assertAll(
+                ()->assertTrue(loanDAO.checkValidStatus("overdue")),
+                ()-> assertTrue(loanDAO.checkValidStatus("terminated")),
+                ()-> assertTrue(loanDAO.checkValidStatus("RESERVED")),
+                ()-> assertTrue(loanDAO.checkValidStatus("PROGRESS"))
+
+        );
+
     }
 
     @Test
@@ -372,6 +444,7 @@ class LoanDAOImplTest {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         assertFalse(loanDAO.checkValidStatus("fini"));
     }
+
 
 
 }

@@ -55,15 +55,12 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("loanManager: " + loanManager);
         exception = loanManager.addLoan(loan);
         if (!exception.equals("")) {
-            logger.info("exception found: " + exception);
-            throw new BusinessExceptionLoan(exception);
+            logger.error("exception found: " + exception);
+            ar.setReturn(false);
         }
 
         return ar;
     }
-
-
-    // Update
 
 
     // Get One
@@ -80,6 +77,7 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setBookId(loan.getBook().getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
+
             loanTypeOut.setStartDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate()));
             loanTypeOut.setPlannedEndDate(dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate()));
             if (loan.getEndDate() != null) {
@@ -115,37 +113,38 @@ public class LoanServiceImpl implements ILoanService {
 
     // Get List By Criterias
     @Override
-    public GetLoanByCriteriasResponseType getLoanByCriterias(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
+    public GetLoanByCriteriasResponseType getLoanByCriteria(GetLoanByCriteriasRequestType parameters) throws BusinessExceptionLoan {
         List<Loan> loanList;
         LoanListType loanListType = new LoanListType();
         GetLoanByCriteriasResponseType responseType = new GetLoanByCriteriasResponseType();
 
         checkAuthentication(parameters.getToken());
-        logger.info("troko");
         Map<String, String> map = new HashMap<>();
         if (parameters.getLoanCriterias() == null) {
             responseType.setLoanListType(loanListType);
             return responseType;
         }
-        if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null)
+        if (parameters.getLoanCriterias().getBookId() == 0 && parameters.getLoanCriterias().getLogin() == null && parameters.getLoanCriterias().getStatus() == null && parameters.getLoanCriterias().getISBN() == null)
             return null;
 
-        if (parameters.getLoanCriterias().getLogin() != null && !parameters.getLoanCriterias().getLogin().equals("") || !parameters.getLoanCriterias().getLogin().equals("?")) {
+        if (parameters.getLoanCriterias().getLogin() != null && !parameters.getLoanCriterias().getLogin().equals("") && !parameters.getLoanCriterias().getLogin().equals("?") && !parameters.getLoanCriterias().getLogin().equalsIgnoreCase("null")) {
             map.put("login", parameters.getLoanCriterias().getLogin().toUpperCase());
         }
 
         if (parameters.getLoanCriterias().getBookId() != -1 && parameters.getLoanCriterias().getBookId() != 0) {
             map.put("book.bookId", Integer.toString(parameters.getLoanCriterias().getBookId()));
         }
-        if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("")) {
+        if (parameters.getLoanCriterias().getStatus() != null && !parameters.getLoanCriterias().getStatus().equals("") && !parameters.getLoanCriterias().getStatus().equalsIgnoreCase("null")) {
             map.put("status", parameters.getLoanCriterias().getStatus().toUpperCase());
+        }
+        if (parameters.getLoanCriterias().getISBN() != null && !parameters.getLoanCriterias().getISBN().equals("")) {
+            map.put("isbn", parameters.getLoanCriterias().getISBN().toUpperCase());
         }
 
         logger.info("map: " + map);
         logger.info(map);
 
-        loanList = loanManager.getLoansByCriterias(map);
-        logger.info("stuff");
+        loanList = loanManager.getLoansByCriteria(map);
 
         logger.info("loanListType beg: " + loanListType.getLoanTypeOut().size());
         logger.info(loanList);
@@ -199,6 +198,14 @@ public class LoanServiceImpl implements ILoanService {
         return ar;
     }
 
+    @Override
+    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters)  {
+        CheckInLoanResponseType ar = new CheckInLoanResponseType();
+        boolean feedback = loanManager.checkinBooking(parameters.getToken(), parameters.getId());
+        ar.setReturn(feedback);
+        return ar;
+    }
+
 
     // Delete
 
@@ -216,6 +223,15 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
             loanTypeOut.setBookId(loan.getBook().getId());
+            LoanBook bookLoan = new LoanBook();
+            bookLoan.setAuthor(loan.getBook().getAuthor());
+            bookLoan.setTitle(loan.getBook().getTitle());
+            bookLoan.setISBN(loan.getBook().getIsbn());
+            bookLoan.setEdition(loan.getBook().getEdition());
+            bookLoan.setKeywords(loan.getBook().getKeywords());
+            bookLoan.setNbPages(loan.getBook().getNbPages());
+            bookLoan.setPublicationYear(loan.getBook().getPublicationYear());
+            loanTypeOut.setLoanBook(bookLoan);
             XMLGregorianCalendar startDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate());
             XMLGregorianCalendar plannedEndDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate());
             if (loan.getEndDate() != null) {
@@ -246,7 +262,11 @@ public class LoanServiceImpl implements ILoanService {
         logger.info(loanTypeIn);
         Loan loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
-        loan.setBook(bookManager.getBookById(loanTypeIn.getId()));
+        loan.setBook(bookManager.getBookByIsbn(loanTypeIn.getISBN().toUpperCase()));
+
+
+        loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeIn.getStartDate()));
+
         logger.info("conversion loanType into loan done");
         return loan;
     }
@@ -269,7 +289,7 @@ public class LoanServiceImpl implements ILoanService {
         this.bookManager = bookManager;
     }
 
-    public void setMemberManager(MemberManager memberManager) {
+    void setMemberManager(MemberManager memberManager) {
         this.memberManager = memberManager;
     }
 

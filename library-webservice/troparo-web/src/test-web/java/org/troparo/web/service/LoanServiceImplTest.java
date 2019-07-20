@@ -16,6 +16,7 @@ import org.troparo.model.Member;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.web.service.helper.DateConvertedHelper;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -54,7 +55,10 @@ class LoanServiceImplTest {
         parameters.setToken("derr");
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
+        loanTypeIn.setISBN("12345");
         parameters.setLoanTypeIn(loanTypeIn);
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        loanService.setDateConvertedHelper(dateConvertedHelper);
         when(loanManager.addLoan(any(Loan.class))).thenReturn("");
         assertDoesNotThrow(() -> loanService.addLoan(parameters));
 
@@ -67,8 +71,13 @@ class LoanServiceImplTest {
         parameters.setToken("derr");
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
+        loanTypeIn.setISBN("12345");
         parameters.setLoanTypeIn(loanTypeIn);
         String exception = "exception";
+        DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
+        loanService.setDateConvertedHelper(dateConvertedHelper);
+        XMLGregorianCalendar date = dateConvertedHelper.convertDateIntoXmlDate(new Date());
+        loanTypeIn.setStartDate(date);
         when(loanManager.addLoan(any(Loan.class))).thenReturn(exception);
         assertThrows(BusinessExceptionLoan.class, () -> loanService.addLoan(parameters));
 
@@ -118,7 +127,7 @@ class LoanServiceImplTest {
         parameters.setToken("token123");
         parameters.setLoanCriterias(null);
 
-        assertDoesNotThrow(() -> loanService.getLoanByCriterias(parameters));
+        assertDoesNotThrow(() -> loanService.getLoanByCriteria(parameters));
     }
 
     @Test
@@ -132,8 +141,8 @@ class LoanServiceImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("login", "KOLIO");
         List<Loan> loanList = new ArrayList<>();
-        when(loanManager.getLoansByCriterias(map)).thenReturn(loanList);
-        assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
+        when(loanManager.getLoansByCriteria(map)).thenReturn(loanList);
+        assertEquals(0, loanService.getLoanByCriteria(parameters).getLoanListType().getLoanTypeOut().size());
     }
 
     @Test
@@ -146,7 +155,7 @@ class LoanServiceImplTest {
         parameters.setLoanCriterias(loanCriterias);
         Map<String, String> map = new HashMap<>();
         map.put("invalid.criteria", "invalid");
-        assertEquals(0, loanService.getLoanByCriterias(parameters).getLoanListType().getLoanTypeOut().size());
+        assertEquals(0, loanService.getLoanByCriteria(parameters).getLoanListType().getLoanTypeOut().size());
     }
 
 

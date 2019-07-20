@@ -1,6 +1,5 @@
 package org.troparo.business.impl;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,16 +9,14 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
-import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
-import org.troparo.consumer.impl.MemberDAOImpl;
+import org.troparo.consumer.enums.LoanStatus;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
 
-import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -46,9 +43,6 @@ class LoanManagerImplTest {
     private MemberManager memberManager;
 
     private BookManager bookManager;
-
-
-
 
 
     @BeforeEach
@@ -88,14 +82,14 @@ class LoanManagerImplTest {
         Book book = new Book();
         book.setId(2);
         loan.setBook(book);
-        when(bookManager.isAvailable(anyInt())).thenReturn(false);
-        assertEquals("book is not available: " + book.getId(), loanManager.addLoan(loan));
+        when(bookManager.isAvailable(2)).thenReturn(false);
+        assertEquals("the book is unavailable for that date", loanManager.addLoan(loan));
     }
 
     @Test
     @DisplayName("should return \"max number of books rented reached\" when member has reached the max possible loans")
-    void addLoan3() {
-        LoanManagerImpl loanManager1 = new LoanManagerImpl();
+    void addLoan3() throws ParseException {
+        LoanManagerImpl loanManager1 = spy(LoanManagerImpl.class);
         MemberManagerImpl memberManager2 = mock(MemberManagerImpl.class);
         loanManager1.setMemberManager(memberManager2);
         Member member = new Member();
@@ -109,17 +103,56 @@ class LoanManagerImplTest {
         loan.setBorrower(member);
         Book book = new Book();
         book.setId(3);
-        book.setTitle("borring");
+        book.setTitle("boring");
         loan.setBook(book);
         loanManager1.setBookManager(bookManager);
         when(bookManager.isAvailable(anyInt())).thenReturn(true);
         loanManager1.setMemberManager(memberManager2);
         when(memberManager2.getMemberById(2)).thenReturn(member);
-        System.out.println("loan: "+member.getLoanList().size());
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2021-02-12");
+        when(loanManager1.getTodayDate()).thenReturn(today);
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book());
         LoanDAOImpl loanDAO = mock(LoanDAOImpl.class);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        List<Loan> loanList = new ArrayList<>();
+        loanList.add(new Loan());
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
         loanManager1.setLoanDAO(loanDAO);
+        loanList.remove(0);
+        Map<String, String> map1 = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+       when(loanDAO.getLoansByCriteria(map1)).thenReturn(loanList);
         assertEquals("max number of books rented reached", loanManager1.addLoan(loan));
     }
+
+
+    @Test
+    @DisplayName("should book")
+    void checkBooking(){
+        Loan loan = new Loan();
+        when(memberManager.checkAdmin(anyString())).thenReturn(true);
+        when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertTrue(loanManager.checkinBooking("", 3));
+    }
+
+    @Test
+    @DisplayName("should not book if user not admin")
+    void checkBooking1(){
+        Loan loan = new Loan();
+        when(memberManager.checkAdmin(anyString())).thenReturn(false);
+        when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertFalse(loanManager.checkinBooking("", 3));
+    }
+
 
     @Test
     @DisplayName("should return the list of loans")
@@ -144,15 +177,277 @@ class LoanManagerImplTest {
         assertNull(loanManager.getLoanById(2));
     }
 
+
+
+
+    @Test
+    @DisplayName("should return true if loan already in progress")
+    void checkIfSimilarLoanPlannedOrInProgress(){
+        Loan loan = new Loan();
+        Member member = new Member();
+        String login = "momo56";
+        member.setLogin(login);
+        Book book = new Book();
+        book.setId(2);
+        book.setIsbn("1223443");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        List<Loan> loanList = new ArrayList<>();
+        Loan loan1 = new Loan();
+        loan1.setBook(book);
+        loanList.add(loan1);
+        when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
+        assertTrue( loanManager.checkIfSimilarLoanPlannedOrInProgress(loan));
+    }
+
+
+    @Test
+    @DisplayName("should return error if book unavailable")
+    void checkBookAndMemberValidity() throws ParseException {
+        Loan loan = new Loan();
+        Member member = new Member();
+        String login = "momo56";
+        member.setLogin(login);
+        Book book = new Book();
+        book.setId(2);
+        book.setIsbn("1234567824");
+        book.setTitle("title");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        loan.setStartDate(new Date());
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2019-02-12");
+        loan.setStartDate(today);
+        loanManager.setPlannedEndDate(loan);
+        List<Book> bookList = new ArrayList<>();
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        assertEquals("the book is unavailable for that date", loanManager.checkBookAndMemberValidity(loan));
+    }
+
+
     @Test
     @DisplayName("should return an empty list")
     void getLoansByCriterias() {
         Map<String, String> map = new HashMap<>();
         map.put("login", "pol");
         map.put("price", "3.4");
-        assertEquals(0, loanManager.getLoansByCriterias(map).size());
+        assertEquals(0, loanManager.getLoansByCriteria(map).size());
     }
 
+    @Test
+    @DisplayName("should return error if overlapping")
+    void checkIfNoOverLapping() throws ParseException {
+        Loan loan = new Loan();
+        Loan loanS = new Loan();
+        Book book = new Book();
+        book.setTitle("title");
+        loan.setBook(book);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2019-07-14");
+        loan.setStartDate(today);
+        loanManager.setPlannedEndDate(loan);
+        Date start = simpleDateFormat.parse("2019-07-12");
+        loan.setStartDate(today);
+        Date plannedEnd = simpleDateFormat.parse("2019-07-22");
+        loanS.setStartDate(start);
+        loanS.setPlannedEndDate(plannedEnd);
+        List<Book> bookList = new ArrayList<>();
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        assertEquals("No book available for those dates!", loanManager.checkIfNoOverLapping(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return empty string if not overlapping")
+    void checkIfNoOverLapping1() throws ParseException {
+        LoanManagerImpl loanManager = new LoanManagerImpl();
+        loanManager.setLoanDAO(loanDAO);
+        Loan loan = new Loan();
+        Loan loanS = new Loan();
+        Book book = new Book();
+        book.setTitle("title");
+        loan.setBook(book);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date today = simpleDateFormat.parse("2019-09-14");
+        loan.setStartDate(today);
+        loanManager.setPlannedEndDate(loan);
+        Date start = simpleDateFormat.parse("2019-07-12");
+        loan.setStartDate(today);
+        Date plannedEnd = simpleDateFormat.parse("2019-07-22");
+        loanS.setStartDate(start);
+        loanS.setPlannedEndDate(plannedEnd);
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book());
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        assertEquals("", loanManager.checkIfNoOverLapping(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return error if date in past")
+    void checkLoanStartDateIsNotInPastOrNull() throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2019-02-14");
+        assertEquals("startDate should be in the future", loanManager.checkLoanStartDateIsNotInPastOrNull(startDate));
+    }
+
+    @Test
+    @DisplayName("should return error if date null")
+    void checkLoanStartDateIsNotInPastOrNull1() {
+        assertEquals("startDate should be in the future", loanManager.checkLoanStartDateIsNotInPastOrNull(null));
+    }
+
+    @Test
+    @DisplayName("should return empty string if date in future")
+    void checkLoanStartDateIsNotInPastOrNull2() throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        Date startDate = simpleDateFormat.parse("2069-02-14");
+        assertEquals("", loanManager.checkLoanStartDateIsNotInPastOrNull(startDate));
+    }
+
+    @Test
+    @DisplayName("should return empty string if nothing overdue")
+    void checkIfOverDue(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        List<Loan> loanList = new ArrayList<>();
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertFalse(loanManager.checkIfOverDue(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return error if overdue")
+    void checkIfOverDue1(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.OVERDUE.toString());
+        List<Loan> loanList = new ArrayList<>();
+        Loan loan1 = new Loan();
+        loanList.add(loan1);
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertTrue(loanManager.checkIfOverDue(loan));
+
+    }
+
+    @Test
+    @DisplayName("should return empty string if limit not reached")
+    void checkIfReserveLimitNotReached(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.RESERVED.toString());
+        List<Loan> loanList = new ArrayList<>();
+        for (int i = 0; i < loanManager.getMaxReserve(); i++) {
+            Loan loan1 = new Loan();
+            loanList.add(loan1);
+        }
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertEquals("You have already reached the maximum number of reservation: "+loanManager.getMaxReserve(), loanManager.checkIfReserveLimitNotReached(loan.getBorrower().getLogin()));
+    }
+
+    @Test
+    @DisplayName("should return empty string if limit is reached")
+    void checkIfReserveLimitNotReached1(){
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        Map<String, String> map = new HashMap<>();
+        map.put("login", loan.getBorrower().getLogin());
+        map.put("status", LoanStatus.RESERVED.toString());
+        List<Loan> loanList = new ArrayList<>();
+        when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
+        assertEquals("", loanManager.checkIfReserveLimitNotReached(loan.getBorrower().getLogin()));
+    }
+
+
+    @Test
+    @DisplayName("should return error while reserving")
+    void reserve() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        loanManager.setLoanDAO(loanDAO);
+        Loan loan = new Loan();
+        Book book = new Book();
+        Member member = new Member();
+        book.setId(2);
+        member.setLogin("John");
+        loan.setBook(book);
+        loan.setBorrower(member);
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date startDate = simpleDateFormat.parse("2020-04-09");
+        Date plannedEndDate = simpleDateFormat.parse("2020-05-10");
+        loan.setStartDate(startDate);
+        loan.setPlannedEndDate(plannedEndDate);
+        List<Book> bookList = new ArrayList<>();
+        bookList.add(new Book());
+        Date today = simpleDateFormat.parse("2019-03-09");
+        when(loanManager.getTodayDate()).thenReturn(today);
+        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+        when(loanDAO.addLoan(loan)).thenReturn(false);
+        assertEquals("Issue while reserving", loanManager.reserve(loan));
+
+
+    }
+
+    @Test
+    void checkAddingRenewDurationGivesLaterThanTodayReturnsTrue() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date today = simpleDateFormat.parse("2018-09-09");
+        Date loanDate = simpleDateFormat.parse("2018-06-19");
+
+        when(loanManager.getTodayDate()).thenReturn(today);
+        assertTrue(loanManager.checkAddingRenewDurationGivesLaterThanToday(loanDate));
+
+    }
+
+    @Test
+    void checkAddingRenewDurationGivesLaterThanTodayReturnsFalse() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date loanDate = simpleDateFormat.parse("2018-09-09");
+        Date today = simpleDateFormat.parse("2018-06-19");
+
+        when(loanManager.getTodayDate()).thenReturn(today);
+        assertFalse(loanManager.checkAddingRenewDurationGivesLaterThanToday(loanDate));
+    }
 
     @Test
     @DisplayName("should return \"loan already terminated\"")
@@ -208,11 +503,15 @@ class LoanManagerImplTest {
     @Test
     @DisplayName("should return true if renewable")
     void isRenewable1() throws ParseException {
+        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
+        loanManager.setLoanDAO(loanDAO);
         Loan loan = new Loan();
         String pattern = "dd-MM-yyyy";
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         loan.setStartDate(format.parse("01-01-2019"));
         loan.setPlannedEndDate(format.parse("10-01-2019"));
+        Date today = format.parse("02-02-2019");
+        when(loanManager.getTodayDate()).thenReturn(today);
         when(loanDAO.getLoanById(2)).thenReturn(loan);
         assertTrue(loanManager.isRenewable(2));
     }

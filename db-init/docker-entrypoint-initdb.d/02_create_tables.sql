@@ -40,6 +40,7 @@ CREATE TABLE public.loan (
         start_date timestamp NULL,
         book_id int4 NULL,
         borrower_id int4 NULL,
+        checked boolean not null,
         CONSTRAINT loan_pkey PRIMARY KEY (id),
         CONSTRAINT fkckf2g131el3qunjs9afsf6265 FOREIGN KEY (borrower_id) REFERENCES member(id),
         CONSTRAINT fkllwvq8yhcx4uqka3jay8a53o2 FOREIGN KEY (book_id) REFERENCES book(id)

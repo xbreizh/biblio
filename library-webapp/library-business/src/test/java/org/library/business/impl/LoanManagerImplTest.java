@@ -4,12 +4,20 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.library.model.Loan;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -107,6 +115,25 @@ class LoanManagerImplTest {
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(iLoanService.getLoanStatus(any(GetLoanStatusRequestType.class))).thenReturn(getLoanStatusResponseType);
         assertNull(loanManager.getStatus("", 2));
+
+    }
+
+
+    @Test
+    void createArrayFromLoanDates() throws ParseException {
+        List<Loan> loanList = new ArrayList<>();
+        String pattern = "MM/dd/yyyy";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date start = simpleDateFormat.parse("12/20/2019");
+        Date end = simpleDateFormat.parse("12/24/2019");
+        Loan loan = new Loan();
+        loan.setStartDate(start);
+        loan.setPlannedEndDate(end);
+        loanList.add(loan);
+        assertEquals("[12/20/2019, 12/21/2019, 12/22/2019, 12/23/2019]", Arrays.toString(loanManager.createArrayFromLoanDates(loanList)));
+
+
 
     }
 }

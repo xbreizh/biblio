@@ -139,7 +139,7 @@ class BookManagerImplTest {
         Map<String, String> criterias = new HashMap<>();
         criterias.put("Test", "Test");
         when(bookDAO.getBooksByCriterias(criterias)).thenReturn(bookList);
-        assertEquals(bookList, bookManager.getBooksByCriterias(criterias));
+        assertEquals(bookList, bookManager.getBooksByCriteria(criterias));
     }
 
 

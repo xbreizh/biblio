@@ -38,8 +38,8 @@ class MemberManagerImplIntegrationTest {
     }
 
     @AfterEach
-    void finish(){
-        System.out.println("Size: "+memberManager.getMembers().size());
+    void finish() {
+        System.out.println("Size: " + memberManager.getMembers().size());
     }
 
     @Test

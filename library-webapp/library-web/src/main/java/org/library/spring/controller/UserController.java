@@ -19,13 +19,17 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
+import javax.xml.ws.soap.SOAPFaultException;
+import java.net.UnknownHostException;
 import java.security.Principal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 @Controller
 @ControllerAdvice
 public class UserController {
+    private static final String LOGIN = "login";
     @Inject
     MemberManager memberManager;
     @Inject
@@ -33,15 +37,14 @@ public class UserController {
     @Inject
     LoanManager loanManager;
 
-    static final String LOGIN = "login";
-
-
     private Logger logger = Logger.getLogger(UserController.class);
 
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ModelAndView handleNoHandlerFoundException(NoHandlerFoundException ex) {
+    @ExceptionHandler({IndexOutOfBoundsException.class, NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
+    public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {
         ModelAndView model = new ModelAndView();
         model.addObject("exception", ex.getMessage());
+
+
         if (ex.getMessage().startsWith("No handler found")) {
             model.setViewName("404");
         } else {
@@ -213,12 +216,48 @@ public class UserController {
 
     @GetMapping("/mySpace")
     public ModelAndView mySpace() {
+
+        return new ModelAndView("mySpace");
+    }
+
+    @PostMapping("/reservePreForm")
+    public ModelAndView reservePreForm(String isbn) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        logger.info("trying to get loans for: " + isbn);
+        List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
+        logger.info("loanList here: " + loanList.size());
         ModelAndView mv = new ModelAndView();
 
-        mv.setViewName("mySpace");
+        String[] disabled = loanManager.createArrayFromLoanDates(loanList);
+        mv.addObject("loanList", loanList);
+        mv.addObject("book", loanList.get(0).getBook());
+        mv.addObject("disabled", disabled);
+        mv.setViewName("reserve");
 
         return mv;
+
     }
+
+    @PostMapping("/reserve")
+    public ModelAndView reserve(Date startDate, String isbn) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        String login = authentication.getPrincipal().toString();
+
+        logger.info("login: " + login);
+        logger.info("token: " + token);
+        logger.info("isbn: " + isbn);
+        logger.info("startDate: " + startDate);
+
+
+        if (loanManager.reserve(token, login, isbn, startDate)) {
+            return new ModelAndView("bookingOk");
+        }
+        return new ModelAndView("bookingKo");
+
+    }
+
 
     @PostMapping("/search")
     public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {
@@ -236,11 +275,11 @@ public class UserController {
         logger.info("title received: " + title);
         logger.info("author received: " + author);
 
-        HashMap criterias = new HashMap<String, String>();
-        criterias.put("isbn", isbn);
-        criterias.put("TITLE", title);
-        criterias.put("AUTHOR", author);
-        books = bookManager.searchBooks(token, criterias);
+        HashMap criteria = new HashMap<String, String>();
+        criteria.put("isbn", isbn);
+        criteria.put("TITLE", title);
+        criteria.put("AUTHOR", author);
+        books = bookManager.searchBooks(token, criteria);
 
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);
@@ -248,6 +287,7 @@ public class UserController {
         mv.addObject("isbn", isbn);
         mv.addObject("title", title);
         mv.addObject("author", author);
+        checkOverdue(member, mv);
         mv.setViewName("home");
         logger.info("going back to home");
 

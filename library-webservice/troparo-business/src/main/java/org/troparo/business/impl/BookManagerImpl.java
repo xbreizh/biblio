@@ -93,7 +93,7 @@ public class BookManagerImpl implements BookManager {
     }
 
     @Override
-    public List<Book> getBooksByCriterias(Map<String, String> map) {
+    public List<Book> getBooksByCriteria(Map<String, String> map) {
         Map<String, String> criterias = removeInvalidEntriesFromCriterias(map);
 
         logger.info("criterias: " + criterias);

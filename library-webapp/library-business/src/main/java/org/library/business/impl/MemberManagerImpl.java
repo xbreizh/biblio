@@ -15,7 +15,6 @@ import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.connectservice.IConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
-import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
 import org.troparo.services.memberservice.MemberService;
 
@@ -35,7 +34,7 @@ public class MemberManagerImpl implements MemberManager {
     @Inject
     LoanManager loanManager;
     private MemberService memberService;
-
+    private ConnectService connectService;
 
     public MemberManagerImpl() {
         this.memberService = new MemberService();
@@ -62,12 +61,10 @@ public class MemberManagerImpl implements MemberManager {
 
             logger.info("member loan size: " + member.getLoanList());
             return member;
-        } catch (NullPointerException e) {
-            logger.info("Issue while trying to get member details");
-        } catch (BusinessExceptionMember businessExceptionMember) {
-            logger.error(businessExceptionMember.getMessage());
-        } catch (BusinessExceptionLoan businessExceptionLoan) {
-            logger.error(businessExceptionLoan.getMessage());
+        } catch (Exception e) {
+            logger.error("Issue while trying to get member details");
+            logger.error(e.getMessage());
+
         }
 
         return null;
@@ -183,8 +180,6 @@ public class MemberManagerImpl implements MemberManager {
     public void setConnectService(ConnectService connectService) {
         this.connectService = connectService;
     }
-
-    private ConnectService connectService;
 
     public void setLoanManager(LoanManager loanManager) {
         this.loanManager = loanManager;

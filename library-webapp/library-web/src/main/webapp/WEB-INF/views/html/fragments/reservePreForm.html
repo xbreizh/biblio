@@ -1,0 +1,26 @@
+<div th:fragment="reservePreForm" xmlns:th="http://www.w3.org/1999/xhtml">
+
+    <td th:if="${overdue}">
+        <button class="btn btn-info first" onclick="overdue()">Book it!</button>
+    </td>
+    <td th:if="!${overdue}">
+        <form method="post" th:action="@{/reservePreForm}" th:object="${reservePreForm}">
+
+            <input class="form-control"
+                   id="Isbn"
+                   name="isbn"
+                   placeholder="ISBN"
+                   th:value="${book.isbn}"
+                   type="hidden">
+
+            <input class="form-control btn btn-info"
+                   id="search-submit"
+                   name="search-submit"
+                   type="submit"
+                   value="Book it!">
+
+        </form>
+    </td>
+
+</div>
+
