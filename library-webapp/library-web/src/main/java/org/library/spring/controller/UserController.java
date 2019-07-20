@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
-import org.library.business.impl.DateConvertedHelper;
 import org.library.model.Book;
 import org.library.model.Loan;
 import org.library.model.Member;
@@ -40,14 +39,12 @@ public class UserController {
 
     private Logger logger = Logger.getLogger(UserController.class);
 
-    @ExceptionHandler({NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
+    @ExceptionHandler({IndexOutOfBoundsException.class, NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
     public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {
         ModelAndView model = new ModelAndView();
-        System.out.println("getting here");
         model.addObject("exception", ex.getMessage());
 
 
-        System.out.println("excc: "+ex.getMessage());
         if (ex.getMessage().startsWith("No handler found")) {
             model.setViewName("404");
         } else {
@@ -56,8 +53,6 @@ public class UserController {
 
         return model;
     }
-
-
 
 
     @RequestMapping("/")
@@ -226,47 +221,42 @@ public class UserController {
     }
 
     @PostMapping("/reservePreForm")
-    public ModelAndView reservePreForm(String isbn)  {
+    public ModelAndView reservePreForm(String isbn) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         logger.info("trying to get loans for: " + isbn);
         List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
-        logger.info("loanList here: "+loanList.size());
+        logger.info("loanList here: " + loanList.size());
         ModelAndView mv = new ModelAndView();
-        if(!loanList.isEmpty()) {
-            String[] disabled = loanManager.createArrayFromLoanDates(loanList);
-            mv.addObject("loanList", loanList);
-            mv.addObject("book", loanList.get(0).getBook());
-            mv.addObject("disabled",disabled );
-            mv.setViewName("reserve");
-        }else{
 
-            mv.setViewName("home");
-        }
+        String[] disabled = loanManager.createArrayFromLoanDates(loanList);
+        mv.addObject("loanList", loanList);
+        mv.addObject("book", loanList.get(0).getBook());
+        mv.addObject("disabled", disabled);
+        mv.setViewName("reserve");
+
         return mv;
 
     }
 
     @PostMapping("/reserve")
-    public ModelAndView reserve(Date startDate, String isbn)  {
+    public ModelAndView reserve(Date startDate, String isbn) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
 
-        logger.info("login: "+login);
-        logger.info("token: "+token);
-        logger.info("isbn: "+isbn);
-        logger.info("startDate: "+startDate);
+        logger.info("login: " + login);
+        logger.info("token: " + token);
+        logger.info("isbn: " + isbn);
+        logger.info("startDate: " + startDate);
 
 
-        if(loanManager.reserve(token, login, isbn, startDate)){
+        if (loanManager.reserve(token, login, isbn, startDate)) {
             return new ModelAndView("bookingOk");
         }
         return new ModelAndView("bookingKo");
 
     }
-
-
 
 
     @PostMapping("/search")

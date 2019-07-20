@@ -319,7 +319,9 @@ public class MemberManagerImpl implements MemberManager {
 
         Member m = getMemberByLogin(login.toUpperCase());
         if (m != null) {
-
+            if(m.getRole().equalsIgnoreCase("admin")){
+                logger.error("password can't be reset for admins");
+            }
 
             logger.info("member not null");
             m.setPassword(encryptPassword(password));
@@ -354,8 +356,8 @@ public class MemberManagerImpl implements MemberManager {
             return false;
         }
         // THAT PROCESS CAN'T BE USED FOR RESETTING SUPERADMIN ACCESS
-        if (member.getRole().equalsIgnoreCase("superAdmin")) {
-            logger.error("that process can't be used for resetting superAdmin password");
+        if (member.getRole().equalsIgnoreCase("Admin")) {
+            logger.error("that process can't be used for resetting Admin password");
             return false;
         }
         if (member.getEmail().equalsIgnoreCase(email)) {

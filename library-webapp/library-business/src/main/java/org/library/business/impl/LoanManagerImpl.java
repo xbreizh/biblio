@@ -109,14 +109,14 @@ public class LoanManagerImpl implements LoanManager {
 
         for (LoanTypeOut loanTypeOut : list.getLoanTypeOut()
         ) {
-            if(loanTypeOut.getEndDate()!=null) { // we exclude the none-returned items
+            /*if(loanTypeOut.getEndDate()!=null) {*/ // we exclude the none-returned items
                 Loan loan = new Loan();
                 loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
                 loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
                 Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
                 loan.setBook(book);
                 loanList.add(loan);
-            }
+            /*}*/
         }
 
         logger.info("converted " + loanList.size() + " items");

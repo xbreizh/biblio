@@ -7,9 +7,17 @@
     height:30%;
 }
 
-h2{
+h2, h4, h5{
     text-align:  center;
 }
+a{
+    text-decoration: none;
+}
 
+
+roundBorder{
+    border-radius: 5px;
+    border: 2px solid lightslategrey;
+}
 
 

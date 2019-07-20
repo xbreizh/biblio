@@ -91,6 +91,7 @@ public class MemberManagerImpl implements MemberManager {
         return getConnectServicePort().requestPasswordResetLink(requestPasswordResetLinkRequestType).isReturn();
     }
 
+
     private IConnectService getConnectServicePort() {
         return connectService.getConnectServicePort();
     }

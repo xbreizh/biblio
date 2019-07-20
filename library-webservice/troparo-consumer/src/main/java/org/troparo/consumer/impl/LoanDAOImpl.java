@@ -134,9 +134,9 @@ public class LoanDAOImpl implements LoanDAO {
                         " l.planned_end_date > "+loanStartDate+") or("+
                 " l.start_date < "+loanPlannedEndDate+" and"+
                 " l.planned_end_date > "+loanPlannedEndDate+
-                ") or ("+
+                ")/* or ("+
                 "l.planned_end_date < "+loanStartDate+" and"+
-                " l.end_date is null)))";
+                " l.end_date is null)*/))";
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
             return query.getResultList();
