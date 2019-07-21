@@ -111,7 +111,7 @@
         <dependency>
             <groupId>org.apache.bval</groupId>
             <artifactId>bval-jsr</artifactId>
-            <version>2.0.0</version>
+            <version>${bval-jsr.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.postgresql/postgresql -->
@@ -126,12 +126,18 @@
             <artifactId>hibernate-core</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/net.sf.ehcache/ehcache-core -->
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>2.6.11</version>
-        </dependency>
+        <!--   &lt;!&ndash; https://mvnrepository.com/artifact/net.sf.ehcache/ehcache-core &ndash;&gt;
+           <dependency>
+               <groupId>net.sf.ehcache</groupId>
+               <artifactId>ehcache-core</artifactId>
+               <version>2.6.11</version>
+           </dependency>-->
+       <!-- <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-test.version}</version>
+            <scope>test</scope>
+        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-ehcache -->
         <dependency>
@@ -143,14 +149,14 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-tx.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
+        <!--&lt;!&ndash; https://mvnrepository.com/artifact/javax.mail/javax.mail-api &ndash;&gt;
         <dependency>
             <groupId>javax.mail</groupId>
             <artifactId>javax.mail-api</artifactId>
             <version>1.6.2</version>
-        </dependency>
+        </dependency>-->
 
         <!-- ===== Tests ===== -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
@@ -170,11 +176,11 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
-        <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-core</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
+        <!-- <dependency>
+             <groupId>org.springframework.security</groupId>
+             <artifactId>spring-security-core</artifactId>
+             <version>${spring-security.version}</version>
+         </dependency>-->
 
         <dependency>
             <groupId>log4j</groupId>
@@ -196,17 +202,26 @@
         </dependency>
 
         <dependency>
-            <groupId>com.google.inject</groupId>
-            <artifactId>guice</artifactId>
-            <version>4.2.0</version>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
+        <!-- <dependency>
+             <groupId>org.springframework</groupId>
+             <artifactId>spring-test</artifactId>
+             <version>${spring-test.version}</version>
+             <scope>test</scope>
+         </dependency>-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+            <version>${spring-security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-test.version}</version>
             <scope>test</scope>
         </dependency>
-
 
     </dependencies>
 

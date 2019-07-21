@@ -20,20 +20,31 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jdk.version>8</jdk.version>
         <compileSource>1.8</compileSource>
+        <bval-jsr.version>2.0.2</bval-jsr.version>
         <cxf.scope>compile</cxf.scope>
-        <cxf.version>3.2.7</cxf.version>
+       <!-- <cxf.version>3.2.9</cxf.version>-->
+        <cxf-rt-frontend-jaxws.version>3.3.2</cxf-rt-frontend-jaxws.version>
+        <cxf-rt-ws-security.version>3.3.2</cxf-rt-ws-security.version>
+        <cxf-codegen-plugin.version>3.3.2</cxf-codegen-plugin.version>
+        <cxf-rt-transports.version>3.3.2</cxf-rt-transports.version>
         <docker.image.prefix>troparo</docker.image.prefix>
         <dockerfile.version>1.4.1</dockerfile.version>
-        <hibernate.version>5.4.0.Final</hibernate.version>
-        <jaxws.version>2.3.0</jaxws.version>
+        <hibernate.version>5.4.2.Final</hibernate.version>
+        <hibernate-ehcache.version>5.4.3.Final</hibernate-ehcache.version>
+        <jaxws.version>2.3.1</jaxws.version>
         <jaxws.scope>compile</jaxws.scope>
         <junit.jupiter.version>5.4.0</junit.jupiter.version>
         <log4j.version>1.2.17</log4j.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
-        <mockito.version>2.23.0</mockito.version>
+        <mockito.version>3.0.0</mockito.version>
         <postgres.version>42.2.5</postgres.version>
-        <spring.version>5.1.5.RELEASE</spring.version>
+        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring-orm.version>5.1.8.RELEASE</spring-orm.version>
+        <spring-security.version>5.1.5.RELEASE</spring-security.version>
+        <spring-webmvc.version>5.1.8.RELEASE</spring-webmvc.version>
+        <spring-test.version>5.1.8.RELEASE</spring-test.version>
+        <spring-tx.version>5.1.8.RELEASE</spring-tx.version>
         <surefire.version>2.22.1</surefire.version>
     </properties>
 
@@ -107,33 +118,34 @@
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-frontend-jaxws</artifactId>
-                <version>${cxf.version}</version>
+                <version>${cxf-rt-frontend-jaxws.version}</version>
                 <scope>${cxf.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>org.apache.cxf</groupId>
                 <artifactId>cxf-rt-transports-http</artifactId>
-                <version>${cxf.version}</version>
+                <version>${cxf-rt-transports.version}</version>
                 <scope>${cxf.scope}</scope>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
+            <!--&lt;!&ndash; https://mvnrepository.com/artifact/org.springframework.security/spring-security-core &ndash;&gt;
             <dependency>
                 <groupId>org.springframework.security</groupId>
                 <artifactId>spring-security-core</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
+                <version>${spring-security.version}</version>
+            </dependency>-->
 
             <dependency>
                 <groupId>javax.inject</groupId>
                 <artifactId>javax.inject</artifactId>
                 <version>1</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/log4j/log4j -->
             <dependency>
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
-                <scope>compile</scope>
             </dependency>
+
 
 
             <!-- JSR-250 -->
@@ -168,27 +180,22 @@
                 <version>2.1</version>
                 <scope>test</scope>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/name.falgout.jeffrey.testing.junit5/mockito-extension -->
+           <!-- &lt;!&ndash; https://mvnrepository.com/artifact/name.falgout.jeffrey.testing.junit5/mockito-extension &ndash;&gt;
             <dependency>
                 <groupId>name.falgout.jeffrey.testing.junit5</groupId>
                 <artifactId>mockito-extension</artifactId>
                 <version>1.1.1</version>
-            </dependency>
+            </dependency>-->
 
 
             <!-- https://mvnrepository.com/artifact/org.mockito/mockito-core -->
             <dependency>
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-core</artifactId>
-                <version>2.25.0</version>
+                <version>${mockito.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-                <scope>test</scope>
-            </dependency>
+
 
         </dependencies>
     </dependencyManagement>

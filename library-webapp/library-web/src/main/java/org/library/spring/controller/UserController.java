@@ -37,7 +37,7 @@ public class UserController {
     @Inject
     LoanManager loanManager;
 
-    private Logger logger = Logger.getLogger(UserController.class);
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     @ExceptionHandler({IndexOutOfBoundsException.class, NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
     public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {

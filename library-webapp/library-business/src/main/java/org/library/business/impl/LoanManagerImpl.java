@@ -19,7 +19,7 @@ import java.util.List;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
-    private static final Logger logger = Logger.getLogger(LoanManager.class.toString());
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private LoanService loanService;
 
 

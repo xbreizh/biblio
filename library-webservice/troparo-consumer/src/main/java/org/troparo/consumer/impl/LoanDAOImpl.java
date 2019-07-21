@@ -21,7 +21,7 @@ public class LoanDAOImpl implements LoanDAO {
     private static final String ISBN = "isbn";
     private static final String BOOK_ID = "book_id";
     private static final String LOGIN = "login";
-    private static Logger logger = Logger.getLogger(LoanDAOImpl.class.getName());
+    private static  Logger logger = Logger.getLogger(LoanDAOImpl.class);
     @Inject
     private SessionFactory sessionFactory;
     private static final Class cl = Loan.class;

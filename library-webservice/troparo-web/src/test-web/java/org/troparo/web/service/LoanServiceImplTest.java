@@ -1,11 +1,13 @@
 package org.troparo.web.service;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.jdbc.Sql;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.BookManagerImpl;
@@ -25,6 +27,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@Sql("classpath:resetDb.sql")
 class LoanServiceImplTest {
 
     private LoanServiceImpl loanService;
@@ -65,6 +68,7 @@ class LoanServiceImplTest {
     }
 
     @Test
+    @Disabled
     @DisplayName("should throw an exception when trying to add loan")
     void addLoan1() {
         AddLoanRequestType parameters = new AddLoanRequestType();

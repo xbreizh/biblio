@@ -582,6 +582,7 @@ class LoanManagerImplTest {
         Date today = format.parse("02-02-2019");
         when(loanManager.getTodayDate()).thenReturn(today);
         loan.setPlannedEndDate(format.parse("12-02-2019"));
+        loan.setStartDate(format.parse("01-02-2019"));
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
         assertEquals("PROGRESS", loanManager.getLoanStatus(55));
 

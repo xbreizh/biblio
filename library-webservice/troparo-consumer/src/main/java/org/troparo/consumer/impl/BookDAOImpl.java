@@ -23,7 +23,7 @@ import static java.lang.Math.toIntExact;
 
 @Named("bookDAO")
 public class BookDAOImpl implements BookDAO {
-    private static Logger logger = Logger.getLogger(BookDAOImpl.class.getName());
+    private static  Logger logger = Logger.getLogger(BookDAOImpl.class);
     private Class cl = Book.class;
     @Inject
     private SessionFactory sessionFactory;

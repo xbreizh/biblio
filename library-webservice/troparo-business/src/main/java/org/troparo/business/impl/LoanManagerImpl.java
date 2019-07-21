@@ -49,7 +49,7 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static  Logger logger = Logger.getLogger(LoanManagerImpl.class);
 
     public LoanManagerImpl() {
         workaroundConfigFile();
@@ -81,9 +81,7 @@ public class LoanManagerImpl implements LoanManager {
     @Override
     public String addLoan(Loan loan) {
 
-        System.out.println("loan received: "+loan.getBorrower().getLogin());
-        System.out.println("startDate: "+loan.getStartDate());
-        System.out.println("book; "+loan.getBook().getIsbn());
+
 
         if (loan.getStartDate() != null) {
             logger.info("reservation");
@@ -376,9 +374,9 @@ public class LoanManagerImpl implements LoanManager {
             }
             if (loan.getStartDate().after(today)) {
                 return "PLANNED";
-            } else {
-                return "PROGRESS";
             }
+                return "PROGRESS";
+
         } catch (NullPointerException e) {
             logger.error("error while getting loan status");
             return null;

@@ -23,7 +23,7 @@ import java.util.Set;
 @Named
 public class ConnectManagerImpl implements AuthenticationProvider {
 
-    private static final Logger logger = Logger.getLogger(ConnectManagerImpl.class);
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private static final String ROLE = "USER";
     private ConnectService connectService;
 

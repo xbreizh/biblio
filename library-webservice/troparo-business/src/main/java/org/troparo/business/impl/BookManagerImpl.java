@@ -19,7 +19,8 @@ public class BookManagerImpl implements BookManager {
     BookDAO bookDAO;
     @Inject
     StringValidatorBook stringValidatorBook;
-    private Logger logger = Logger.getLogger(BookManagerImpl.class);
+    private static  Logger logger = Logger.getLogger(BookManagerImpl.class);
+
 
     public void setStringValidatorBook(StringValidatorBook stringValidatorBook) {
         this.stringValidatorBook = stringValidatorBook;

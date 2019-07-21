@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class BookDAOImplTest {
-    private Logger logger = Logger.getLogger(BookDAOImplTest.class);
+    private static  Logger logger = Logger.getLogger(BookDAOImplTest.class);
 
     @Inject
     private BookDAO bookDAO;

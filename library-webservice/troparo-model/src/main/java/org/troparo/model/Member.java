@@ -12,7 +12,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "MEMBER")
-@Getter @Setter
+@Getter
+@Setter
 public class Member {
 
 

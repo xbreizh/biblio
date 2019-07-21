@@ -49,7 +49,6 @@ public class Book {
     private List<Loan> loanList = new ArrayList<>();
 
 
-
     @Override
     public String toString() {
         return "Book{" +
