@@ -15,13 +15,14 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/apache-cxf-services.xml,
             classpath:org/troparo/web/config/spring-hibernate-jax-ws.xml,
-
-
         </param-value>
+
     </context-param>
 
 
-    <!-- Apache CXF servlet -->
+
+
+    <!-- Ap    </contervlet -->
     <servlet>
         <servlet-name>CXFServlet</servlet-name>
         <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>

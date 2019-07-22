@@ -65,7 +65,7 @@ public class MemberManagerImpl implements MemberManager {
 
     public String checkValidityOfParametersForInsertMember(Member member) {
         if (member == null) return "no member provided";
-
+        logger.info("logger here");
         String[][] memberParameters = {{"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
                 {"lastName", member.getLastName()},
@@ -85,7 +85,7 @@ public class MemberManagerImpl implements MemberManager {
     public String checkValidityOfParametersForUpdateMember(Member member) {
 
         if (member == null) return "no member provided";
-
+        logger.info("logger here");
         String[][] memberParameters = {
                 {"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
