@@ -22,7 +22,7 @@ public class MemberDAOImpl implements MemberDAO {
     private static final String ROLE = "role";
     private static final String EMAIL = "email";
     private static final String TOKEN = "token";
-    private static Logger logger = Logger.getLogger(TestLogger.class);
+    private static Logger logger = Logger.getLogger(MemberDAOImpl.class);
     private Class cl = Member.class;
     private String request;
     @Inject

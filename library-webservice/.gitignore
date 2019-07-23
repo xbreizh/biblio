@@ -5,3 +5,4 @@ troparo-web/src/main/java/org/troparo/services/**
 db-init/
 jenkins/
 sonarqube/
+LOGS/
