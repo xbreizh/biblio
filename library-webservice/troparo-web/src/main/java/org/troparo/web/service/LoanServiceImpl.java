@@ -242,6 +242,7 @@ public class LoanServiceImpl implements ILoanService {
             bookLoan.setNbPages(loan.getBook().getNbPages());
             bookLoan.setPublicationYear(loan.getBook().getPublicationYear());
             loanTypeOut.setLoanBook(bookLoan);
+            loanTypeOut.setChecked(loan.isChecked());
             XMLGregorianCalendar startDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate());
             XMLGregorianCalendar plannedEndDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate());
             if (loan.getEndDate() != null) {
