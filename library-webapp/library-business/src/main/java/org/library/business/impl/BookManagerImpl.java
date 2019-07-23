@@ -15,7 +15,7 @@ import java.util.Map;
 
 @Named
 public class BookManagerImpl implements BookManager {
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static  Logger logger = Logger.getLogger(BookManagerImpl.class);
 
     private BookService bookService;
 

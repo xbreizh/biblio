@@ -1,5 +1,6 @@
 package org.mail.impl;
 
+import org.apache.log4j.Logger;
 import org.mail.contract.ConnectManager;
 import org.springframework.context.annotation.PropertySource;
 import org.troparo.entities.connect.GetTokenRequestType;
@@ -12,16 +13,16 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 @Named
-@PropertySource("classpath:docker/mail.properties")
+@PropertySource("classpath:mail.properties")
 public class ConnectManagerImpl implements ConnectManager {
 
-
+    private Logger logger = Logger.getLogger(ConnectManagerImpl.class);
 
     public PropertiesLoad getPropertiesLoad() {
         return propertiesLoad;
     }
 
-    public void setPropertiesLoad(PropertiesLoad propertiesLoad) {
+    void setPropertiesLoad(PropertiesLoad propertiesLoad) {
         this.propertiesLoad = propertiesLoad;
     }
 
@@ -32,6 +33,7 @@ public class ConnectManagerImpl implements ConnectManager {
 
     @Override
     public String authenticate() throws BusinessExceptionConnect {
+
         GetTokenRequestType getTokenRequestType = new GetTokenRequestType();
         getTokenRequestType.setLogin(propertiesLoad.getProperty("login"));
         getTokenRequestType.setPassword(propertiesLoad.getProperty("passwordApp"));
@@ -41,8 +43,10 @@ public class ConnectManagerImpl implements ConnectManager {
 
 
         if (!token.equals("wrong LOGIN or pwd")) {
+            logger.info("authentication successful!");
             return token;
         } else {
+            logger.error("authentication issue!");
             return null;
 
 

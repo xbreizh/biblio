@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {ConnectManagerImpl.class, PropertiesLoad.class})
-@PropertySource("classpath:docker/mail.properties")
+@PropertySource("classpath:mail.properties")
 class ConnectManagerImplTest {
 
     private ConnectManagerImpl connectManager;
