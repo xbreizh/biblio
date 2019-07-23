@@ -17,14 +17,28 @@ function toggle_displays(t, d) {
 }
 
 
-function overdue() {
+function alertOverdue() {
     Swal.fire({
         title: 'You can\'t book while having overdue items!',
         type: 'error',
         confirmButtonText: 'Ok, I ll take care of it!'
     });
+    toggle_displays('myLoans','myProfile' );
 }
 
-
+function overdueInitPopup(overdue) {
+    $(document).ready(function () {
+        if (overdue) {
+            if (sessionStorage.getItem('popState') != 'shown') {
+                Swal.fire({
+                    title: 'You have some overdue items!',
+                    type: 'error',
+                    confirmButtonText: 'Ok, I ll take care of it!'
+                }, document.getElementById("myLoans").style.display = "block");
+                sessionStorage.setItem('popState', 'shown')
+            }
+        }
+    });
+}
 
 
