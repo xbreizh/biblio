@@ -200,7 +200,6 @@ public class EmailManagerImpl {
     private String readContentFromFile(File file) throws IOException {
         logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
-        //String todelete = "";
         //use buffering, reading one line at a time
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
