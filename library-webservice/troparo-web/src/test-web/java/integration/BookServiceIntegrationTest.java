@@ -33,6 +33,7 @@ class BookServiceIntegrationTest {
     @BeforeEach
     @Sql(scripts = "classpath:resetDb.sql")
     void getToken() {
+        logger.info("testing logger");
         GetTokenRequestType parameters = new GetTokenRequestType();
         parameters.setLogin("LOKII");
         parameters.setPassword("123");

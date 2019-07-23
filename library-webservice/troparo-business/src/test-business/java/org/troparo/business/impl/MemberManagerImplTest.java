@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.impl.validator.StringValidatorMember;
@@ -21,6 +22,7 @@ import static org.mockito.Mockito.*;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
+@Sql("classpath:resetDb.sql")
 @Transactional
 class MemberManagerImplTest {
 
@@ -448,6 +450,7 @@ class MemberManagerImplTest {
         String password = "kokl";
         Member member = new Member();
         member.setLogin(login);
+        member.setRole("ploc");
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         assertFalse(memberManager.resetPassword(login, password));
 
@@ -460,6 +463,7 @@ class MemberManagerImplTest {
         String email = "cdcd@test.fr";
         Member member = new Member();
         member.setEmail(email);
+        member.setRole("de");
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         when(memberDAO.updateMember(member)).thenReturn(true);
         assertTrue(memberManager.resetPassword(login, anyString()));
@@ -474,6 +478,7 @@ class MemberManagerImplTest {
         String password = "kokl";
         Member member = new Member();
         member.setLogin(login);
+        member.setRole("plok");
         memberManager.setMemberDAO(memberDAO);
         when(memberManager.getMemberByLogin(login)).thenReturn(member);
         memberManager.getMemberByLogin(login);

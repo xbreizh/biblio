@@ -13,7 +13,9 @@ public class PropertiesLoad {
 
 
     public PropertiesLoad() throws IOException {
-        input = PropertiesLoad.class.getClassLoader().getResourceAsStream("docker/mail.properties");
+        input = PropertiesLoad.class.getClassLoader().getResourceAsStream("mail.properties");
+        prop.load(input);
+        input = PropertiesLoad.class.getClassLoader().getResourceAsStream("log4j.properties");
         prop.load(input);
 
     }

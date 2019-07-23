@@ -8,7 +8,7 @@ http://www.springframework.org/schema/context ">
 
     <!-- to activate annotations in beans already registered in the ApplicationContext -->
     <context:annotation-config/>
-
+    <context:property-placeholder location="classpath:log4j.properties"/>
     <!-- scans packages to find and register beans within the application context -->
     <!-- <context:component-scan base-package="org.troparo.web"/>
      <context:component-scan base-package="org.troparo.business"/>-->

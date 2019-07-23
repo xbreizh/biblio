@@ -18,6 +18,7 @@ http://www.springframework.org/schema/context ">
     <context:component-scan base-package="org.troparo"/>
 
     <context:property-placeholder location="classpath:config.properties"/>
+    <context:property-placeholder location="classpath:log4j.properties"/>
 
     <!-- turn on spring transaction annotation -->
     <tx:annotation-driven transaction-manager="transactionManager"/>

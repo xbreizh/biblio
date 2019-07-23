@@ -41,7 +41,7 @@
                     <plugin>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-codegen-plugin</artifactId>
-                        <version>${cxf.version}</version>
+                        <version>${cxf-codegen-plugin.version}</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -117,7 +117,7 @@
                     <plugin>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-codegen-plugin</artifactId>
-                        <version>${cxf.version}</version>
+                        <version>${cxf-codegen-plugin.version}</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -200,7 +200,6 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
-            <scope>compile</scope>
         </dependency>
 
 
@@ -209,36 +208,42 @@
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-frontend-jaxws</artifactId>
-            <version>${cxf.version}</version>
+            <version>${cxf-rt-frontend-jaxws.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-transports-http -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-transports-http</artifactId>
-            <version>${cxf.version}</version>
+            <version>${cxf-rt-transports.version}</version>
         </dependency>
         <!-- https://mvnrepository.com/artifact/org.apache.cxf/cxf-rt-ws-security -->
         <dependency>
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-rt-ws-security</artifactId>
-            <version>${cxf.version}</version>
+            <version>${cxf-rt-ws-security.version}</version>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>com.sun.xml.ws</groupId>
             <artifactId>jaxws-rt</artifactId>
             <version>${jaxws.version}</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-test.version}</version>
+            <scope>test</scope>
         </dependency>
 
         <!-- Spring Framework-4.x -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-webmvc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-orm</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-orm.version}</version>
         </dependency>
 
         <!-- Hibernate Core-4.2.x -->
@@ -273,12 +278,12 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
+       <!-- <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-test.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
@@ -311,7 +316,6 @@
                     <warName>troparo_app</warName>
                 </configuration>
             </plugin>
-            <!-- plugin 4- apache cxf codegen wsdl2java goal -->
 
             <plugin>
                 <groupId>org.jacoco</groupId>

@@ -27,7 +27,7 @@ public class MemberManagerImpl implements MemberManager {
     StringValidatorMember stringValidatorMember;
     @Value("${pepper}")
     private String pepper;
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    private static Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
     public MemberManagerImpl() {
         logger.info("peppper was null");
@@ -65,7 +65,7 @@ public class MemberManagerImpl implements MemberManager {
 
     public String checkValidityOfParametersForInsertMember(Member member) {
         if (member == null) return "no member provided";
-
+        logger.info("logger here");
         String[][] memberParameters = {{"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
                 {"lastName", member.getLastName()},
@@ -85,7 +85,7 @@ public class MemberManagerImpl implements MemberManager {
     public String checkValidityOfParametersForUpdateMember(Member member) {
 
         if (member == null) return "no member provided";
-
+        logger.info("logger here");
         String[][] memberParameters = {
                 {"login", member.getLogin()},
                 {"firstName", member.getFirstName()},
@@ -319,7 +319,7 @@ public class MemberManagerImpl implements MemberManager {
 
         Member m = getMemberByLogin(login.toUpperCase());
         if (m != null) {
-            if(m.getRole().equalsIgnoreCase("admin")){
+            if (m.getRole().equalsIgnoreCase("admin")) {
                 logger.error("password can't be reset for admins");
             }
 
@@ -355,7 +355,7 @@ public class MemberManagerImpl implements MemberManager {
             logger.error("member not found / login probably incorrect");
             return false;
         }
-        // THAT PROCESS CAN'T BE USED FOR RESETTING SUPERADMIN ACCESS
+        // THAT PROCESS CAN'T BE USED FOR RESETTING ADMIN ACCESS
         if (member.getRole().equalsIgnoreCase("Admin")) {
             logger.error("that process can't be used for resetting Admin password");
             return false;

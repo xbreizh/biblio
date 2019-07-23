@@ -25,6 +25,7 @@ hs_err_pid*
 *.iml
 target/
 generated/
+LOGS/
 org/troparo/entities/**
 troparo-web/src/main/java/org/troparo/entities/
 troparo-web/src/main/java/org/troparo/services/

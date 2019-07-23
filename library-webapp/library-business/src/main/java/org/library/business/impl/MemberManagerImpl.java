@@ -30,7 +30,7 @@ import java.util.List;
 
 @Named
 public class MemberManagerImpl implements MemberManager {
-    private static final Logger logger = Logger.getLogger(MemberManagerImpl.class);
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     @Inject
     LoanManager loanManager;
     private MemberService memberService;

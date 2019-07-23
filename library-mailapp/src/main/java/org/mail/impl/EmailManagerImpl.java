@@ -1,6 +1,7 @@
 package org.mail.impl;
 
 
+import org.apache.log4j.Logger;
 import org.mail.contract.ConnectManager;
 import org.mail.model.Mail;
 import org.springframework.context.annotation.PropertySource;
@@ -34,7 +35,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Component
-@PropertySource("classpath:docker/mail.properties")
+@PropertySource("classpath:mail.properties")
 @PropertySource("classpath:docker/Overdue.html")
 public class EmailManagerImpl {
 
@@ -42,6 +43,7 @@ public class EmailManagerImpl {
     ConnectManager connectManager;
 
     private MailService mailService;
+    private Logger logger = Logger.getLogger(ConnectManagerImpl.class);
 
     @Inject
     PropertiesLoad propertiesLoad;
@@ -83,6 +85,7 @@ public class EmailManagerImpl {
             ) {
                 input = getItemsForSubject(subject, mail);
                 if (input != null) {
+                    logger.info("sending Email");
                     Message message = prepareMessage(mail, template, subject, input);
                     Transport.send(message);
                 }
@@ -91,6 +94,7 @@ public class EmailManagerImpl {
     }
 
     private Map<String, String> getItemsForSubject(String subject, Mail mail) {
+        logger.info("trying to get items");
         Map<String, String> input;
         switch (subject) {
             case "subjectPasswordReset":
@@ -101,6 +105,7 @@ public class EmailManagerImpl {
                 break;
             default:
                 input = null;
+                logger.warn("wrong email subject: " + subject + ", returning null");
                 break;
         }
         return input;
@@ -112,6 +117,7 @@ public class EmailManagerImpl {
         input.put("TOKEN", mail.getToken());
         input.put("EMAIL", mail.getEmail());
         input.put("LOGIN", mail.getLogin());
+        logger.info("getting template items: " + input);
         return input;
     }
 
@@ -134,6 +140,7 @@ public class EmailManagerImpl {
 
         // adding condition for testign purposes
         if (propertiesLoad.getProperty("test").equalsIgnoreCase("true")) {
+            logger.info("test email detected");
             recipient = propertiesLoad.getProperty("testRecipient");
         }
 
@@ -143,28 +150,34 @@ public class EmailManagerImpl {
 
         message.setContent(htmlText, "text/html");
         message.setSubject(propertiesLoad.getProperty(subject));
+        logger.info("message ready");
         return message;
 
     }
 
 
     //Method to replace the values for keys
-    String replaceValuesForKeys(String template, Map<String, String> input) throws IOException {
+    private String replaceValuesForKeys(String template, Map<String, String> input) throws IOException {
+        logger.info("replacing values for keys");
+        String msg=null;
+        try {
+            File file = new File(EmailManagerImpl.class.getClassLoader().getResource(template).getFile());
+            msg = readContentFromFile(file);
 
-        File file = new File(EmailManagerImpl.class.getClassLoader().getResource(template).getFile());
-
-        String msg = readContentFromFile(file);
 
         Set<Map.Entry<String, String>> entries = input.entrySet();
         for (Map.Entry<String, String> entry : entries) {
             msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
         }
+        } catch (NullPointerException e) {
+            logger.error("Issue while getting file");
+        }
 
         return msg;
     }
 
-    Map<String, String> getOverdueTemplateItems(Mail mail) {
-
+    private Map<String, String> getOverdueTemplateItems(Mail mail) {
+        logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
         input.put("FIRSTNAME", mail.getFirstname());
@@ -184,9 +197,10 @@ public class EmailManagerImpl {
 
 
     //Method to read HTML file as a String
-    String readContentFromFile(File file) throws IOException {
+    private String readContentFromFile(File file) throws IOException {
+        logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
-        String todelete = "";
+        //String todelete = "";
         //use buffering, reading one line at a time
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
@@ -197,16 +211,17 @@ public class EmailManagerImpl {
                 contents.append(System.getProperty("line.separator"));
             }
         } catch (IOException e) {
-            todelete = e.getMessage();
+            logger.error(e.getMessage());
         } finally {
             reader.close();
         }
-
+        logger.info("html file converted ok");
         return contents.toString();
     }
 
 
     private byte[] hexStringToByteArray(String s) {
+        logger.info("converting hexString into ByteArray");
         byte[] b = new byte[s.length() / 2];
         for (int i = 0; i < b.length; i++) {
             int index = i * 2;
@@ -217,15 +232,18 @@ public class EmailManagerImpl {
     }
 
     private List<Mail> getOverdueList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
+        logger.info("getting overdue list");
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
         GetOverdueMailListResponse response = getMailServicePort().getOverdueMailList(requestType);
+
         return convertOverdueListTypeIntoMailList(response);
 
     }
 
 
     private List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
+        logger.info("getting password reset list");
         GetPasswordResetListRequest request = new GetPasswordResetListRequest();
         request.setToken(token);
 
@@ -235,11 +253,13 @@ public class EmailManagerImpl {
     }
 
     private IMailService getMailServicePort() {
+        logger.info("getting email service port");
         if (mailService == null) mailService = new MailService();
         return mailService.getMailServicePort();
     }
 
-    List<Mail> convertPasswordResetListTypeIntoMailList(GetPasswordResetListResponse response) {
+    private List<Mail> convertPasswordResetListTypeIntoMailList(GetPasswordResetListResponse response) {
+        logger.info("trying to convert password reset list into mailList");
         List<Mail> mailList = new ArrayList<>();
 
         for (PasswordResetTypeOut passwordResetTypeOutTypeOut : response.getPasswordResetListType().getPasswordResetTypeOut()) {
@@ -250,6 +270,7 @@ public class EmailManagerImpl {
 
             mailList.add(mail);
         }
+        if (!mailList.isEmpty()) logger.info("mailList size: " + mailList.size());
         return mailList;
     }
 
@@ -271,20 +292,21 @@ public class EmailManagerImpl {
 
             mailList.add(mail);
         }
+        if (!mailList.isEmpty()) logger.info("mailList size: " + mailList.size());
         return mailList;
     }
 
 
     Date convertGregorianCalendarIntoDate(GregorianCalendar gregorianCalendar) throws DatatypeConfigurationException {
+        logger.info("converting xml date into Date");
         XMLGregorianCalendar xmlCalendar;
         xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
         return xmlCalendar.toGregorianCalendar().getTime();
-
-
     }
 
 
     private Session getSession(Properties props) {
+        logger.info("getting session");
         return Session.getInstance(props,
                 new Authenticator() {
                     @Override
@@ -296,11 +318,12 @@ public class EmailManagerImpl {
     }
 
     private String getPassword() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+        logger.info("trying to get Password");
         String tempKey = propertiesLoad.getProperty("Key");
         String password = propertiesLoad.getProperty("Encrypted_Password");
 
-        byte[] bytekey = hexStringToByteArray(tempKey);
-        SecretKeySpec sks = new SecretKeySpec(bytekey, AES);
+        byte[] byteKey = hexStringToByteArray(tempKey);
+        SecretKeySpec sks = new SecretKeySpec(byteKey, AES);
         Cipher cipher = Cipher.getInstance(AES);
         cipher.init(Cipher.DECRYPT_MODE, sks);
         byte[] decrypted = cipher.doFinal(hexStringToByteArray(password));
@@ -310,11 +333,11 @@ public class EmailManagerImpl {
     }
 
 
-    public MailService getMailService() {
+    MailService getMailService() {
         return mailService;
     }
 
-    public void setMailService(MailService mailService) {
+    void setMailService(MailService mailService) {
         this.mailService = mailService;
     }
 }

@@ -10,7 +10,8 @@ import java.util.Date;
 
 @Entity
 @Table(name = "LOAN")
-@Getter @Setter
+@Getter
+@Setter
 public class Loan {
 
 
@@ -37,7 +38,6 @@ public class Loan {
 
     @ManyToOne
     private Book book;
-
 
 
     @Override

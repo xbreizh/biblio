@@ -22,7 +22,7 @@ public class MailManagerImpl implements MailManager {
     @Inject
     MemberDAO memberDAO;
 
-    private Logger logger = Logger.getLogger(MailManagerImpl.class);
+    private static  Logger logger = Logger.getLogger(MailManagerImpl.class);
 
     @Override
     public int calculateDaysBetweenDates(Date d1, Date d2) {

@@ -2,6 +2,7 @@ package org.troparo.consumer.impl;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -409,6 +410,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return bookList when book(s) available for dates")
+    @Disabled
     void getListBooksAvailableOnThoseDates2() throws ParseException {
         Loan loan = new Loan();
         Book book = new Book();

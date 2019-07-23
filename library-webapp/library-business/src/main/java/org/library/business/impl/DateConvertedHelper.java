@@ -10,7 +10,7 @@ import java.util.GregorianCalendar;
 
 public class DateConvertedHelper {
 
-    private Logger logger = Logger.getLogger(DateConvertedHelper.class);
+    private Logger logger = Logger.getLogger(this.getClass().getName());
 
     public XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
         // converting Date into XML date

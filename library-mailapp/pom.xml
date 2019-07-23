@@ -10,10 +10,19 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <properties>
-        <junit.jupiter.version>5.4.0</junit.jupiter.version>
-        <spring.version>5.1.3.RELEASE</spring.version>
         <maven.compiler.target>1.7</maven.compiler.target>
         <maven.compiler.source>1.7</maven.compiler.source>
+        <bval-jsr.version>2.0.2</bval-jsr.version>
+        <cxf-codegen-plugin.version>3.3.2</cxf-codegen-plugin.version>
+        <jacoco-maven-plugin>0.8.4</jacoco-maven-plugin>
+        <javax.mail.version>1.6.2</javax.mail.version>
+        <junit.jupiter.version>5.4.0</junit.jupiter.version>
+        <log4j.version>1.2.17</log4j.version>
+        <maven-surefire-plugin>2.22.2</maven-surefire-plugin>
+        <mockito.version>3.0.0</mockito.version>
+        <spring.version>5.1.8.RELEASE</spring.version>
+        <spring-boot-autoconfigure.version>2.1.6.RELEASE</spring-boot-autoconfigure.version>
+        <spring-security.version>5.1.5.RELEASE</spring-security.version>
     </properties>
     <profiles>
         <!-- Local profile -->
@@ -25,7 +34,7 @@
                     <plugin>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-codegen-plugin</artifactId>
-                        <version>3.0.2</version>
+                        <version>${cxf-codegen-plugin.version}</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -65,7 +74,7 @@
                     <plugin>
                         <groupId>org.apache.cxf</groupId>
                         <artifactId>cxf-codegen-plugin</artifactId>
-                        <version>3.0.2</version>
+                        <version>${cxf-codegen-plugin.version}</version>
                         <executions>
                             <execution>
                                 <configuration>
@@ -118,11 +127,17 @@
             <scope>test</scope>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/log4j/log4j -->
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-junit-jupiter</artifactId>
-            <version>2.23.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -137,14 +152,14 @@
         <dependency>
             <groupId>org.apache.bval</groupId>
             <artifactId>bval-jsr</artifactId>
-            <version>2.0.0</version>
+            <version>${bval-jsr.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/javax.mail/javax.mail-api -->
         <dependency>
             <groupId>com.sun.mail</groupId>
             <artifactId>javax.mail</artifactId>
-            <version>1.6.0</version>
+            <version>${javax.mail.version}</version>
         </dependency>
 
 
@@ -156,12 +171,12 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
-            <version>${spring.version}</version>
+            <version>${spring-security.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
-            <version>1.2.5.RELEASE</version>
+            <version>${spring-boot-autoconfigure.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -172,7 +187,7 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>2.27.0</version>
+            <version>${mockito.version}</version>
             <scope>test</scope>
         </dependency>
 
@@ -185,7 +200,7 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>1.2.5.RELEASE</version>
+                <version>${spring-boot-autoconfigure.version}</version>
                 <executions>
                     <execution>
                         <goals>
@@ -208,12 +223,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>${maven-surefire-plugin}</version>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.7.7.201606060606</version>
+                <version>${jacoco-maven-plugin}</version>
                 <configuration>
                     <excludes>
                         <exclude>**/ScheduledTasks.*</exclude>
