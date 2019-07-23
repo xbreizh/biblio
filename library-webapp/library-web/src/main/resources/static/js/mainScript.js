@@ -16,16 +16,7 @@ function toggle_displays(t, d) {
     }
 }
 
-$(document).ready(function () {
-    if (sessionStorage.getItem('popState') != 'shown') {
-        Swal.fire({
-            title: 'You have some overdue items!',
-            type: 'error',
-            confirmButtonText: 'Ok, I ll take care of it!'
-        }, document.getElementById("myLoans").style.display = "block");
-        sessionStorage.setItem('popState', 'shown')
-    }
-});
+
 function overdue() {
     Swal.fire({
         title: 'You can\'t book while having overdue items!',

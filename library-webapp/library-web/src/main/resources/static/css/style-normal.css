@@ -1,0 +1,13 @@
+.container{
+    margin-top: 10vh;
+    height: 80vh;
+}
+
+.row{
+    height:30%;
+}
+
+.login{
+    color: #1e678b;
+    font-weight: bold;
+}

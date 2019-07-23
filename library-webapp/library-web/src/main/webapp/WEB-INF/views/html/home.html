@@ -30,6 +30,25 @@
 </div>
 
 
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var overdue = [[${overdue}]];
+    $(document).ready(function () {
+        if(overdue) {
+            if (sessionStorage.getItem('popState') != 'shown') {
+                Swal.fire({
+                    title: 'You have some overdue items!',
+                    type: 'error',
+                    confirmButtonText: 'Ok, I ll take care of it!'
+                }, document.getElementById("myLoans").style.display = "block");
+                sessionStorage.setItem('popState', 'shown')
+            }
+        }
+    });
+    /*]]>*/
+
+</script>
+
 </body>
 </html>
 
