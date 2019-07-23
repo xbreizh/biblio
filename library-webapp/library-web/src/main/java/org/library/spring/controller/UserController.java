@@ -201,6 +201,20 @@ public class UserController {
 
     }
 
+    @PostMapping("/remove")
+    public ModelAndView remove(ModelAndView mv, String loanId) throws BusinessExceptionLoan {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String token = authentication.getDetails().toString();
+        logger.info("trying to remove: " + loanId);
+        int idLoan = Integer.parseInt(loanId);
+        loanManager.removeLoan(token, idLoan);
+
+        return new ModelAndView("redirect:/");
+
+    }
+
+
+
 
     @GetMapping("/connect")
     public String user(Principal principal) {
