@@ -1,4 +1,4 @@
-package org.troparo.web.service.helper;
+package org.troparo.web.service;
 
 import org.apache.log4j.Logger;
 

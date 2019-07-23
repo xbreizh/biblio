@@ -9,7 +9,6 @@ import org.troparo.entities.loan.*;
 import org.troparo.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
-import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -176,6 +175,17 @@ public class LoanServiceImpl implements ILoanService {
         return ar;
     }
 
+    @Override
+    public RemoveLoanResponseType removeLoan(RemoveLoanRequestType parameters) throws BusinessExceptionLoan {
+        String token = parameters.getToken();
+        checkAuthentication(token);
+        RemoveLoanResponseType ar = new RemoveLoanResponseType();
+        String feedback = loanManager.removeLoan(token, parameters.getId());
+
+        ar.setReturn(feedback);
+        return ar;
+    }
+
 
     @Override
     public RenewLoanResponseType renewLoan(RenewLoanRequestType parameters) throws BusinessExceptionLoan {
@@ -272,7 +282,7 @@ public class LoanServiceImpl implements ILoanService {
     }
 
 
-    private void checkAuthentication(String token) throws BusinessExceptionLoan {
+    void checkAuthentication(String token) throws BusinessExceptionLoan {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {

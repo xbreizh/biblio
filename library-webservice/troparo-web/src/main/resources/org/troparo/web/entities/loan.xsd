@@ -157,6 +157,25 @@
     </xsd:element>
 
     <!-- Terminate Loan Request Type -->
+    <xsd:element name="removeLoanRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:Id"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Terminate Loan Response Type -->
+    <xsd:element name="removeLoanResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Terminate Loan Request Type -->
     <xsd:element name="terminateLoanRequestType">
         <xsd:complexType>
             <xsd:sequence>

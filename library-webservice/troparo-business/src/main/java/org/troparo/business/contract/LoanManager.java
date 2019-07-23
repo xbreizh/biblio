@@ -19,6 +19,8 @@ public interface LoanManager {
 
     String renewLoan(int id);
 
+    String removeLoan(String token, int loanId);
+
     boolean isRenewable(int id);
 
     String terminate(int id);

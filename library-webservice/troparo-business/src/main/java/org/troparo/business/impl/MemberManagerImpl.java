@@ -339,7 +339,8 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkAdmin(String token) {
         Member m = memberDAO.getMemberByToken(token);
         if (m != null && m.getRole() != null) {
-            return m.getRole().equals("Admin");
+            logger.info("role: "+m.getRole());
+            return m.getRole().equalsIgnoreCase("Admin");
         }
 
         return false;

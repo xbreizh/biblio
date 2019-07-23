@@ -146,6 +146,18 @@ public class LoanDAOImpl implements LoanDAO {
     }
 
     @Override
+    public boolean removeLoan(Loan loan) {
+        logger.info("trying to remove loan");
+        try {
+            sessionFactory.getCurrentSession().remove(loan);
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public List<Loan> getLoansByCriteria(Map<String, String> map) {
 
         StringBuilder request = new StringBuilder();

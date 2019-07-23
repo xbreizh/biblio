@@ -13,7 +13,6 @@ import org.troparo.entities.mail.MailListType;
 import org.troparo.entities.mail.MailTypeOut;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
-import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.ParseException;

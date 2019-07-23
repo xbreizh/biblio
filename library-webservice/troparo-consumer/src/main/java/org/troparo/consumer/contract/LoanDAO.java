@@ -24,4 +24,6 @@ public interface LoanDAO {
     List<Loan> getLoansByCriteria(Map<String, String> map);
 
     List<Book> getListBooksAvailableOnThoseDates(Loan loan);
+
+    boolean removeLoan(Loan loan);
 }

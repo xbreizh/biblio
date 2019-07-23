@@ -10,10 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.entities.connect.GetTokenRequestType;
-import org.troparo.entities.loan.GetLoanByCriteriasRequestType;
-import org.troparo.entities.loan.GetLoanByIdRequestType;
-import org.troparo.entities.loan.LoanCriterias;
-import org.troparo.entities.loan.LoanListRequestType;
+import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.web.service.ConnectServiceImpl;
 import org.troparo.web.service.LoanServiceImpl;
@@ -40,6 +37,18 @@ class LoanServiceIntegrationTest {
         parameters.setLogin("LOKII");
         parameters.setPassword("123");
         token = connectService.getToken(parameters).getReturn();
+
+    }
+
+    @Test
+    @DisplayName("should remove loan")
+    void removeLoan() throws BusinessExceptionLoan {
+        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        int id = 1;
+        parameters.setId(id);
+        parameters.setToken(token);
+        parameters.setId(2);
+        assertEquals("loan removed", loanService.removeLoan(parameters).getReturn());
 
     }
 

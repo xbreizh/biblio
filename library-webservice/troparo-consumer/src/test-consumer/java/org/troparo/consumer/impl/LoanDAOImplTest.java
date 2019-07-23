@@ -58,6 +58,25 @@ class LoanDAOImplTest {
         assertEquals(0, loanDAO1.getLoans().size());
     }
 
+    @Test
+    @DisplayName("should remove existing loan")
+    void removeLoan() {
+        Loan loan = loanDAO.getLoanById(2);
+        assertAll(
+                ()->assertEquals(5, loanDAO.getLoans().size()),
+                ()->assertTrue(loanDAO.removeLoan(loan)),
+                ()->assertEquals(4, loanDAO.getLoans().size())
+        );
+    }
+
+    @Test
+    @DisplayName("remove loan")
+    void removeLoan1() {
+        Loan loan = loanDAO.getLoanById(22);
+        assertFalse(loanDAO.removeLoan(loan));
+    }
+
+
 
     @Test
     @DisplayName("should add a loan")

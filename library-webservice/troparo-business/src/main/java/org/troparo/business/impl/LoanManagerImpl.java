@@ -304,6 +304,19 @@ public class LoanManagerImpl implements LoanManager {
 
     }
 
+    @Override
+    public String removeLoan(String token, int id) {
+        Loan loan = loanDAO.getLoanById(id);
+        logger.info("loan check: "+loan.isChecked());
+        if(memberManager.checkAdmin(token)|| (!loan.isChecked() && loan.getBorrower().getToken().equals(token))){
+            if(loanDAO.removeLoan(loan)){
+                return "loan removed";
+            }
+
+        }
+        return "You can't remove that loan, please contact the Administration";
+    }
+
 
     @Override
     public boolean isRenewable(int id) {

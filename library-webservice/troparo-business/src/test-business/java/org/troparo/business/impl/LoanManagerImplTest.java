@@ -58,6 +58,81 @@ class LoanManagerImplTest {
     }
 
     @Test
+    @DisplayName("should remove if admin")
+    void removeLoan() {
+        Loan loan = new Loan();
+        String token = "tok123";
+        int loanId = 2;
+        loan.setId(loanId);
+        Member member = new Member();
+        member.setRole("admin");
+        member.setToken(token);
+        when(memberManager.checkAdmin(token)).thenReturn(true);
+        when(loanDAO.getLoanById(loanId)).thenReturn(loan);
+        when(loanDAO.removeLoan(loan)).thenReturn(true);
+        assertEquals("loan removed", loanManager.removeLoan(token, loanId));
+
+    }
+
+    @Test
+    @DisplayName("should remove if not admin but loan not checked")
+    void removeLoan1() {
+        Loan loan = new Loan();
+        String token = "tok123";
+        int loanId = 2;
+        loan.setId(loanId);
+        loan.setChecked(false);
+        Member member = new Member();
+        member.setRole("admin");
+        member.setToken(token);
+        loan.setBorrower(member);
+        when(memberManager.checkAdmin(token)).thenReturn(false);
+        when(loanDAO.getLoanById(loanId)).thenReturn(loan);
+        when(loanDAO.removeLoan(loan)).thenReturn(true);
+        assertEquals("loan removed", loanManager.removeLoan(token, loanId));
+
+    }
+
+    @Test
+    @DisplayName("should return an error if not admin and loan checked")
+    void removeLoan2() {
+        Loan loan = new Loan();
+        String token = "tok123";
+        int loanId = 2;
+        loan.setId(loanId);
+        loan.setChecked(true);
+        Member member = new Member();
+        member.setRole("admin");
+        member.setToken(token);
+        loan.setBorrower(member);
+        when(memberManager.checkAdmin(token)).thenReturn(false);
+        when(loanDAO.getLoanById(loanId)).thenReturn(loan);
+        when(loanDAO.removeLoan(loan)).thenReturn(true);
+        assertEquals("You can't remove that loan, please contact the Administration", loanManager.removeLoan(token, loanId));
+
+    }
+
+    @Test
+    @DisplayName("should return an error if not admin, loan unchecked and invalid token")
+    void removeLoan3() {
+        Loan loan = new Loan();
+        String token = "tok123";
+        int loanId = 2;
+        loan.setId(loanId);
+        loan.setChecked(false);
+        Member member = new Member();
+        member.setRole("admin");
+        member.setToken(token);
+        loan.setBorrower(member);
+        when(memberManager.checkAdmin(token)).thenReturn(false);
+        when(loanDAO.getLoanById(loanId)).thenReturn(loan);
+        when(loanDAO.removeLoan(loan)).thenReturn(true);
+        assertEquals("You can't remove that loan, please contact the Administration", loanManager.removeLoan("er", loanId));
+
+    }
+
+
+    @Test
     @DisplayName("should return \"invalid member\" when member is null")
     void addLoan() {
         Loan loan = new Loan();
