@@ -4,6 +4,26 @@
             elementFormDefault="qualified">
 
 
+    <!-- Reserve Request Type -->
+    <xsd:element name="reserveRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:Token"/>
+                <xsd:element ref="tns:ISBN"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Reserve Response Type -->
+    <xsd:element name="reserveResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
     <!-- Check Loan Request Type -->
     <xsd:element name="checkInLoanRequestType">
         <xsd:complexType>
@@ -37,7 +57,7 @@
     <xsd:element name="addLoanResponseType">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="return" type="xsd:boolean"/>
+                <xsd:element name="return" type="xsd:string"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -210,8 +230,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Login"/>
-                <xsd:element name="startDate" nillable="true" type="xsd:date"/>
-                <xsd:element ref="tns:ISBN"/>
+                <xsd:element ref="tns:bookId"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
@@ -294,7 +313,6 @@
     </xsd:element>
 
 
-
     <!-- Book Type In-->
     <xsd:element name="LoanBook">
         <xsd:complexType>
@@ -360,6 +378,7 @@
     </xsd:element>
 
     <xsd:element name="Id" type="xsd:int"/>
+    <xsd:element name="bookId" type="xsd:int"/>
     <!--Exception-->
 
     <!-- Business Exception Type -->
@@ -372,8 +391,6 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-
-
 
 
 </xsd:schema>

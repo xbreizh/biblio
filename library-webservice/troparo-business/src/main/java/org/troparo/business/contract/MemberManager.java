@@ -46,4 +46,6 @@ public interface MemberManager {
     boolean checkAdmin(String token);
 
     boolean requestPasswordLink(String login, String email);
+
+    Member getMemberByToken(String token);
 }

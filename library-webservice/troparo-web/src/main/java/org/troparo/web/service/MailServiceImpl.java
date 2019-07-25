@@ -7,6 +7,7 @@ import org.troparo.entities.mail.*;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;

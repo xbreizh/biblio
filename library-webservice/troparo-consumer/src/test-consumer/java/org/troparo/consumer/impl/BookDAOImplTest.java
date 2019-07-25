@@ -11,6 +11,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
+import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -34,6 +35,9 @@ class BookDAOImplTest {
         logger.info("size: " + bookDAO.getBooks().size());
         logger.info("reset db");
     }
+
+
+
 
     @Test
     @DisplayName("should return the books from db (checking the number)")
@@ -104,7 +108,7 @@ class BookDAOImplTest {
     void getBooksByCriterias() {
         Map<String, String> map = new HashMap<>();
         map.put("Titlde", "jpolinfo");
-        assertEquals(0, bookDAO.getBooksByCriterias(map).size());
+        assertEquals(0, bookDAO.getBooksByCriteria(map).size());
 
     }
 
@@ -113,7 +117,7 @@ class BookDAOImplTest {
     void getBooksByCriterias1() {
         Map<String, String> map = new HashMap<>();
         map.put("Title", "jpolinfo");
-        assertEquals(0, bookDAO.getBooksByCriterias(map).size());
+        assertEquals(0, bookDAO.getBooksByCriteria(map).size());
 
     }
 
@@ -121,7 +125,7 @@ class BookDAOImplTest {
     @DisplayName("should return empty list if map is null")
     void getBooksByCriterias2() {
 
-        assertEquals(0, bookDAO.getBooksByCriterias(null).size());
+        assertEquals(0, bookDAO.getBooksByCriteria(null).size());
 
     }
 
@@ -130,7 +134,7 @@ class BookDAOImplTest {
     void getBooksByCriterias3() {
         Map<String, String> map = new HashMap<>();
         map.put("Title", "grande");
-        assertEquals(1, bookDAO.getBooksByCriterias(map).size());
+        assertEquals(1, bookDAO.getBooksByCriteria(map).size());
 
     }
 
@@ -138,7 +142,7 @@ class BookDAOImplTest {
     @DisplayName("should return empty list if no criteria")
     void getBooksByCriterias4() {
         Map<String, String> map = new HashMap<>();
-        assertEquals(0, bookDAO.getBooksByCriterias(map).size());
+        assertEquals(0, bookDAO.getBooksByCriteria(map).size());
 
     }
 
@@ -149,7 +153,7 @@ class BookDAOImplTest {
         bookDAO1.setSessionFactory(null);
         Map<String, String> map = new HashMap<>();
         map.put("Title", "grande");
-        assertEquals(0, bookDAO1.getBooksByCriterias(map).size());
+        assertEquals(0, bookDAO1.getBooksByCriteria(map).size());
     }
 
     @Test
@@ -158,7 +162,7 @@ class BookDAOImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("Title", "e");
         map.put("author", "e");
-        assertEquals(2, bookDAO.getBooksByCriterias(map).size());
+        assertEquals(2, bookDAO.getBooksByCriteria(map).size());
     }
 
     @Test
@@ -217,9 +221,9 @@ class BookDAOImplTest {
     @DisplayName("should return the number of books available")
     void getAvailable1() {
         assertAll(
-                () -> assertEquals(0, bookDAO.getAvailable("1234567824")),
-                () -> assertEquals(4, bookDAO.getAvailable("12345678OK")),
-                () -> assertEquals(0, bookDAO.getAvailable("fr"))
+                () -> assertEquals(0, bookDAO.getNbAvailable("1234567824")),
+                () -> assertEquals(4, bookDAO.getNbAvailable("12345678OK")),
+                () -> assertEquals(0, bookDAO.getNbAvailable("fr"))
 
         );
 

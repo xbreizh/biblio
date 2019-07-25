@@ -9,6 +9,7 @@ import org.troparo.model.Loan;
 import org.troparo.model.Member;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -308,7 +309,7 @@ public class MemberServiceImpl implements IMemberService {
     }
 
 
-    public void setMemberManager(MemberManager memberManager) {
+    void setMemberManager(MemberManager memberManager) {
         this.memberManager = memberManager;
     }
 

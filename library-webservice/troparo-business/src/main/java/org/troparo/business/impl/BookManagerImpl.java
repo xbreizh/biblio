@@ -45,6 +45,10 @@ public class BookManagerImpl implements BookManager {
     }
 
 
+
+
+
+
     public String checkValidityOfParametersForInsertBook(Book book) {
         if (book == null) return "no book provided";
         String[][] bookParameters = {
@@ -98,7 +102,7 @@ public class BookManagerImpl implements BookManager {
         Map<String, String> criterias = removeInvalidEntriesFromCriterias(map);
 
         logger.info("criterias: " + criterias);
-        return bookDAO.getBooksByCriterias(criterias);
+        return bookDAO.getBooksByCriteria(criterias);
     }
 
     protected Map<String, String> removeInvalidEntriesFromCriterias(Map<String, String> map) {
@@ -126,7 +130,7 @@ public class BookManagerImpl implements BookManager {
 
         Map<String, String> map = new HashMap<>();
         map.put("ISBN", book.getIsbn().toUpperCase());
-        bookList = bookDAO.getBooksByCriterias(map);
+        bookList = bookDAO.getBooksByCriteria(map);
         if (bookList == null) return "No Item found with that ISBN";
         logger.info("getting list. Size: " + bookList.size());
         if (bookList.isEmpty()) return "No book to update";
@@ -254,7 +258,7 @@ public class BookManagerImpl implements BookManager {
 
     @Override
     public int getNbAvailable(String isbn) {
-        return bookDAO.getAvailable(isbn);
+        return bookDAO.getNbAvailable(isbn);
     }
 
     @Override

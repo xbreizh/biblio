@@ -84,7 +84,7 @@ public class MailManagerImpl implements MailManager {
         ) {
             if (member.getToken().startsWith("TEMP")) {
                 member.setToken(removeTempFromToken(member.getToken()));
-                member.setTokenExpiration(getTodaySDate());
+                member.setTokenexpiration(getTodaySDate());
                 memberDAO.updateMember(member);
             }
         }

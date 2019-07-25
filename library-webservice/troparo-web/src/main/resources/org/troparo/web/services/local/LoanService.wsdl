@@ -11,6 +11,12 @@
                         schemaLocation="../../entities/loan.xsd"/>
         </xsd:schema>
     </wsdl:types>
+    <wsdl:message name="reserveRequest">
+        <wsdl:part element="loan:reserveRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="reserveResponse">
+        <wsdl:part element="loan:reserveResponseType" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="addLoanRequest">
         <wsdl:part element="loan:addLoanRequestType" name="parameters"/>
     </wsdl:message>
@@ -76,6 +82,11 @@
     </wsdl:message>
 
     <wsdl:portType name="ILoanService">
+        <wsdl:operation name="reserve">
+            <wsdl:input message="tns:reserveRequest"/>
+            <wsdl:output message="tns:reserveResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
         <wsdl:operation name="addLoan">
             <wsdl:input message="tns:addLoanRequest"/>
             <wsdl:output message="tns:addLoanResponse"/>

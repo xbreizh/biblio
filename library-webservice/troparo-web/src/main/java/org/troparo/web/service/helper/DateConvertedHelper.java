@@ -1,4 +1,4 @@
-package org.troparo.web.service;
+package org.troparo.web.service.helper;
 
 import org.apache.log4j.Logger;
 
@@ -29,8 +29,8 @@ public class DateConvertedHelper {
     }
 
 
-    public Date convertXmlDateIntoDate(XMLGregorianCalendar startDate)  {
-        if(startDate==null)return null;
+    public Date convertXmlDateIntoDate(XMLGregorianCalendar startDate) {
+        if (startDate == null) return null;
         return startDate.toGregorianCalendar().getTime();
     }
 }

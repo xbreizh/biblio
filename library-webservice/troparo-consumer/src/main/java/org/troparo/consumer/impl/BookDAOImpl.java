@@ -109,7 +109,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public List<Book> getBooksByCriterias(Map<String, String> map) {
+    public List<Book> getBooksByCriteria(Map<String, String> map) {
         String request;
         StringBuilder criteria = new StringBuilder();
         logger.info("map: " + map);
@@ -180,7 +180,7 @@ public class BookDAOImpl implements BookDAO {
     }
 
     @Override
-    public int getAvailable(String isbn) {
+    public int getNbAvailable(String isbn) {
         logger.info("isbn passed: " + isbn);
         String request = "select count(*) from Book where isbn = :isbn and id not in(select book.id from Loan where endDate is null)";
         Query query = getCurrentSession().createQuery(request);
@@ -205,6 +205,7 @@ public class BookDAOImpl implements BookDAO {
         return query.getResultList().isEmpty();
 
     }
+
 
     @Override
     public Book getBookByIsbn(String isbn) {

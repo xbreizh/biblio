@@ -9,6 +9,7 @@ import org.troparo.entities.loan.*;
 import org.troparo.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
+import org.troparo.web.service.helper.DateConvertedHelper;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -44,23 +45,36 @@ public class LoanServiceImpl implements ILoanService {
     // Create
     @Override
     public AddLoanResponseType addLoan(AddLoanRequestType parameters) throws BusinessExceptionLoan {
-        LoanTypeIn loanTypeIn;
-        String exception;
+        //LoanTypeIn loanTypeIn;
+        //String exception;
         AddLoanResponseType ar = new AddLoanResponseType();
         checkAuthentication(parameters.getToken());
-        ar.setReturn(true);
-        loanTypeIn = parameters.getLoanTypeIn();
-        Loan loan = convertLoanTypeInIntoLoan(loanTypeIn);
+        ar.setReturn("success");
+        //loanTypeIn = parameters.getLoanTypeIn();
+       // Loan loan = convertLoanTypeInIntoLoan(loanTypeIn);
         logger.info("loanManager: " + loanManager);
-        exception = loanManager.addLoan(loan);
-        if (!exception.equals("")) {
+        //loanTypeIn.getLogin()
+        String login = parameters.getLoanTypeIn().getLogin();
+        int bookId = parameters.getLoanTypeIn().getBookId();
+        //exception = loanManager.addLoan(login, bookId);
+        /*if (!exception.equals("")) {
             logger.error("exception found: " + exception);
             ar.setReturn(false);
-        }
+        }*/
+        ar.setReturn(loanManager.addLoan(login, bookId));
 
         return ar;
     }
 
+
+    @Override
+    public ReserveResponseType reserve(ReserveRequestType parameters) throws BusinessExceptionLoan {
+        ReserveResponseType ar = new ReserveResponseType();
+        checkAuthentication(parameters.getToken());
+
+        ar.setReturn(loanManager.reserve(parameters.getToken(), parameters.getISBN()));
+        return ar;
+    }
 
     // Get One
     @Override
@@ -209,7 +223,7 @@ public class LoanServiceImpl implements ILoanService {
     }
 
     @Override
-    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters)  {
+    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters) {
         CheckInLoanResponseType ar = new CheckInLoanResponseType();
         boolean feedback = loanManager.checkinBooking(parameters.getToken(), parameters.getId());
         ar.setReturn(feedback);
@@ -242,7 +256,6 @@ public class LoanServiceImpl implements ILoanService {
             bookLoan.setNbPages(loan.getBook().getNbPages());
             bookLoan.setPublicationYear(loan.getBook().getPublicationYear());
             loanTypeOut.setLoanBook(bookLoan);
-            loanTypeOut.setChecked(loan.isChecked());
             XMLGregorianCalendar startDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate());
             XMLGregorianCalendar plannedEndDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate());
             if (loan.getEndDate() != null) {
@@ -269,7 +282,7 @@ public class LoanServiceImpl implements ILoanService {
 
 
     // Converts Input into Loan for business
-    private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
+   /* private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
         logger.info(loanTypeIn);
         Loan loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
@@ -280,7 +293,7 @@ public class LoanServiceImpl implements ILoanService {
 
         logger.info("conversion loanType into loan done");
         return loan;
-    }
+    }*/
 
 
     void checkAuthentication(String token) throws BusinessExceptionLoan {

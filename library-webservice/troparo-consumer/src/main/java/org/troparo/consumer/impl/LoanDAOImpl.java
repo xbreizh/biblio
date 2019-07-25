@@ -21,7 +21,7 @@ public class LoanDAOImpl implements LoanDAO {
     private static final String ISBN = "isbn";
     private static final String BOOK_ID = "book_id";
     private static final String LOGIN = "login";
-    private static  Logger logger = Logger.getLogger(LoanDAOImpl.class);
+    private static Logger logger = Logger.getLogger(LoanDAOImpl.class);
     @Inject
     private SessionFactory sessionFactory;
     private static final Class cl = Loan.class;
@@ -115,27 +115,66 @@ public class LoanDAOImpl implements LoanDAO {
         }
     }
 
+    @Override
+    public Loan getPendingReservation(String isbn) {
+        logger.info("Isbn received: " + isbn);
+        List<Loan> loanList;
+        String request = "From Loan where isbn = :isbn and reservationDate is not null and startDate is null and book_id is null order by reservationDate asc";
+        try {
+            Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
+            query.setParameter(ISBN, isbn);
+            loanList = query.getResultList();
+
+            if (!loanList.isEmpty()) return loanList.get(0);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        logger.info("no pending reservation for: " + isbn);
+        return null;
+    }
+
+    @Override
+    public Book getNextAvailableBook(String isbn) {
+        String request;
+        List<Book> bookList;
+        if (isbn == null) return null;
+        isbn = "'" + isbn.toUpperCase() + "'";
+        logger.info("ISBN received: " + isbn);
+        request =
+                "select * from Book where isbn = " + isbn + " and exists (" +
+                        "select book_id from loan where isbn = " + isbn + " and end_date is null)";
+        try {
+            Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
+            bookList = query.getResultList();
+            if (!bookList.isEmpty()) return bookList.get(0);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+        return null;
+    }
+
+
     Date getTodayDate() {
         return new Date();
     }
 
-    @Override
+    // @Override
     public List<Book> getListBooksAvailableOnThoseDates(Loan loan) {
         String request;
         List<Book> bookList = new ArrayList<>();
         logger.info("Title received: " + loan.getBook().getTitle());
-        String title = "'"+loan.getBook().getTitle().toUpperCase()+"'";
-        String loanStartDate = "'"+loan.getStartDate().toString()+"'";
-        String loanPlannedEndDate = "'"+loan.getPlannedEndDate()+"'";
-        request =  "select * from Book b where b.title = "+title+" and b.id not in ( " +
+        String title = "'" + loan.getBook().getTitle().toUpperCase() + "'";
+        String loanStartDate = "'" + loan.getStartDate().toString() + "'";
+        String loanPlannedEndDate = "'" + loan.getPlannedEndDate() + "'";
+        request = "select * from Book b where b.title = " + title + " and b.id not in ( " +
                 "select l.book_id from Loan l where l.end_date is null and l.book_id in (" +
-                " select b1.id from Book b1 where b1.title = "+title+" and(" +
-                "l.start_date <= "+loanStartDate+" and" +
-                        " l.planned_end_date > "+loanStartDate+") or("+
-                " l.start_date < "+loanPlannedEndDate+" and"+
-                " l.planned_end_date > "+loanPlannedEndDate+
-                ")/* or ("+
-                "l.planned_end_date < "+loanStartDate+" and"+
+                " select b1.id from Book b1 where b1.title = " + title + " and(" +
+                "l.start_date <= " + loanStartDate + " and" +
+                " l.planned_end_date > " + loanStartDate + ") or(" +
+                " l.start_date < " + loanPlannedEndDate + " and" +
+                " l.planned_end_date > " + loanPlannedEndDate +
+                ")/* or (" +
+                "l.planned_end_date < " + loanStartDate + " and" +
                 " l.end_date is null)*/))";
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
@@ -150,7 +189,7 @@ public class LoanDAOImpl implements LoanDAO {
         logger.info("trying to remove loan");
         try {
             sessionFactory.getCurrentSession().remove(loan);
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return false;
         }

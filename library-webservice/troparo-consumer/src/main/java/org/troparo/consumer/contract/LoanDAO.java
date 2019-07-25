@@ -15,6 +15,8 @@ public interface LoanDAO {
 
     boolean updateLoan(Loan loan);
 
+    boolean removeLoan(Loan loan);
+
     Loan getLoanById(int id);
 
     List getLoanByIsbn(String isbn);
@@ -23,7 +25,8 @@ public interface LoanDAO {
 
     List<Loan> getLoansByCriteria(Map<String, String> map);
 
-    List<Book> getListBooksAvailableOnThoseDates(Loan loan);
+    Loan getPendingReservation(String isbn);
 
-    boolean removeLoan(Loan loan);
+    Book getNextAvailableBook(String isbn);
+
 }

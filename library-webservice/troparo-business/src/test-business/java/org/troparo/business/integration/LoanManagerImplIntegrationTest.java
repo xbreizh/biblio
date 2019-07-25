@@ -93,7 +93,7 @@ class LoanManagerImplIntegrationTest {
     }
 
 
-    @Test
+  /*  @Test
     @DisplayName("should add loan")
     void addLoan() {
         Loan loan = new Loan();
@@ -178,6 +178,6 @@ class LoanManagerImplIntegrationTest {
         Date today = simpleDateFormat.parse("2019-08-13");
         loan.setStartDate(today);
         assertEquals("the book is unavailable for that date", loanManager.addLoan(loan));
-    }
+    }*/
 
 }

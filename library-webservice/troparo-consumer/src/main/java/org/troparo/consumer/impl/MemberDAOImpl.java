@@ -175,7 +175,7 @@ public class MemberDAOImpl implements MemberDAO {
         logger.info("getting in dao");
         try {
             logger.info(sessionFactory);
-            return sessionFactory.getCurrentSession().createQuery("from Member where token like 'TEMP%' AND tokenExpiration > CURRENT_TIMESTAMP", cl).getResultList();
+            return sessionFactory.getCurrentSession().createQuery("from Member where token like 'TEMP%' AND tokenexpiration > CURRENT_TIMESTAMP", cl).getResultList();
         } catch (Exception e) {
             logger.error("SessionFactory possibly not initialized!");
         }

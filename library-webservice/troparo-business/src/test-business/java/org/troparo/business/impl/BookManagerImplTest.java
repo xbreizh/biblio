@@ -37,6 +37,8 @@ class BookManagerImplTest {
         bookManager.setStringValidatorBook(stringValidatorBook);
     }
 
+
+
     @Test
     @DisplayName("should say that the ISBN already exist")
     void addBook() {
@@ -138,7 +140,7 @@ class BookManagerImplTest {
         List<Book> bookList = new ArrayList<>();
         Map<String, String> criterias = new HashMap<>();
         criterias.put("Test", "Test");
-        when(bookDAO.getBooksByCriterias(criterias)).thenReturn(bookList);
+        when(bookDAO.getBooksByCriteria(criterias)).thenReturn(bookList);
         assertEquals(bookList, bookManager.getBooksByCriteria(criterias));
     }
 
@@ -167,7 +169,7 @@ class BookManagerImplTest {
     void updateBook() {
         Map<String, String> map = new HashMap<>();
         map.put("ISBN", "ABC");
-        when(bookDAO.getBooksByCriterias(map)).thenReturn(null);
+        when(bookDAO.getBooksByCriteria(map)).thenReturn(null);
         Book book = new Book();
         book.setIsbn("ABC");
         assertEquals("No Item found with that ISBN", bookManager.updateBook(book));
@@ -186,7 +188,7 @@ class BookManagerImplTest {
         List<Book> bookList = new ArrayList<>();
         Book book = new Book();
         book.setIsbn("ABC123");
-        when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
+        when(bookDAO.getBooksByCriteria(map)).thenReturn(bookList);
         assertEquals("No book to update", bookManager.updateBook(book));
     }
 
@@ -207,7 +209,7 @@ class BookManagerImplTest {
         Book book = new Book();
         book.setIsbn("ABC123");
         bookList.add(book);
-        when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
+        when(bookDAO.getBooksByCriteria(map)).thenReturn(bookList);
         when(bookDAO.updateBook(book)).thenReturn(false);
         assertEquals("Issue while updating", bookManager.updateBook(book));
     }
@@ -221,7 +223,7 @@ class BookManagerImplTest {
         Book book = new Book();
         book.setIsbn("ABC123");
         bookList.add(book);
-        when(bookDAO.getBooksByCriterias(map)).thenReturn(bookList);
+        when(bookDAO.getBooksByCriteria(map)).thenReturn(bookList);
         when(bookDAO.updateBook(book)).thenReturn(true);
         assertEquals("", bookManager.updateBook(book));
     }
@@ -502,7 +504,7 @@ class BookManagerImplTest {
     @Test
     @DisplayName("should return number of books available")
     void getNbAvailable() {
-        when(bookDAO.getAvailable(anyString())).thenReturn(3);
+        when(bookDAO.getNbAvailable(anyString())).thenReturn(3);
         assertEquals(3, bookManager.getNbAvailable("isbn123"));
     }
 

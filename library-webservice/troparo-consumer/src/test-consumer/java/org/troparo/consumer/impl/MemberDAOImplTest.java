@@ -198,7 +198,7 @@ class MemberDAOImplTest {
     void invalidateToken() {
         Member member = memberDAO.getMemberByLogin("LOKII");
         String token = member.getToken();
-        member.setTokenExpiration(new Date()); // setting last connectDate to now
+        member.setTokenexpiration(new Date()); // setting last connectDate to now
         memberDAO.updateMember(member);
         assertAll(
                 () -> assertNotNull(memberDAO.getMemberByToken(token)),

@@ -18,13 +18,13 @@ public interface BookDAO {
 
     boolean existingISBN(String isbn);
 
-    List<Book> getBooksByCriterias(Map<String, String> map);
+    List<Book> getBooksByCriteria(Map<String, String> map);
 
     boolean updateBook(Book book);
 
     boolean remove(Book book);
 
-    int getAvailable(String isbn);
+    int getNbAvailable(String isbn);
 
     boolean isAvailable(int id);
 

@@ -51,7 +51,7 @@ public class Member {
     private Date dateConnect;
 
     @Column(name = "TOKENEXPIRATION")
-    private Date tokenExpiration;
+    private Date tokenexpiration;
 
     @OneToMany(mappedBy = "borrower", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private List<Loan> loanList = new ArrayList<>();
@@ -71,7 +71,7 @@ public class Member {
                 ", dateJoin=" + dateJoin +
                 ", dateConnect=" + dateConnect +
                 ", loanList=" + loanList.size() +
-                ", tokenExpiration=" + tokenExpiration +
+                ", tokenexpiration=" + tokenexpiration +
                 '}';
     }
 }
