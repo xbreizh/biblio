@@ -18,13 +18,11 @@ import org.troparo.model.Member;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.web.service.helper.DateConvertedHelper;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @Sql("classpath:resetDb.sql")
@@ -51,7 +49,7 @@ class LoanServiceImplTest {
 
     }
 
-    @Test
+  /*  @Test
     @DisplayName("should not throw any exception when trying to add loan")
     void addLoan() {
         AddLoanRequestType parameters = new AddLoanRequestType();
@@ -70,20 +68,66 @@ class LoanServiceImplTest {
     @Test
     @Disabled
     @DisplayName("should throw an exception when trying to add loan")
-    void addLoan1() {
+    void addLoan1() throws BusinessExceptionLoan {
+        loanService = spy(LoanServiceImpl.class);
         AddLoanRequestType parameters = new AddLoanRequestType();
-        parameters.setToken("derr");
+        String token = "tok123";
+        parameters.setToken(token);
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
         loanTypeIn.setISBN("12345");
         parameters.setLoanTypeIn(loanTypeIn);
-        String exception = "exception";
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         loanService.setDateConvertedHelper(dateConvertedHelper);
         XMLGregorianCalendar date = dateConvertedHelper.convertDateIntoXmlDate(new Date());
         loanTypeIn.setStartDate(date);
-        when(loanManager.addLoan(any(Loan.class))).thenReturn(exception);
-        assertThrows(BusinessExceptionLoan.class, () -> loanService.addLoan(parameters));
+        doThrow(new BusinessExceptionLoan()).when(loanService).checkAuthentication(token);
+        assertThrows(BusinessExceptionLoan.class, ()-> loanService.addLoan(parameters));
+
+    }*/
+
+
+    @Test
+    @Disabled
+    @DisplayName("should throw an exception when trying to remove loan")
+    void removeLoan() throws BusinessExceptionLoan {
+        loanService = spy(LoanServiceImpl.class);
+        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        String token = "tok123";
+        parameters.setToken(token);
+        parameters.setId(2);
+        doThrow(new BusinessExceptionLoan()).when(loanService).checkAuthentication(token);
+        assertThrows(BusinessExceptionLoan.class, () -> loanService.removeLoan(parameters));
+
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("should return exception is non empty string returned from manager")
+    void removeLoan1() throws BusinessExceptionLoan {
+        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        String token = "tok123";
+        int id = 1;
+        parameters.setId(id);
+        parameters.setToken(token);
+        String exception = "exception";
+        when(loanManager.removeLoan(anyString(), anyInt())).thenReturn(exception);
+        assertEquals(exception, loanService.removeLoan(parameters).getReturn());
+
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("should return empty string if removal ok")
+    void removeLoan2() throws BusinessExceptionLoan {
+        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        String token = "tok123";
+        int id = 1;
+        parameters.setId(id);
+        parameters.setToken(token);
+        String exception = "";
+        when(loanManager.removeLoan(anyString(), anyInt())).thenReturn(exception);
+        assertEquals(exception, loanService.removeLoan(parameters).getReturn());
 
     }
 

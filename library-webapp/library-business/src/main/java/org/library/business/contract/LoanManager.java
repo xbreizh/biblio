@@ -19,6 +19,8 @@ public interface LoanManager {
 
     boolean renew(String token, String isbn, String login, XMLGregorianCalendar startDate) throws BusinessExceptionLoan;
 
+    boolean removeLoan(String token, int id) throws BusinessExceptionLoan;
+
 
     List<Loan> getLoansForIsbn(String token, String isbn);
 

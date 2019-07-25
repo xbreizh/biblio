@@ -21,6 +21,12 @@ public class Loan {
     @NonNull
     private int id;
 
+    @Column(name = "RESERVATION_DATE")
+    private Date reservationDate;
+
+    @Column(name = "AVAILABLE_DATE")
+    private Date availableDate;
+
     @Column(name = "START_DATE")
     private Date startDate;
 
@@ -30,10 +36,12 @@ public class Loan {
     @Column(name = "END_DATE")
     private Date endDate;
 
-    @Column(name = "CHECKED")
-    private boolean checked;
+    @Column(name = "ISBN")
+    @NonNull
+    private String isbn;
 
     @ManyToOne
+    @NonNull
     private Member borrower;
 
     @ManyToOne
@@ -44,12 +52,14 @@ public class Loan {
     public String toString() {
         return "Loan{" +
                 "id=" + id +
+                ", reservationDate=" + reservationDate +
+                ", availableDate=" + availableDate +
                 ", startDate=" + startDate +
                 ", plannedEndDate=" + plannedEndDate +
                 ", endDate=" + endDate +
+                ", isbn=" + isbn +
                 ", borrower=" + borrower.getLogin() +
                 ", book=" + book.getTitle() +
-                ", checked=" + checked +
                 '}';
     }
 

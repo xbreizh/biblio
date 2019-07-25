@@ -333,7 +333,7 @@ class MemberManagerImplTest {
 
         Date date = simpleDateFormat.parse("2020-09-09");
         member.setToken(token);
-        member.setTokenExpiration(date);
+        member.setTokenexpiration(date);
         when(memberDAO.getMemberByToken(token)).thenReturn(member);
         assertTrue(memberManager.checkToken(token));
     }

@@ -45,6 +45,19 @@ public class LoanManagerImpl implements LoanManager {
 
     }
 
+    @Override
+    public boolean removeLoan(String token, int id) throws BusinessExceptionLoan {
+        logger.info("trying to renew: " + id);
+        RemoveLoanRequestType removeLoanRequestType = new RemoveLoanRequestType();
+        removeLoanRequestType.setToken(token);
+        removeLoanRequestType.setId(id);
+        RemoveLoanResponseType removeLoanResponseType;
+        removeLoanResponseType = getLoanServicePort().removeLoan(removeLoanRequestType);
+        return removeLoanResponseType.getReturn().isEmpty();
+
+    }
+
+
     ILoanService getLoanServicePort() {
         if (loanService == null) loanService = new LoanService();
         return loanService.getLoanServicePort();
@@ -109,14 +122,13 @@ public class LoanManagerImpl implements LoanManager {
 
         for (LoanTypeOut loanTypeOut : list.getLoanTypeOut()
         ) {
-            /*if(loanTypeOut.getEndDate()!=null) {*/ // we exclude the none-returned items
                 Loan loan = new Loan();
                 loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
                 loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
+                loan.setChecked(loanTypeOut.isChecked());
                 Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
                 loan.setBook(book);
                 loanList.add(loan);
-            /*}*/
         }
 
         logger.info("converted " + loanList.size() + " items");

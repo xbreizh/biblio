@@ -34,6 +34,42 @@ class LoanTest {
     }
 
     @Test
+    @DisplayName("should get reservation date")
+    void getReservationDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        loan.setReservationDate(date);
+        assertEquals(date, loan.getReservationDate());
+    }
+
+    @Test
+    @DisplayName("should set reservation date")
+    void setReservationDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        loan.setReservationDate(date);
+        assertEquals(date, loan.getReservationDate());
+    }
+
+    @Test
+    @DisplayName("should get available date")
+    void getAvailableDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        loan.setAvailableDate(date);
+        assertEquals(date, loan.getAvailableDate());
+    }
+
+    @Test
+    @DisplayName("should set reservation date")
+    void setAvailableDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        loan.setAvailableDate(date);
+        assertEquals(date, loan.getAvailableDate());
+    }
+
+    @Test
     @DisplayName("should get start date")
     void getStartDate() throws ParseException {
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -134,6 +170,6 @@ class LoanTest {
         loan.setStartDate(date);
         loan.setPlannedEndDate(format.parse("2010-01-07"));
         loan.setEndDate(format.parse("2010-01-17"));
-        assertEquals("Loan{id=123, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, borrower=Diego23, book=Captain Cook, checked=false}", loan.toString());
+        assertEquals("Loan{id=123, reservationDate=null, availableDate=null, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, isbn=null, borrower=Diego23, book=Captain Cook}", loan.toString());
     }
 }

@@ -33,6 +33,8 @@ public class Loan {
 
     private String status;
 
+    private boolean checked;
+
 
 
     @Override

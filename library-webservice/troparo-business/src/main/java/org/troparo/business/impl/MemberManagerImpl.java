@@ -251,7 +251,7 @@ public class MemberManagerImpl implements MemberManager {
         if (checkPassword(password, member.getPassword())) {
             String token = generateToken();
             member.setToken(token);
-            member.setTokenExpiration(adding20MnToCurrentDate());
+            member.setTokenexpiration(adding20MnToCurrentDate());
             member.setDateConnect(getNow());
             memberDAO.updateMember(member);
             return token;
@@ -277,7 +277,7 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkToken(String token) {
         Member member = memberDAO.getMemberByToken(token);
         Date now = getNow();
-        return (member != null && member.getTokenExpiration().after(now));
+        return (member != null && member.getTokenexpiration().after(now));
     }
 
     @Override
@@ -339,7 +339,8 @@ public class MemberManagerImpl implements MemberManager {
     public boolean checkAdmin(String token) {
         Member m = memberDAO.getMemberByToken(token);
         if (m != null && m.getRole() != null) {
-            return m.getRole().equals("Admin");
+            logger.info("role: "+m.getRole());
+            return m.getRole().equalsIgnoreCase("Admin");
         }
 
         return false;
@@ -362,7 +363,7 @@ public class MemberManagerImpl implements MemberManager {
         }
         if (member.getEmail().equalsIgnoreCase(email)) {
             member.setToken("TEMP" + generateToken());
-            member.setTokenExpiration(adding20MnToCurrentDate());
+            member.setTokenexpiration(adding20MnToCurrentDate());
             logger.info("Token to be passed: " + member.getToken());
             return memberDAO.updateMember(member);
         } else {
@@ -370,6 +371,11 @@ public class MemberManagerImpl implements MemberManager {
         }
 
         return false;
+    }
+
+    @Override
+    public Member getMemberByToken(String token) {
+        return memberDAO.getMemberByToken(token);
     }
 
     String generateToken() {

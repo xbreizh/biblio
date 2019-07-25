@@ -25,29 +25,46 @@
 
 
             <td data-th-text="${loan.id}"></td>
-            <td data-th-text="${#dates.format(loan.startDate, 'dd-MM-yyyy')}"></td>
-            <td data-th-text="${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}"></td>
+            <td data-th-text="${#dates.format(loan.startDate, 'dd-MM-yyyy')}">startDate</td>
+            <td data-th-text="${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}">plannedEndDate</td>
             <td data-th-text="${loan.book.isbn}"></td>
             <td data-th-text="${loan.book.title}"></td>
             <td data-th-text="${loan.status}"></td>
             <td>
-                <div th:if="${loan.renewable}">
+                <div th:unless="${loan.checked}">
                     <div>
-                        <form method="post" th:action="@{/renew}" th:object="${renew}">
+                        <form method="post" th:action="@{/remove}" th:object="${remove}">
 
 
-                            <input id="id" name="id" th:value="${loan.id}" type="hidden">
+                            <input id="loanId" name="loanId" th:value="${loan.id}" type="hidden">
 
 
-                            <button class="btn btn-outline-info" type="submit">Renew
+                            <button class="btn btn-outline-danger" type="submit">Remove
                             </button>
 
                         </form>
                     </div>
-
                 </div>
-                <div th:unless="${loan.renewable}">
-                    <img alt="forbidden" style="width: 80px;height: auto" th:src="@{/img/forbidden.jpg}"/>
+
+                <div th:if="${loan.checked}">
+                    <div th:if="${loan.renewable}">
+                        <div>
+                            <form method="post" th:action="@{/renew}" th:object="${renew}">
+
+
+                                <input id="id" name="id" th:value="${loan.id}" type="hidden">
+
+
+                                <button class="btn btn-outline-info" type="submit">Renew
+                                </button>
+
+                            </form>
+                        </div>
+
+                    </div>
+                    <div th:unless="${loan.renewable}">
+                        <img alt="forbidden" style="width: 80px;height: auto" th:src="@{/img/forbidden.jpg}"/>
+                    </div>
                 </div>
             </td>
 

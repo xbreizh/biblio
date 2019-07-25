@@ -11,6 +11,12 @@
                         schemaLocation="../../entities/loan.xsd"/>
         </xsd:schema>
     </wsdl:types>
+    <wsdl:message name="reserveRequest">
+        <wsdl:part element="loan:reserveRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="reserveResponse">
+        <wsdl:part element="loan:reserveResponseType" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="addLoanRequest">
         <wsdl:part element="loan:addLoanRequestType" name="parameters"/>
     </wsdl:message>
@@ -59,6 +65,12 @@
     <wsdl:message name="terminateLoanResponse">
         <wsdl:part element="loan:terminateLoanResponseType" name="parameters"/>
     </wsdl:message>
+    <wsdl:message name="removeLoanRequest">
+        <wsdl:part element="loan:removeLoanRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="removeLoanResponse">
+        <wsdl:part element="loan:removeLoanResponseType" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="checkInLoanRequest">
         <wsdl:part element="loan:checkInLoanRequestType" name="parameters"/>
     </wsdl:message>
@@ -70,6 +82,11 @@
     </wsdl:message>
 
     <wsdl:portType name="ILoanService">
+        <wsdl:operation name="reserve">
+            <wsdl:input message="tns:reserveRequest"/>
+            <wsdl:output message="tns:reserveResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
         <wsdl:operation name="addLoan">
             <wsdl:input message="tns:addLoanRequest"/>
             <wsdl:output message="tns:addLoanResponse"/>
@@ -108,6 +125,11 @@
         <wsdl:operation name="terminateLoan">
             <wsdl:input message="tns:terminateLoanRequest"/>
             <wsdl:output message="tns:terminateLoanResponse"/>
+            <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
+        </wsdl:operation>
+        <wsdl:operation name="removeLoan">
+            <wsdl:input message="tns:removeLoanRequest"/>
+            <wsdl:output message="tns:removeLoanResponse"/>
             <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
         </wsdl:operation>
         <wsdl:operation name="checkInLoan">
@@ -213,6 +235,19 @@
             </wsdl:fault>
         </wsdl:operation>
         <wsdl:operation name="terminateLoan">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="removeLoan">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>

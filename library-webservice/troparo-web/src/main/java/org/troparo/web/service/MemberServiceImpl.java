@@ -309,7 +309,7 @@ public class MemberServiceImpl implements IMemberService {
     }
 
 
-    public void setMemberManager(MemberManager memberManager) {
+    void setMemberManager(MemberManager memberManager) {
         this.memberManager = memberManager;
     }
 

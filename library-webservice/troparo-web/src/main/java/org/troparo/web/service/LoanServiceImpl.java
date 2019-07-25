@@ -45,23 +45,36 @@ public class LoanServiceImpl implements ILoanService {
     // Create
     @Override
     public AddLoanResponseType addLoan(AddLoanRequestType parameters) throws BusinessExceptionLoan {
-        LoanTypeIn loanTypeIn;
-        String exception;
+        //LoanTypeIn loanTypeIn;
+        //String exception;
         AddLoanResponseType ar = new AddLoanResponseType();
         checkAuthentication(parameters.getToken());
-        ar.setReturn(true);
-        loanTypeIn = parameters.getLoanTypeIn();
-        Loan loan = convertLoanTypeInIntoLoan(loanTypeIn);
+        ar.setReturn("success");
+        //loanTypeIn = parameters.getLoanTypeIn();
+       // Loan loan = convertLoanTypeInIntoLoan(loanTypeIn);
         logger.info("loanManager: " + loanManager);
-        exception = loanManager.addLoan(loan);
-        if (!exception.equals("")) {
+        //loanTypeIn.getLogin()
+        String login = parameters.getLoanTypeIn().getLogin();
+        int bookId = parameters.getLoanTypeIn().getBookId();
+        //exception = loanManager.addLoan(login, bookId);
+        /*if (!exception.equals("")) {
             logger.error("exception found: " + exception);
             ar.setReturn(false);
-        }
+        }*/
+        ar.setReturn(loanManager.addLoan(login, bookId));
 
         return ar;
     }
 
+
+    @Override
+    public ReserveResponseType reserve(ReserveRequestType parameters) throws BusinessExceptionLoan {
+        ReserveResponseType ar = new ReserveResponseType();
+        checkAuthentication(parameters.getToken());
+
+        ar.setReturn(loanManager.reserve(parameters.getToken(), parameters.getISBN()));
+        return ar;
+    }
 
     // Get One
     @Override
@@ -176,6 +189,17 @@ public class LoanServiceImpl implements ILoanService {
         return ar;
     }
 
+    @Override
+    public RemoveLoanResponseType removeLoan(RemoveLoanRequestType parameters) throws BusinessExceptionLoan {
+        String token = parameters.getToken();
+        checkAuthentication(token);
+        RemoveLoanResponseType ar = new RemoveLoanResponseType();
+        String feedback = loanManager.removeLoan(token, parameters.getId());
+
+        ar.setReturn(feedback);
+        return ar;
+    }
+
 
     @Override
     public RenewLoanResponseType renewLoan(RenewLoanRequestType parameters) throws BusinessExceptionLoan {
@@ -199,7 +223,7 @@ public class LoanServiceImpl implements ILoanService {
     }
 
     @Override
-    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters)  {
+    public CheckInLoanResponseType checkInLoan(CheckInLoanRequestType parameters) {
         CheckInLoanResponseType ar = new CheckInLoanResponseType();
         boolean feedback = loanManager.checkinBooking(parameters.getToken(), parameters.getId());
         ar.setReturn(feedback);
@@ -258,7 +282,7 @@ public class LoanServiceImpl implements ILoanService {
 
 
     // Converts Input into Loan for business
-    private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
+   /* private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
         logger.info(loanTypeIn);
         Loan loan = new Loan();
         loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
@@ -269,10 +293,10 @@ public class LoanServiceImpl implements ILoanService {
 
         logger.info("conversion loanType into loan done");
         return loan;
-    }
+    }*/
 
 
-    private void checkAuthentication(String token) throws BusinessExceptionLoan {
+    void checkAuthentication(String token) throws BusinessExceptionLoan {
         try {
             authentication.checkToken(token);
         } catch (Exception e) {
