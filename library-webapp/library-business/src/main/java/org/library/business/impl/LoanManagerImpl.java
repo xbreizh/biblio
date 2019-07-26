@@ -9,8 +9,8 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
 
+import javax.inject.Inject;
 import javax.inject.Named;
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -22,12 +22,10 @@ public class LoanManagerImpl implements LoanManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private LoanService loanService;
 
-
+    @Inject
     private DateConvertedHelper dateConvertedHelper;
 
-    public LoanManagerImpl() {
-        dateConvertedHelper = new DateConvertedHelper();
-    }
+
 
     void setLoanService(LoanService loanService) {
         this.loanService = loanService;
@@ -48,11 +46,11 @@ public class LoanManagerImpl implements LoanManager {
     @Override
     public boolean removeLoan(String token, int id) throws BusinessExceptionLoan {
         logger.info("trying to renew: " + id);
-        RemoveLoanRequestType removeLoanRequestType = new RemoveLoanRequestType();
-        removeLoanRequestType.setToken(token);
-        removeLoanRequestType.setId(id);
-        RemoveLoanResponseType removeLoanResponseType;
-        removeLoanResponseType = getLoanServicePort().removeLoan(removeLoanRequestType);
+        CancelLoanRequestType cancelLoanRequestType = new CancelLoanRequestType();
+        cancelLoanRequestType.setToken(token);
+        cancelLoanRequestType.setId(id);
+        CancelLoanResponseType removeLoanResponseType;
+        removeLoanResponseType = getLoanServicePort().cancelLoan(cancelLoanRequestType);
         return removeLoanResponseType.getReturn().isEmpty();
 
     }
@@ -74,6 +72,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String getStatus(String token, int id) throws BusinessExceptionLoan {
+        logger.info("getting loan status");
         GetLoanStatusRequestType requestType = new GetLoanStatusRequestType();
         requestType.setToken(token);
         requestType.setId(id);
@@ -81,16 +80,16 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public boolean renew(String token, String isbn, String login, XMLGregorianCalendar startDate) throws BusinessExceptionLoan {
+    public String renew(String token, int bookId, String login) throws BusinessExceptionLoan {
         AddLoanRequestType addLoanRequestType = new AddLoanRequestType();
         addLoanRequestType.setToken(token);
         LoanTypeIn loanTypeIn = new LoanTypeIn();
-        loanTypeIn.setISBN(isbn);
         loanTypeIn.setLogin(login);
-        loanTypeIn.setStartDate(startDate);
+        loanTypeIn.setBookId(bookId);
+        loanTypeIn.setLogin(login);
         addLoanRequestType.setLoanTypeIn(loanTypeIn);
         AddLoanResponseType responseType = getLoanServicePort().addLoan(addLoanRequestType);
-        return responseType.isReturn();
+        return responseType.getReturn();
     }
 
     @Override
@@ -109,7 +108,7 @@ public class LoanManagerImpl implements LoanManager {
             logger.info("size returned: " + responseType.getLoanListType().getLoanTypeOut().size());
             loans = convertLoanByCriteriaIntoLoanList(responseType.getLoanListType());
         } catch (BusinessExceptionLoan businessExceptionLoan) {
-           logger.error(businessExceptionLoan.getMessage());
+            logger.error(businessExceptionLoan.getMessage());
         }
         logger.info("returning loanList");
         return loans;
@@ -122,13 +121,13 @@ public class LoanManagerImpl implements LoanManager {
 
         for (LoanTypeOut loanTypeOut : list.getLoanTypeOut()
         ) {
-                Loan loan = new Loan();
-                loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
-                loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
-                loan.setChecked(loanTypeOut.isChecked());
-                Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
-                loan.setBook(book);
-                loanList.add(loan);
+            Loan loan = new Loan();
+            loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
+            loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
+            loan.setChecked(loanTypeOut.isChecked());
+            Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
+            loan.setBook(book);
+            loanList.add(loan);
         }
 
         logger.info("converted " + loanList.size() + " items");
@@ -172,23 +171,19 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public boolean reserve(String token, String login, String isbn, Date startDate) {
-        AddLoanRequestType requestType = new AddLoanRequestType();
+    public String reserve(String token, String isbn) {
+        ReserveRequestType requestType = new ReserveRequestType();
         requestType.setToken(token);
-        LoanTypeIn loanTypeIn = new LoanTypeIn();
-        loanTypeIn.setStartDate(dateConvertedHelper.convertDateIntoXmlDate(startDate));
-        loanTypeIn.setLogin(login);
-        loanTypeIn.setISBN(isbn);
-        requestType.setLoanTypeIn(loanTypeIn);
+        requestType.setISBN(isbn);
 
-        AddLoanResponseType responseType;
+        ReserveResponseType responseType;
         try {
-            responseType = getLoanServicePort().addLoan(requestType);
-            return responseType.isReturn();
+            responseType = getLoanServicePort().reserve(requestType);
+            return responseType.getReturn();
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());
         }
-        return false;
+        return "Issue while reserving";
     }
 
 }

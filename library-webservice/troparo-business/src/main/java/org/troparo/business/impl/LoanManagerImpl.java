@@ -397,14 +397,15 @@ public class LoanManagerImpl implements LoanManager {
         logger.info("today: " + today);
         try {
             loan = loanDAO.getLoanById(id);
+            if (loan.getStartDate()==null) {
+                logger.info("it's planned");
+                return "PLANNED";
+            }
             if (loan.getEndDate() != null) {
                 return "TERMINATED";
             }
             if (loan.getPlannedEndDate().before(today)) {
                 return "OVERDUE";
-            }
-            if (loan.getStartDate().after(today)) {
-                return "PLANNED";
             }
                 return "PROGRESS";
 

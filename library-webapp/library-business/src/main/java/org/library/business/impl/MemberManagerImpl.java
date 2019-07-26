@@ -59,7 +59,7 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("member: " + member);
             logger.info("trying to pass loan to member");
 
-            logger.info("member loan size: " + member.getLoanList());
+            logger.info("member loan size: " + member.getLoanList().size());
             return member;
         } catch (Exception e) {
             logger.error("Issue while trying to get member details");
@@ -83,7 +83,7 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public boolean sendResetPasswordlink(String login, String email) throws BusinessExceptionConnect {
+    public boolean sendResetPasswordLink(String login, String email) throws BusinessExceptionConnect {
         RequestPasswordResetLinkRequestType requestPasswordResetLinkRequestType = new RequestPasswordResetLinkRequestType();
         requestPasswordResetLinkRequestType.setEmail(email);
         requestPasswordResetLinkRequestType.setLogin(login);
@@ -111,8 +111,10 @@ public class MemberManagerImpl implements MemberManager {
         Date date = convertGregorianCalendarIntoDate(memberTypeOut.getDateJoin().toGregorianCalendar());
         member.setDateJoin(date);
         member.setRole(memberTypeOut.getRole());
-        member.setLoanList(convertLoanListTypeIntoList(token, memberTypeOut.getLoanListType()));
-        logger.info("member from business: " + member);
+        List<Loan> loans = convertLoanListTypeIntoList(token, memberTypeOut.getLoanListType());
+        logger.info("got the loans converted");
+        member.setLoanList(loans);
+        logger.info("all infos passed to the member");
         return member;
     }
 
@@ -124,19 +126,25 @@ public class MemberManagerImpl implements MemberManager {
             if (loanTypeOut.getEndDate() == null) {
                 Loan loan = new Loan();
                 loan.setId(loanTypeOut.getId());
-                Date date = convertGregorianCalendarIntoDate(loanTypeOut.getStartDate().toGregorianCalendar());
-                loan.setStartDate(date);
-                date = convertGregorianCalendarIntoDate(loanTypeOut.getPlannedEndDate().toGregorianCalendar());
-                loan.setPlannedEndDate(date);
-                if (loanTypeOut.getEndDate() != null) {
-                    date = convertGregorianCalendarIntoDate(loanTypeOut.getEndDate().toGregorianCalendar());
-                    loan.setEndDate(date);
+                if(loanTypeOut.getStartDate()!=null) {
+                    logger.info("converting dates: "+loanTypeOut.getStartDate());
+                    Date date;
+                    date = convertGregorianCalendarIntoDate(loanTypeOut.getStartDate().toGregorianCalendar());
+                    logger.info("converted startDate");
+                    loan.setStartDate(date);
+                    date = convertGregorianCalendarIntoDate(loanTypeOut.getPlannedEndDate().toGregorianCalendar());
+                    logger.info("converted plannedEndDate");
+                    loan.setPlannedEndDate(date);
+                    loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
+                    //loan.setIsbn(loanTypeOut.get());
+
                 }
-                loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
+
                 loan.setStatus(loanManager.getStatus(token, loan.getId()));
+                logger.info("trying to convert Book");
                 loan.setBook(convertBookTypeOutIntoBook(loanTypeOut.getBookTypeOut()));
                 loanList.add(loan);
-                logger.info("book added to list: " + loan.getBook().getTitle());
+                logger.info("loan added to the list");
             }
         }
 
@@ -145,6 +153,7 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     public Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
+        if(bookTypeOut==null)return null;
         logger.info("trying to convert book");
         Book book = new Book();
         book.setId(bookTypeOut.getId());
@@ -164,6 +173,7 @@ public class MemberManagerImpl implements MemberManager {
             XMLGregorianCalendar xmlCalendar;
             try {
                 xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gDate);
+                logger.info("converting date");
                 return xmlCalendar.toGregorianCalendar().getTime();
             } catch (DatatypeConfigurationException e) {
                 logger.error(e.getMessage());

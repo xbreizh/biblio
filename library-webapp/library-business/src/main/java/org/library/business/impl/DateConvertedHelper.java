@@ -2,12 +2,14 @@ package org.library.business.impl;
 
 import org.apache.log4j.Logger;
 
+import javax.inject.Named;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+@Named
 public class DateConvertedHelper {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());

@@ -4,8 +4,6 @@ package org.library.business.contract;
 import org.library.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.util.Date;
 import java.util.List;
 
 public interface LoanManager {
@@ -17,7 +15,7 @@ public interface LoanManager {
 
     String getStatus(String token, int id) throws BusinessExceptionLoan;
 
-    boolean renew(String token, String isbn, String login, XMLGregorianCalendar startDate) throws BusinessExceptionLoan;
+    String renew(String token, int bookId, String login) throws BusinessExceptionLoan;
 
     boolean removeLoan(String token, int id) throws BusinessExceptionLoan;
 
@@ -26,5 +24,5 @@ public interface LoanManager {
 
     String[] createArrayFromLoanDates(List<Loan> loanList);
 
-    boolean reserve(String token, String login, String isbn, Date startDate);
+    String reserve(String token, String isbn);
 }

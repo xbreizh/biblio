@@ -11,5 +11,5 @@ public interface MemberManager {
 
     boolean resetPassword(String login, String password, String token) throws BusinessExceptionConnect;
 
-    boolean sendResetPasswordlink(String login, String email) throws BusinessExceptionConnect;
+    boolean sendResetPasswordLink(String login, String email) throws BusinessExceptionConnect;
 }

@@ -237,6 +237,7 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
             loanTypeOut.setBookId(loan.getBook().getId());
+            loanTypeOut.setISBN(loan.getIsbn());
             LoanBook bookLoan = new LoanBook();
             bookLoan.setAuthor(loan.getBook().getAuthor());
             bookLoan.setTitle(loan.getBook().getTitle());

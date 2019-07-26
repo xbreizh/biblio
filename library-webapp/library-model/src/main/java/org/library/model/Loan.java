@@ -35,6 +35,8 @@ public class Loan {
 
     private boolean checked;
 
+    private String isbn;
+
 
 
     @Override

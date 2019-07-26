@@ -139,6 +139,7 @@ public class MemberServiceImpl implements IMemberService {
     }
 
     BookTypeOut convertBookIntoBookTypeOut(Book book) {
+        if(book==null)return null;
         BookTypeOut bookTypeOut = new BookTypeOut();
         bookTypeOut.setId(book.getId());
         bookTypeOut.setISBN(book.getIsbn());

@@ -15,23 +15,16 @@
 
 
         <tbody>
-        <th:block data-th-each="loan : ${member.loanList}">
-            <div th:if="${loan.status} == 'OVERDUE'">
-                <td style="color: red"></td>
-            </div>
-            <div th:unless="${loan.status}">
-                <td style="color: blue"></td>
-            </div>
-
+        <th:block data-th-each="loan : ${member.loanList}" >
 
             <td data-th-text="${loan.id}"></td>
-            <td data-th-text="${#dates.format(loan.startDate, 'dd-MM-yyyy')}">startDate</td>
-            <td data-th-text="${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}">plannedEndDate</td>
-            <td data-th-text="${loan.book.isbn}"></td>
+            <td data-th-text="${loan.startDate} ? ${#dates.format(loan.startDate, 'dd-MM-yyyy')}:'' ">startDate</td>
+            <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy'):''}">plannedEndDate</td>
+            <td data-th-text="${loan.isbn}"></td>
             <td data-th-text="${loan.book.title}"></td>
             <td data-th-text="${loan.status}"></td>
             <td>
-                <div th:unless="${loan.checked}">
+                <div th:unless="${loan.startDate}">
                     <div>
                         <form method="post" th:action="@{/remove}" th:object="${remove}">
 
@@ -46,7 +39,7 @@
                     </div>
                 </div>
 
-                <div th:if="${loan.checked}">
+                <div th:if="${loan.startDate}">
                     <div th:if="${loan.renewable}">
                         <div>
                             <form method="post" th:action="@{/renew}" th:object="${renew}">
@@ -67,7 +60,6 @@
                     </div>
                 </div>
             </td>
-
         </th:block>
         </tbody>
     </table>

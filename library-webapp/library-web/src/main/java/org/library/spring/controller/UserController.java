@@ -144,7 +144,7 @@ public class UserController {
         ModelAndView mv = new ModelAndView();
         mv.addObject(LOGIN, login);
         mv.addObject("email", email);
-        if (memberManager.sendResetPasswordlink(login, email)) {
+        if (memberManager.sendResetPasswordLink(login, email)) {
 
             mv.setViewName("passwordReset/passwordResetLinkOk");
         } else {
@@ -265,7 +265,7 @@ public class UserController {
         logger.info("startDate: " + startDate);
 
 
-        if (loanManager.reserve(token, login, isbn, startDate)) {
+        if (loanManager.reserve(token, isbn).isEmpty()) {
             return new ModelAndView("bookingOk");
         }
         return new ModelAndView("bookingKo");

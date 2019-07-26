@@ -621,12 +621,10 @@ class LoanManagerImplTest {
         String isbn = "isbn123";
         book.setIsbn(isbn);
         loan.setBook(book);
-        //loan.setEndDate(new Date());
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
         when(loanDAO.getPendingReservation(isbn)).thenReturn(null);
         when(loanDAO.updateLoan(loan)).thenReturn(true);
         assertEquals("", loanManager.terminate(44));
-        //fail();
     }
 
     @Test

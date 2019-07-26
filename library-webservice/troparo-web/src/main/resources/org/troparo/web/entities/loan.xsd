@@ -256,8 +256,8 @@
                 <xsd:element name="startDate" type="xsd:date"/>
                 <xsd:element name="plannedEndDate" type="xsd:date"/>
                 <xsd:element name="endDate" type="xsd:date"/>
+                <xsd:element ref="tns:ISBN"/>
                 <xsd:element ref="tns:LoanBook"/>
-                <xsd:element name="checked" type="xsd:boolean"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>

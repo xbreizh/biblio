@@ -47,7 +47,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
             responseType = getConnectServicePort().getToken(getTokenRequestType);
             token = responseType.getReturn();
         } catch (WebServiceException e) {
-            exception="issue connecting to remote API";
+            exception="issue connecting to remote API: "+e.getMessage();
             logger.error(exception);
 
         } catch (BusinessExceptionConnect businessExceptionConnect) {
