@@ -216,8 +216,8 @@ public class MemberServiceImpl implements IMemberService {
         MemberListType memberListType = new MemberListType();
         List<Member> memberList;
         checkAuthentication(parameters.getToken());
-        MemberCriterias criterias = parameters.getMemberCriterias();
-        Map<String, String> newMap = cleanCriteriasMap(criterias);
+        MemberCriterias criteria = parameters.getMemberCriterias();
+        Map<String, String> newMap = cleanCriteriaMap(criteria);
 
 
         logger.info("after: " + newMap.size());
@@ -232,14 +232,14 @@ public class MemberServiceImpl implements IMemberService {
         return getMemberByCriteriasResponseType;
     }
 
-    private Map<String, String> cleanCriteriasMap(MemberCriterias criterias) {
+    private Map<String, String> cleanCriteriaMap(MemberCriterias criteria) {
         Map<String, String> map = new HashMap<>();
         String[][] criteriaList = {
-                {"login", criterias.getLogin()},
-                {"firstName", criterias.getFirstName()},
-                {"lastName", criterias.getLastName()},
-                {"role", criterias.getRole()},
-                {"email", criterias.getEmail()}};
+                {"login", criteria.getLogin()},
+                {"firstName", criteria.getFirstName()},
+                {"lastName", criteria.getLastName()},
+                {"role", criteria.getRole()},
+                {"email", criteria.getEmail()}};
 
         for (String[] s : criteriaList
         ) {

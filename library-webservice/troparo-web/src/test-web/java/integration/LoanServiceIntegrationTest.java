@@ -42,13 +42,13 @@ class LoanServiceIntegrationTest {
 
     @Test
     @DisplayName("should remove loan")
-    void removeLoan() throws BusinessExceptionLoan {
-        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+    void cancelLoan() throws BusinessExceptionLoan {
+        CancelLoanRequestType parameters = new CancelLoanRequestType();
         int id = 1;
         parameters.setId(id);
         parameters.setToken(token);
         parameters.setId(2);
-        assertEquals("loan removed", loanService.removeLoan(parameters).getReturn());
+        assertEquals("The loan has been cancelled", loanService.cancelLoan(parameters).getReturn());
 
     }
 

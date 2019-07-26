@@ -92,12 +92,12 @@ class LoanServiceImplTest {
     @DisplayName("should throw an exception when trying to remove loan")
     void removeLoan() throws BusinessExceptionLoan {
         loanService = spy(LoanServiceImpl.class);
-        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        CancelLoanRequestType parameters = new CancelLoanRequestType();
         String token = "tok123";
         parameters.setToken(token);
         parameters.setId(2);
         doThrow(new BusinessExceptionLoan()).when(loanService).checkAuthentication(token);
-        assertThrows(BusinessExceptionLoan.class, () -> loanService.removeLoan(parameters));
+        assertThrows(BusinessExceptionLoan.class, () -> loanService.cancelLoan(parameters));
 
     }
 
@@ -105,14 +105,14 @@ class LoanServiceImplTest {
     @Disabled
     @DisplayName("should return exception is non empty string returned from manager")
     void removeLoan1() throws BusinessExceptionLoan {
-        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        CancelLoanRequestType parameters = new CancelLoanRequestType();
         String token = "tok123";
         int id = 1;
         parameters.setId(id);
         parameters.setToken(token);
         String exception = "exception";
-        when(loanManager.removeLoan(anyString(), anyInt())).thenReturn(exception);
-        assertEquals(exception, loanService.removeLoan(parameters).getReturn());
+        when(loanManager.cancelLoan(anyString(), anyInt())).thenReturn(exception);
+        assertEquals(exception, loanService.cancelLoan(parameters).getReturn());
 
     }
 
@@ -120,14 +120,14 @@ class LoanServiceImplTest {
     @Disabled
     @DisplayName("should return empty string if removal ok")
     void removeLoan2() throws BusinessExceptionLoan {
-        RemoveLoanRequestType parameters = new RemoveLoanRequestType();
+        CancelLoanRequestType parameters = new CancelLoanRequestType();
         String token = "tok123";
         int id = 1;
         parameters.setId(id);
         parameters.setToken(token);
         String exception = "";
-        when(loanManager.removeLoan(anyString(), anyInt())).thenReturn(exception);
-        assertEquals(exception, loanService.removeLoan(parameters).getReturn());
+        when(loanManager.cancelLoan(anyString(), anyInt())).thenReturn(exception);
+        assertEquals(exception, loanService.cancelLoan(parameters).getReturn());
 
     }
 

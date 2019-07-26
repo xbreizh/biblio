@@ -177,7 +177,7 @@
     </xsd:element>
 
     <!-- Terminate Loan Request Type -->
-    <xsd:element name="removeLoanRequestType">
+    <xsd:element name="cancelLoanRequestType">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="tns:Token"/>
@@ -187,7 +187,7 @@
     </xsd:element>
 
     <!-- Terminate Loan Response Type -->
-    <xsd:element name="removeLoanResponseType">
+    <xsd:element name="cancelLoanResponseType">
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element name="return" type="xsd:string"/>

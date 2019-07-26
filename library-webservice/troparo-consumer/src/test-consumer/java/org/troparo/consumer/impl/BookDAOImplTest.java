@@ -56,8 +56,9 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return true")
     void addBook() {
-
-        assertTrue(bookDAO.addBook(new Book()));
+        Book book = new Book();
+        book.setIsbn("isbn");
+        assertTrue(bookDAO.addBook(book));
 
 
     }

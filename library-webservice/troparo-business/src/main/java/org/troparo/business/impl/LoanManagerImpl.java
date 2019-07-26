@@ -85,7 +85,7 @@ public class LoanManagerImpl implements LoanManager {
         Book book = bookManager.getBookById(id);
         String x1 = checkAddLoanDetailsAreValid(member, book);
         if (!x1.isEmpty()) return x1;
-
+        if (checkIfBorrowerHasReachedMaxLoan(member)) return "max number of books rented reached";
         Loan loan = new Loan();
         loan.setStartDate(getTodayDate());
         setPlannedEndDate(loan);
@@ -103,20 +103,6 @@ public class LoanManagerImpl implements LoanManager {
         return "";
     }
 
-  /*  String newBooking(Loan loan) {
-        loan.setStartDate(getTodayDate());
-        setPlannedEndDate(loan);
-        String x = checkBookAndMemberValidity(loan.getBorrower(), loan.getBook().getIsbn());
-        if (!x.isEmpty()) return x;
-
-        // checks if loan is possible
-        *//*if(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty()){
-            return "book is not available: " + loan.getBook().getId();
-        }*//*
-        // checks if borrower can borrow
-        if (checkIfBorrowerHasReachedMaxLoan(loan)) return "max number of books rented reached";
-        return "";
-    }*/
 
     private boolean checkIfBorrowerHasReachedMaxLoan(Member member) {
 
@@ -213,20 +199,7 @@ public class LoanManagerImpl implements LoanManager {
         return "";
     }
 
-    private String checkStartDateIsTodayOrFuture(Date date) {
-        if (date == null) return "No startDate passed";
-        Calendar startDate = Calendar.getInstance();
-        Calendar today = Calendar.getInstance();
-        startDate.setTime(date);
-        today.setTime(getTodayDate());
-        if (
-                (startDate.get(Calendar.YEAR) < today.get(Calendar.YEAR)) &&
-                        (startDate.get(Calendar.MONTH) < today.get(Calendar.MONTH)) &&
-                        (startDate.get(Calendar.DAY_OF_YEAR) < today.get(Calendar.DAY_OF_YEAR))) {
-            return "the booking date cannot be in the past";
-        }
-        return "";
-    }
+
 
 
     String checkBookAndMemberValidity(Member member, String isbn) {
@@ -329,15 +302,16 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public String removeLoan(String token, int id) {
-        /*Loan loan =*/ loanDAO.getLoanById(id);
-       /* logger.info("loan check: "+loan.isChecked());
-        if(memberManager.checkAdmin(token)|| (!loan.isChecked() && loan.getBorrower().getToken().equals(token))){
-            if(loanDAO.removeLoan(loan)){
-                return "loan removed";
-            }
+    public String cancelLoan(String token, int id) {
+        Member member = memberManager.getMemberByToken(token);
+        if (member==null)return "Invalid Member";
+        Loan loan = loanDAO.getLoanById(id);
+        if(loan==null) return "Invalid Loan";
+        if(memberManager.checkAdmin(token)|| (loan.getBorrower().equals(member) && loan.getStartDate()==null )){
+           loan.setEndDate(getTodayDate());
+           if(loanDAO.updateLoan(loan))return "The loan has been cancelled";
 
-        }*/
+        }
         return "You can't remove that loan, please contact the Administration";
     }
 
@@ -408,8 +382,10 @@ public class LoanManagerImpl implements LoanManager {
             pendingLoan.setBook(book);
             pendingLoan.setAvailableDate(getTodayDate());
             loanDAO.updateLoan(pendingLoan);
+            logger.info("pending loan updated");
+        }else{
+            logger.info("no pending loan");
         }
-
     }
 
 

@@ -45,22 +45,12 @@ public class LoanServiceImpl implements ILoanService {
     // Create
     @Override
     public AddLoanResponseType addLoan(AddLoanRequestType parameters) throws BusinessExceptionLoan {
-        //LoanTypeIn loanTypeIn;
-        //String exception;
         AddLoanResponseType ar = new AddLoanResponseType();
         checkAuthentication(parameters.getToken());
         ar.setReturn("success");
-        //loanTypeIn = parameters.getLoanTypeIn();
-       // Loan loan = convertLoanTypeInIntoLoan(loanTypeIn);
         logger.info("loanManager: " + loanManager);
-        //loanTypeIn.getLogin()
         String login = parameters.getLoanTypeIn().getLogin();
         int bookId = parameters.getLoanTypeIn().getBookId();
-        //exception = loanManager.addLoan(login, bookId);
-        /*if (!exception.equals("")) {
-            logger.error("exception found: " + exception);
-            ar.setReturn(false);
-        }*/
         ar.setReturn(loanManager.addLoan(login, bookId));
 
         return ar;
@@ -190,11 +180,11 @@ public class LoanServiceImpl implements ILoanService {
     }
 
     @Override
-    public RemoveLoanResponseType removeLoan(RemoveLoanRequestType parameters) throws BusinessExceptionLoan {
+    public CancelLoanResponseType cancelLoan(CancelLoanRequestType parameters) throws BusinessExceptionLoan {
         String token = parameters.getToken();
         checkAuthentication(token);
-        RemoveLoanResponseType ar = new RemoveLoanResponseType();
-        String feedback = loanManager.removeLoan(token, parameters.getId());
+        CancelLoanResponseType ar = new CancelLoanResponseType();
+        String feedback = loanManager.cancelLoan(token, parameters.getId());
 
         ar.setReturn(feedback);
         return ar;
@@ -279,21 +269,6 @@ public class LoanServiceImpl implements ILoanService {
         logger.info("loanListType end: " + loanListType.getLoanTypeOut().size());
         return loanListType;
     }
-
-
-    // Converts Input into Loan for business
-   /* private Loan convertLoanTypeInIntoLoan(LoanTypeIn loanTypeIn) {
-        logger.info(loanTypeIn);
-        Loan loan = new Loan();
-        loan.setBorrower(memberManager.getMemberByLogin(loanTypeIn.getLogin().toUpperCase()));
-        loan.setBook(bookManager.getBookByIsbn(loanTypeIn.getISBN().toUpperCase()));
-
-
-        loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeIn.getStartDate()));
-
-        logger.info("conversion loanType into loan done");
-        return loan;
-    }*/
 
 
     void checkAuthentication(String token) throws BusinessExceptionLoan {

@@ -11,8 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
-import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.consumer.enums.LoanStatus;
+import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
@@ -67,10 +67,12 @@ class LoanManagerImplTest {
         Member member = new Member();
         member.setRole("admin");
         member.setToken(token);
+        loan.setBorrower(member);
+        when(memberManager.getMemberByToken(token)).thenReturn(member);
         when(memberManager.checkAdmin(token)).thenReturn(true);
         when(loanDAO.getLoanById(loanId)).thenReturn(loan);
-        when(loanDAO.removeLoan(loan)).thenReturn(true);
-        assertEquals("loan removed", loanManager.removeLoan(token, loanId));
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertEquals("The loan has been cancelled", loanManager.cancelLoan(token, loanId));
 
     }
 
@@ -86,63 +88,66 @@ class LoanManagerImplTest {
         member.setRole("admin");
         member.setToken(token);
         loan.setBorrower(member);
+        when(memberManager.getMemberByToken(token)).thenReturn(member);
         when(memberManager.checkAdmin(token)).thenReturn(false);
         when(loanDAO.getLoanById(loanId)).thenReturn(loan);
-        when(loanDAO.removeLoan(loan)).thenReturn(true);
-        assertEquals("loan removed", loanManager.removeLoan(token, loanId));
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertEquals("The loan has been cancelled", loanManager.cancelLoan(token, loanId));
 
     }
 
     @Test
-    @DisplayName("should return an error if not admin and loan checked")
+    @DisplayName("should return an error if not admin and startDate not null")
     void removeLoan2() {
         Loan loan = new Loan();
         String token = "tok123";
         int loanId = 2;
         loan.setId(loanId);
-       // loan.setChecked(true);
+        // loan.setChecked(true);
         Member member = new Member();
         member.setRole("admin");
         member.setToken(token);
         loan.setBorrower(member);
+        loan.setStartDate(new Date());
+        when(memberManager.getMemberByToken(token)).thenReturn(member);
         when(memberManager.checkAdmin(token)).thenReturn(false);
         when(loanDAO.getLoanById(loanId)).thenReturn(loan);
-        when(loanDAO.removeLoan(loan)).thenReturn(true);
-        assertEquals("You can't remove that loan, please contact the Administration", loanManager.removeLoan(token, loanId));
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertEquals("You can't remove that loan, please contact the Administration", loanManager.cancelLoan(token, loanId));
 
     }
 
     @Test
-    @DisplayName("should return an error if not admin, loan unchecked and invalid token")
+    @DisplayName("should return an error if not admin and invalid token")
     void removeLoan3() {
         Loan loan = new Loan();
         String token = "tok123";
         int loanId = 2;
         loan.setId(loanId);
-       // loan.setChecked(false);
+        // loan.setChecked(false);
         Member member = new Member();
         member.setRole("admin");
         member.setToken(token);
-        loan.setBorrower(member);
+        loan.setBorrower(new Member());
+        when(memberManager.getMemberByToken(token)).thenReturn(member);
         when(memberManager.checkAdmin(token)).thenReturn(false);
         when(loanDAO.getLoanById(loanId)).thenReturn(loan);
-        when(loanDAO.removeLoan(loan)).thenReturn(true);
-        assertEquals("You can't remove that loan, please contact the Administration", loanManager.removeLoan("er", loanId));
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
+        assertEquals("You can't remove that loan, please contact the Administration", loanManager.cancelLoan(token, loanId));
 
     }
 
 
-
     @Test
     @DisplayName("should return false if pending reservation")
-    void checkIfPendingReservation(){
+    void checkIfPendingReservation() {
         when(loanDAO.getPendingReservation(anyString())).thenReturn(new Loan());
         assertTrue(loanManager.checkIfPendingReservation("ibnm"));
     }
 
     @Test
     @DisplayName("should return false if no pending reservation")
-    void checkIfPendingReservation1(){
+    void checkIfPendingReservation1() {
         when(loanDAO.getPendingReservation(anyString())).thenReturn(null);
         assertFalse(loanManager.checkIfPendingReservation("ibnm"));
     }
@@ -151,8 +156,7 @@ class LoanManagerImplTest {
     @Test
     @DisplayName("should return \"invalid member\" when member is null")
     void addLoan() {
-        Member member = new Member();
-        assertEquals("invalid member", loanManager.addLoan("login", 3));
+        assertEquals("Invalid member", loanManager.addLoan("login", 3));
 
     }
 
@@ -164,7 +168,8 @@ class LoanManagerImplTest {
         String login = "Seth";
         member.setLogin(login);
         loan.setBorrower(member);
-        assertEquals("invalid book", loanManager.addLoan(login, 3));
+        when(memberManager.getMemberByLogin(login)).thenReturn(member);
+        assertEquals("Invalid book", loanManager.addLoan(login, 3));
 
     }
 
@@ -186,6 +191,7 @@ class LoanManagerImplTest {
         LoanManagerImpl loanManager1 = spy(LoanManagerImpl.class);
         MemberManagerImpl memberManager2 = mock(MemberManagerImpl.class);
         loanManager1.setMemberManager(memberManager2);
+        int bookId = 3;
         Member member = new Member();
         member.setId(2);
         member.getLoanList().add(new Loan());
@@ -197,7 +203,7 @@ class LoanManagerImplTest {
         Loan loan = new Loan();
         loan.setBorrower(member);
         Book book = new Book();
-        book.setId(3);
+        book.setId(bookId);
         book.setTitle("boring");
         loan.setBook(book);
         loanManager1.setBookManager(bookManager);
@@ -223,14 +229,16 @@ class LoanManagerImplTest {
         Map<String, String> map1 = new HashMap<>();
         map.put("login", loan.getBorrower().getLogin());
         map.put("status", LoanStatus.OVERDUE.toString());
-       when(loanDAO.getLoansByCriteria(map1)).thenReturn(loanList);
+        when(memberManager2.getMemberByLogin(login)).thenReturn(member);
+        when(bookManager.getBookById(bookId)).thenReturn(book);
+        when(loanDAO.getLoansByCriteria(map1)).thenReturn(loanList);
         assertEquals("max number of books rented reached", loanManager1.addLoan(login, 3));
     }
 
 
     @Test
     @DisplayName("should book")
-    void checkBooking(){
+    void checkBooking() {
         Loan loan = new Loan();
         when(memberManager.checkAdmin(anyString())).thenReturn(true);
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
@@ -240,7 +248,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should not book if user not admin")
-    void checkBooking1(){
+    void checkBooking1() {
         Loan loan = new Loan();
         when(memberManager.checkAdmin(anyString())).thenReturn(false);
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
@@ -294,9 +302,6 @@ class LoanManagerImplTest {
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
         assertTrue( loanManager.checkIfSimilarLoanPlannedOrInProgress(loan));
     }*/
-
-
-
 
 
     @Test
@@ -385,7 +390,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return empty string if nothing overdue")
-    void checkIfOverDue(){
+    void checkIfOverDue() {
         Loan loan = new Loan();
         Book book = new Book();
         Member member = new Member();
@@ -425,7 +430,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return empty string if limit not reached")
-    void checkIfReserveLimitNotReached(){
+    void checkIfReserveLimitNotReached() {
         Loan loan = new Loan();
         Book book = new Book();
         Member member = new Member();
@@ -442,12 +447,12 @@ class LoanManagerImplTest {
             loanList.add(loan1);
         }
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertEquals("You have already reached the maximum number of reservation: "+loanManager.getMaxReserve(), loanManager.checkIfReserveLimitNotReached(loan.getBorrower().getLogin()));
+        assertEquals("You have already reached the maximum number of reservation: " + loanManager.getMaxReserve(), loanManager.checkIfReserveLimitNotReached(loan.getBorrower().getLogin()));
     }
 
     @Test
     @DisplayName("should return empty string if limit is reached")
-    void checkIfReserveLimitNotReached1(){
+    void checkIfReserveLimitNotReached1() {
         Loan loan = new Loan();
         Book book = new Book();
         Member member = new Member();
@@ -612,8 +617,14 @@ class LoanManagerImplTest {
     @DisplayName("should return empty string if loan terminated")
     void terminate2() {
         Loan loan = new Loan();
+        Book book = new Book();
+        String isbn = "isbn123";
+        book.setIsbn(isbn);
+        loan.setBook(book);
         //loan.setEndDate(new Date());
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        when(loanDAO.getPendingReservation(isbn)).thenReturn(null);
+        when(loanDAO.updateLoan(loan)).thenReturn(true);
         assertEquals("", loanManager.terminate(44));
         //fail();
     }

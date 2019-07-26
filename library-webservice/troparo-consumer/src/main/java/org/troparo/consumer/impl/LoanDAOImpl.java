@@ -141,7 +141,7 @@ public class LoanDAOImpl implements LoanDAO {
         isbn = "'" + isbn.toUpperCase() + "'";
         logger.info("ISBN received: " + isbn);
         request =
-                "select * from Book where isbn = " + isbn + " and exists (" +
+                "select * from Book where isbn = " + isbn + " and id not in (" +
                         "select book_id from loan where isbn = " + isbn + " and end_date is null)";
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);

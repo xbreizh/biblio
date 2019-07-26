@@ -65,11 +65,11 @@
     <wsdl:message name="terminateLoanResponse">
         <wsdl:part element="loan:terminateLoanResponseType" name="parameters"/>
     </wsdl:message>
-    <wsdl:message name="removeLoanRequest">
-        <wsdl:part element="loan:removeLoanRequestType" name="parameters"/>
+    <wsdl:message name="cancelLoanRequest">
+        <wsdl:part element="loan:cancelLoanRequestType" name="parameters"/>
     </wsdl:message>
-    <wsdl:message name="removeLoanResponse">
-        <wsdl:part element="loan:removeLoanResponseType" name="parameters"/>
+    <wsdl:message name="cancelLoanResponse">
+        <wsdl:part element="loan:cancelLoanResponseType" name="parameters"/>
     </wsdl:message>
     <wsdl:message name="checkInLoanRequest">
         <wsdl:part element="loan:checkInLoanRequestType" name="parameters"/>
@@ -127,9 +127,9 @@
             <wsdl:output message="tns:terminateLoanResponse"/>
             <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
         </wsdl:operation>
-        <wsdl:operation name="removeLoan">
-            <wsdl:input message="tns:removeLoanRequest"/>
-            <wsdl:output message="tns:removeLoanResponse"/>
+        <wsdl:operation name="cancelLoan">
+            <wsdl:input message="tns:cancelLoanRequest"/>
+            <wsdl:output message="tns:cancelLoanResponse"/>
             <wsdl:fault name="businessExceptionLoan" message="tns:BusinessExceptionLoan"/>
         </wsdl:operation>
         <wsdl:operation name="checkInLoan">
@@ -247,7 +247,7 @@
                 <soap:fault name="businessExceptionLoan" use="literal"/>
             </wsdl:fault>
         </wsdl:operation>
-        <wsdl:operation name="removeLoan">
+        <wsdl:operation name="cancelLoan">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>

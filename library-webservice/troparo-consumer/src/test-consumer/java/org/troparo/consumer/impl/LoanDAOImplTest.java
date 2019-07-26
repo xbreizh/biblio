@@ -64,31 +64,31 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return null when no pending reservation")
-    void getPendingReservation1()  {
+    void getPendingReservation1() {
 
-        assertEquals(null, loanDAO.getPendingReservation("22"));
+        assertNull(loanDAO.getPendingReservation("22"));
 
     }
 
     @Test
     @DisplayName("should return null if invalid isbn")
-    void getNextAvailableBook(){
-        assertNull( loanDAO.getNextAvailableBook("invalidIsbn"));
+    void getNextAvailableBook() {
+        assertNull(loanDAO.getNextAvailableBook("invalidIsbn"));
 
     }
 
     @Test
     @DisplayName("should return null currently rented")
-    void getNextAvailableBook1(){
-        assertNull( loanDAO.getNextAvailableBook("8574596258"));
+    void getNextAvailableBook1() {
+        assertNull(loanDAO.getNextAvailableBook("8574596258"));
 
     }
 
     @Test
     @DisplayName("should return book is any available")
-    void getNextAvailableBook2(){
+    void getNextAvailableBook2() {
         Book book = bookDAO.getBookById(1);
-        assertEquals(book,  loanDAO.getNextAvailableBook("12345678OK"));
+        assertEquals(book, loanDAO.getNextAvailableBook("12345678OK"));
 
     }
 
@@ -452,7 +452,7 @@ class LoanDAOImplTest {
         loan.setStartDate(startDate);
         loan.setPlannedEndDate(plannedEndDate);
 
-       // assertTrue(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+        // assertTrue(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
     }
 
 
@@ -490,7 +490,7 @@ class LoanDAOImplTest {
         loan.setBook(book);
         loan.setStartDate(startDate);
         loan.setPlannedEndDate(plannedEndDate);
-       // assertTrue(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
+        // assertTrue(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
     }
 
     @Test
