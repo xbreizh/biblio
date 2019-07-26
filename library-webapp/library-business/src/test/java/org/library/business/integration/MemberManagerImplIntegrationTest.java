@@ -10,6 +10,7 @@ import org.library.model.Member;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.member.*;
+import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
@@ -48,7 +49,7 @@ class MemberManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return member")
-    void getMember() throws BusinessExceptionMember, BusinessExceptionLoan, DatatypeConfigurationException {
+    void getMember() throws BusinessExceptionMember, BusinessExceptionLoan, DatatypeConfigurationException, BusinessExceptionBook {
         GetMemberByLoginResponseType getMemberByLoginResponseType = new GetMemberByLoginResponseType();
         MemberTypeOut memberTypeOut = new MemberTypeOut();
         String email = "loki.fr@frfr.eter";

@@ -133,6 +133,7 @@ public class MemberServiceImpl implements IMemberService {
                 loanTypeOut.setEndDate(xmlCalendar);
             }
             loanTypeOut.setBookTypeOut(convertBookIntoBookTypeOut(l.getBook()));
+            loanTypeOut.setISBN(l.getIsbn());
             loanListType.getLoanTypeOut().add(loanTypeOut);
         }
         return loanListType;

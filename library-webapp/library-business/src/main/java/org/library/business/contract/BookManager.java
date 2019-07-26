@@ -10,4 +10,6 @@ import java.util.Map;
 public interface BookManager {
 
     List<Book> searchBooks(String token, Map<String, String> criterias) throws BusinessExceptionBook;
+
+    Book getBookByISBN(String token, String isbn) throws BusinessExceptionBook;
 }

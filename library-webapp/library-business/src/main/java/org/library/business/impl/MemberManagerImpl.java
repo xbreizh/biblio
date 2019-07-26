@@ -2,6 +2,7 @@ package org.library.business.impl;
 
 
 import org.apache.log4j.Logger;
+import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
 import org.library.model.Book;
@@ -11,6 +12,7 @@ import org.troparo.entities.connect.CheckTokenRequestType;
 import org.troparo.entities.connect.RequestPasswordResetLinkRequestType;
 import org.troparo.entities.connect.ResetPasswordRequestType;
 import org.troparo.entities.member.*;
+import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.connectservice.IConnectService;
@@ -35,6 +37,8 @@ public class MemberManagerImpl implements MemberManager {
     LoanManager loanManager;
     private MemberService memberService;
     private ConnectService connectService;
+    @Inject
+    private BookManager bookManager;
 
     public MemberManagerImpl() {
         this.memberService = new MemberService();
@@ -101,7 +105,7 @@ public class MemberManagerImpl implements MemberManager {
         return memberService.getMemberServicePort();
     }
 
-    public Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan {
+    public Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan, BusinessExceptionBook {
         Member member = new Member();
         member.setFirstName(memberTypeOut.getFirstName());
         member.setLastName(memberTypeOut.getLastName());
@@ -112,13 +116,14 @@ public class MemberManagerImpl implements MemberManager {
         member.setDateJoin(date);
         member.setRole(memberTypeOut.getRole());
         List<Loan> loans = convertLoanListTypeIntoList(token, memberTypeOut.getLoanListType());
-        logger.info("got the loans converted");
+        logger.info("got the loans converted: " + loans.size());
         member.setLoanList(loans);
         logger.info("all infos passed to the member");
+
         return member;
     }
 
-    public List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan {
+    public List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan, BusinessExceptionBook {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert LoanListType into List<Loan>");
         for (LoanTypeOut loanTypeOut : loanListType.getLoanTypeOut()
@@ -126,8 +131,8 @@ public class MemberManagerImpl implements MemberManager {
             if (loanTypeOut.getEndDate() == null) {
                 Loan loan = new Loan();
                 loan.setId(loanTypeOut.getId());
-                if(loanTypeOut.getStartDate()!=null) {
-                    logger.info("converting dates: "+loanTypeOut.getStartDate());
+                if (loanTypeOut.getStartDate() != null) {
+                    logger.info("converting dates: " + loanTypeOut.getStartDate());
                     Date date;
                     date = convertGregorianCalendarIntoDate(loanTypeOut.getStartDate().toGregorianCalendar());
                     logger.info("converted startDate");
@@ -136,13 +141,22 @@ public class MemberManagerImpl implements MemberManager {
                     logger.info("converted plannedEndDate");
                     loan.setPlannedEndDate(date);
                     loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
-                    //loan.setIsbn(loanTypeOut.get
-
                 }
+                logger.info("getting book: " + loanTypeOut.getBookTypeOut());
+                if (loanTypeOut.getBookTypeOut() == null) {
+                    logger.info("creating new Book");
+                    logger.info("isbn: " + loanTypeOut.getISBN());
+                    Book book = bookManager.getBookByISBN(token, loanTypeOut.getISBN());
+                    loan.setBook(book);
+                    logger.info("title: " + book.getTitle());
+                } else {
+                    loan.setBook(convertBookTypeOutIntoBook(loanTypeOut.getBookTypeOut()));
+                }
+                loan.setIsbn(loanTypeOut.getISBN());
+                logger.info("setting isbn: " + loan.getIsbn());
 
                 loan.setStatus(loanManager.getStatus(token, loan.getId()));
                 logger.info("trying to convert Book");
-                loan.setBook(convertBookTypeOutIntoBook(loanTypeOut.getBookTypeOut()));
                 loanList.add(loan);
                 logger.info("loan added to the list");
             }
@@ -153,7 +167,7 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     public Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
-        if(bookTypeOut==null)return null;
+        if (bookTypeOut == null) return null;
         logger.info("trying to convert book");
         Book book = new Book();
         book.setId(bookTypeOut.getId());

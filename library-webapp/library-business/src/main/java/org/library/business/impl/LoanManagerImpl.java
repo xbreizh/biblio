@@ -26,7 +26,6 @@ public class LoanManagerImpl implements LoanManager {
     private DateConvertedHelper dateConvertedHelper;
 
 
-
     void setLoanService(LoanService loanService) {
         this.loanService = loanService;
     }

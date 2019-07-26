@@ -10,6 +10,7 @@ import org.troparo.services.bookservice.IBookService;
 
 import javax.inject.Named;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,12 +37,29 @@ public class BookManagerImpl implements BookManager {
         return result;
     }
 
-    IBookService getBookServicePort() {
+    @Override
+    public Book getBookByISBN(String token, String isbn) throws BusinessExceptionBook {
+        logger.info("getting book by isbn: "+isbn);
+        HashMap criteria = new HashMap<String, String>();
+        criteria.put("ISBN", isbn);
+        List<Book> books = searchBooks(token, criteria);
+        logger.info("map passed: "+criteria);
+
+        if(!books.isEmpty()) {
+            Book book =books.get(0);
+            logger.info("Book found: "+book.getTitle());
+            return book;
+        }
+        logger.info("no book found");
+        return null;
+    }
+
+    private IBookService getBookServicePort() {
         if (bookService == null) bookService = new BookService();
         return bookService.getBookServicePort();
     }
 
-    List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) throws BusinessExceptionBook {
+    private List<Book> convertBookTypeOutListIntoBookList(String token, List<BookTypeOut> bookTypeOutList) throws BusinessExceptionBook {
         List<Book> bookList = new ArrayList<>();
         for (BookTypeOut bookTypeOut : bookTypeOutList
         ) {
@@ -72,7 +90,7 @@ public class BookManagerImpl implements BookManager {
         return responseType.getReturn();
     }
 
-    BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
+    private BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
         logger.info("criterias: " + criterias);
         BookCriterias bookCriterias = new BookCriterias();
         bookCriterias.setISBN(criterias.get("ISBN"));
