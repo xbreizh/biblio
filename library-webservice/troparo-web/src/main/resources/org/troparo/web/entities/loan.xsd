@@ -286,9 +286,13 @@
     <xsd:element name="ISBN">
         <xsd:simpleType>
             <xsd:restriction base="xsd:string">
+                <xsd:minLength value="10"/>
+                <xsd:maxLength value="13"/>
             </xsd:restriction>
         </xsd:simpleType>
     </xsd:element>
+
+
 
     <!-- Loan Criterias-->
     <xsd:element name="LoanCriterias">
@@ -317,14 +321,7 @@
     <xsd:element name="LoanBook">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element name="ISBN">
-                    <xsd:simpleType>
-                        <xsd:restriction base="xsd:string">
-                            <xsd:minInclusive value="10"/>
-                            <xsd:maxInclusive value="13"/>
-                        </xsd:restriction>
-                    </xsd:simpleType>
-                </xsd:element>
+                <xsd:element ref="tns:ISBN"/>
                 <xsd:element name="Title">
                     <xsd:simpleType>
                         <xsd:restriction base="xsd:string">

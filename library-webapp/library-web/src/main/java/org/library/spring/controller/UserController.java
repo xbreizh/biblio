@@ -56,7 +56,7 @@ public class UserController {
 
 
     @RequestMapping("/")
-    public ModelAndView home() {
+    public ModelAndView home(String error) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
@@ -68,7 +68,7 @@ public class UserController {
             checkOverdue(member, mv);
             mv.addObject("loanList", member.getLoanList());
             mv.addObject("member", member);
-            addingPopup(mv);
+            addingPopup(mv, error);
             mv.setViewName("home");
         } else {
             mv.setViewName(LOGIN);
@@ -87,8 +87,9 @@ public class UserController {
         }
     }
 
-    private void addingPopup(ModelAndView mv) {
+    private void addingPopup(ModelAndView mv, String error) {
         mv.addObject("popup", true);
+        mv.addObject("error", error);
     }
 
     @GetMapping("/login")
@@ -239,15 +240,14 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         logger.info("trying to get loans for: " + isbn);
-        List<Loan> loanList = loanManager.getLoansForIsbn(token, isbn);
-        logger.info("loanList here: " + loanList.size());
+        String reserveResult = loanManager.reserve(token, isbn);
         ModelAndView mv = new ModelAndView();
 
-        String[] disabled = loanManager.createArrayFromLoanDates(loanList);
-        mv.addObject("loanList", loanList);
-        mv.addObject("book", loanList.get(0).getBook());
-        mv.addObject("disabled", disabled);
-        mv.setViewName("reserve");
+       // String[] disabled = loanManager.createArrayFromLoanDates(loanList);
+        mv.addObject("error", reserveResult);
+       // mv.addObject("disabled", disabled);
+        logger.info("error returned: "+reserveResult);
+        mv.setViewName("403");
 
         return mv;
 

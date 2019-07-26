@@ -61,7 +61,7 @@ public class LoanServiceImpl implements ILoanService {
     public ReserveResponseType reserve(ReserveRequestType parameters) throws BusinessExceptionLoan {
         ReserveResponseType ar = new ReserveResponseType();
         checkAuthentication(parameters.getToken());
-
+        logger.info("new reserve call");
         ar.setReturn(loanManager.reserve(parameters.getToken(), parameters.getISBN()));
         return ar;
     }

@@ -9,21 +9,25 @@ import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
 
-import javax.inject.Inject;
 import javax.inject.Named;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private LoanService loanService;
-
-    @Inject
     private DateConvertedHelper dateConvertedHelper;
+
+
+    public void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+        this.dateConvertedHelper = dateConvertedHelper;
+    }
+
+
+    public LoanManagerImpl() {
+        this.setDateConvertedHelper(new DateConvertedHelper());
+    }
 
 
     void setLoanService(LoanService loanService) {
@@ -144,7 +148,7 @@ public class LoanManagerImpl implements LoanManager {
         return book;
     }
 
-    @Override
+   /* @Override
     public String[] createArrayFromLoanDates(List<Loan> loanList) {
         if (loanList.isEmpty()) return new String[0];
         List<String> dateList = new ArrayList<>();
@@ -166,17 +170,21 @@ public class LoanManagerImpl implements LoanManager {
 
         return dateList.toArray(new String[dateList.size()]);
 
-    }
+    }*/
 
     @Override
     public String reserve(String token, String isbn) {
+        logger.info("inside reserve: " + isbn);
         ReserveRequestType requestType = new ReserveRequestType();
         requestType.setToken(token);
         requestType.setISBN(isbn);
+        System.out.println("token: "+token+" /isbn: "+isbn);
 
         ReserveResponseType responseType;
         try {
+            System.out.println("mak: "+getLoanServicePort().reserve(requestType));
             responseType = getLoanServicePort().reserve(requestType);
+            logger.info("request type set");
             return responseType.getReturn();
         } catch (BusinessExceptionLoan businessExceptionLoan) {
             logger.error(businessExceptionLoan.getMessage());

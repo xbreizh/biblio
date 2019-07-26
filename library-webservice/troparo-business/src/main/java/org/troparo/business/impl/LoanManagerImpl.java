@@ -135,6 +135,8 @@ public class LoanManagerImpl implements LoanManager {
         return "The book has been reserved but is currently unavailable. We will contact you as soon as it's ready";
     }
 
+
+
     private void getBookIfAvailable(Loan loan) {
         loan.setBook(loanDAO.getNextAvailableBook(loan.getIsbn()));
     }
@@ -159,6 +161,20 @@ public class LoanManagerImpl implements LoanManager {
         x = checkIfReserveLimitNotReached(member.getLogin());
         if (!x.isEmpty()) return x;
 
+        x = checkIfSameBookAlreadyRenterByMember(member, isbn);
+        if (!x.isEmpty()) return x;
+
+        return "";
+    }
+
+
+    private String checkIfSameBookAlreadyRenterByMember(Member member, String isbn) {
+        if(!member.getLoanList().isEmpty()){
+            for (Loan loan:member.getLoanList()
+            ) {
+                if (loan.getIsbn().equalsIgnoreCase(isbn))return "You can't reserve a book that you already rent";
+            }
+        }
         return "";
     }
 
@@ -167,18 +183,6 @@ public class LoanManagerImpl implements LoanManager {
         return "";
     }
 
-   /* String checkIfNoOverLapping(Loan loan) {
-        Date startDate = loan.getStartDate();
-        Date plannedEndDate = loan.getPlannedEndDate();
-        if(startDate == null || plannedEndDate==null)return "startDate and plannedEndDate should be filled";
-       // List<Book> bookList = loanDAO.getListBooksAvailableOnThoseDates(loan);
-
-        if (!bookList.isEmpty()) {
-            loan.setBook(bookList.get(0));
-            return "";
-        }
-        return "No book available for those dates!";
-    }*/
 
 
 

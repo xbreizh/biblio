@@ -119,7 +119,7 @@ class LoanManagerImplTest {
     }
 
 
-    @Test
+   /* @Test
     void createArrayFromLoanDates() throws ParseException {
         List<Loan> loanList = new ArrayList<>();
         String pattern = "MM/dd/yyyy";
@@ -135,5 +135,5 @@ class LoanManagerImplTest {
 
 
 
-    }
+    }*/
 }

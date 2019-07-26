@@ -221,6 +221,19 @@
                 <soap:fault name="businessExceptionLoan" use="literal"/>
             </wsdl:fault>
         </wsdl:operation>
+        <wsdl:operation name="reserve">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionLoan">
+                <soap:fault name="businessExceptionLoan" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
         <wsdl:operation name="renewLoan">
             <soap:operation
                     soapAction=""/>
