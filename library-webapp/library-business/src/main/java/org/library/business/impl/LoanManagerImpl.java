@@ -124,7 +124,6 @@ public class LoanManagerImpl implements LoanManager {
             Loan loan = new Loan();
             loan.setStartDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getStartDate()));
             loan.setPlannedEndDate(dateConvertedHelper.convertXmlDateIntoDate(loanTypeOut.getPlannedEndDate()));
-            loan.setChecked(loanTypeOut.isChecked());
             Book book = convertLoanBookIntoBook(loanTypeOut.getLoanBook());
             loan.setBook(book);
             loanList.add(loan);

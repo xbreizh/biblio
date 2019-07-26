@@ -136,7 +136,7 @@ public class MemberManagerImpl implements MemberManager {
                     logger.info("converted plannedEndDate");
                     loan.setPlannedEndDate(date);
                     loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
-                    //loan.setIsbn(loanTypeOut.get());
+                    //loan.setIsbn(loanTypeOut.get
 
                 }
 
