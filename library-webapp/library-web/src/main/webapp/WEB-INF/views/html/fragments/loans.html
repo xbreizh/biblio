@@ -19,7 +19,7 @@
         <tr>
             <td data-th-text="${loan.id}">loanId</td>
             <td data-th-text="${loan.startDate} ? ${#dates.format(loan.startDate, 'dd-MM-yyyy')}:'not available' ">startDate</td>
-            <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy'):'not available'}">plannedEndDate</td>
+            <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}:'not available'">plannedEndDate</td>
             <td data-th-text="${loan.book.isbn}">ISBN</td>
             <td data-th-text="${loan.book.title}">title</td>
             <td data-th-text="${loan.status}">status</td>

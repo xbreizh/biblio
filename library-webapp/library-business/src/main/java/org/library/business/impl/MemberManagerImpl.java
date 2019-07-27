@@ -61,7 +61,7 @@ public class MemberManagerImpl implements MemberManager {
             // converting into Member
             Member member = convertMemberTypeOutIntoMember(token, memberTypeOut);
             logger.info("member: " + member);
-            logger.info("trying to pass loan to member");
+            logger.info("trying to pass loan to member: "+member.getLoanList().get(0).getIsbn());
 
             logger.info("member loan size: " + member.getLoanList().size());
             return member;
@@ -131,6 +131,7 @@ public class MemberManagerImpl implements MemberManager {
             if (loanTypeOut.getEndDate() == null) {
                 Loan loan = new Loan();
                 loan.setId(loanTypeOut.getId());
+                logger.info("ISBN get: "+loanTypeOut.getISBN());
                 if (loanTypeOut.getStartDate() != null) {
                     logger.info("converting dates: " + loanTypeOut.getStartDate());
                     Date date;
@@ -141,6 +142,7 @@ public class MemberManagerImpl implements MemberManager {
                     logger.info("converted plannedEndDate");
                     loan.setPlannedEndDate(date);
                     loan.setRenewable(loanManager.isRenewable(token, loan.getId()));
+
                 }
                 logger.info("getting book: " + loanTypeOut.getBookTypeOut());
                 if (loanTypeOut.getBookTypeOut() == null) {
@@ -154,7 +156,6 @@ public class MemberManagerImpl implements MemberManager {
                 }
                 loan.setIsbn(loanTypeOut.getISBN());
                 logger.info("setting isbn: " + loan.getIsbn());
-
                 loan.setStatus(loanManager.getStatus(token, loan.getId()));
                 logger.info("trying to convert Book");
                 loanList.add(loan);

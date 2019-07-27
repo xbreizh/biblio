@@ -22,7 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.UnknownHostException;
 import java.security.Principal;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -66,7 +67,7 @@ public class UserController {
         if (member != null) {
             logger.info("Member retrieved: " + member);
             checkOverdue(member, mv);
-            mv.addObject("loanList", member.getLoanList());
+            getIsbnRentedList(member, mv);
             mv.addObject("member", member);
             addingPopup(mv, error);
             mv.setViewName("home");
@@ -74,6 +75,25 @@ public class UserController {
             mv.setViewName(LOGIN);
         }
         return mv;
+    }
+
+    private void getIsbnRentedList(Member member, ModelAndView mv){
+        List<String> loanList = new ArrayList<>();
+        String[] isbnList;
+        if(!member.getLoanList().isEmpty()) {
+            logger.info("nb loans to add: "+member.getLoanList().size());
+            for (Loan loan : member.getLoanList()
+            ) {
+                logger.info("adding: "+loan.getIsbn());
+                loanList.add(loan.getIsbn());
+            }
+        }
+        logger.info("isbn passed: "+loanList.size());
+
+        isbnList = Arrays.copyOf(loanList.toArray(), loanList.size(),
+                String[].class);
+        logger.info(Arrays.toString(isbnList));
+        mv.addObject("isbnList", isbnList);
     }
 
     private void checkOverdue(Member member, ModelAndView mv) {
@@ -215,8 +235,6 @@ public class UserController {
     }
 
 
-
-
     @GetMapping("/connect")
     public String user(Principal principal) {
         // Get authenticated user name from Principal
@@ -243,10 +261,10 @@ public class UserController {
         String reserveResult = loanManager.reserve(token, isbn);
         ModelAndView mv = new ModelAndView();
 
-       // String[] disabled = loanManager.createArrayFromLoanDates(loanList);
+        // String[] disabled = loanManager.createArrayFromLoanDates(loanList);
         mv.addObject("error", reserveResult);
-       // mv.addObject("disabled", disabled);
-        logger.info("error returned: "+reserveResult);
+        // mv.addObject("disabled", disabled);
+        logger.info("error returned: " + reserveResult);
         mv.setViewName("403");
 
         return mv;
@@ -254,21 +272,22 @@ public class UserController {
     }
 
     @PostMapping("/reserve")
-    public ModelAndView reserve(Date startDate, String isbn) {
+    public ModelAndView reserve(ModelAndView mv, String isbn) {
+        logger.info("getting into search");
+        List<Book> books;
+        // Get authenticated user name from SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
-
-        logger.info("login: " + login);
+        Member member = memberManager.getMember(token, login);
         logger.info("token: " + token);
-        logger.info("isbn: " + isbn);
-        logger.info("startDate: " + startDate);
+        logger.info(authentication.getName());
+        logger.info("isbn received: " + isbn);
 
+        mv.setViewName("home");
+        logger.info("going back to home");
 
-        if (loanManager.reserve(token, isbn).isEmpty()) {
-            return new ModelAndView("bookingOk");
-        }
-        return new ModelAndView("bookingKo");
+        return mv;
 
     }
 
