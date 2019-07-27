@@ -290,7 +290,7 @@ public class UserController {
         logger.info("author received: " + author);
 
         HashMap criteria = new HashMap<String, String>();
-        criteria.put("isbn", isbn);
+        criteria.put("ISBN", isbn);
         criteria.put("TITLE", title);
         criteria.put("AUTHOR", author);
         books = bookManager.searchBooks(token, criteria);
