@@ -277,7 +277,6 @@ public class UserController {
     public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {
         logger.info("getting into search");
         List<Book> books;
-
         // Get authenticated user name from SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
@@ -290,7 +289,7 @@ public class UserController {
         logger.info("author received: " + author);
 
         HashMap criteria = new HashMap<String, String>();
-        criteria.put("isbn", isbn);
+        criteria.put("ISBN", isbn);
         criteria.put("TITLE", title);
         criteria.put("AUTHOR", author);
         books = bookManager.searchBooks(token, criteria);

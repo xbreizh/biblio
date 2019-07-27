@@ -31,6 +31,15 @@ class BookManagerImplIntegrationTest {
 
     }
 
+    @Test
+    @DisplayName("should return books")
+    void searchBooks1() throws BusinessExceptionBook {
+        HashMap<String, String> criterias = new HashMap<>();
+        criterias.put("isbn", "ok");
+        assertEquals("LA GRANDE AVENTURE", bookManager.searchBooks("", criterias).get(0).getTitle());
+
+    }
+
 
     @Test
     @DisplayName("should return number available")

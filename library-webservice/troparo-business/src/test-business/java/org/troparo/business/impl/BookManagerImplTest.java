@@ -145,6 +145,9 @@ class BookManagerImplTest {
     }
 
 
+
+
+
     @Test
     @DisplayName("should remove invalid entries from criterias Map")
     void removeInvalidEntriesFromCriterias() {
@@ -153,7 +156,7 @@ class BookManagerImplTest {
 
         criterias.put("Test", "Test");
         criterias.put("Author", "");
-        criterias.put("ISBN", "123");
+        criterias.put("isbn", "123");
         criterias.put("Title", "?");
         criterias.put("Moko", "");
         criterias.put("", "?");
@@ -162,6 +165,9 @@ class BookManagerImplTest {
 
         assertEquals(criteriaResults, bookManager2.removeInvalidEntriesFromCriterias(criterias));
     }
+
+
+
 
 
     @Test

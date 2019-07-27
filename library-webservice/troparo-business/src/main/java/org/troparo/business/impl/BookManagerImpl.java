@@ -107,12 +107,12 @@ public class BookManagerImpl implements BookManager {
 
     protected Map<String, String> removeInvalidEntriesFromCriterias(Map<String, String> map) {
         Map<String, String> criterias = new HashMap<>();
-        String[] possibleCriterias = {"Author", "Title", "ISBN"};
+        String[] possibleCriterias = {"AUTHOR", "TITLE", "ISBN"};
         List<String> possibleCriteriasList = Arrays.asList(possibleCriterias);
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            if (possibleCriteriasList.contains(entry.getKey()) && !entry.getValue().equals("?") && !entry.getValue().equals("")) {
-                criterias.put(entry.getKey(), entry.getValue());
+            if (possibleCriteriasList.contains(entry.getKey().toUpperCase()) && !entry.getValue().equals("?") && !entry.getValue().equals("")) {
+                criterias.put(entry.getKey().toUpperCase(), entry.getValue());
             }
 
         }
