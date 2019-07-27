@@ -147,6 +147,7 @@ class BookManagerImplTest {
 
 
 
+
     @Test
     @DisplayName("should remove invalid entries from criterias Map")
     void removeInvalidEntriesFromCriterias() {

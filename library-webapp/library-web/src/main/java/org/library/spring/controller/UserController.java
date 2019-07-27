@@ -277,7 +277,6 @@ public class UserController {
     public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {
         logger.info("getting into search");
         List<Book> books;
-
         // Get authenticated user name from SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
