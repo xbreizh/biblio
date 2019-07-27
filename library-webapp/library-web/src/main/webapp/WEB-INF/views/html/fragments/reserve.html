@@ -1,19 +1,29 @@
-<div th:fragment="reservePreForm" xmlns:th="http://www.w3.org/1999/xhtml">
+<div th:fragment="reserve" xmlns:th="http://www.w3.org/1999/xhtml">
 
-    <td th:if="${overdue}">
+
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == true}">
         <button class="btn btn-info first" onclick="alertOverdue()">Reserve it!</button>
     </td>
-    <td th:if="!${overdue}">
+
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == true}">
+        <button class="btn btn-info first" onclick="alertOverdue()">Reserve it!</button>
+    </td>
+
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == false}">
+        <button class="btn btn-info first" onclick="alertAlreadyRented()">Reserve it!</button>
+    </td>
+
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == false}">
         <form method="post" th:action="@{/reserve}" th:object="${reserve}">
 
             <input class="form-control"
                    id="Isbn"
                    name="isbn"
                    placeholder="ISBN"
-                   th:value="${book.isbn}"
+                   th:value="${isbn}"
                    type="hidden">
 
-            <input class="form-control btn btn-info"
+            <input class="form-control btn btn-info first"
                    id="search-submit"
                    name="search-submit"
                    type="submit"

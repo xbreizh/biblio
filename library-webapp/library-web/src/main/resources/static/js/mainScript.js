@@ -26,6 +26,15 @@ function alertOverdue() {
     toggle_displays('myLoans','myProfile' );
 }
 
+function alertAlreadyRented() {
+    Swal.fire({
+        title: 'You are already renting that book!',
+        type: 'error',
+        confirmButtonText: 'Ups, my bad!'
+    });
+    toggle_displays('myLoans','myProfile' );
+}
+
 function overdueInitPopup(overdue) {
     $(document).ready(function () {
         if (overdue) {

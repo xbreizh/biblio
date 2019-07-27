@@ -103,6 +103,8 @@ public class UserController {
                 mv.addObject("overdue", true);
                 logger.info("overdue found");
                 break;
+            }else{
+                mv.addObject("overdue", false);
             }
         }
     }
@@ -313,6 +315,7 @@ public class UserController {
         criteria.put("AUTHOR", author);
         books = bookManager.searchBooks(token, criteria);
 
+        mv.setViewName("home");
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);
         mv.addObject("books", books);
@@ -320,7 +323,7 @@ public class UserController {
         mv.addObject("title", title);
         mv.addObject("author", author);
         checkOverdue(member, mv);
-        mv.setViewName("home");
+        getIsbnRentedList(member, mv);
         logger.info("going back to home");
 
         return mv;
