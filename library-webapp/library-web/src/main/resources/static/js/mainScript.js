@@ -16,6 +16,11 @@ function toggle_displays(t, d) {
     }
 }
 
+function showLoans(){
+    var x = document.getElementById('myLoans');
+    x.style.display = "block";
+}
+
 
 function alertOverdue() {
     Swal.fire({
@@ -23,7 +28,7 @@ function alertOverdue() {
         type: 'error',
         confirmButtonText: 'Ok, I ll take care of it!'
     });
-    toggle_displays('myLoans','myProfile' );
+    showLoans();
 }
 
 function alertAlreadyRented() {
@@ -32,7 +37,7 @@ function alertAlreadyRented() {
         type: 'error',
         confirmButtonText: 'Ups, my bad!'
     });
-    toggle_displays('myLoans','myProfile' );
+    showLoans();
 }
 
 function overdueInitPopup(overdue) {
