@@ -1,19 +1,27 @@
 <div th:fragment="reserve" xmlns:th="http://www.w3.org/1999/xhtml">
 
 
-    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == true}">
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == true && maxReservation ==false}">
         <button class="btn btn-info first" onclick="alertOverdue()">Reserve it!</button>
     </td>
 
-    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == true}">
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == true && maxReservation ==false}">
         <button class="btn btn-info first" onclick="alertOverdue()">Reserve it!</button>
     </td>
 
-    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == false}">
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == false && maxReservation ==true}">
+        <button class="btn btn-info first" onclick="alertMaxRented()">Reserve it!</button>
+    </td>
+
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == false && maxReservation ==true}">
+        <button class="btn btn-info first" onclick="alertMaxRented()">Reserve it!</button>
+    </td>
+
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == false && maxReservation ==false}">
         <button class="btn btn-info first" onclick="alertAlreadyRented()">Reserve it!</button>
     </td>
 
-    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == false}">
+    <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == false && maxReservation ==false}">
         <form method="post" th:action="@{/reserve}" th:object="${reserve}">
 
             <input class="form-control"

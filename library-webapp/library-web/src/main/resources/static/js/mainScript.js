@@ -31,6 +31,16 @@ function alertOverdue() {
     showLoans();
 }
 
+function alertMaxRented() {
+    Swal.fire({
+        title: 'You have reach the max reserving limit!',
+        type: 'error',
+        confirmButtonText: 'Oh, Ok!'
+    });
+    showLoans();
+}
+
+
 function alertAlreadyRented() {
     Swal.fire({
         title: 'You are already renting that book!',

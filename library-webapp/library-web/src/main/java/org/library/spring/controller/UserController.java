@@ -37,6 +37,7 @@ public class UserController {
     BookManager bookManager;
     @Inject
     LoanManager loanManager;
+    private int maxReservation=3;
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
@@ -67,6 +68,7 @@ public class UserController {
         if (member != null) {
             logger.info("Member retrieved: " + member);
             checkOverdue(member, mv);
+            checkMaxreserved(member, mv);
             getIsbnRentedList(member, mv);
             mv.addObject("member", member);
             addingPopup(mv, error);
@@ -75,6 +77,22 @@ public class UserController {
             mv.setViewName(LOGIN);
         }
         return mv;
+    }
+
+    private void checkMaxreserved(Member member, ModelAndView mv){
+
+        int nbReserved=0;
+        mv.addObject("maxReservation", false);
+        for (Loan loan: member.getLoanList()
+             ) {
+            if (loan.getStartDate() == null){
+                nbReserved++;
+            }
+        }
+        if (nbReserved >= maxReservation){
+            mv.addObject("maxReservation", true);
+        }
+
     }
 
     private void getIsbnRentedList(Member member, ModelAndView mv){
@@ -249,27 +267,6 @@ public class UserController {
     }
 
 
-  /*  @GetMapping("/mySpace")
-    public ModelAndView mySpace() {
-
-        return new ModelAndView("mySpace");
-    }*/
-
-   /* @PostMapping("/reservePreForm")
-    public ModelAndView reservePreForm(String isbn) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
-        logger.info("trying to get loans for: " + isbn);
-        String reserveResult = loanManager.reserve(token, isbn);
-        ModelAndView mv = new ModelAndView();
-
-        mv.addObject("error", reserveResult);
-        logger.info("error returned: " + reserveResult);
-        mv.setViewName("403");
-
-        return mv;
-
-    }*/
 
     @PostMapping("/reserve")
     public ModelAndView reserve(ModelAndView mv, String isbn) {
@@ -284,6 +281,7 @@ public class UserController {
         logger.info("isbn received: " + isbn);
         logger.info(loanManager.reserve(token, isbn));
         checkOverdue(member, mv);
+        checkMaxreserved(member, mv);
         getIsbnRentedList(member, mv);
         mv.setViewName("home");
         logger.info("going back to home");
@@ -310,6 +308,7 @@ public class UserController {
 
         checkOverdue(member, mv);
         getIsbnRentedList(member, mv);
+        checkMaxreserved(member, mv);
 
         HashMap criteria = new HashMap<String, String>();
         criteria.put("ISBN", isbn);

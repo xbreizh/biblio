@@ -20,7 +20,8 @@ public class LoanManagerImpl implements LoanManager {
     private DateConvertedHelper dateConvertedHelper;
 
 
-    public void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+
+    void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
         this.dateConvertedHelper = dateConvertedHelper;
     }
 
@@ -149,29 +150,6 @@ public class LoanManagerImpl implements LoanManager {
         return book;
     }
 
-   /* @Override
-    public String[] createArrayFromLoanDates(List<Loan> loanList) {
-        if (loanList.isEmpty()) return new String[0];
-        List<String> dateList = new ArrayList<>();
-        SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-        for (Loan loan : loanList) {
-            Date start = loan.getStartDate();
-            Date end = loan.getPlannedEndDate();
-
-            Calendar c = Calendar.getInstance();
-            c.setTime(loan.getStartDate());
-            Date dateToAdd = start;
-            while (!format.format(dateToAdd).equals(format.format(end))) {
-                dateList.add(format.format(dateToAdd));
-                c.add(Calendar.DAY_OF_MONTH, 1);
-                dateToAdd = c.getTime();
-            }
-        }
-
-
-        return dateList.toArray(new String[dateList.size()]);
-
-    }*/
 
     @Override
     public String reserve(String token, String isbn) {
@@ -179,11 +157,9 @@ public class LoanManagerImpl implements LoanManager {
         ReserveRequestType requestType = new ReserveRequestType();
         requestType.setToken(token);
         requestType.setISBN(isbn);
-        System.out.println("token: "+token+" /isbn: "+isbn);
 
         ReserveResponseType responseType;
         try {
-            System.out.println("mak: "+getLoanServicePort().reserve(requestType));
             responseType = getLoanServicePort().reserve(requestType);
             logger.info("request type set");
             return responseType.getReturn();
