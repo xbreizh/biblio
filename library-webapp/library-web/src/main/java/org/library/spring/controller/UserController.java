@@ -276,13 +276,15 @@ public class UserController {
         logger.info("getting into search");
         // Get authenticated user name from SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        /*String token = authentication.getDetails().toString();
+        String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
-        Member member = memberManager.getMember(token, login);*/
-        /*logger.info("token: " + token);*/
+        Member member = memberManager.getMember(token, login);
+        logger.info("token: " + token);
         logger.info(authentication.getName());
         logger.info("isbn received: " + isbn);
-
+        logger.info(loanManager.reserve(token, isbn));
+        checkOverdue(member, mv);
+        getIsbnRentedList(member, mv);
         mv.setViewName("home");
         logger.info("going back to home");
 
@@ -306,6 +308,9 @@ public class UserController {
         logger.info("title received: " + title);
         logger.info("author received: " + author);
 
+        checkOverdue(member, mv);
+        getIsbnRentedList(member, mv);
+
         HashMap criteria = new HashMap<String, String>();
         criteria.put("ISBN", isbn);
         criteria.put("TITLE", title);
@@ -319,8 +324,6 @@ public class UserController {
         mv.addObject("isbn", isbn);
         mv.addObject("title", title);
         mv.addObject("author", author);
-        checkOverdue(member, mv);
-        getIsbnRentedList(member, mv);
         logger.info("going back to home");
 
         return mv;

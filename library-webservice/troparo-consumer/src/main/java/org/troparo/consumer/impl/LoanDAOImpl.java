@@ -141,7 +141,7 @@ public class LoanDAOImpl implements LoanDAO {
         isbn = "'" + isbn.toUpperCase() + "'";
         logger.info("ISBN received: " + isbn);
         request =
-                "select * from Book where isbn = " + isbn + " and id not in (" +
+                "select * from Book where isbn = " + isbn + " and exists(" +
                         "select book_id from loan where isbn = " + isbn + " and end_date is null)";
         try {
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
@@ -166,7 +166,7 @@ public class LoanDAOImpl implements LoanDAO {
         String title = "'" + loan.getBook().getTitle().toUpperCase() + "'";
         String loanStartDate = "'" + loan.getStartDate().toString() + "'";
         String loanPlannedEndDate = "'" + loan.getPlannedEndDate() + "'";
-        request = "select * from Book b where b.title = " + title + " and b.id not in ( " +
+        request = "select * from Book b where b.title = " + title + " and exists ( " +
                 "select l.book_id from Loan l where l.end_date is null and l.book_id in (" +
                 " select b1.id from Book b1 where b1.title = " + title + " and(" +
                 "l.start_date <= " + loanStartDate + " and" +

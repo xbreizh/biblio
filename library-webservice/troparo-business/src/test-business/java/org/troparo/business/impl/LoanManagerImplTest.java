@@ -282,26 +282,51 @@ class LoanManagerImplTest {
 
 
 
-/*
     @Test
-    @DisplayName("should return true if loan already in progress")
+    @DisplayName("should return true if loan already in progress ")
     void checkIfSimilarLoanPlannedOrInProgress(){
+        // will return true if similar isbn and endDate is null
         Loan loan = new Loan();
         Member member = new Member();
         String login = "momo56";
         member.setLogin(login);
+
         Book book = new Book();
         book.setId(2);
-        book.setIsbn("1223443");
+        String isbn = "dede333";
+        book.setIsbn(isbn);
         loan.setBook(book);
         loan.setBorrower(member);
         List<Loan> loanList = new ArrayList<>();
-        Loan loan1 = new Loan();
-        loan1.setBook(book);
-        loanList.add(loan1);
+        loan.setBook(book);
+        loan.setIsbn(isbn);
+        loanList.add(loan);
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
-        assertTrue( loanManager.checkIfSimilarLoanPlannedOrInProgress(loan));
-    }*/
+        assertTrue( loanManager.checkIfSimilarLoanPlannedOrInProgress(member, isbn));
+    }
+
+    @Test
+    @DisplayName("should return false if loan no longer in progress ")
+    void checkIfSimilarLoanPlannedOrInProgress1(){
+        Loan loan = new Loan();
+        Member member = new Member();
+        String login = "momo56";
+        member.setLogin(login);
+
+        Book book = new Book();
+        book.setId(2);
+        String isbn = "dede333";
+        book.setIsbn(isbn);
+        loan.setBook(book);
+        loan.setBorrower(member);
+        List<Loan> loanList = new ArrayList<>();
+        loan.setEndDate(new Date());
+        loan.setBook(book);
+        loan.setIsbn(isbn);
+        loanList.add(loan);
+        when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
+        assertFalse( loanManager.checkIfSimilarLoanPlannedOrInProgress(member, isbn));
+    }
 
 
     @Test

@@ -226,10 +226,12 @@ public class LoanManagerImpl implements LoanManager {
 
     boolean checkIfSimilarLoanPlannedOrInProgress(Member member, String isbn) {
        List<Loan> loanList = loanDAO.getLoanByLogin(member.getLogin());
-
+        logger.info("isbn received : "+isbn);
        if(loanList!=null && !loanList.isEmpty()){
            for(Loan loan: loanList){
-               if (loan.getIsbn().equals(isbn) && loan.getEndDate() !=null){
+               logger.info("isbn from loan: "+loan.getIsbn());
+               logger.info("end date: "+loan.getEndDate());
+               if (loan.getIsbn().equals(isbn) && loan.getEndDate() ==null){
                    logger.error("there is already a loan with that book and that login");
                    return true;
                }
