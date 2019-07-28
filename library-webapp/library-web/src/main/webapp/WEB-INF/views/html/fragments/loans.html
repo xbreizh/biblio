@@ -18,8 +18,8 @@
         <th:block data-th-each="loan : ${member.loanList}" >
         <tr>
             <td data-th-text="${loan.id}">loanId</td>
-            <td data-th-text="${loan.startDate} ? ${#dates.format(loan.startDate, 'dd-MM-yyyy')}:'not available' ">startDate</td>
-            <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}:'not available'">plannedEndDate</td>
+            <td data-th-text="${loan.startDate} ? ${#dates.format(loan.startDate, 'dd-MM-yyyy')}:'N/A' ">startDate</td>
+            <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}:'N/A'">plannedEndDate</td>
             <td data-th-text="${loan.book.isbn}">ISBN</td>
             <td data-th-text="${loan.book.title}">title</td>
             <td data-th-text="${loan.status}">status</td>
@@ -56,7 +56,7 @@
 
                     </div>
                     <div th:unless="${loan.renewable}">
-                        <img alt="forbidden" style="width: 80px;height: auto" th:src="@{/img/forbidden.jpg}"/>
+                        &#9940;
                     </div>
                 </div>
             </td>

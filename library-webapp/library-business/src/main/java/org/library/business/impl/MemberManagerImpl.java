@@ -61,7 +61,6 @@ public class MemberManagerImpl implements MemberManager {
             // converting into Member
             Member member = convertMemberTypeOutIntoMember(token, memberTypeOut);
             logger.info("member: " + member);
-            logger.info("trying to pass loan to member: "+member.getLoanList().get(0).getIsbn());
 
             logger.info("member loan size: " + member.getLoanList().size());
             return member;

@@ -97,16 +97,16 @@ public class UserController {
     }
 
     private void checkOverdue(Member member, ModelAndView mv) {
-        for (Loan loan : member.getLoanList()
-        ) {
-            if (loan.getStatus().equalsIgnoreCase("OVERDUE")) {
-                mv.addObject("overdue", true);
-                logger.info("overdue found");
-                break;
-            }else{
-                mv.addObject("overdue", false);
+        mv.addObject("overdue", false);
+            for (Loan loan : member.getLoanList()
+            ) {
+                if (loan.getStatus().equalsIgnoreCase("OVERDUE")) {
+                    mv.addObject("overdue", true);
+                    logger.info("overdue found");
+                    break;
+                }
             }
-        }
+
     }
 
     private void addingPopup(ModelAndView mv, String error) {
@@ -263,9 +263,7 @@ public class UserController {
         String reserveResult = loanManager.reserve(token, isbn);
         ModelAndView mv = new ModelAndView();
 
-        // String[] disabled = loanManager.createArrayFromLoanDates(loanList);
         mv.addObject("error", reserveResult);
-        // mv.addObject("disabled", disabled);
         logger.info("error returned: " + reserveResult);
         mv.setViewName("403");
 
@@ -276,13 +274,12 @@ public class UserController {
     @PostMapping("/reserve")
     public ModelAndView reserve(ModelAndView mv, String isbn) {
         logger.info("getting into search");
-        List<Book> books;
         // Get authenticated user name from SecurityContext
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
+        /*String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
-        Member member = memberManager.getMember(token, login);
-        logger.info("token: " + token);
+        Member member = memberManager.getMember(token, login);*/
+        /*logger.info("token: " + token);*/
         logger.info(authentication.getName());
         logger.info("isbn received: " + isbn);
 
