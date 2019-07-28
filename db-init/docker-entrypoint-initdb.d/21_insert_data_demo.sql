@@ -23,6 +23,8 @@ VALUES ('MAURICE MOSS', 'GALLIMARD', '2019-01-18 15:25:33.546', '12345678OK', 'I
         'LA GRANDE AVENTURE')
      , ('JAMES KOLO', 'DUPION', '2019-01-19 15:38:44.412', '8574596258', 'PAST PRESENT FUTURE', 340, 1986,
         'BOKANA')
+     , ('ALPHONSE DAUDET', 'FLAMMARION', '2019-02-21 15:25:33.546', '555784913P', 'MULE STOIQUE', 33, 1988,
+        'MAZOR')
 ;
 
 INSERT INTO public.loan (reservation_date, available_date, start_date, planned_end_date, end_date, isbn, book_id, borrower_id)

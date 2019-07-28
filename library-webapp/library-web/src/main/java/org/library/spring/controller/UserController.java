@@ -275,15 +275,19 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
-        Member member = memberManager.getMember(token, login);
+
         logger.info("token: " + token);
         logger.info(authentication.getName());
         logger.info("isbn received: " + isbn);
         logger.info(loanManager.reserve(token, isbn));
+        Member member = memberManager.getMember(token, login);
+
+        mv.setViewName("home");
         checkOverdue(member, mv);
         checkMaxreserved(member, mv);
         getIsbnRentedList(member, mv);
-        mv.setViewName("home");
+        mv.addObject("loanList", member.getLoanList());
+        mv.addObject("member", member);
         logger.info("going back to home");
 
         return mv;
@@ -300,6 +304,7 @@ public class UserController {
         String token = authentication.getDetails().toString();
         String login = authentication.getPrincipal().toString();
         Member member = memberManager.getMember(token, login);
+
         logger.info("token: " + token);
         logger.info(authentication.getName());
         logger.info("isbn received: " + isbn);
