@@ -4,11 +4,9 @@ import org.apache.log4j.Logger;
 import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
+import org.library.helper.LibraryHelper;
 import org.library.model.Book;
-import org.library.model.Loan;
 import org.library.model.Member;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -16,41 +14,48 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.UnknownHostException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @ControllerAdvice
 public class UserController {
     private static final String LOGIN = "login";
-    @Inject
-    MemberManager memberManager;
-    @Inject
-    BookManager bookManager;
-    @Inject
-    LoanManager loanManager;
-    private int maxReservation=3;
+    private static final String HOME = "home";
+    private static final String RESET = "passwordReset/passwordReset";
+    private static final String ERROR = "403";
+    private static final String NOT_FOUND = "404";
+    private static final String REDIRECT_HOME = "redirect:/";
+    private static Logger logger = Logger.getLogger(UserController.class);
+    //@Inject
+    private MemberManager memberManager;
+    //@Inject
+    private BookManager bookManager;
+    //@Inject
+    private LoanManager loanManager;
+    //@Inject
+    private LibraryHelper helper;
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
+    public UserController(MemberManager memberManager, BookManager bookManager, LoanManager loanManager, LibraryHelper helper) {
+        this.memberManager = memberManager;
+        this.bookManager = bookManager;
+        this.loanManager = loanManager;
+        this.helper = helper;
+    }
 
     @ExceptionHandler({IndexOutOfBoundsException.class, NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
     public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {
-        ModelAndView model = new ModelAndView();
+        ModelAndView model = new ModelAndView(ERROR);
         model.addObject("exception", ex.getMessage());
 
 
         if (ex.getMessage().startsWith("No handler found")) {
-            model.setViewName("404");
-        } else {
-            model.setViewName("error");
+            model.setViewName(NOT_FOUND);
         }
 
         return model;
@@ -59,90 +64,38 @@ public class UserController {
 
     @RequestMapping("/")
     public ModelAndView home(String error) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
-        String login = authentication.getPrincipal().toString();
-        logger.info("controller: " + authentication.getName());
+        logger.info("getting home");
+        String token = helper.getConnectedToken();
+        String login = helper.getConnectedLogin();
         Member member = memberManager.getMember(token, login);
-        ModelAndView mv = new ModelAndView();
+
+        ModelAndView mv = new ModelAndView(HOME);
         if (member != null) {
             logger.info("Member retrieved: " + member);
-            checkOverdue(member, mv);
-            checkMaxreserved(member, mv);
-            getIsbnRentedList(member, mv);
+
+            //checking
+            helper.checkOverdue(member, mv);
+            helper.getIsbnRentedList(member, mv);
+            helper.checkMaxReserved(member, mv);
+            helper.addingPopup(mv, error);
+
             mv.addObject("member", member);
-            addingPopup(mv, error);
-            mv.setViewName("home");
+
         } else {
             mv.setViewName(LOGIN);
         }
         return mv;
     }
 
-    private void checkMaxreserved(Member member, ModelAndView mv){
-
-        int nbReserved=0;
-        mv.addObject("maxReservation", false);
-        for (Loan loan: member.getLoanList()
-             ) {
-            if (loan.getStartDate() == null){
-                nbReserved++;
-            }
-        }
-        if (nbReserved >= maxReservation){
-            mv.addObject("maxReservation", true);
-        }
-
-    }
-
-    private void getIsbnRentedList(Member member, ModelAndView mv){
-        List<String> loanList = new ArrayList<>();
-        String[] isbnList;
-        if(!member.getLoanList().isEmpty()) {
-            logger.info("nb loans to add: "+member.getLoanList().size());
-            for (Loan loan : member.getLoanList()
-            ) {
-                logger.info("adding: "+loan.getIsbn());
-                loanList.add(loan.getIsbn());
-            }
-        }
-        logger.info("isbn passed: "+loanList.size());
-
-        isbnList = Arrays.copyOf(loanList.toArray(), loanList.size(),
-                String[].class);
-        logger.info(Arrays.toString(isbnList));
-        mv.addObject("isbnList", isbnList);
-    }
-
-    private void checkOverdue(Member member, ModelAndView mv) {
-        mv.addObject("overdue", false);
-            for (Loan loan : member.getLoanList()
-            ) {
-                if (loan.getStatus().equalsIgnoreCase("OVERDUE")) {
-                    mv.addObject("overdue", true);
-                    logger.info("overdue found");
-                    break;
-                }
-            }
-
-    }
-
-    private void addingPopup(ModelAndView mv, String error) {
-        mv.addObject("popup", true);
-        mv.addObject("error", error);
-    }
 
     @GetMapping("/login")
     public ModelAndView login() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName(LOGIN);
+        String login = helper.getConnectedLogin();
+        ModelAndView mv = new ModelAndView(LOGIN);
 
         // check if user already logged in
-        if (!authentication.getPrincipal().toString().equals("anonymousUser")) {
-            mv.addObject(LOGIN, authentication.getPrincipal().toString());
-            mv.setViewName("connected");
+        if (!login.equals("anonymousUser")) {
+            mv.setViewName(REDIRECT_HOME);
         }
 
         return mv;
@@ -151,7 +104,7 @@ public class UserController {
     @RequestMapping("/denied")
     public ModelAndView error(Principal user, HttpServletRequest req) {
         logger.info("error");
-        ModelAndView model = new ModelAndView();
+        ModelAndView model = new ModelAndView(ERROR);
         model.addObject("errorCode", "Error 403");
 
         logger.info(req.getAttribute("javax.servlet.error.status_code"));
@@ -163,18 +116,16 @@ public class UserController {
                     "You do not have permission to access this page!");
         }
 
-        model.setViewName("403");
         return model;
     }
 
 
     @GetMapping("/passwordReset")
     public ModelAndView passwordReset(String login, String token) {
-        ModelAndView mv = new ModelAndView();
+        ModelAndView mv = new ModelAndView(RESET);
         mv.addObject(LOGIN, login);
         mv.addObject("token", token);
 
-        mv.setViewName("passwordReset/passwordReset");
         return mv;
     }
 
@@ -224,112 +175,78 @@ public class UserController {
     }
 
     private boolean passwordCheck(String password, String confirmPassword) {
-        if (password.isEmpty() || !password.equals(confirmPassword)) return false;
-        return true;
+        return !password.isEmpty() && password.equals(confirmPassword);
 
     }
 
 
     @PostMapping("/renew")
-    public ModelAndView renew(ModelAndView mv, String id) throws BusinessExceptionLoan {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
+    public ModelAndView renew(String id) throws BusinessExceptionLoan {
+        String token = helper.getConnectedToken();
         logger.info("trying to renew: " + id);
         int idLoan = Integer.parseInt(id);
         loanManager.renewLoan(token, idLoan);
 
-        return new ModelAndView("redirect:/");
+        return new ModelAndView(REDIRECT_HOME);
 
     }
 
     @PostMapping("/remove")
-    public ModelAndView remove(ModelAndView mv, String loanId) throws BusinessExceptionLoan {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
+    public ModelAndView remove(String loanId) throws BusinessExceptionLoan {
+        String token = helper.getConnectedToken();
         logger.info("trying to remove: " + loanId);
-        int idLoan = Integer.parseInt(loanId);
-        loanManager.removeLoan(token, idLoan);
 
-        return new ModelAndView("redirect:/");
+        loanManager.removeLoan(token, Integer.parseInt(loanId));
+
+        return new ModelAndView(REDIRECT_HOME);
 
     }
-
-
-    @GetMapping("/connect")
-    public String user(Principal principal) {
-        // Get authenticated user name from Principal
-        logger.info("trying to get to user");
-        logger.info(principal.getName());
-        logger.info("role: " + principal.toString());
-
-        logger.info("principal: " + principal);
-        return "home";
-    }
-
 
 
     @PostMapping("/reserve")
-    public ModelAndView reserve(ModelAndView mv, String isbn) {
+    public ModelAndView reserve(String isbn) {
         logger.info("getting into search");
-        // Get authenticated user name from SecurityContext
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
-        String login = authentication.getPrincipal().toString();
 
-        logger.info("token: " + token);
-        logger.info(authentication.getName());
+        String token = helper.getConnectedToken();
         logger.info("isbn received: " + isbn);
         logger.info(loanManager.reserve(token, isbn));
-        Member member = memberManager.getMember(token, login);
 
-        mv.setViewName("home");
-        checkOverdue(member, mv);
-        checkMaxreserved(member, mv);
-        getIsbnRentedList(member, mv);
-        mv.addObject("loanList", member.getLoanList());
-        mv.addObject("member", member);
-        logger.info("going back to home");
-
-        return mv;
+        return new ModelAndView(REDIRECT_HOME);
 
     }
 
 
     @PostMapping("/search")
-    public ModelAndView search(ModelAndView mv, String isbn, String author, String title) throws BusinessExceptionBook {
+    public ModelAndView search(String isbn, String author, String title) throws BusinessExceptionBook {
         logger.info("getting into search");
-        List<Book> books;
-        // Get authenticated user name from SecurityContext
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String token = authentication.getDetails().toString();
-        String login = authentication.getPrincipal().toString();
+        ModelAndView mv = new ModelAndView(HOME);
+
+        String token = helper.getConnectedToken();
+        String login = helper.getConnectedLogin();
+
+        logger.info("elements received: isbn" + isbn + " / title " + title + " / author: " + author);
+
+
+        Map<String, String> criteria = helper.generateSearchMap(isbn, author, title);
+        List<Book> books = bookManager.searchBooks(token, criteria);
+
+
         Member member = memberManager.getMember(token, login);
-
-        logger.info("token: " + token);
-        logger.info(authentication.getName());
-        logger.info("isbn received: " + isbn);
-        logger.info("title received: " + title);
-        logger.info("author received: " + author);
-
-        checkOverdue(member, mv);
-        getIsbnRentedList(member, mv);
-        checkMaxreserved(member, mv);
-
-        HashMap criteria = new HashMap<String, String>();
-        criteria.put("ISBN", isbn);
-        criteria.put("TITLE", title);
-        criteria.put("AUTHOR", author);
-        books = bookManager.searchBooks(token, criteria);
-
-        mv.setViewName("home");
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);
         mv.addObject("books", books);
         mv.addObject("isbn", isbn);
         mv.addObject("title", title);
         mv.addObject("author", author);
-        logger.info("going back to home");
+
+
+        helper.checkOverdue(member, mv);
+        helper.getIsbnRentedList(member, mv);
+        helper.checkMaxReserved(member, mv);
 
         return mv;
     }
+
+
 }
+

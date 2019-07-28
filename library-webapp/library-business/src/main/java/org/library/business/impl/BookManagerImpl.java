@@ -16,7 +16,7 @@ import java.util.Map;
 
 @Named
 public class BookManagerImpl implements BookManager {
-    private static  Logger logger = Logger.getLogger(BookManagerImpl.class);
+    private static Logger logger = Logger.getLogger(BookManagerImpl.class);
 
     private BookService bookService;
 
@@ -26,7 +26,7 @@ public class BookManagerImpl implements BookManager {
         List<Book> result;
         GetBookByCriteriasRequestType requestType = new GetBookByCriteriasRequestType();
         requestType.setToken(token);
-        requestType.setBookCriterias(convertCriteriasIntoCriteriasRequest(criteria));
+        requestType.setBookCriterias(convertCriteriaIntoCriteriaRequest(criteria));
         GetBookByCriteriasResponseType responseType;
         logger.info(requestType.getBookCriterias().getAuthor());
         logger.info(requestType.getToken());
@@ -34,20 +34,21 @@ public class BookManagerImpl implements BookManager {
 
         result = convertBookTypeOutListIntoBookList(token, responseType.getBookListType().getBookTypeOut());
         logger.info("result: " + result);
+
         return result;
     }
 
     @Override
     public Book getBookByISBN(String token, String isbn) throws BusinessExceptionBook {
-        logger.info("getting book by isbn: "+isbn);
-        HashMap criteria = new HashMap<String, String>();
+        logger.info("getting book by isbn: " + isbn);
+        Map<String, String> criteria = new HashMap<>();
         criteria.put("ISBN", isbn);
         List<Book> books = searchBooks(token, criteria);
-        logger.info("map passed: "+criteria);
+        logger.info("map passed: " + criteria);
 
-        if(!books.isEmpty()) {
-            Book book =books.get(0);
-            logger.info("Book found: "+book.getTitle());
+        if (!books.isEmpty()) {
+            Book book = books.get(0);
+            logger.info("Book found: " + book.getTitle());
             return book;
         }
         logger.info("no book found");
@@ -90,8 +91,8 @@ public class BookManagerImpl implements BookManager {
         return responseType.getReturn();
     }
 
-    private BookCriterias convertCriteriasIntoCriteriasRequest(Map<String, String> criterias) {
-        logger.info("criterias: " + criterias);
+    private BookCriterias convertCriteriaIntoCriteriaRequest(Map<String, String> criterias) {
+        logger.info("criteria: " + criterias);
         BookCriterias bookCriterias = new BookCriterias();
         bookCriterias.setISBN(criterias.get("ISBN"));
         logger.info("added isbn: ");
@@ -102,10 +103,8 @@ public class BookManagerImpl implements BookManager {
         bookCriterias.setAuthor(criterias.get("AUTHOR"));
         logger.info("added author: ");
 
+        logger.info("elements received: isbn " + bookCriterias.getISBN() + " / title " + bookCriterias.getTitle() + " / author: " + bookCriterias.getAuthor());
 
-        logger.info("author passed: " + bookCriterias.getAuthor());
-        logger.info("title passed: " + bookCriterias.getTitle());
-        logger.info("isbn passed: " + bookCriterias.getISBN());
         return bookCriterias;
     }
 
