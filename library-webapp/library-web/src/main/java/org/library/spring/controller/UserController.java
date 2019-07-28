@@ -249,13 +249,13 @@ public class UserController {
     }
 
 
-    @GetMapping("/mySpace")
+  /*  @GetMapping("/mySpace")
     public ModelAndView mySpace() {
 
         return new ModelAndView("mySpace");
-    }
+    }*/
 
-    @PostMapping("/reservePreForm")
+   /* @PostMapping("/reservePreForm")
     public ModelAndView reservePreForm(String isbn) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String token = authentication.getDetails().toString();
@@ -269,7 +269,7 @@ public class UserController {
 
         return mv;
 
-    }
+    }*/
 
     @PostMapping("/reserve")
     public ModelAndView reserve(ModelAndView mv, String isbn) {

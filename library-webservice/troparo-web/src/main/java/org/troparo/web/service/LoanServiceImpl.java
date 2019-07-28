@@ -63,6 +63,7 @@ public class LoanServiceImpl implements ILoanService {
         checkAuthentication(parameters.getToken());
         logger.info("new reserve call");
         ar.setReturn(loanManager.reserve(parameters.getToken(), parameters.getISBN()));
+        logger.info("getting reserve return: "+ar.getReturn());
         return ar;
     }
 

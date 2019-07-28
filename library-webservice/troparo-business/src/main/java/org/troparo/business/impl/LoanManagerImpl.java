@@ -81,11 +81,15 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String addLoan(String login, int id) {
+        logger.info("trying to add loan");
+        logger.info("login: "+login);
         Member member = memberManager.getMemberByLogin(login);
         Book book = bookManager.getBookById(id);
-        String x1 = checkAddLoanDetailsAreValid(member, book);
-        if (!x1.isEmpty()) return x1;
-        if (checkIfBorrowerHasReachedMaxLoan(member)) return "max number of books rented reached";
+        String x = checkAddLoanDetailsAreValid(member, book);
+        if (!x.isEmpty()) {
+            logger.error(x);
+            return x;
+        }
         Loan loan = new Loan();
         loan.setStartDate(getTodayDate());
         setPlannedEndDate(loan);
@@ -96,17 +100,36 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     private String checkAddLoanDetailsAreValid(Member member, Book book) {
+        logger.info("member to check: "+member);
 
         if(member == null) return "Invalid member";
 
         if(book == null) return "Invalid book";
+
+        if (checkIfBorrowerHasReachedMaxLoan(member)) return "max number of books rented reached";
+
         return "";
     }
 
 
-    private boolean checkIfBorrowerHasReachedMaxLoan(Member member) {
+    boolean checkIfBorrowerHasReachedMaxLoan(Member member) {
+        logger.info("checking if max loans reached");
+        logger.info("memberList: "+member.getLoanList());
+        if(member.getLoanList()==null || member.getLoanList().isEmpty()){
+            logger.info("member list empty");
+            return false;
+        }
+        List<Loan> wholeLoanList = new ArrayList<>();
+        for (Loan loan: member.getLoanList()
+             ) {
+            if (loan.getStartDate() !=null && loan.getEndDate()!=null){
+                wholeLoanList.add(loan);
+                logger.info("adding loan");
+            }
+        }
+        logger.info("current Loans: "+wholeLoanList.size());
 
-      return memberManager.getMemberById(member.getId()).getLoanList().size() >= maxBooks;
+      return wholeLoanList.size() >= maxBooks;
 
     }
 
@@ -119,6 +142,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String reserve(String token, String isbn) {
+        logger.info("trying to reserve: "+isbn);
         Member member = memberManager.getMemberByToken(token);
         String x1 = checkReserveLoanDetailsAreValid(member, isbn);
         if (!x1.isEmpty()) return x1;
@@ -127,9 +151,11 @@ public class LoanManagerImpl implements LoanManager {
         loan.setReservationDate(getTodayDate());
         loan.setBorrower(member);
         if (!(loanDAO.addLoan(loan))) return "Issue while reserving";
+        logger.info("loan has been reserved: "+isbn);
         getBookIfAvailable(loan);
         if(loan.getBook()!=null){
             loan.setAvailableDate(getTodayDate());
+            loanDAO.updateLoan(loan);
             return "The book has been reserved and is available for collection for 4 days";
         }
         return "The book has been reserved but is currently unavailable. We will contact you as soon as it's ready";
@@ -138,6 +164,7 @@ public class LoanManagerImpl implements LoanManager {
 
 
     private void getBookIfAvailable(Loan loan) {
+        logger.info("trying to get available book");
         loan.setBook(loanDAO.getNextAvailableBook(loan.getIsbn()));
     }
 
@@ -156,27 +183,20 @@ public class LoanManagerImpl implements LoanManager {
 
 
         x = checkBookAndMemberValidity(member, isbn);
-        if (!x.isEmpty()) return x;
+        if (!x.isEmpty()) {
+        logger.error("error found: "+x);
+            return x;
+        }
 
         x = checkIfReserveLimitNotReached(member.getLogin());
-        if (!x.isEmpty()) return x;
-
-        x = checkIfSameBookAlreadyRenterByMember(member, isbn);
-        if (!x.isEmpty()) return x;
-
-        return "";
-    }
-
-
-    private String checkIfSameBookAlreadyRenterByMember(Member member, String isbn) {
-        if(!member.getLoanList().isEmpty()){
-            for (Loan loan:member.getLoanList()
-            ) {
-                if (loan.getIsbn().equalsIgnoreCase(isbn))return "You can't reserve a book that you already rent";
-            }
+        if (!x.isEmpty()) {
+            logger.error("error found: "+x);
+            return x;
         }
+
         return "";
     }
+
 
     String checkLoanStartDateIsNotInPastOrNull(Date date) {
         if (date == null || date.before(getTodayDate()))return "startDate should be in the future";
@@ -231,7 +251,7 @@ public class LoanManagerImpl implements LoanManager {
            for(Loan loan: loanList){
                logger.info("isbn from loan: "+loan.getIsbn());
                logger.info("end date: "+loan.getEndDate());
-               if (loan.getIsbn().equals(isbn) && loan.getEndDate() ==null){
+               if (loan.getIsbn().equals(isbn) && loan.getStartDate() !=null && loan.getEndDate() ==null){
                    logger.error("there is already a loan with that book and that login");
                    return true;
                }

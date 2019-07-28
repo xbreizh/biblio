@@ -280,6 +280,25 @@ class LoanManagerImplTest {
         assertNull(loanManager.getLoanById(2));
     }
 
+    @Test
+    @DisplayName("should return true if Max loans reached")
+    void checkIfBorrowerHasReachedMaxLoan(){
+        Member member = new Member();
+        member.setLogin("logan");
+        Book book = new Book();
+        book.setTitle("ponyo");
+        Loan loan = new Loan();
+        loan.setBorrower(member);
+        loan.setBook(book);
+        List<Loan> loanList = new ArrayList<>();
+        loanList.add(loan);
+        member.setLoanList(loanList);
+        System.out.println(member.getLoanList());
+
+        assertFalse(loanManager.checkIfBorrowerHasReachedMaxLoan(member));
+
+    }
+
 
 
     @Test

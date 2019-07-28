@@ -42,6 +42,7 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public boolean addLoan(Loan loan) {
+        logger.info("trying to add loan");
         try {
             sessionFactory.getCurrentSession().flush();
             sessionFactory.getCurrentSession().persist(loan);
@@ -49,6 +50,7 @@ public class LoanDAOImpl implements LoanDAO {
             logger.error("error while persisting: " + e.getMessage());
             return false;
         }
+        logger.info("loan added successfully");
         return true;
     }
 
