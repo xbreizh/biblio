@@ -20,6 +20,8 @@ public interface MailManager {
 
     List<Mail> getPasswordResetList(String token);
 
-    List<Loan> getLoansReadyForStart();
+    List<Mail> getLoansReadyForStart();
+
+    Date calculateEndAvailableDate(Loan loan, int nbdays);
 
 }

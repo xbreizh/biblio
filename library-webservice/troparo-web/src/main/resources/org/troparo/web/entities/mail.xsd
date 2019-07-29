@@ -4,6 +4,24 @@
             elementFormDefault="qualified">
 
     <!-- Get Mail by Criterias Request Type -->
+    <xsd:element name="getLoanReadyRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Mail by Criterias Response Type -->
+    <xsd:element name="getLoanReadyResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MailListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get Mail by Criterias Request Type -->
     <xsd:element name="getPasswordResetListRequest">
         <xsd:complexType>
             <xsd:sequence>
@@ -81,6 +99,7 @@
                 <xsd:element name="FirstName" type="xsd:string"/>
                 <xsd:element name="LastName" type="xsd:string"/>
                 <xsd:element name="DueDate" type="xsd:date"/>
+                <xsd:element name="EndAvailableDate" type="xsd:date"/>
                 <xsd:element name="DiffDays" type="xsd:int"/>
                 <xsd:element name="Isbn" type="xsd:string"/>
                 <xsd:element name="Title" type="xsd:string"/>

@@ -9,10 +9,20 @@ public class Mail {
     private int diffDays;
     private Book book;
     private Member member;
+    private Date endAvailableDate;
+
 
     public Mail() {
         book = new Book();
         member = new Member();
+    }
+
+    public Date getEndAvailableDate() {
+        return endAvailableDate;
+    }
+
+    public void setEndAvailableDate(Date endAvailableDate) {
+        this.endAvailableDate = endAvailableDate;
     }
 
     public String getToken() {

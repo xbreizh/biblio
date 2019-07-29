@@ -17,6 +17,7 @@ import org.troparo.model.Member;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -41,6 +42,26 @@ class MailManagerImplTest {
         loanManager.setLoanDAO(loanDAO);
     }
 
+
+    @Test
+    @DisplayName("should add 2 days to date")
+    void calculateEndAvailableDate() throws ParseException {
+        Loan loan = new Loan();
+        String dt = "2008-01-01";  // Start date
+        String dt2 = "2008-01-05";  // Start date
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(sdf.parse(dt));
+        Date availableDate=c.getTime();
+
+        c.setTime(sdf.parse(dt2));
+        Date endAvailable = c.getTime();
+        loan.setAvailableDate(availableDate);
+
+        assertEquals(endAvailable, mailManager.calculateEndAvailableDate(loan, 4));
+
+    }
 
     @Test
     @DisplayName("should set loanmanager")

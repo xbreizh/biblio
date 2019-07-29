@@ -11,6 +11,12 @@
                         schemaLocation="../../entities/mail.xsd"/>
         </xsd:schema>
     </wsdl:types>
+    <wsdl:message name="getLoanReadyRequest">
+        <wsdl:part element="mail:getLoanReadyRequest" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getLoanReadyResponse">
+        <wsdl:part element="mail:getLoanReadyResponse" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="getOverdueMailListRequest">
         <wsdl:part element="mail:getOverdueMailListRequest" name="parameters"/>
     </wsdl:message>
@@ -38,6 +44,11 @@
             <wsdl:output message="tns:getPasswordResetListResponse"/>
             <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
         </wsdl:operation>
+        <wsdl:operation name="getLoanReady">
+            <wsdl:input message="tns:getLoanReadyRequest"/>
+            <wsdl:output message="tns:getLoanReadyResponse"/>
+            <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
+        </wsdl:operation>
     </wsdl:portType>
 
     <wsdl:binding name="MailServiceSOAPBinding" type="tns:IMailService">
@@ -58,6 +69,19 @@
         </wsdl:operation>
 
         <wsdl:operation name="getOverdueMailList">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMail">
+                <soap:fault name="businessExceptionMail" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getLoanReady">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>

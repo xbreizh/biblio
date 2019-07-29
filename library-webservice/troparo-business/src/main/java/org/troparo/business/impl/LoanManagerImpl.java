@@ -433,6 +433,10 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
+    @Override
+    public int getNbDaysReservation() {
+        return nbDaysReservation;
+    }
 
     @Override
     public void fillPendingReservation(){

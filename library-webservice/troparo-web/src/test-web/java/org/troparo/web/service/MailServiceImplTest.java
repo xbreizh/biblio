@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.impl.MailManagerImpl;
+import org.troparo.entities.mail.GetLoanReadyRequest;
 import org.troparo.entities.mail.GetOverdueMailListRequest;
 import org.troparo.entities.mail.MailListType;
 import org.troparo.entities.mail.MailTypeOut;
@@ -56,6 +57,18 @@ class MailServiceImplTest {
         parameters.setToken("tchok");
         //assertDoesNotThrow(()->mailService.getOverdueMailList(parameters));
         assertNotNull(mailService.getOverdueMailList(parameters));
+    }
+
+    @Test
+    @DisplayName("should return mail list")
+    void getReadyMailList() throws BusinessExceptionMail {
+        List<Mail> list = new ArrayList<>();
+        when(connectService.checkToken(anyString())).thenReturn(true);
+        when(mailManager.getLoansReadyForStart()).thenReturn(list);
+        GetLoanReadyRequest parameters = new GetLoanReadyRequest();
+        parameters.setToken("tchok");
+        //assertDoesNotThrow(()->mailService.getOverdueMailList(parameters));
+        assertNotNull(mailService.getLoanReady(parameters));
     }
 
     @Test
@@ -116,7 +129,7 @@ class MailServiceImplTest {
         String email = "sasa@test.test";
         mail.setEmail(email);
         mailList.add(mail);
-        listType = mailService.convertmailListIntoMailListType(mailList);
+        listType = mailService.convertMailListIntoMailListType(mailList);
         MailTypeOut mailTypeOut = listType.getMailTypeOut().get(0);
         assertAll(
                 () -> assertEquals(author, mailTypeOut.getAuthor()),

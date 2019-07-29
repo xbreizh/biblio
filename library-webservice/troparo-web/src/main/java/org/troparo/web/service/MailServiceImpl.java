@@ -37,12 +37,32 @@ public class MailServiceImpl implements IMailService {
     public GetPasswordResetListResponse getPasswordResetList(GetPasswordResetListRequest parameters) {
         GetPasswordResetListResponse ar = new GetPasswordResetListResponse();
         List<Mail> mailList = mailManager.getPasswordResetList(parameters.getToken());
-        ar.setPasswordResetListType(convertmailListIntoPasswordResetlistType(mailList));
+        ar.setPasswordResetListType(convertMailListIntoPasswordResetListType(mailList));
 
         return ar;
     }
 
-    private PasswordResetListType convertmailListIntoPasswordResetlistType(List<Mail> mailList) {
+    @Override
+    public GetOverdueMailListResponse getOverdueMailList(GetOverdueMailListRequest parameters) throws BusinessExceptionMail {
+        checkAuthentication(parameters.getToken());
+        GetOverdueMailListResponse ar = new GetOverdueMailListResponse();
+        List<Mail> mailList = mailManager.getOverdueEmailList();
+        MailListType mailListType = convertMailListIntoMailListType(mailList);
+        ar.setMailListType(mailListType);
+        return ar;
+    }
+
+    @Override
+    public GetLoanReadyResponse getLoanReady(GetLoanReadyRequest parameters) throws BusinessExceptionMail {
+        checkAuthentication(parameters.getToken());
+        GetLoanReadyResponse ar = new GetLoanReadyResponse();
+        List<Mail> mailList = mailManager.getLoansReadyForStart();
+        MailListType mailListType = convertMailListIntoMailListType(mailList);
+        ar.setMailListType(mailListType);
+        return ar;
+    }
+
+    private PasswordResetListType convertMailListIntoPasswordResetListType(List<Mail> mailList) {
         PasswordResetListType passwordResetListType = new PasswordResetListType();
         for (Mail mail : mailList) {
             PasswordResetTypeOut passwordResetTypeOut = new PasswordResetTypeOut();
@@ -55,33 +75,28 @@ public class MailServiceImpl implements IMailService {
         return passwordResetListType;
     }
 
-    @Override
-    public GetOverdueMailListResponse getOverdueMailList(GetOverdueMailListRequest parameters) throws BusinessExceptionMail {
-        checkAuthentication(parameters.getToken());
-        GetOverdueMailListResponse ar = new GetOverdueMailListResponse();
-        List<Mail> mailList = mailManager.getOverdueEmailList();
-        MailListType mailListType = convertmailListIntoMailListType(mailList);
-        ar.setMailListType(mailListType);
-        return ar;
-    }
 
 
-    MailListType convertmailListIntoMailListType(List<Mail> mailList) {
+
+    MailListType convertMailListIntoMailListType(List<Mail> mailList) {
         MailListType mlt = new MailListType();
-
+        logger.info("converting mailList into MailTypeOut list");
 
         for (Mail mail : mailList) {
-            MailTypeOut mout = new MailTypeOut();
-            mout.setEmail(mail.getEmail());
-            mout.setFirstName(mail.getFirstName());
-            mout.setLastName(mail.getLastName());
-            mout.setDueDate(dateConvertedHelper.convertDateIntoXmlDate(mail.getDueDate()));
-            mout.setDiffDays(mail.getDiffDays());
-            mout.setIsbn(mail.getIsbn());
-            mout.setTitle(mail.getTitle());
-            mout.setAuthor(mail.getAuthor());
-            mout.setEdition(mail.getEdition());
-            mlt.getMailTypeOut().add(mout);
+            MailTypeOut mailTypeOut = new MailTypeOut();
+            mailTypeOut.setEmail(mail.getEmail());
+            mailTypeOut.setFirstName(mail.getFirstName());
+            mailTypeOut.setLastName(mail.getLastName());
+            logger.info("converting due date");
+            mailTypeOut.setDueDate(dateConvertedHelper.convertDateIntoXmlDate(mail.getDueDate()));
+            mailTypeOut.setDiffDays(mail.getDiffDays());
+            logger.info("converting endAvailable date");
+            mailTypeOut.setEndAvailableDate(dateConvertedHelper.convertDateIntoXmlDate(mail.getEndAvailableDate()));
+            mailTypeOut.setIsbn(mail.getIsbn());
+            mailTypeOut.setTitle(mail.getTitle());
+            mailTypeOut.setAuthor(mail.getAuthor());
+            mailTypeOut.setEdition(mail.getEdition());
+            mlt.getMailTypeOut().add(mailTypeOut);
 
         }
 

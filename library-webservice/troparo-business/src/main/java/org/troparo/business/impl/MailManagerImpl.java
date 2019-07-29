@@ -46,11 +46,14 @@ public class MailManagerImpl implements MailManager {
     }
 
     @Override
-    public List<Loan> getLoansReadyForStart() {
-        return loanDAO.getLoansReadyForStart();
+    public List<Mail> getLoansReadyForStart() {
+        logger.info("getting loans ready for start");
+        List<Loan> loans = loanDAO.getLoansReadyForStart();
+        return gettingDataForLoan(loans);
     }
 
     List<Mail> gettingDataForLoan(List<Loan> loans) {
+        logger.info("preparing mail list");
         List<Mail> mailList = new ArrayList<>();
         for (Loan loan : loans
         ) {
@@ -63,11 +66,27 @@ public class MailManagerImpl implements MailManager {
             mail.setAuthor(loan.getBook().getAuthor());
             mail.setEdition(loan.getBook().getEdition());
             mail.setDueDate(loan.getPlannedEndDate());
-            int overDays = calculateDaysBetweenDates(getTodaySDate(), loan.getPlannedEndDate());
-            mail.setDiffDays(overDays);
+            mail.setEndAvailableDate(calculateEndAvailableDate(loan, loanManager.getNbDaysReservation()));
+            if(loan.getPlannedEndDate()!=null){
+                int overDays = calculateDaysBetweenDates(getTodaySDate(), loan.getPlannedEndDate());
+                mail.setDiffDays(overDays);
+            }
             mailList.add(mail);
         }
         return mailList;
+    }
+
+
+
+    @Override
+    public Date calculateEndAvailableDate(Loan loan,int  nbDays){
+        logger.debug("calculating endAvailable date");
+        Date availableDate = loan.getAvailableDate();
+        Calendar c = Calendar.getInstance();
+        c.setTime(availableDate);
+        c.add(Calendar.DATE, nbDays);  // number of days to add
+       return c.getTime();
+
     }
 
     Date getTodaySDate() {

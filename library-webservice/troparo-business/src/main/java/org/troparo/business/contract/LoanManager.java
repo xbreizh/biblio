@@ -42,5 +42,7 @@ public interface LoanManager {
 
     void cleanupExpiredReservation();
 
+    int getNbDaysReservation();
+
 
 }
