@@ -29,4 +29,9 @@ public interface LoanDAO {
 
     Book getNextAvailableBook(String isbn);
 
+    boolean cleanupExpiredReservation(int expiration);
+
+    int cleanupExpiredReservationCount(int expiration);
+
+
 }

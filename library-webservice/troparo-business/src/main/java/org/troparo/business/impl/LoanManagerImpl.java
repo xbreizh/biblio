@@ -4,6 +4,7 @@ package org.troparo.business.impl;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
@@ -14,7 +15,6 @@ import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
 
@@ -23,12 +23,12 @@ import java.util.*;
 @Transactional
 @Named
 public class LoanManagerImpl implements LoanManager {
-    @Inject
-    LoanDAO loanDAO;
-    @Inject
-    BookManager bookManager;
-    @Inject
-    MemberManager memberManager;
+
+    private LoanDAO loanDAO;
+
+    private BookManager bookManager;
+
+    private MemberManager memberManager;
     @Value("${loanDuration}")
     private String loanDurationString;
     private int loanDuration;
@@ -41,6 +41,9 @@ public class LoanManagerImpl implements LoanManager {
     @Value("${maxReserve}")
     private String maxReserveString;
     private int maxReserve;
+    @Value("${nbDaysReservation}")
+    private String nbDaysReservationString;
+    private int nbDaysReservation;
     private static final String STATUS = "status";
     private static final String LOGIN = "login";
 
@@ -49,8 +52,13 @@ public class LoanManagerImpl implements LoanManager {
         return maxReserve;
     }
 
+    public LoanManagerImpl(LoanDAO loanDAO, BookManager bookManager, MemberManager memberManager) {
+        this.loanDAO = loanDAO;
+        this.bookManager = bookManager;
+        this.memberManager = memberManager;
+    }
 
-    private static  Logger logger = Logger.getLogger(LoanManagerImpl.class);
+    private static Logger logger = Logger.getLogger(LoanManagerImpl.class);
 
     public LoanManagerImpl() {
         workaroundConfigFile();
@@ -77,12 +85,18 @@ public class LoanManagerImpl implements LoanManager {
         } else {
             maxReserve = 3;
         }
+        if (nbDaysReservationString != null && !nbDaysReservationString.isEmpty()) {
+            nbDaysReservation = Integer.parseInt(nbDaysReservationString);
+        } else {
+            nbDaysReservation = 3;
+        }
     }
+
 
     @Override
     public String addLoan(String login, int id) {
         logger.info("trying to add loan");
-        logger.info("login: "+login);
+        logger.info("login: " + login);
         Member member = memberManager.getMemberByLogin(login);
         Book book = bookManager.getBookById(id);
         String x = checkAddLoanDetailsAreValid(member, book);
@@ -100,11 +114,11 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     private String checkAddLoanDetailsAreValid(Member member, Book book) {
-        logger.info("member to check: "+member);
+        logger.info("member to check: " + member);
 
-        if(member == null) return "Invalid member";
+        if (member == null) return "Invalid member";
 
-        if(book == null) return "Invalid book";
+        if (book == null) return "Invalid book";
 
         if (checkIfBorrowerHasReachedMaxLoan(member)) return "max number of books rented reached";
 
@@ -114,22 +128,22 @@ public class LoanManagerImpl implements LoanManager {
 
     boolean checkIfBorrowerHasReachedMaxLoan(Member member) {
         logger.info("checking if max loans reached");
-        logger.info("memberList: "+member.getLoanList());
-        if(member.getLoanList()==null || member.getLoanList().isEmpty()){
+        logger.info("memberList: " + member.getLoanList());
+        if (member.getLoanList() == null || member.getLoanList().isEmpty()) {
             logger.info("member list empty");
             return false;
         }
         List<Loan> wholeLoanList = new ArrayList<>();
-        for (Loan loan: member.getLoanList()
-             ) {
-            if (loan.getStartDate() !=null && loan.getEndDate()!=null){
+        for (Loan loan : member.getLoanList()
+        ) {
+            if (loan.getStartDate() != null && loan.getEndDate() != null) {
                 wholeLoanList.add(loan);
                 logger.info("adding loan");
             }
         }
-        logger.info("current Loans: "+wholeLoanList.size());
+        logger.info("current Loans: " + wholeLoanList.size());
 
-      return wholeLoanList.size() >= maxBooks;
+        return wholeLoanList.size() >= maxBooks;
 
     }
 
@@ -142,7 +156,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public String reserve(String token, String isbn) {
-        logger.info("trying to reserve: "+isbn);
+        logger.info("trying to reserve: " + isbn);
         Member member = memberManager.getMemberByToken(token);
         String x1 = checkReserveLoanDetailsAreValid(member, isbn);
         if (!x1.isEmpty()) return x1;
@@ -151,16 +165,15 @@ public class LoanManagerImpl implements LoanManager {
         loan.setReservationDate(getTodayDate());
         loan.setBorrower(member);
         if (!(loanDAO.addLoan(loan))) return "Issue while reserving";
-        logger.info("loan has been reserved: "+isbn);
+        logger.info("loan has been reserved: " + isbn);
         getBookIfAvailable(loan);
-        if(loan.getBook()!=null){
+        if (loan.getBook() != null) {
             loan.setAvailableDate(getTodayDate());
             loanDAO.updateLoan(loan);
             return "The book has been reserved and is available for collection for 4 days";
         }
         return "The book has been reserved but is currently unavailable. We will contact you as soon as it's ready";
     }
-
 
 
     private void getBookIfAvailable(Loan loan) {
@@ -171,7 +184,7 @@ public class LoanManagerImpl implements LoanManager {
 
     @Override
     public boolean checkinBooking(String token, int id) {
-        if (!memberManager.checkAdmin(token))return false;
+        if (!memberManager.checkAdmin(token)) return false;
 
         Loan loan = loanDAO.getLoanById(id);
         return loanDAO.updateLoan(loan);
@@ -184,13 +197,13 @@ public class LoanManagerImpl implements LoanManager {
 
         x = checkBookAndMemberValidity(member, isbn);
         if (!x.isEmpty()) {
-        logger.error("error found: "+x);
+            logger.error("error found: " + x);
             return x;
         }
 
         x = checkIfReserveLimitNotReached(member.getLogin());
         if (!x.isEmpty()) {
-            logger.error("error found: "+x);
+            logger.error("error found: " + x);
             return x;
         }
 
@@ -199,11 +212,9 @@ public class LoanManagerImpl implements LoanManager {
 
 
     String checkLoanStartDateIsNotInPastOrNull(Date date) {
-        if (date == null || date.before(getTodayDate()))return "startDate should be in the future";
+        if (date == null || date.before(getTodayDate())) return "startDate should be in the future";
         return "";
     }
-
-
 
 
     boolean checkIfOverDue(Member member) {
@@ -224,40 +235,39 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
-
-
     String checkBookAndMemberValidity(Member member, String isbn) {
 
-        if ( member== null) {
+        if (member == null) {
             return "invalid member";
         }
-        if (bookManager.getBookByIsbn(isbn)==null) {
+        if (bookManager.getBookByIsbn(isbn) == null) {
             return "invalid book";
         }
 
-        if(checkIfBorrowerHasReachedMaxLoan(member))return "Max Loans reached";
+        if (checkIfBorrowerHasReachedMaxLoan(member)) return "Max Loans reached";
 
-        if(checkIfOverDue(member))return "There are Overdue Items";
+        if (checkIfOverDue(member)) return "There are Overdue Items";
 
         // if borrower already has the book in renting, he can't reserve it
-        if (checkIfSimilarLoanPlannedOrInProgress(member, isbn)) return "That book is already has a renting in progress or planned for that user";
+        if (checkIfSimilarLoanPlannedOrInProgress(member, isbn))
+            return "That book is already has a renting in progress or planned for that user";
         return "";
     }
 
     boolean checkIfSimilarLoanPlannedOrInProgress(Member member, String isbn) {
-       List<Loan> loanList = loanDAO.getLoanByLogin(member.getLogin());
-        logger.info("isbn received : "+isbn);
-       if(loanList!=null && !loanList.isEmpty()){
-           for(Loan loan: loanList){
-               logger.info("isbn from loan: "+loan.getIsbn());
-               logger.info("end date: "+loan.getEndDate());
-               if (loan.getIsbn().equals(isbn) && loan.getStartDate() !=null && loan.getEndDate() ==null){
-                   logger.error("there is already a loan with that book and that login");
-                   return true;
-               }
-           }
-       }
-       return false;
+        List<Loan> loanList = loanDAO.getLoanByLogin(member.getLogin());
+        logger.info("isbn received : " + isbn);
+        if (loanList != null && !loanList.isEmpty()) {
+            for (Loan loan : loanList) {
+                logger.info("isbn from loan: " + loan.getIsbn());
+                logger.info("end date: " + loan.getEndDate());
+                if (loan.getIsbn().equals(isbn) && loan.getStartDate() != null && loan.getEndDate() == null) {
+                    logger.error("there is already a loan with that book and that login");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
 
@@ -330,19 +340,19 @@ public class LoanManagerImpl implements LoanManager {
     @Override
     public String cancelLoan(String token, int id) {
         Member member = memberManager.getMemberByToken(token);
-        if (member==null)return "Invalid Member";
+        if (member == null) return "Invalid Member";
         Loan loan = loanDAO.getLoanById(id);
-        if(loan==null) return "Invalid Loan";
-        if(memberManager.checkAdmin(token)|| (loan.getBorrower().equals(member) && loan.getStartDate()==null )){
-           loan.setEndDate(getTodayDate());
-           if(loanDAO.updateLoan(loan))return "The loan has been cancelled";
+        if (loan == null) return "Invalid Loan";
+        if (memberManager.checkAdmin(token) || (loan.getBorrower().equals(member) && loan.getStartDate() == null)) {
+            loan.setEndDate(getTodayDate());
+            if (loanDAO.updateLoan(loan)) return "The loan has been cancelled";
 
         }
         return "You can't remove that loan, please contact the Administration";
     }
 
 
-    public boolean checkIfPendingReservation(String isbn){
+    public boolean checkIfPendingReservation(String isbn) {
         return loanDAO.getPendingReservation(isbn) != null;
 
     }
@@ -404,14 +414,21 @@ public class LoanManagerImpl implements LoanManager {
 
     public void transferBookToPendingLoanIfAny(Book book) {
         Loan pendingLoan = loanDAO.getPendingReservation(book.getIsbn());
-        if (pendingLoan!=null){
+        if (pendingLoan != null) {
             pendingLoan.setBook(book);
             pendingLoan.setAvailableDate(getTodayDate());
             loanDAO.updateLoan(pendingLoan);
             logger.info("pending loan updated");
-        }else{
+        } else {
             logger.info("no pending loan");
         }
+    }
+
+    @Override
+    @Scheduled(cron = "5 0 * * *")
+    public void cleanupExpiredReservation() {
+        logger.info("cleaning expired reservations");
+        loanDAO.cleanupExpiredReservation(nbDaysReservation);
     }
 
 
@@ -423,7 +440,7 @@ public class LoanManagerImpl implements LoanManager {
         logger.info("today: " + today);
         try {
             loan = loanDAO.getLoanById(id);
-            if (loan.getStartDate()==null) {
+            if (loan.getStartDate() == null) {
                 logger.info("it's planned");
                 return "PLANNED";
             }
@@ -433,7 +450,7 @@ public class LoanManagerImpl implements LoanManager {
             if (loan.getPlannedEndDate().before(today)) {
                 return "OVERDUE";
             }
-                return "PROGRESS";
+            return "PROGRESS";
 
         } catch (NullPointerException e) {
             logger.error("error while getting loan status");

@@ -140,7 +140,7 @@ public class MemberServiceImpl implements IMemberService {
     }
 
     BookTypeOut convertBookIntoBookTypeOut(Book book) {
-        if(book==null)return null;
+        if (book == null) return null;
         BookTypeOut bookTypeOut = new BookTypeOut();
         bookTypeOut.setId(book.getId());
         bookTypeOut.setISBN(book.getIsbn());
@@ -223,7 +223,7 @@ public class MemberServiceImpl implements IMemberService {
 
 
         logger.info("after: " + newMap.size());
-        memberList = memberManager.getMembersByCriterias(newMap);
+        memberList = memberManager.getMembersByCriteria(newMap);
         GetMemberByCriteriasResponseType getMemberByCriteriasResponseType = new GetMemberByCriteriasResponseType();
         logger.info("memberListType beg: " + memberListType.getMemberTypeOut().size());
 

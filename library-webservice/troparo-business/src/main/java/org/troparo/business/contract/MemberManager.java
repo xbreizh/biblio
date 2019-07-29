@@ -18,7 +18,7 @@ public interface MemberManager {
 
     Member getMemberByLogin(String login);
 
-    List<Member> getMembersByCriterias(Map<String, String> map);
+    List<Member> getMembersByCriteria(Map<String, String> map);
 
     String updateMember(Member member);
 

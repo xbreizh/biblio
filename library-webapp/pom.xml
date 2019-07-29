@@ -13,7 +13,7 @@
         <projectName>library</projectName>
         <project.version>1.0-SNAPSHOT</project.version>
         <failOnMissingWebXml>false</failOnMissingWebXml>
-        <github-sha>9abbeec7be0eaff9535858b60630b43f9284a776</github-sha>
+        <github-sha>1e31deabefaf34c0b539ba2310eac50556289c4d</github-sha>
         <cxf.version>3.2.7</cxf.version>
         <jdk.version>8</jdk.version>
         <spring.version>5.1.5.RELEASE</spring.version>

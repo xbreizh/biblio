@@ -133,7 +133,7 @@ class MemberManagerImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("login", "Maurice");
         when(memberDAO.getMembersByCriterias(map)).thenReturn(list);
-        assertNotNull(memberManager.getMembersByCriterias(map));
+        assertNotNull(memberManager.getMembersByCriteria(map));
     }
 
     @Test
@@ -141,8 +141,8 @@ class MemberManagerImplTest {
     void getMembersByCriterias1() {
         Map<String, String> map = new HashMap<>();
         assertAll(
-                () -> assertEquals(0, memberManager.getMembersByCriterias(map).size()),
-                () -> assertEquals(0, memberManager.getMembersByCriterias(null).size())
+                () -> assertEquals(0, memberManager.getMembersByCriteria(map).size()),
+                () -> assertEquals(0, memberManager.getMembersByCriteria(null).size())
         );
 
     }
@@ -151,7 +151,7 @@ class MemberManagerImplTest {
     @DisplayName("should return empty list if member criterias not existing")
     void getMembersByCriterias2() {
         Map<String, String> map = new HashMap<>();
-        assertEquals(0, memberManager.getMembersByCriterias(map).size());
+        assertEquals(0, memberManager.getMembersByCriteria(map).size());
     }
 
 
@@ -160,7 +160,7 @@ class MemberManagerImplTest {
     void getMembersByCriterias3() {
         Map<String, String> map = new HashMap<>();
         map.put("firstname", "");
-        assertEquals(0, memberManager.getMembersByCriterias(map).size());
+        assertEquals(0, memberManager.getMembersByCriteria(map).size());
     }
 
     @Test
@@ -168,7 +168,7 @@ class MemberManagerImplTest {
     void getMembersByCriterias4() {
         Map<String, String> map = new HashMap<>();
         map.put("firstname", "?");
-        assertEquals(0, memberManager.getMembersByCriterias(map).size());
+        assertEquals(0, memberManager.getMembersByCriteria(map).size());
     }
 
     // UPDATE MEMBER

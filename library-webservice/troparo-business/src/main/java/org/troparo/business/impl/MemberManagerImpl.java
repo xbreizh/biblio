@@ -1,6 +1,5 @@
 package org.troparo.business.impl;
 
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
@@ -10,7 +9,6 @@ import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -29,9 +27,13 @@ public class MemberManagerImpl implements MemberManager {
     private String pepper;
     private static Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
-    public MemberManagerImpl() {
+    /*public MemberManagerImpl() {
         logger.info("peppper was null");
         pepper = "TIPIAK";
+    }*/
+
+
+    public MemberManagerImpl() {
     }
 
     public void setMemberDAO(MemberDAO memberDAO) {
@@ -139,19 +141,19 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     @Override
-    public List<Member> getMembersByCriterias(Map<String, String> map) {
+    public List<Member> getMembersByCriteria(Map<String, String> map) {
         List<Member> memberList = new ArrayList<>();
         if (map == null || map.isEmpty()) return memberList;
-        Map<String, String> criterias = new HashMap<>();
+        Map<String, String> criteria = new HashMap<>();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getValue().equals("?") && !entry.getValue().equals("")) {
-                criterias.put(entry.getKey(), entry.getValue());
+                criteria.put(entry.getKey(), entry.getValue());
             }
         }
-        if (criterias.isEmpty()) return memberList;
-        logger.info("criterias: " + criterias);
-        return memberDAO.getMembersByCriterias(criterias);
+        if (criteria.isEmpty()) return memberList;
+        logger.info("criteria: " + criteria);
+        return memberDAO.getMembersByCriterias(criteria);
     }
 
 

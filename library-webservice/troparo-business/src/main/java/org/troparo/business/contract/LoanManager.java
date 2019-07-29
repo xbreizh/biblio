@@ -37,4 +37,6 @@ public interface LoanManager {
     boolean checkIfPendingReservation(String isbn);
 
     void transferBookToPendingLoanIfAny(Book book);
+
+    void cleanupExpiredReservation();
 }

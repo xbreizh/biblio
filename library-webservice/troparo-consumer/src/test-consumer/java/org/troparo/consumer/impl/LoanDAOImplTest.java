@@ -15,7 +15,7 @@ import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
-
+import static org.mockito.Mockito.*;
 import javax.inject.Inject;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -367,6 +367,24 @@ class LoanDAOImplTest {
         map.put("status", "");
         assertEquals("", loanDAO.addStatusToRequest(map));
     }
+
+    @Test
+    @DisplayName("should return true when cleaning expired reservations")
+    void cleanupExpiredReservation() {
+
+        assertTrue( loanDAO.cleanupExpiredReservation(4));
+
+    }
+
+
+    @Test
+    @DisplayName("should return 1")
+    void cleanupExpiredReservationCount() {
+        assertEquals(1, loanDAO.cleanupExpiredReservationCount(4));
+    }
+
+
+
 
     @Test
     @DisplayName("should return \"where endDate is not null\" if empty map")

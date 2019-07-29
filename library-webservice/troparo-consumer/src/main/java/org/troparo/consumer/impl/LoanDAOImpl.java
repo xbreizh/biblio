@@ -137,12 +137,11 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public Book getNextAvailableBook(String isbn) {
-        String request;
         List<Book> bookList;
         if (isbn == null) return null;
         isbn = "'" + isbn.toUpperCase() + "'";
         logger.info("ISBN received: " + isbn);
-        request =
+        String request =
                 "select * from Book where isbn = " + isbn + " and exists(" +
                         "select book_id from loan where isbn = " + isbn + " and end_date is null)";
         try {
@@ -154,6 +153,55 @@ public class LoanDAOImpl implements LoanDAO {
         }
         return null;
     }
+
+    @Override
+    public boolean cleanupExpiredReservation(int expiration) {
+        StringBuilder sb = new StringBuilder();
+        int beforeCleanup = cleanupExpiredReservationCount(expiration);
+        logger.info("number reservations to clean: "+beforeCleanup);
+        try {
+            sb.append("update loan set end_date = current_date where available_date < (now() - interval ");
+            sb.append( "'"+expiration+" day'");
+            sb.append(") and start_date is null and end_date is null");
+
+
+            Query query = sessionFactory.getCurrentSession().createNativeQuery(
+                    sb.toString());
+
+            query.executeUpdate();
+            int afterCleanup = cleanupExpiredReservationCount(expiration);
+            logger.info("number reservations to clean: "+afterCleanup);
+            if(afterCleanup==0) return true;
+        }catch (Exception e){
+            logger.error(e.getMessage());
+        }
+        return false;
+    }
+
+    public int cleanupExpiredReservationCount(int expiration) {
+        StringBuilder sb = new StringBuilder();
+
+        try {
+            sb.append("select * from  Loan where available_date < (now() - ");
+            sb.append("interval '"+expiration+" day'");
+            sb.append(") and start_date is null and end_date is null");
+            Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString());
+            logger.info("query: "+sb.toString());
+            if( query.getResultList().isEmpty()) {
+                logger.info("no expired reservation found");
+                return 0;
+            }
+            else{
+                logger.info(query.getFetchSize());
+            return query.getResultList().size();
+            }
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return 999;
+        }
+
+    }
+
 
 
     Date getTodayDate() {
