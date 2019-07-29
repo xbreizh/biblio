@@ -202,6 +202,22 @@ public class LoanDAOImpl implements LoanDAO {
 
     }
 
+    @Override
+    public List<Loan> getAllPendingReservationWithNoBook() {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("From Loan where book.id is null and endDate is null");
+        Query query = sessionFactory.getCurrentSession().createQuery(sb.toString());
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Loan> getLoansReadyForStart() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("From Loan where book.id is not null and availableDate is not null and startDate is null and endDate is null");
+        Query query = sessionFactory.getCurrentSession().createQuery(sb.toString());
+        return query.getResultList();
+    }
 
 
     Date getTodayDate() {

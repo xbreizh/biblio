@@ -14,6 +14,9 @@ import org.troparo.business.impl.LoanManagerImpl;
 import org.troparo.business.impl.MailManagerImpl;
 import org.troparo.consumer.impl.LoanDAOImpl;
 
+import javax.inject.Inject;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
@@ -23,20 +26,21 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class MailManagerImplIntegrationTest {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    /*@Inject*/
+    @Inject
     private MailManager mailManager;
 
-    private LoanManagerImpl loanManager;
-    private LoanDAOImpl loanDAO;
+   /* private LoanManagerImpl loanManager;
+
+    private LoanDAOImpl loanDAO;*/
 
 
     @BeforeEach
     void reset() {
-        mailManager = new MailManagerImpl();
+       /* mailManager = new MailManagerImpl();
         loanManager = new LoanManagerImpl();
         loanDAO = new LoanDAOImpl();
         loanManager.setLoanDAO(loanDAO);
-        mailManager.setLoanManager(loanManager);
+        mailManager.setLoanManager(loanManager);*/
         logger.info("reset db");
     }
 
@@ -47,5 +51,10 @@ class MailManagerImplIntegrationTest {
         assertNotNull(mailManager.getOverdueEmailList());
     }
 
+    @Test
+    @DisplayName("should return loans having books but no startDate")
+    void getLoansReadyForStart(){
+        assertEquals(1, mailManager.getLoansReadyForStart().size());
+    }
 
 }

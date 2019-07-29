@@ -47,9 +47,11 @@ class LoanManagerImplIntegrationTest {
     private BookManager bookManager;
 
 
+
     @BeforeEach
     void reset() {
-        System.out.println("db size loans : " + loanManager.getLoans().size());
+
+        logger.info("db size loans : " + loanManager.getLoans().size());
         logger.info("reset db");
     }
 
@@ -57,7 +59,7 @@ class LoanManagerImplIntegrationTest {
     @Test
     @DisplayName("should return loans from database")
     void getLoans() {
-        assertEquals(5, loanManager.getLoans().size());
+        assertEquals(8, loanManager.getLoans().size());
     }
 
     @Test
@@ -65,7 +67,7 @@ class LoanManagerImplIntegrationTest {
     void getLoansByCriteria1() {
         Map<String, String> map = new HashMap<>();
         map.put("login", "JPOLINO");
-        assertEquals(4, loanManager.getLoansByCriteria(map).size());
+        assertEquals(7, loanManager.getLoansByCriteria(map).size());
     }
 
     @Test
@@ -91,6 +93,8 @@ class LoanManagerImplIntegrationTest {
         map.put("isbn", "8574596258");
         assertEquals(1, loanManager.getLoansByCriteria(map).size());
     }
+
+
 
 
   /*  @Test

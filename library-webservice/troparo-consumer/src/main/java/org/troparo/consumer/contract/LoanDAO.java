@@ -33,5 +33,7 @@ public interface LoanDAO {
 
     int cleanupExpiredReservationCount(int expiration);
 
+    List<Loan> getAllPendingReservationWithNoBook();
 
+    List<Loan> getLoansReadyForStart();
 }

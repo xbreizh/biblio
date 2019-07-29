@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
+import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Loan;
 import org.troparo.model.Mail;
@@ -21,6 +22,8 @@ public class MailManagerImpl implements MailManager {
     LoanManager loanManager;
     @Inject
     MemberDAO memberDAO;
+    @Inject
+    LoanDAO loanDAO;
 
     private static  Logger logger = Logger.getLogger(MailManagerImpl.class);
 
@@ -40,6 +43,11 @@ public class MailManagerImpl implements MailManager {
 
         logger.info("loans: " + loans.size());
         return gettingDataForLoan(loans);
+    }
+
+    @Override
+    public List<Loan> getLoansReadyForStart() {
+        return loanDAO.getLoansReadyForStart();
     }
 
     List<Mail> gettingDataForLoan(List<Loan> loans) {

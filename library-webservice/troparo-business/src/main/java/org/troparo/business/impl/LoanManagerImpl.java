@@ -15,6 +15,7 @@ import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.*;
 
@@ -24,6 +25,7 @@ import java.util.*;
 @Named
 public class LoanManagerImpl implements LoanManager {
 
+    @Inject
     private LoanDAO loanDAO;
 
     private BookManager bookManager;
@@ -52,8 +54,7 @@ public class LoanManagerImpl implements LoanManager {
         return maxReserve;
     }
 
-    public LoanManagerImpl(LoanDAO loanDAO, BookManager bookManager, MemberManager memberManager) {
-        this.loanDAO = loanDAO;
+    public LoanManagerImpl( BookManager bookManager, MemberManager memberManager) {
         this.bookManager = bookManager;
         this.memberManager = memberManager;
     }
@@ -425,10 +426,28 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    @Scheduled(cron = "5 0 * * *")
+    @Scheduled(cron = "5 0 * * 1-5") // runs every week day at 00:05
     public void cleanupExpiredReservation() {
         logger.info("cleaning expired reservations");
         loanDAO.cleanupExpiredReservation(nbDaysReservation);
+    }
+
+
+
+    @Override
+    public void fillPendingReservation(){
+       List<Loan> pendingLoanList = loanDAO.getAllPendingReservationWithNoBook();
+       List<Loan> updatedList = new ArrayList<>();
+       if (!pendingLoanList.isEmpty()){
+           logger.info("pending list is not empty");
+           for (Loan loan: pendingLoanList
+                ) {
+               getBookIfAvailable(loan);
+              updatedList.add(loan);
+           }
+       }
+       logger.info("number of updates: "+updatedList.size());
+
     }
 
 

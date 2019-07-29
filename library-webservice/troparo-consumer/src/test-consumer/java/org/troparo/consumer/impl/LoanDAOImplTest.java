@@ -70,11 +70,25 @@ class LoanDAOImplTest {
 
     }
 
+
+    @Test
+    @DisplayName("should return pending loans with no books")
+    void getAllPendingReservationWithNoBook(){
+        assertEquals(1, loanDAO.getAllPendingReservationWithNoBook().size());
+    }
+
     @Test
     @DisplayName("should return null if invalid isbn")
     void getNextAvailableBook() {
         assertNull(loanDAO.getNextAvailableBook("invalidIsbn"));
 
+    }
+
+
+    @Test
+    @DisplayName("should return loans having books but no startDate")
+    void getLoansReadyForStart(){
+        assertEquals(1, loanDAO.getLoansReadyForStart().size());
     }
 
     @Test
