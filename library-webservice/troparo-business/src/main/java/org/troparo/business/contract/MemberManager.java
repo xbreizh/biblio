@@ -48,4 +48,6 @@ public interface MemberManager {
     boolean requestPasswordLink(String login, String email);
 
     Member getMemberByToken(String token);
+
+    boolean switchReminder(String token, String login);
 }

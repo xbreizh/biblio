@@ -4,6 +4,27 @@
             elementFormDefault="qualified">
 
 
+
+    <!-- Add Reminder Request Type -->
+    <xsd:element name="switchReminderRequestType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+                <xsd:element name="Login" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Add Reminder  Response Type -->
+    <xsd:element name="switchReminderResponseType">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="return" type="xsd:boolean"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+
     <!-- Add Member Request Type -->
     <xsd:element name="addMemberRequestType">
         <xsd:complexType>
@@ -306,6 +327,7 @@
                 <xsd:element name="Email" type="xsd:string"/>
                 <xsd:element name="DateJoin" type="xsd:date"/>
                 <xsd:element name="Role" type="xsd:string"/>
+                <xsd:element name="Reminder" type="xsd:boolean"/>
                 <xsd:element ref="tns:LoanListType"/>
             </xsd:sequence>
         </xsd:complexType>

@@ -53,6 +53,9 @@ public class Member {
     @Column(name = "TOKENEXPIRATION")
     private Date tokenexpiration;
 
+    @Column(name = "REMINDER")
+    private boolean reminder;
+
     @OneToMany(mappedBy = "borrower", fetch = FetchType.EAGER, cascade = {CascadeType.REMOVE})
     private List<Loan> loanList = new ArrayList<>();
 

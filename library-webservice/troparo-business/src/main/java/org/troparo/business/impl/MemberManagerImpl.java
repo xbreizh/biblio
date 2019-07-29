@@ -27,14 +27,6 @@ public class MemberManagerImpl implements MemberManager {
     private String pepper;
     private static Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
-    /*public MemberManagerImpl() {
-        logger.info("peppper was null");
-        pepper = "TIPIAK";
-    }*/
-
-
-    public MemberManagerImpl() {
-    }
 
     public void setMemberDAO(MemberDAO memberDAO) {
         this.memberDAO = memberDAO;
@@ -378,6 +370,23 @@ public class MemberManagerImpl implements MemberManager {
     @Override
     public Member getMemberByToken(String token) {
         return memberDAO.getMemberByToken(token);
+    }
+
+    @Override
+    public boolean switchReminder(String token, String login) {
+        logger.info("switching reminder");
+        Member member = getMemberByLogin(login);
+        if (!checkAdmin(token) && getMemberByToken(token)!=member)return false;
+
+        if(member.isReminder()){
+            member.setReminder(false);
+            logger.info("disabling reminder");
+        }else{
+            member.setReminder(true);
+            logger.info("activating reminder");
+        }
+
+        return memberDAO.updateMember(member);
     }
 
     String generateToken() {

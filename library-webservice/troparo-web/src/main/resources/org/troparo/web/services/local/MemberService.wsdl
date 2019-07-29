@@ -53,6 +53,12 @@
     <wsdl:message name="removeMemberResponse">
         <wsdl:part element="member:removeMemberResponseType" name="parameters"/>
     </wsdl:message>
+    <wsdl:message name="switchReminderRequest">
+        <wsdl:part element="member:switchReminderRequestType" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="switchReminderResponse">
+        <wsdl:part element="member:switchReminderResponseType" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="BusinessExceptionMember">
         <wsdl:part element="member:BusinessMemberFaultType" name="parameters"/>
     </wsdl:message>
@@ -91,6 +97,11 @@
         <wsdl:operation name="removeMember">
             <wsdl:input message="tns:removeMemberRequest"/>
             <wsdl:output message="tns:removeMemberResponse"/>
+            <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
+        </wsdl:operation>
+        <wsdl:operation name="switchReminder">
+            <wsdl:input message="tns:switchReminderRequest"/>
+            <wsdl:output message="tns:switchReminderResponse"/>
             <wsdl:fault name="businessExceptionMember" message="tns:BusinessExceptionMember"/>
         </wsdl:operation>
     </wsdl:portType>
@@ -165,6 +176,19 @@
             </wsdl:fault>
         </wsdl:operation>
         <wsdl:operation name="updateMember">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMember">
+                <soap:fault name="businessExceptionMember" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="switchReminder">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>

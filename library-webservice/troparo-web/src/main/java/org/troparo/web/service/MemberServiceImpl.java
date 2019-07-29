@@ -117,6 +117,15 @@ public class MemberServiceImpl implements IMemberService {
         return (GetMemberByIdResponseType) getMemberResponseType(responseType, memberTypeOut, member);
     }
 
+    @Override
+    public SwitchReminderResponseType switchReminder(SwitchReminderRequestType parameters) throws BusinessExceptionMember {
+        SwitchReminderResponseType responseType = new SwitchReminderResponseType();
+        boolean verdict = memberManager.switchReminder(parameters.getToken(), parameters.getLogin());
+        responseType.setReturn(verdict);
+        logger.info("reminder activation: "+verdict);
+        return responseType;
+    }
+
     LoanListType convertingListOfLoansIntoLoanListMember(List<Loan> loanList) {
         LoanListType loanListType = new LoanListType();
 
@@ -175,6 +184,7 @@ public class MemberServiceImpl implements IMemberService {
             memberTypeOut.setEmail(member.getEmail());
             XMLGregorianCalendar xmlCalendar = dateConvertedHelper.convertDateIntoXmlDate(member.getDateJoin());
             memberTypeOut.setDateJoin(xmlCalendar);
+            memberTypeOut.setReminder(member.isReminder());
 
             // getting the loanList
 
@@ -210,6 +220,8 @@ public class MemberServiceImpl implements IMemberService {
         memberListResponseType.setMemberListType(memberListType);
         return memberListResponseType;
     }
+
+
 
 
     // Get List By Criterias

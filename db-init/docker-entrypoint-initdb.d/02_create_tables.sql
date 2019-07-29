@@ -1,5 +1,4 @@
 
-
 CREATE TABLE public."member"
 (
     id                SERIAL,
@@ -13,6 +12,7 @@ CREATE TABLE public."member"
     "role"            varchar(255) NULL,
     "token"           varchar(255) NULL,
     "tokenexpiration" timestamp    NULL,
+    "reminder"          BOOLEAN NOT NULL,
     CONSTRAINT member_pkey PRIMARY KEY (id)
 );
 
