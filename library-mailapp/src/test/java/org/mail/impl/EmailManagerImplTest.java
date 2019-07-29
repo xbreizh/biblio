@@ -35,6 +35,7 @@ class EmailManagerImplTest {
 
     @BeforeEach
     void init(){
+
         emailManager = spy(EmailManagerImpl.class);
         mailService = mock(MailService.class);
         emailManager.setMailService(mailService);

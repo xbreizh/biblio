@@ -23,6 +23,7 @@
         <spring.version>5.1.8.RELEASE</spring.version>
         <spring-boot-autoconfigure.version>2.1.6.RELEASE</spring-boot-autoconfigure.version>
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
+        <github-sha>8f49d85387ef673a81d0135874124882bb3f77d5</github-sha>
     </properties>
     <profiles>
         <!-- Local profile -->
@@ -42,12 +43,12 @@
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/6528c20e50b02d8baa8ddbc0c378961b5cb857c1/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/${github-sha}/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/MailService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/7ca01dca64527f57e8492caff6a7dde4920cfdea/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/${github-sha}/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>
@@ -82,12 +83,12 @@
                                     <wsdlOptions>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/6528c20e50b02d8baa8ddbc0c378961b5cb857c1/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/MailService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/${github-sha}/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/MailService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/7dfebd539e50f2b83c0956810aef3eb879762222/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/${github-sha}/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>

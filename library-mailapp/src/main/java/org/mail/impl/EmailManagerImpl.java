@@ -3,6 +3,7 @@ package org.mail.impl;
 
 import org.apache.log4j.Logger;
 import org.mail.contract.ConnectManager;
+import org.mail.contract.EmailManager;
 import org.mail.model.Mail;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -37,7 +38,8 @@ import java.util.*;
 @Component
 @PropertySource("classpath:mail.properties")
 @PropertySource("classpath:docker/Overdue.html")
-public class EmailManagerImpl {
+public class EmailManagerImpl implements EmailManager {
+
 
     @Inject
     ConnectManager connectManager;
@@ -51,10 +53,8 @@ public class EmailManagerImpl {
     private static final String AES = "AES";
 
 
-    // */10 * * * * *
-    // "* 00 11 * * *"
-    //@Scheduled(cron = "* 00 11 * * *")
-
+    @Override
+    @Scheduled(cron = "* 00 11 * * *")
     //@Scheduled(fixedRate = 500000)
     public void sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
         String template = "docker/Overdue.html";
@@ -66,8 +66,24 @@ public class EmailManagerImpl {
         }
     }
 
+    @Override
+    @Scheduled(cron = "0 8,14 * * 1-5 *") // runs every week day at 08:00 and 14:00
+    //@Scheduled(fixedRate = 500000)
+    public void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
+        logger.info("sending Book ready email");
+        String template = "docker/LoanReady.html";
+        String subject = "subjectLoanReady";
+        String token = connectManager.authenticate();
+        if (token != null) {
+            List<Mail> loanReady = getReadyList(token);
+            sendEmail(template, subject, loanReady);
+        }
+    }
+
     @Scheduled(fixedRate = 2000000000)
+    @Override
     public void sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
+        logger.info("sending password reset email");
         String template = "docker/resetPassword.html";
         String subject = "subjectPasswordReset";
         String token = connectManager.authenticate();
@@ -78,15 +94,20 @@ public class EmailManagerImpl {
         }
     }
 
-    private void sendEmail(String template, String subject, List<Mail> overdueList) throws MessagingException, IOException {
+    private void sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
+        logger.info("mailList size: " + mailList.size());
         Map<String, String> input;
-        if (overdueList != null && !overdueList.isEmpty()) {
-            for (Mail mail : overdueList
+        if (!mailList.isEmpty()) {
+            for (Mail mail : mailList
             ) {
                 input = getItemsForSubject(subject, mail);
                 if (input != null) {
                     logger.info("sending Email");
                     Message message = prepareMessage(mail, template, subject, input);
+                    logger.info("mail: " + mail);
+                    logger.info("template: " + template);
+                    logger.info("subject: " + subject);
+                    logger.info("input: " + input);
                     Transport.send(message);
                 }
             }
@@ -102,6 +123,9 @@ public class EmailManagerImpl {
                 break;
             case "subjectOverDue":
                 input = getOverdueTemplateItems(mail);
+                break;
+            case "subjectLoanReady":
+                input = getReadyTemplateItems(mail);
                 break;
             default:
                 input = null;
@@ -159,16 +183,16 @@ public class EmailManagerImpl {
     //Method to replace the values for keys
     private String replaceValuesForKeys(String template, Map<String, String> input) throws IOException {
         logger.info("replacing values for keys");
-        String msg=null;
+        String msg = null;
         try {
             File file = new File(EmailManagerImpl.class.getClassLoader().getResource(template).getFile());
             msg = readContentFromFile(file);
 
 
-        Set<Map.Entry<String, String>> entries = input.entrySet();
-        for (Map.Entry<String, String> entry : entries) {
-            msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
-        }
+            Set<Map.Entry<String, String>> entries = input.entrySet();
+            for (Map.Entry<String, String> entry : entries) {
+                msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
+            }
         } catch (NullPointerException e) {
             logger.error("Issue while getting file");
         }
@@ -193,6 +217,26 @@ public class EmailManagerImpl {
         input.put("AUTHOR", mail.getAuthor());
         input.put("EDITION", mail.getEdition());
         return input;
+    }
+
+    private Map<String, String> getReadyTemplateItems(Mail mail) {
+        logger.info("getting overdue template items");
+        //Set key values
+        Map<String, String> input = new HashMap<>();
+        input.put("FIRSTNAME", mail.getFirstname());
+        input.put("LASTNAME", mail.getLastname());
+
+        int overDays = mail.getDiffdays();
+        input.put("Isbn", mail.getIsbn());
+        input.put("DIFFDAYS", Integer.toString(overDays));
+        input.put("TITLE", mail.getTitle());
+        input.put("AUTHOR", mail.getAuthor());
+        input.put("EDITION", mail.getEdition());
+        SimpleDateFormat dt2 = new SimpleDateFormat("dd-MM-yyyy");
+        String endAvailableDate = dt2.format(mail.getEndAvailableDate());
+        input.put("ENDAVAILABLEDATE", endAvailableDate);
+        return input;
+
     }
 
 
@@ -240,6 +284,16 @@ public class EmailManagerImpl {
 
     }
 
+    private List<Mail> getReadyList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
+        logger.info("getting overdue list");
+        GetLoanReadyRequest requestType = new GetLoanReadyRequest();
+        requestType.setToken(token);
+        GetLoanReadyResponse response = getMailServicePort().getLoanReady(requestType);
+
+        return convertReadyListTypeIntoMailList(response);
+
+    }
+
 
     private List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
         logger.info("getting password reset list");
@@ -274,7 +328,32 @@ public class EmailManagerImpl {
     }
 
 
+    private List<Mail> convertReadyListTypeIntoMailList(GetLoanReadyResponse response) throws DatatypeConfigurationException {
+
+
+        List<Mail> mailList = new ArrayList<>();
+
+        for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
+            Mail mail = new Mail();
+            mail.setEmail(mailTypeOut.getEmail());
+            mail.setFirstname(mailTypeOut.getFirstName());
+            mail.setLastname(mailTypeOut.getLastName());
+            mail.setIsbn(mailTypeOut.getIsbn());
+            mail.setTitle(mailTypeOut.getTitle());
+            mail.setAuthor(mailTypeOut.getAuthor());
+            mail.setDiffdays(mailTypeOut.getDiffDays());
+            mail.setEdition(mailTypeOut.getEdition());
+            mail.setEndAvailableDate(convertGregorianCalendarIntoDate(mailTypeOut.getEndAvailableDate().toGregorianCalendar()));
+            mailList.add(mail);
+        }
+        if (!mailList.isEmpty()) logger.info("mailList size: " + mailList.size());
+        return mailList;
+    }
+
+
     List<Mail> convertOverdueListTypeIntoMailList(GetOverdueMailListResponse response) throws DatatypeConfigurationException {
+
+
         List<Mail> mailList = new ArrayList<>();
 
         for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {

@@ -66,7 +66,9 @@ public class MailManagerImpl implements MailManager {
             mail.setAuthor(loan.getBook().getAuthor());
             mail.setEdition(loan.getBook().getEdition());
             mail.setDueDate(loan.getPlannedEndDate());
-            mail.setEndAvailableDate(calculateEndAvailableDate(loan, loanManager.getNbDaysReservation()));
+            if(loan.getAvailableDate()!=null) {
+                mail.setEndAvailableDate(calculateEndAvailableDate(loan, loanManager.getNbDaysReservation()));
+            }
             if(loan.getPlannedEndDate()!=null){
                 int overDays = calculateDaysBetweenDates(getTodaySDate(), loan.getPlannedEndDate());
                 mail.setDiffDays(overDays);

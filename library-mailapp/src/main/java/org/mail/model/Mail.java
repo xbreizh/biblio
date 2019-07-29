@@ -16,6 +16,16 @@ public class Mail {
     private String token;
     private String login;
 
+    public Date getEndAvailableDate() {
+        return endAvailableDate;
+    }
+
+    public void setEndAvailableDate(Date endAvailableDate) {
+        this.endAvailableDate = endAvailableDate;
+    }
+
+    private Date endAvailableDate;
+
     public String getToken() {
         return token;
     }
