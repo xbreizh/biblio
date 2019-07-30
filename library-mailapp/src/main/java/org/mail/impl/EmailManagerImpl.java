@@ -37,7 +37,7 @@ import java.util.*;
 
 @Component
 @PropertySource("classpath:mail.properties")
-@PropertySource("classpath:docker/Overdue.html")
+@PropertySource("classpath:templates/Overdue.html")
 public class EmailManagerImpl implements EmailManager {
 
 
@@ -51,13 +51,14 @@ public class EmailManagerImpl implements EmailManager {
     PropertiesLoad propertiesLoad;
 
     private static final String AES = "AES";
+    private static final String MAIL_LIST_SIZE ="mailList size: ";
 
 
     @Override
     @Scheduled(cron = "* 00 11 * * *")
     //@Scheduled(fixedRate = 500000)
     public void sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
-        String template = "docker/Overdue.html";
+        String template = "templates/Overdue.html";
         String subject = "subjectOverDue";
         String token = connectManager.authenticate();
         if (token != null) {
@@ -67,11 +68,11 @@ public class EmailManagerImpl implements EmailManager {
     }
 
     @Override
-    @Scheduled(cron = "0 8,14 * * 1-5 *") // runs every week day at 08:00 and 14:00
-    //@Scheduled(fixedRate = 500000)
+    //@Scheduled(cron = "0 8,14 * * 1-5 *") // runs every week day at 08:00 and 14:00
+    @Scheduled(fixedRate = 500000)
     public void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
         logger.info("sending Book ready email");
-        String template = "docker/LoanReady.html";
+        String template = "templates/LoanReady.html";
         String subject = "subjectLoanReady";
         String token = connectManager.authenticate();
         if (token != null) {
@@ -80,11 +81,30 @@ public class EmailManagerImpl implements EmailManager {
         }
     }
 
-    @Scheduled(fixedRate = 2000000000)
     @Override
+    @Scheduled(cron = "0 9,13 * * 1-5 *") // runs every week day at 08:00 and 14:00
+    //@Scheduled(fixedRate = 500000)
+    public void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
+        logger.info("sending Reminder email");
+        List<Mail> reminderList ;
+        String template = "templates/Reminder.html";
+        String subject = "subjectReminder";
+        String token = connectManager.authenticate();
+        if (token != null) {
+           reminderList = getReminderList(token);
+            logger.info("list for reminder: "+reminderList.size());
+            sendEmail(template, subject, reminderList);
+        }
+    }
+
+
+
+    //@Scheduled(fixedRate = 2000000000)
+    @Override
+    @Scheduled(fixedRate = 500000)
     public void sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending password reset email");
-        String template = "docker/resetPassword.html";
+        String template = "templates/resetPassword.html";
         String subject = "subjectPasswordReset";
         String token = connectManager.authenticate();
         if (token != null) {
@@ -95,7 +115,7 @@ public class EmailManagerImpl implements EmailManager {
     }
 
     private void sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
-        logger.info("mailList size: " + mailList.size());
+        logger.info(MAIL_LIST_SIZE + mailList.size());
         Map<String, String> input;
         if (!mailList.isEmpty()) {
             for (Mail mail : mailList
@@ -127,6 +147,9 @@ public class EmailManagerImpl implements EmailManager {
             case "subjectLoanReady":
                 input = getReadyTemplateItems(mail);
                 break;
+            case "subjectReminder":
+                input = getReminderTemplateItems(mail);
+                break;
             default:
                 input = null;
                 logger.warn("wrong email subject: " + subject + ", returning null");
@@ -135,12 +158,15 @@ public class EmailManagerImpl implements EmailManager {
         return input;
     }
 
+
+
     private Map<String, String> getPasswordResetTemplateItems(Mail mail) {
         //Set key values
         Map<String, String> input = new HashMap<>();
         input.put("TOKEN", mail.getToken());
         input.put("EMAIL", mail.getEmail());
         input.put("LOGIN", mail.getLogin());
+        input.put("PWDACTION",propertiesLoad.getProperty("pwdResetAction"));
         logger.info("getting template items: " + input);
         return input;
     }
@@ -219,6 +245,10 @@ public class EmailManagerImpl implements EmailManager {
         return input;
     }
 
+    private Map<String, String> getReminderTemplateItems(Mail mail) {
+        return getOverdueTemplateItems(mail);
+    }
+
     private Map<String, String> getReadyTemplateItems(Mail mail) {
         logger.info("getting overdue template items");
         //Set key values
@@ -285,7 +315,7 @@ public class EmailManagerImpl implements EmailManager {
     }
 
     private List<Mail> getReadyList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
-        logger.info("getting overdue list");
+        logger.info("getting ready list");
         GetLoanReadyRequest requestType = new GetLoanReadyRequest();
         requestType.setToken(token);
         GetLoanReadyResponse response = getMailServicePort().getLoanReady(requestType);
@@ -293,6 +323,17 @@ public class EmailManagerImpl implements EmailManager {
         return convertReadyListTypeIntoMailList(response);
 
     }
+
+    private List<Mail> getReminderList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
+        logger.info("getting reminder list");
+        GetReminderMailListRequest requestType = new GetReminderMailListRequest();
+        requestType.setToken(token);
+        GetReminderMailListResponse response = getMailServicePort().getReminderMailList(requestType);
+        logger.info("nb Elements returned: "+response.getMailListType().getMailTypeOut().size());
+        return convertReminderListTypeIntoMailList(response);
+    }
+
+
 
 
     private List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
@@ -323,7 +364,7 @@ public class EmailManagerImpl implements EmailManager {
 
             mailList.add(mail);
         }
-        if (!mailList.isEmpty()) logger.info("mailList size: " + mailList.size());
+        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         return mailList;
     }
 
@@ -346,7 +387,28 @@ public class EmailManagerImpl implements EmailManager {
             mail.setEndAvailableDate(convertGregorianCalendarIntoDate(mailTypeOut.getEndAvailableDate().toGregorianCalendar()));
             mailList.add(mail);
         }
-        if (!mailList.isEmpty()) logger.info("mailList size: " + mailList.size());
+        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
+        return mailList;
+    }
+
+
+    private List<Mail> convertReminderListTypeIntoMailList(GetReminderMailListResponse response) throws DatatypeConfigurationException {
+        List<Mail> mailList = new ArrayList<>();
+        for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
+
+            Mail mail = new Mail();
+            mail.setEmail(mailTypeOut.getEmail());
+            mail.setFirstname(mailTypeOut.getFirstName());
+            mail.setLastname(mailTypeOut.getLastName());
+            mail.setIsbn(mailTypeOut.getIsbn());
+            mail.setTitle(mailTypeOut.getTitle());
+            mail.setAuthor(mailTypeOut.getAuthor());
+            mail.setDiffdays(mailTypeOut.getDiffDays());
+            mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate().toGregorianCalendar()));
+            mail.setEdition(mailTypeOut.getEdition());
+            mailList.add(mail);
+        }
+        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         return mailList;
     }
 
@@ -370,7 +432,7 @@ public class EmailManagerImpl implements EmailManager {
 
             mailList.add(mail);
         }
-        if (!mailList.isEmpty()) logger.info("mailList size: " + mailList.size());
+        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         return mailList;
     }
 

@@ -70,6 +70,7 @@ public class MailServiceImpl implements IMailService {
         List<Mail> mailList = mailManager.getLoansReminder(parameters.getToken());
         MailListType mailListType = convertMailListIntoMailListType(mailList);
         ar.setMailListType(mailListType);
+        logger.info("returning Reminder list");
         return ar;
     }
 
