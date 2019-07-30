@@ -36,4 +36,6 @@ public interface LoanDAO {
     List<Loan> getAllPendingReservationWithNoBook();
 
     List<Loan> getLoansReadyForStart();
+
+    List<Loan> getReminderLoans(int daysReminder);
 }

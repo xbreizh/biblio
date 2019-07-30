@@ -22,6 +22,8 @@ public interface MailManager {
 
     List<Mail> getLoansReadyForStart();
 
-    Date calculateEndAvailableDate(Loan loan, int nbdays);
+    List<Mail> getLoansReminder();
+
+    Date calculateEndAvailableDate(Loan loan, int nbDays);
 
 }

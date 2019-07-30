@@ -84,6 +84,13 @@ class LoanDAOImplTest {
 
     }
 
+    @Test
+    @DisplayName("should return reminder list")
+    void getReminderLoans(){
+        assertEquals(1,loanDAO.getReminderLoans(3).size());
+    }
+
+
 
     @Test
     @DisplayName("should return loans having books but no startDate")

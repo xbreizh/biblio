@@ -27,9 +27,9 @@ public class LoanManagerImpl implements LoanManager {
 
     @Inject
     private LoanDAO loanDAO;
-
+    @Inject
     private BookManager bookManager;
-
+    @Inject
     private MemberManager memberManager;
     @Value("${loanDuration}")
     private String loanDurationString;
@@ -54,10 +54,10 @@ public class LoanManagerImpl implements LoanManager {
         return maxReserve;
     }
 
-    public LoanManagerImpl( BookManager bookManager, MemberManager memberManager) {
+   /* public LoanManagerImpl( BookManager bookManager, MemberManager memberManager) {
         this.bookManager = bookManager;
         this.memberManager = memberManager;
-    }
+    }*/
 
     private static Logger logger = Logger.getLogger(LoanManagerImpl.class);
 
@@ -158,6 +158,7 @@ public class LoanManagerImpl implements LoanManager {
     @Override
     public String reserve(String token, String isbn) {
         logger.info("trying to reserve: " + isbn);
+        logger.info("token received: "+token);
         Member member = memberManager.getMemberByToken(token);
         String x1 = checkReserveLoanDetailsAreValid(member, isbn);
         if (!x1.isEmpty()) return x1;

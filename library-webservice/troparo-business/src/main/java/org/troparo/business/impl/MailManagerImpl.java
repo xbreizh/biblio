@@ -1,6 +1,8 @@
 package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
@@ -17,6 +19,7 @@ import java.util.*;
 
 @Named
 @Transactional
+@PropertySource("classpath:config.properties")
 public class MailManagerImpl implements MailManager {
     @Inject
     LoanManager loanManager;
@@ -24,6 +27,13 @@ public class MailManagerImpl implements MailManager {
     MemberDAO memberDAO;
     @Inject
     LoanDAO loanDAO;
+
+    @Value("${daysReminder}")
+    private int daysReminder;
+
+    public MailManagerImpl() {
+        if (daysReminder==0)daysReminder=5;
+    }
 
     private static  Logger logger = Logger.getLogger(MailManagerImpl.class);
 
@@ -49,6 +59,12 @@ public class MailManagerImpl implements MailManager {
     public List<Mail> getLoansReadyForStart() {
         logger.info("getting loans ready for start");
         List<Loan> loans = loanDAO.getLoansReadyForStart();
+        return gettingDataForLoan(loans);
+    }
+
+    @Override
+    public List<Mail> getLoansReminder() {
+        List<Loan> loans = loanDAO.getReminderLoans(daysReminder);
         return gettingDataForLoan(loans);
     }
 

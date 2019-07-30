@@ -74,7 +74,8 @@ public class Member {
                 ", dateJoin=" + dateJoin +
                 ", dateConnect=" + dateConnect +
                 ", loanList=" + loanList.size() +
-                ", tokenexpiration=" + tokenexpiration +
+                ", tokenExpiration=" + tokenexpiration +
+                ", reminder=" + reminder +
                 '}';
     }
 }

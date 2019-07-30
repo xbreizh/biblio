@@ -202,7 +202,7 @@ public class MemberDAOImpl implements MemberDAO {
 
     @Override
     public Member getMemberByToken(String token) {
-        logger.info("token: " + token);
+        logger.info("trying to get member by token: " + token);
         request = "From Member where token = :token";
 
         Query query = sessionFactory.getCurrentSession().createQuery(request, cl);

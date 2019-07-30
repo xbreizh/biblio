@@ -2,6 +2,7 @@ package org.troparo.business.impl;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -9,6 +10,7 @@ import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.validator.StringValidatorMember;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Member;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.transaction.Transactional;
@@ -17,24 +19,28 @@ import java.util.*;
 @Transactional
 @Named
 @Component
+@Configuration
 @PropertySource("classpath:config.properties")
 public class MemberManagerImpl implements MemberManager {
     @Inject
     MemberDAO memberDAO;
     @Inject
     StringValidatorMember stringValidatorMember;
+
+
     @Value("${pepper}")
     private String pepper;
     private static Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
+    public MemberManagerImpl() {
+        if (pepper==null){
+            pepper="TIPIAK";
+        }
+    }
+
 
     public void setMemberDAO(MemberDAO memberDAO) {
         this.memberDAO = memberDAO;
-    }
-
-    @Override
-    public void setStringValidatorMember(StringValidatorMember stringValidatorMember) {
-        this.stringValidatorMember = stringValidatorMember;
     }
 
     @Override
@@ -231,6 +237,7 @@ public class MemberManagerImpl implements MemberManager {
 
 
     // Login
+
     @Override
     public String getToken(String login, String password) {
         String wrongCredentials = "wrong credentials";
@@ -254,7 +261,6 @@ public class MemberManagerImpl implements MemberManager {
 
         return wrongCredentials;
     }
-
     Date adding20MnToCurrentDate() {
         Date now = getNow();
         Calendar c = Calendar.getInstance();
@@ -304,6 +310,7 @@ public class MemberManagerImpl implements MemberManager {
     }
 
     // Update Password
+
     @Override
     public boolean resetPassword(String login, String password) {
         logger.info("here");
@@ -328,7 +335,6 @@ public class MemberManagerImpl implements MemberManager {
         }
         return false;
     }
-
     @Override
     public boolean checkAdmin(String token) {
         Member m = memberDAO.getMemberByToken(token);
@@ -411,5 +417,10 @@ public class MemberManagerImpl implements MemberManager {
         return uuid;
     }
 
+
+    @Override
+    public void setStringValidatorMember(StringValidatorMember stringValidatorMember) {
+        this.stringValidatorMember = stringValidatorMember;
+    }
 }
 

@@ -121,7 +121,7 @@ public class LoanDAOImpl implements LoanDAO {
     public Loan getPendingReservation(String isbn) {
         logger.info("Isbn received: " + isbn);
         List<Loan> loanList;
-        String request = "From Loan where isbn = :isbn and reservationDate is not null and startDate is null and book_id is null order by reservationDate asc";
+        String request = "From Loan where isbn = :isbn and reservationDate is not null and startDate is null and book.id is null order by reservationDate asc";
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request, cl);
             query.setParameter(ISBN, isbn);
@@ -205,17 +205,29 @@ public class LoanDAOImpl implements LoanDAO {
     @Override
     public List<Loan> getAllPendingReservationWithNoBook() {
 
-        StringBuilder sb = new StringBuilder();
-        sb.append("From Loan where book.id is null and endDate is null");
-        Query query = sessionFactory.getCurrentSession().createQuery(sb.toString());
+        Query query = sessionFactory.getCurrentSession().createQuery("From Loan where book.id is null and endDate is null");
         return query.getResultList();
     }
 
     @Override
     public List<Loan> getLoansReadyForStart() {
+        String request = "From Loan where book.id is not null and availableDate is not null and startDate is null and endDate is null";
+        Query query = sessionFactory.getCurrentSession().createQuery(request);
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Loan> getReminderLoans(int daysReminder) {
         StringBuilder sb = new StringBuilder();
-        sb.append("From Loan where book.id is not null and availableDate is not null and startDate is null and endDate is null");
-        Query query = sessionFactory.getCurrentSession().createQuery(sb.toString());
+        sb.append("select * from ("+
+                "SELECT current_date, id, reservation_date, available_date, start_date, planned_end_date, end_date, isbn, book_id, borrower_id,"+
+                "  EXTRACT(DAY FROM planned_end_date - current_date) as diff "+
+                "FROM loan ) as a where a.diff >=0 and ");
+        sb.append("a.diff <= "+daysReminder);
+        sb.append(" and borrower_id in (select id from member where reminder = true) and end_date is null and start_date is not null and planned_end_date is not null"
+                );
+        logger.info("query: "+sb.toString());
+        Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString());
         return query.getResultList();
     }
 
@@ -224,31 +236,7 @@ public class LoanDAOImpl implements LoanDAO {
         return new Date();
     }
 
-    // @Override
-    public List<Book> getListBooksAvailableOnThoseDates(Loan loan) {
-        String request;
-        List<Book> bookList = new ArrayList<>();
-        logger.info("Title received: " + loan.getBook().getTitle());
-        String title = "'" + loan.getBook().getTitle().toUpperCase() + "'";
-        String loanStartDate = "'" + loan.getStartDate().toString() + "'";
-        String loanPlannedEndDate = "'" + loan.getPlannedEndDate() + "'";
-        request = "select * from Book b where b.title = " + title + " and exists ( " +
-                "select l.book_id from Loan l where l.end_date is null and l.book_id in (" +
-                " select b1.id from Book b1 where b1.title = " + title + " and(" +
-                "l.start_date <= " + loanStartDate + " and" +
-                " l.planned_end_date > " + loanStartDate + ") or(" +
-                " l.start_date < " + loanPlannedEndDate + " and" +
-                " l.planned_end_date > " + loanPlannedEndDate +
-                ")/* or (" +
-                "l.planned_end_date < " + loanStartDate + " and" +
-                " l.end_date is null)*/))";
-        try {
-            Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
-            return query.getResultList();
-        } catch (Exception e) {
-            return bookList;
-        }
-    }
+
 
     @Override
     public boolean removeLoan(Loan loan) {
