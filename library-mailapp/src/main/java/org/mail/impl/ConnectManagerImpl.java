@@ -18,9 +18,7 @@ public class ConnectManagerImpl implements ConnectManager {
 
     private Logger logger = Logger.getLogger(ConnectManagerImpl.class);
 
-    public PropertiesLoad getPropertiesLoad() {
-        return propertiesLoad;
-    }
+
 
     void setPropertiesLoad(PropertiesLoad propertiesLoad) {
         this.propertiesLoad = propertiesLoad;
@@ -44,6 +42,7 @@ public class ConnectManagerImpl implements ConnectManager {
 
         if (!token.equals("wrong LOGIN or pwd")) {
             logger.info("authentication successful!");
+            logger.info("token: "+token);
             return token;
         } else {
             logger.error("authentication issue!");

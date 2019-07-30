@@ -15,6 +15,6 @@ public interface EmailManager {
 
     void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
 
-
+    void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
 
 }
