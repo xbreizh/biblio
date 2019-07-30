@@ -87,7 +87,9 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return reminder list")
     void getReminderLoans(){
+        System.out.println(loanDAO.getReminderLoans(3).get(0).getClass());
         assertEquals(1,loanDAO.getReminderLoans(3).size());
+
     }
 
 

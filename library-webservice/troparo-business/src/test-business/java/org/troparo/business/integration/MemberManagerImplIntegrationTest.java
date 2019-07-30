@@ -243,10 +243,10 @@ class MemberManagerImplIntegrationTest {
         newMember.setEmail(email);
         newMember.setRole(role);
         assertAll(
-                () -> assertEquals(firstName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getFirstName()),
-                () -> assertEquals(lastName, memberManager1.transfertUpdatedDetails(newMember, memberDb).getLastName()),
-                () -> assertEquals(email, memberManager1.transfertUpdatedDetails(newMember, memberDb).getEmail()),
-                () -> assertEquals(role, memberManager1.transfertUpdatedDetails(newMember, memberDb).getRole())
+                () -> assertEquals(firstName, memberManager1.transferUpdatedDetails(newMember, memberDb).getFirstName()),
+                () -> assertEquals(lastName, memberManager1.transferUpdatedDetails(newMember, memberDb).getLastName()),
+                () -> assertEquals(email, memberManager1.transferUpdatedDetails(newMember, memberDb).getEmail()),
+                () -> assertEquals(role, memberManager1.transferUpdatedDetails(newMember, memberDb).getRole())
         );
 
     }

@@ -11,7 +11,6 @@ public class Mail {
     private Member member;
     private Date endAvailableDate;
 
-
     public Mail() {
         book = new Book();
         member = new Member();

@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MailManager;
+import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.LoanManagerImpl;
 import org.troparo.business.impl.MailManagerImpl;
 import org.troparo.consumer.impl.LoanDAOImpl;
@@ -18,6 +19,9 @@ import javax.inject.Inject;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
@@ -29,6 +33,9 @@ class MailManagerImplIntegrationTest {
     @Inject
     private MailManager mailManager;
 
+    private MemberManager memberManager;
+
+
    /* private LoanManagerImpl loanManager;
 
     private LoanDAOImpl loanDAO;*/
@@ -36,11 +43,8 @@ class MailManagerImplIntegrationTest {
 
     @BeforeEach
     void reset() {
-       /* mailManager = new MailManagerImpl();
-        loanManager = new LoanManagerImpl();
-        loanDAO = new LoanDAOImpl();
-        loanManager.setLoanDAO(loanDAO);
-        mailManager.setLoanManager(loanManager);*/
+        memberManager = mock(MemberManager.class);
+      mailManager.setMemberManager(memberManager);
         logger.info("reset db");
     }
 
@@ -54,7 +58,8 @@ class MailManagerImplIntegrationTest {
     @Test
     @DisplayName("should return loans having books but no startDate")
     void getLoansReadyForStart(){
-        assertEquals(1, mailManager.getLoansReadyForStart().size());
+        when(memberManager.checkAdmin(anyString())).thenReturn(true);
+        assertEquals(1, mailManager.getLoansReadyForStart("dede").size());
     }
 
 }

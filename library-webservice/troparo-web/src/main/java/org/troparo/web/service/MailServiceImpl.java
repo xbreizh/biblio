@@ -52,11 +52,22 @@ public class MailServiceImpl implements IMailService {
         return ar;
     }
 
+
     @Override
     public GetLoanReadyResponse getLoanReady(GetLoanReadyRequest parameters) throws BusinessExceptionMail {
         checkAuthentication(parameters.getToken());
         GetLoanReadyResponse ar = new GetLoanReadyResponse();
-        List<Mail> mailList = mailManager.getLoansReadyForStart();
+        List<Mail> mailList = mailManager.getLoansReadyForStart(parameters.getToken());
+        MailListType mailListType = convertMailListIntoMailListType(mailList);
+        ar.setMailListType(mailListType);
+        return ar;
+    }
+
+    @Override
+    public GetReminderMailListResponse getReminderMailList(GetReminderMailListRequest parameters) throws BusinessExceptionMail {
+        checkAuthentication(parameters.getToken());
+        GetReminderMailListResponse ar = new GetReminderMailListResponse();
+        List<Mail> mailList = mailManager.getLoansReminder(parameters.getToken());
         MailListType mailListType = convertMailListIntoMailListType(mailList);
         ar.setMailListType(mailListType);
         return ar;
@@ -74,8 +85,6 @@ public class MailServiceImpl implements IMailService {
         }
         return passwordResetListType;
     }
-
-
 
 
     MailListType convertMailListIntoMailListType(List<Mail> mailList) {

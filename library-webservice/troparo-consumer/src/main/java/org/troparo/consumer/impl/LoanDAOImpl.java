@@ -219,6 +219,8 @@ public class LoanDAOImpl implements LoanDAO {
     @Override
     public List<Loan> getReminderLoans(int daysReminder) {
         StringBuilder sb = new StringBuilder();
+        sb.append("select * from loan where id in (");
+        sb.append("select id from (");
         sb.append("select * from ("+
                 "SELECT current_date, id, reservation_date, available_date, start_date, planned_end_date, end_date, isbn, book_id, borrower_id,"+
                 "  EXTRACT(DAY FROM planned_end_date - current_date) as diff "+
@@ -226,8 +228,9 @@ public class LoanDAOImpl implements LoanDAO {
         sb.append("a.diff <= "+daysReminder);
         sb.append(" and borrower_id in (select id from member where reminder = true) and end_date is null and start_date is not null and planned_end_date is not null"
                 );
+        sb.append(") b)");
         logger.info("query: "+sb.toString());
-        Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString());
+        Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString()).addEntity(Loan.class);
         return query.getResultList();
     }
 

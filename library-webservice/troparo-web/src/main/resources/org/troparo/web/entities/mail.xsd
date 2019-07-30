@@ -3,6 +3,24 @@
             xmlns:tns="http://troparo.org/entities/mail" targetNamespace="http://troparo.org/entities/mail"
             elementFormDefault="qualified">
 
+    <!-- Get ReminderList Request Type -->
+    <xsd:element name="getReminderMailListRequest">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="Token" type="xsd:string"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <!-- Get ReminderList Type -->
+    <xsd:element name="getReminderMailListResponse">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="tns:MailListType"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
     <!-- Get Mail by Criterias Request Type -->
     <xsd:element name="getLoanReadyRequest">
         <xsd:complexType>

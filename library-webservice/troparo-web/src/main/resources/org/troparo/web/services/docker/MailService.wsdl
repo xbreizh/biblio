@@ -11,6 +11,12 @@
                         schemaLocation="../../entities/mail.xsd"/>
         </xsd:schema>
     </wsdl:types>
+    <wsdl:message name="getReminderMailListRequest">
+        <wsdl:part element="mail:getReminderMailListRequest" name="parameters"/>
+    </wsdl:message>
+    <wsdl:message name="getReminderMailListResponse">
+        <wsdl:part element="mail:getReminderMailListResponse" name="parameters"/>
+    </wsdl:message>
     <wsdl:message name="getLoanReadyRequest">
         <wsdl:part element="mail:getLoanReadyRequest" name="parameters"/>
     </wsdl:message>
@@ -49,6 +55,11 @@
             <wsdl:output message="tns:getLoanReadyResponse"/>
             <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
         </wsdl:operation>
+        <wsdl:operation name="getReminderMailList">
+            <wsdl:input message="tns:getReminderMailListRequest"/>
+            <wsdl:output message="tns:getReminderMailListResponse"/>
+            <wsdl:fault name="businessExceptionMail" message="tns:BusinessExceptionMail"/>
+        </wsdl:operation>
     </wsdl:portType>
 
     <wsdl:binding name="MailServiceSOAPBinding" type="tns:IMailService">
@@ -69,6 +80,19 @@
         </wsdl:operation>
 
         <wsdl:operation name="getOverdueMailList">
+            <soap:operation
+                    soapAction=""/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+            <wsdl:fault name="businessExceptionMail">
+                <soap:fault name="businessExceptionMail" use="literal"/>
+            </wsdl:fault>
+        </wsdl:operation>
+        <wsdl:operation name="getReminderMailList">
             <soap:operation
                     soapAction=""/>
             <wsdl:input>

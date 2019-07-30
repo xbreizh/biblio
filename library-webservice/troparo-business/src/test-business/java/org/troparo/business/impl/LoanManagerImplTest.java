@@ -222,7 +222,7 @@ class LoanManagerImplTest {
         map.put("status", LoanStatus.OVERDUE.toString());
         List<Loan> loanList = new ArrayList<>();
         loanList.add(new Loan());
-        when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
+      /*  when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);*/
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
         loanManager1.setLoanDAO(loanDAO);
         loanList.remove(0);

@@ -18,11 +18,13 @@ public interface MailManager {
 
     void setLoanManager(LoanManager loanManager);
 
+    void setMemberManager(MemberManager memberManager);
+
     List<Mail> getPasswordResetList(String token);
 
-    List<Mail> getLoansReadyForStart();
+    List<Mail> getLoansReadyForStart(String token);
 
-    List<Mail> getLoansReminder();
+    List<Mail> getLoansReminder(String token);
 
     Date calculateEndAvailableDate(Loan loan, int nbDays);
 

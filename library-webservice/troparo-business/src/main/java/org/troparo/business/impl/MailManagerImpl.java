@@ -6,6 +6,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
+import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Loan;
@@ -27,6 +28,13 @@ public class MailManagerImpl implements MailManager {
     MemberDAO memberDAO;
     @Inject
     LoanDAO loanDAO;
+
+    @Inject
+    MemberManager memberManager;
+
+    public void setMemberManager(MemberManager memberManager) {
+        this.memberManager = memberManager;
+    }
 
     @Value("${daysReminder}")
     private int daysReminder;
@@ -56,15 +64,20 @@ public class MailManagerImpl implements MailManager {
     }
 
     @Override
-    public List<Mail> getLoansReadyForStart() {
+    public List<Mail> getLoansReadyForStart(String token) {
+        List<Mail> list = new ArrayList<>();
+        if (!memberManager.checkAdmin(token) )return list;
         logger.info("getting loans ready for start");
         List<Loan> loans = loanDAO.getLoansReadyForStart();
         return gettingDataForLoan(loans);
     }
 
     @Override
-    public List<Mail> getLoansReminder() {
+    public List<Mail> getLoansReminder(String token) {
+        List<Mail> list = new ArrayList<>();
+        if (!memberManager.checkAdmin(token) )return list;
         List<Loan> loans = loanDAO.getReminderLoans(daysReminder);
+        logger.info("size of list found: "+loans.size());
         return gettingDataForLoan(loans);
     }
 
@@ -75,13 +88,21 @@ public class MailManagerImpl implements MailManager {
         ) {
             Mail mail = new Mail();
             mail.setEmail(loan.getBorrower().getEmail());
+            logger.info("lastname ok");
             mail.setFirstName(loan.getBorrower().getFirstName());
+            logger.info("lastname ok");
             mail.setLastName(loan.getBorrower().getLastName());
+            logger.info("lastname ok");
             mail.setIsbn(loan.getBook().getIsbn());
+            logger.info("lastname ok");
             mail.setTitle(loan.getBook().getTitle());
+            logger.info("lastname ok");
             mail.setAuthor(loan.getBook().getAuthor());
+            logger.info("lastname ok");
             mail.setEdition(loan.getBook().getEdition());
+            logger.info("lastname ok");
             mail.setDueDate(loan.getPlannedEndDate());
+            logger.info("lastname ok");
             if(loan.getAvailableDate()!=null) {
                 mail.setEndAvailableDate(calculateEndAvailableDate(loan, loanManager.getNbDaysReservation()));
             }
@@ -123,6 +144,8 @@ public class MailManagerImpl implements MailManager {
 
     @Override
     public List<Mail> getPasswordResetList(String token) {
+        List<Mail> list = new ArrayList<>();
+        if (!memberManager.checkAdmin(token) )return list;
         List<Member> memberList = memberDAO.getPasswordResetList();
         logger.info("number of member pwd to reset: " + memberList.size());
         for (Member member : memberList

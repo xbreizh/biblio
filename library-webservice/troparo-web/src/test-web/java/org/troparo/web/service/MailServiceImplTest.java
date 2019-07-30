@@ -64,7 +64,7 @@ class MailServiceImplTest {
     void getReadyMailList() throws BusinessExceptionMail {
         List<Mail> list = new ArrayList<>();
         when(connectService.checkToken(anyString())).thenReturn(true);
-        when(mailManager.getLoansReadyForStart()).thenReturn(list);
+        when(mailManager.getLoansReadyForStart(anyString())).thenReturn(list);
         GetLoanReadyRequest parameters = new GetLoanReadyRequest();
         parameters.setToken("tchok");
         //assertDoesNotThrow(()->mailService.getOverdueMailList(parameters));

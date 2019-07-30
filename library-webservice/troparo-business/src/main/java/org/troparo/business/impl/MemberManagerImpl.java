@@ -169,14 +169,14 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("ex " + exception);
             return exception;
         }
-        memberFromDatabase = transfertUpdatedDetails(member, memberFromDatabase);
+        memberFromDatabase = transferUpdatedDetails(member, memberFromDatabase);
 
         memberDAO.updateMember(memberFromDatabase);
         logger.info("updated: " + memberFromDatabase.getId());
         return "";
     }
 
-    public Member transfertUpdatedDetails(Member newMember, Member memberFromDatabase) {
+    public Member transferUpdatedDetails(Member newMember, Member memberFromDatabase) {
         updateFirstName(memberFromDatabase, newMember);
         updateLastName(memberFromDatabase, newMember);
         updateEmail(memberFromDatabase, newMember);
@@ -342,7 +342,7 @@ public class MemberManagerImpl implements MemberManager {
             logger.info("role: "+m.getRole());
             return m.getRole().equalsIgnoreCase("Admin");
         }
-
+        logger.info("not an admin");
         return false;
     }
 
