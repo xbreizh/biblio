@@ -8,6 +8,7 @@
             <th th:text="LastName">LastName</th>
             <th th:text="Email">Email</th>
             <th th:text="DateJoin">DateJoin</th>
+            <th th:text="Reminder">Reminder</th>
         </tr>
         </thead>
         <tbody>
@@ -17,6 +18,7 @@
             <td th:text="${member.lastName}">lastName</td>
             <td th:text="${member.email}">Email</td>
             <td th:text="${#dates.format(member.dateJoin, 'dd-MM-yyyy')}">dateJoin</td>
+            <td th:replace="fragments/reminder :: reminder">reminder</td>
         </tr>
         </tbody>
     </table>

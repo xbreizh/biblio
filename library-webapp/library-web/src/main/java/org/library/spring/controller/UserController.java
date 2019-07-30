@@ -14,6 +14,8 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
+import org.troparo.services.memberservice.BusinessExceptionMember;
+
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
@@ -190,6 +192,17 @@ public class UserController {
         return new ModelAndView(REDIRECT_HOME);
 
     }
+
+    @PostMapping("/reminder")
+    public ModelAndView reminder(String login, boolean reminder) throws  BusinessExceptionMember {
+        String token = helper.getConnectedToken();
+        logger.info("updating reminder");
+        memberManager.switchReminder(token, login, reminder);
+
+        return new ModelAndView(REDIRECT_HOME);
+
+    }
+
 
     @PostMapping("/remove")
     public ModelAndView remove(String loanId) throws BusinessExceptionLoan {

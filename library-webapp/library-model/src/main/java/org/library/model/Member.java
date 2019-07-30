@@ -43,6 +43,8 @@ public class Member {
 
     private Date dateConnect;
 
+    private boolean reminder;
+
 
     private List<Loan> loanList = new ArrayList<>();
 

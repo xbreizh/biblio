@@ -17,6 +17,7 @@ import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.connectservice.IConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
+import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
 import org.troparo.services.memberservice.MemberService;
 
@@ -94,6 +95,15 @@ public class MemberManagerImpl implements MemberManager {
         return getConnectServicePort().requestPasswordResetLink(requestPasswordResetLinkRequestType).isReturn();
     }
 
+    @Override
+    public boolean switchReminder(String token, String login, boolean reminder) throws BusinessExceptionMember {
+        SwitchReminderRequestType switchReminderRequestType = new SwitchReminderRequestType();
+        switchReminderRequestType.setLogin(login);
+        switchReminderRequestType.setToken(token);
+        return getMemberServicePort().switchReminder(switchReminderRequestType).isReturn();
+
+    }
+
 
     private IConnectService getConnectServicePort() {
         return connectService.getConnectServicePort();
@@ -114,6 +124,7 @@ public class MemberManagerImpl implements MemberManager {
         Date date = convertGregorianCalendarIntoDate(memberTypeOut.getDateJoin().toGregorianCalendar());
         member.setDateJoin(date);
         member.setRole(memberTypeOut.getRole());
+        member.setReminder(memberTypeOut.isReminder());
         List<Loan> loans = convertLoanListTypeIntoList(token, memberTypeOut.getLoanListType());
         logger.info("got the loans converted: " + loans.size());
         member.setLoanList(loans);
