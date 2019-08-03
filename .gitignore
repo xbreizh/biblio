@@ -34,4 +34,6 @@ jenkins/
 db-init/
 sonarqube/
 sonarqube_backup/
+sonarqube_old/
+database/
 jenkins-sonarqube-backup/

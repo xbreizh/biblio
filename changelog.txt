@@ -1,0 +1,35 @@
+
+Bugs 
+
+search by ISBN not working bug
+	Probleme sur la recherche par critere (ISBN). La valeur est ignoree a la soumission du formulaire. La recherche en utilisant les autres criteres fonctionne correctement
+
+method addCopy bug
+	
+Amélioration systèmes de logs / Alertes de mail bug
+Gérer les exceptions coté client bug
+Problème d’initialisation de la base bug
+
+
+Evolution
+
+Alerte avant date Evolutions
+Refactoring code Evolutions
+Alert pour retard à la connexion Evolutions
+Réservation en ligne Evolutions
+
+
+
+New Feature
+
+Intégration continue New feature
+Mise en place des Tests unitaires New feature
+Reset password New feature
+
+
+
+
+
+
+
+
