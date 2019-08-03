@@ -54,10 +54,6 @@ public class LoanManagerImpl implements LoanManager {
         return maxReserve;
     }
 
-   /* public LoanManagerImpl( BookManager bookManager, MemberManager memberManager) {
-        this.bookManager = bookManager;
-        this.memberManager = memberManager;
-    }*/
 
     private static Logger logger = Logger.getLogger(LoanManagerImpl.class);
 
@@ -95,11 +91,11 @@ public class LoanManagerImpl implements LoanManager {
 
 
     @Override
-    public String addLoan(String login, int id) {
+    public String addLoan(String login, int bookId) {
         logger.info("trying to add loan");
         logger.info("login: " + login);
         Member member = memberManager.getMemberByLogin(login);
-        Book book = bookManager.getBookById(id);
+        Book book = bookManager.getBookById(bookId);
         String x = checkAddLoanDetailsAreValid(member, book);
         if (!x.isEmpty()) {
             logger.error(x);
@@ -251,19 +247,19 @@ public class LoanManagerImpl implements LoanManager {
         if (checkIfOverDue(member)) return "There are Overdue Items";
 
         // if borrower already has the book in renting, he can't reserve it
-        if (checkIfSimilarLoanPlannedOrInProgress(member, isbn))
+        if (checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn))
             return "That book is already has a renting in progress or planned for that user";
         return "";
     }
 
-    boolean checkIfSimilarLoanPlannedOrInProgress(Member member, String isbn) {
+    boolean checkIfMemberHasSimilarLoanPlannedOrInProgress(Member member, String isbn) {
         List<Loan> loanList = loanDAO.getLoanByLogin(member.getLogin());
         logger.info("isbn received : " + isbn);
         if (loanList != null && !loanList.isEmpty()) {
             for (Loan loan : loanList) {
                 logger.info("isbn from loan: " + loan.getIsbn());
                 logger.info("end date: " + loan.getEndDate());
-                if (loan.getIsbn().equals(isbn) && loan.getStartDate() != null && loan.getEndDate() == null) {
+                if (loan.getIsbn().equals(isbn) && loan.getEndDate() == null) {
                     logger.error("there is already a loan with that book and that login");
                     return true;
                 }

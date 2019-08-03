@@ -42,7 +42,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return the books from db (checking the number)")
     void getBooks() {
-        assertEquals(6, bookDAO.getBooks().size());
+        assertEquals(8, bookDAO.getBooks().size());
     }
 
     @Test
@@ -222,8 +222,8 @@ class BookDAOImplTest {
     @DisplayName("should return the number of books available")
     void getAvailable1() {
         assertAll(
-                () -> assertEquals(0, bookDAO.getNbAvailable("1234567824")),
-                () -> assertEquals(4, bookDAO.getNbAvailable("12345678OK")),
+                () -> assertEquals(0, bookDAO.getNbAvailable("555784913P")),
+                () -> assertEquals(1, bookDAO.getNbAvailable("12345678PO")),
                 () -> assertEquals(0, bookDAO.getNbAvailable("fr"))
 
         );

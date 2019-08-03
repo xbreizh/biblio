@@ -10,7 +10,7 @@ import java.util.Map;
 
 public interface LoanManager {
 
-    String addLoan(String login, int id);
+    String addLoan(String login, int bookId);
 
     List<Loan> getLoans();
 

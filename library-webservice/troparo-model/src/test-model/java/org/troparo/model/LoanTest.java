@@ -170,6 +170,6 @@ class LoanTest {
         loan.setStartDate(date);
         loan.setPlannedEndDate(format.parse("2010-01-07"));
         loan.setEndDate(format.parse("2010-01-17"));
-        assertEquals("Loan{id=123, reservationDate=null, availableDate=null, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, isbn=null, borrower=Diego23, book=Captain Cook}", loan.toString());
+        assertEquals("Loan{id=123, reservationDate=null, availableDate=null, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, isbn=null, borrower=Member{id=0, login='Diego23', firstName='null', lastName='null', password='null', role='null', token='null', email='null', dateJoin=null, dateConnect=null, loanList=0, tokenExpiration=null, reminder=false}, book=Captain Cook}", loan.toString());
     }
 }

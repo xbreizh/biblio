@@ -59,7 +59,7 @@ class LoanManagerImplIntegrationTest {
     @Test
     @DisplayName("should return loans from database")
     void getLoans() {
-        assertEquals(8, loanManager.getLoans().size());
+        assertEquals(9, loanManager.getLoans().size());
     }
 
     @Test

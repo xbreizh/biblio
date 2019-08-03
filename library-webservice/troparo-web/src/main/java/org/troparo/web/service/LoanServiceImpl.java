@@ -237,17 +237,19 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut = new LoanTypeOut();
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
-            loanTypeOut.setBookId(loan.getBook().getId());
-            loanTypeOut.setISBN(loan.getIsbn());
-            LoanBook bookLoan = new LoanBook();
-            bookLoan.setAuthor(loan.getBook().getAuthor());
-            bookLoan.setTitle(loan.getBook().getTitle());
-            bookLoan.setISBN(loan.getBook().getIsbn());
-            bookLoan.setEdition(loan.getBook().getEdition());
-            bookLoan.setKeywords(loan.getBook().getKeywords());
-            bookLoan.setNbPages(loan.getBook().getNbPages());
-            bookLoan.setPublicationYear(loan.getBook().getPublicationYear());
-            loanTypeOut.setLoanBook(bookLoan);
+            if(loan.getBook()!=null) {
+                loanTypeOut.setBookId(loan.getBook().getId());
+                loanTypeOut.setISBN(loan.getIsbn());
+                LoanBook bookLoan = new LoanBook();
+                bookLoan.setAuthor(loan.getBook().getAuthor());
+                bookLoan.setTitle(loan.getBook().getTitle());
+                bookLoan.setISBN(loan.getBook().getIsbn());
+                bookLoan.setEdition(loan.getBook().getEdition());
+                bookLoan.setKeywords(loan.getBook().getKeywords());
+                bookLoan.setNbPages(loan.getBook().getNbPages());
+                bookLoan.setPublicationYear(loan.getBook().getPublicationYear());
+                loanTypeOut.setLoanBook(bookLoan);
+            }
             XMLGregorianCalendar startDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getStartDate());
             XMLGregorianCalendar plannedEndDate = dateConvertedHelper.convertDateIntoXmlDate(loan.getPlannedEndDate());
             if (loan.getEndDate() != null) {

@@ -198,7 +198,7 @@ class LoanManagerImplTest {
         member.getLoanList().add(new Loan());
         member.getLoanList().add(new Loan());
         member.getLoanList().add(new Loan());
-        String login = "george";
+        String login = "georgette";
         member.setLogin(login);
         Loan loan = new Loan();
         loan.setBorrower(member);
@@ -229,8 +229,10 @@ class LoanManagerImplTest {
         Map<String, String> map1 = new HashMap<>();
         map.put("login", loan.getBorrower().getLogin());
         map.put("status", LoanStatus.OVERDUE.toString());
+        when(loanManager1.checkIfBorrowerHasReachedMaxLoan(member)).thenReturn(true);
         when(memberManager2.getMemberByLogin(login)).thenReturn(member);
         when(bookManager.getBookById(bookId)).thenReturn(book);
+
         when(loanDAO.getLoansByCriteria(map1)).thenReturn(loanList);
         assertEquals("max number of books rented reached", loanManager1.addLoan(login, 3));
     }
@@ -303,7 +305,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return true if loan already in progress ")
-    void checkIfSimilarLoanPlannedOrInProgress(){
+    void checkIfMemberHasSimilarLoanPlannedOrInProgress(){
         // will return true if similar isbn and endDate is null
         Loan loan = new Loan();
         Member member = new Member();
@@ -321,7 +323,7 @@ class LoanManagerImplTest {
         loan.setIsbn(isbn);
         loanList.add(loan);
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
-        assertTrue( loanManager.checkIfSimilarLoanPlannedOrInProgress(member, isbn));
+        assertTrue( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
     @Test
@@ -344,7 +346,7 @@ class LoanManagerImplTest {
         loan.setIsbn(isbn);
         loanList.add(loan);
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
-        assertFalse( loanManager.checkIfSimilarLoanPlannedOrInProgress(member, isbn));
+        assertFalse( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
 
@@ -673,9 +675,12 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return TERMINATED if endDate is not null")
-    void getLoanStatus() {
+    void getLoanStatus() throws ParseException {
         Loan loan = new Loan();
+        String pattern = "dd-MM-yyyy";
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
         loan.setEndDate(new Date());
+        loan.setStartDate(format.parse("02-01-2019"));
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
         assertEquals("TERMINATED", loanManager.getLoanStatus(55));
 
@@ -691,6 +696,7 @@ class LoanManagerImplTest {
         SimpleDateFormat format = new SimpleDateFormat(pattern);
         Date today = format.parse("02-02-2019");
         when(loanManager.getTodayDate()).thenReturn(today);
+        loan.setStartDate(format.parse("02-01-2019"));
         loan.setPlannedEndDate(format.parse("12-01-2019"));
         when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
         assertEquals("OVERDUE", loanManager.getLoanStatus(55));

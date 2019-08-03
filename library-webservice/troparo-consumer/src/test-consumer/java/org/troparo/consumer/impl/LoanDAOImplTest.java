@@ -87,8 +87,8 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return reminder list")
     void getReminderLoans(){
-        System.out.println(loanDAO.getReminderLoans(3).get(0).getClass());
-        assertEquals(1,loanDAO.getReminderLoans(3).size());
+       // System.out.println(loanDAO.getReminderLoans(3).get(0).getClass());
+        assertEquals(1,loanDAO.getReminderLoans(5).size());
 
     }
 
@@ -101,9 +101,9 @@ class LoanDAOImplTest {
     }
 
     @Test
-    @DisplayName("should return null currently rented")
+    @DisplayName("should return null if currently rented")
     void getNextAvailableBook1() {
-        assertNull(loanDAO.getNextAvailableBook("8574596258"));
+        assertNull(loanDAO.getNextAvailableBook("555784913P"));
 
     }
 
@@ -118,7 +118,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return list of loans")
     void getLoans() {
-        assertEquals(5, loanDAO.getLoans().size());
+        assertEquals(9, loanDAO.getLoans().size());
     }
 
     @Test
@@ -134,9 +134,9 @@ class LoanDAOImplTest {
     void removeLoan() {
         Loan loan = loanDAO.getLoanById(2);
         assertAll(
-                () -> assertEquals(5, loanDAO.getLoans().size()),
+                () -> assertEquals(9, loanDAO.getLoans().size()),
                 () -> assertTrue(loanDAO.removeLoan(loan)),
-                () -> assertEquals(4, loanDAO.getLoans().size())
+                () -> assertEquals(8, loanDAO.getLoans().size())
         );
     }
 
@@ -234,7 +234,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return not empty list if existing loan for a login")
     void getLoanByLogin() {
-        assertEquals(4, loanDAO.getLoanByLogin("Jpolino").size());
+        assertEquals(7, loanDAO.getLoanByLogin("Jpolino").size());
     }
 
     @Test
@@ -403,7 +403,7 @@ class LoanDAOImplTest {
     @Test
     @DisplayName("should return 1")
     void cleanupExpiredReservationCount() {
-        assertEquals(1, loanDAO.cleanupExpiredReservationCount(4));
+        assertEquals(2, loanDAO.cleanupExpiredReservationCount(4));
     }
 
 

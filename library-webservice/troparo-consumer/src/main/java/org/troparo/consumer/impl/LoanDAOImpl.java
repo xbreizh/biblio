@@ -143,8 +143,9 @@ public class LoanDAOImpl implements LoanDAO {
         logger.info("ISBN received: " + isbn);
         String request =
                 "select * from Book where isbn = " + isbn + " and exists(" +
-                        "select book_id from loan where isbn = " + isbn + " and end_date is null)";
+                        "select book_id from loan where isbn = " + isbn + " and end_date is not null)";
         try {
+            logger.info("query: "+request);
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
             bookList = query.getResultList();
             if (!bookList.isEmpty()) return bookList.get(0);
@@ -218,6 +219,11 @@ public class LoanDAOImpl implements LoanDAO {
 
     @Override
     public List<Loan> getReminderLoans(int daysReminder) {
+        // we calculate the number of days between today and planned_end_date
+        // if that number is positive (negative would be overdue)
+        // and inferior or equals to daysReminder
+        // we consider it
+
         StringBuilder sb = new StringBuilder();
         sb.append("select * from loan where id in (");
         sb.append("select id from (");

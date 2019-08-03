@@ -182,7 +182,8 @@ public class BookDAOImpl implements BookDAO {
     @Override
     public int getNbAvailable(String isbn) {
         logger.info("isbn passed: " + isbn);
-        String request = "select count(*) from Book where isbn = :isbn and id not in(select book.id from Loan where endDate is null)";
+        String request = "select count(*) from Book where isbn = :isbn and not exists (FROM Loan where endDate is null and isbn = :isbn)";
+
         Query query = getCurrentSession().createQuery(request);
         query.setParameter("isbn", isbn);
         long count = (long) query.getSingleResult();

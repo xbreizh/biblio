@@ -58,7 +58,7 @@ class LoanServiceIntegrationTest {
         LoanListRequestType loanListRequestType = new LoanListRequestType();
         loanListRequestType.setToken(token);
         System.out.println(loanService.getAllLoans(loanListRequestType).getLoanListType().getLoanTypeOut());
-        assertEquals(5, loanService.getAllLoans(loanListRequestType).getLoanListType().getLoanTypeOut().size());
+        assertEquals(9, loanService.getAllLoans(loanListRequestType).getLoanListType().getLoanTypeOut().size());
     }
 
     @Test
@@ -79,7 +79,7 @@ class LoanServiceIntegrationTest {
         loanCriterias.setLogin("jpolino");
         loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
         System.out.println("size: " + loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
-        assertEquals(4, loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+        assertEquals(7, loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
     }
 
     @Test
@@ -91,7 +91,7 @@ class LoanServiceIntegrationTest {
         loanCriterias.setLogin("jpolino");
         loanByCriteriasRequestType.setLoanCriterias(loanCriterias);
         System.out.println("size: " + loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
-        assertEquals(4, loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
+        assertEquals(7, loanService.getLoanByCriteria(loanByCriteriasRequestType).getLoanListType().getLoanTypeOut().size());
     }
 }
 
