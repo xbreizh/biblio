@@ -22,7 +22,6 @@
         <compileSource>1.8</compileSource>
         <bval-jsr.version>2.0.2</bval-jsr.version>
         <cxf.scope>compile</cxf.scope>
-       <!-- <cxf.version>3.2.9</cxf.version>-->
         <cxf-rt-frontend-jaxws.version>3.3.2</cxf-rt-frontend-jaxws.version>
         <cxf-rt-ws-security.version>3.3.2</cxf-rt-ws-security.version>
         <cxf-codegen-plugin.version>3.3.2</cxf-codegen-plugin.version>

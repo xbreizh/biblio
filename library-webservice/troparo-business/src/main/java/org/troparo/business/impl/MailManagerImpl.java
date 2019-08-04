@@ -88,21 +88,13 @@ public class MailManagerImpl implements MailManager {
         ) {
             Mail mail = new Mail();
             mail.setEmail(loan.getBorrower().getEmail());
-            logger.info("lastname ok");
             mail.setFirstName(loan.getBorrower().getFirstName());
-            logger.info("lastname ok");
             mail.setLastName(loan.getBorrower().getLastName());
-            logger.info("lastname ok");
             mail.setIsbn(loan.getBook().getIsbn());
-            logger.info("lastname ok");
             mail.setTitle(loan.getBook().getTitle());
-            logger.info("lastname ok");
             mail.setAuthor(loan.getBook().getAuthor());
-            logger.info("lastname ok");
             mail.setEdition(loan.getBook().getEdition());
-            logger.info("lastname ok");
             mail.setDueDate(loan.getPlannedEndDate());
-            logger.info("lastname ok");
             if(loan.getAvailableDate()!=null) {
                 mail.setEndAvailableDate(calculateEndAvailableDate(loan, loanManager.getNbDaysReservation()));
             }

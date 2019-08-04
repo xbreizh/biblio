@@ -72,9 +72,6 @@
                     </plugin>
                 </plugins>
                 <testResources>
-                    <!-- <testResource>
-                         <directory>src/main/resources</directory>
-                     </testResource>-->
                     <testResource>
                         <directory>src/test-business/resources/local</directory>
                     </testResource>
@@ -151,12 +148,6 @@
             <artifactId>spring-tx</artifactId>
             <version>${spring-tx.version}</version>
         </dependency>
-        <!--&lt;!&ndash; https://mvnrepository.com/artifact/javax.mail/javax.mail-api &ndash;&gt;
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>javax.mail-api</artifactId>
-            <version>1.6.2</version>
-        </dependency>-->
 
         <!-- ===== Tests ===== -->
         <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine -->
@@ -174,13 +165,6 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.security/spring-security-core -->
-        <!-- <dependency>
-             <groupId>org.springframework.security</groupId>
-             <artifactId>spring-security-core</artifactId>
-             <version>${spring-security.version}</version>
-         </dependency>-->
 
         <dependency>
             <groupId>log4j</groupId>
@@ -205,12 +189,6 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
         </dependency>
-        <!-- <dependency>
-             <groupId>org.springframework</groupId>
-             <artifactId>spring-test</artifactId>
-             <version>${spring-test.version}</version>
-             <scope>test</scope>
-         </dependency>-->
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-core</artifactId>
@@ -238,14 +216,6 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                </configuration>
-            </plugin>-->
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>

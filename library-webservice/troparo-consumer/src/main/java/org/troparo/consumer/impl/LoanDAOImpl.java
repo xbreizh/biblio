@@ -21,6 +21,7 @@ public class LoanDAOImpl implements LoanDAO {
     private static final String ISBN = "isbn";
     private static final String BOOK_ID = "book_id";
     private static final String LOGIN = "login";
+    private static final String QUERY ="query: ";
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class);
     @Inject
     private SessionFactory sessionFactory;
@@ -145,7 +146,7 @@ public class LoanDAOImpl implements LoanDAO {
                 "select * from Book where isbn = " + isbn + " and exists(" +
                         "select book_id from loan where isbn = " + isbn + " and end_date is not null)";
         try {
-            logger.info("query: "+request);
+            logger.info(QUERY+request);
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
             bookList = query.getResultList();
             if (!bookList.isEmpty()) return bookList.get(0);
@@ -187,7 +188,7 @@ public class LoanDAOImpl implements LoanDAO {
             sb.append("interval '"+expiration+" day'");
             sb.append(") and start_date is null and end_date is null");
             Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString());
-            logger.info("query: "+sb.toString());
+            logger.info(QUERY+sb.toString());
             if( query.getResultList().isEmpty()) {
                 logger.info("no expired reservation found");
                 return 0;
@@ -235,7 +236,7 @@ public class LoanDAOImpl implements LoanDAO {
         sb.append(" and borrower_id in (select id from member where reminder = true) and end_date is null and start_date is not null and planned_end_date is not null"
                 );
         sb.append(") b)");
-        logger.info("query: "+sb.toString());
+        logger.info(QUERY+sb.toString());
         Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString()).addEntity(Loan.class);
         return query.getResultList();
     }
