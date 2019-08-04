@@ -476,66 +476,6 @@ class LoanDAOImplTest {
 
 
     @Test
-    @DisplayName("should return emptyList when no book available for dates")
-    @Disabled
-    void getListBooksAvailableOnThoseDates() throws ParseException {
-        Loan loan = new Loan();
-        Book book = new Book();
-        String title = "test";
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date startDate = simpleDateFormat.parse("2019-08-12");
-        Date plannedEndDate = simpleDateFormat.parse("2019-08-19");
-        book.setTitle(title);
-        Member member = new Member();
-        member.setLogin("jo");
-        loan.setBorrower(member);
-        loan.setBook(book);
-        loan.setStartDate(startDate);
-        loan.setPlannedEndDate(plannedEndDate);
-
-        // assertTrue(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
-    }
-
-
-    @Test
-    @Disabled
-    @DisplayName("should return bookList when book(s) available for dates")
-    void getListBooksAvailableOnThoseDates1() throws ParseException {
-        Loan loan = new Loan();
-        Book book = new Book();
-        String title = "LA GRANDE AVENTURE";
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date startDate = simpleDateFormat.parse("2019-07-16");
-        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
-        book.setTitle(title);
-        loan.setBook(book);
-        loan.setStartDate(startDate);
-        loan.setPlannedEndDate(plannedEndDate);
-        /*System.out.println(loanDAO.getListBooksAvailableOnThoseDates(loan).get(0).getClass());
-        assertFalse(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());*/
-    }
-
-    @Test
-    @DisplayName("should return bookList when book(s) available for dates")
-    @Disabled
-    void getListBooksAvailableOnThoseDates2() throws ParseException {
-        Loan loan = new Loan();
-        Book book = new Book();
-        String title = "bokana";
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date startDate = simpleDateFormat.parse("2019-07-16");
-        Date plannedEndDate = simpleDateFormat.parse("2019-08-10");
-        book.setTitle(title);
-        loan.setBook(book);
-        loan.setStartDate(startDate);
-        loan.setPlannedEndDate(plannedEndDate);
-        // assertTrue(loanDAO.getListBooksAvailableOnThoseDates(loan).isEmpty());
-    }
-
-    @Test
     @DisplayName("should return true")
     void checkValidStatus() {
         LoanDAOImpl loanDAO = new LoanDAOImpl();

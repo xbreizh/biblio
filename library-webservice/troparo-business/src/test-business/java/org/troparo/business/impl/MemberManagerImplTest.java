@@ -524,7 +524,6 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return false when firstName null or ? or empty")
-    @Disabled
     void updateFirstName() {
         MemberManagerImpl memberManager1 = new MemberManagerImpl();
         String[] wrongFirstNames = {"", null, "?"};
@@ -542,7 +541,6 @@ class MemberManagerImplTest {
 
     @Test
     @DisplayName("should return true when role valid")
-    @Disabled
     void updateFirstName1() {
         MemberManagerImpl memberManager1 = new MemberManagerImpl();
         Member newMember = new Member();

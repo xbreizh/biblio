@@ -529,56 +529,8 @@ class LoanManagerImplTest {
         assertEquals(0, loanManager.getLoansByCriteria(map).size());
     }
 
-    @Test
-    @DisplayName("should return error if overlapping")
-    void checkIfNoOverLapping() throws ParseException {
-        Loan loan = new Loan();
-        Loan loanS = new Loan();
-        Book book = new Book();
-        book.setTitle("title");
-        loan.setBook(book);
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date today = simpleDateFormat.parse("2019-07-14");
-        loan.setStartDate(today);
-        loanManager.setPlannedEndDate(loan);
-        Date start = simpleDateFormat.parse("2019-07-12");
-        loan.setStartDate(today);
-        Date plannedEnd = simpleDateFormat.parse("2019-07-22");
-        loanS.setStartDate(start);
-        loanS.setPlannedEndDate(plannedEnd);
-        List<Book> bookList = new ArrayList<>();
-       /* when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
-        assertEquals("No book available for those dates!", loanManager.checkIfNoOverLapping(loan));*/
 
-    }
 
-    @Test
-    @DisplayName("should return empty string if not overlapping")
-    void checkIfNoOverLapping1() throws ParseException {
-        LoanManagerImpl loanManager = new LoanManagerImpl();
-        loanManager.setLoanDAO(loanDAO);
-        Loan loan = new Loan();
-        Loan loanS = new Loan();
-        Book book = new Book();
-        book.setTitle("title");
-        loan.setBook(book);
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-        Date today = simpleDateFormat.parse("2019-09-14");
-        loan.setStartDate(today);
-        loanManager.setPlannedEndDate(loan);
-        Date start = simpleDateFormat.parse("2019-07-12");
-        loan.setStartDate(today);
-        Date plannedEnd = simpleDateFormat.parse("2019-07-22");
-        loanS.setStartDate(start);
-        loanS.setPlannedEndDate(plannedEnd);
-        List<Book> bookList = new ArrayList<>();
-        bookList.add(new Book());
-      /*  when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
-        assertEquals("", loanManager.checkIfNoOverLapping(loan));*/
-
-    }
 
     @Test
     @DisplayName("should return error if date in past")
@@ -623,7 +575,7 @@ class LoanManagerImplTest {
 
     }
 
-   /* @Test
+    @Test
     @DisplayName("should return error if overdue")
     void checkIfOverDue1(){
         Loan loan = new Loan();
@@ -640,9 +592,9 @@ class LoanManagerImplTest {
         Loan loan1 = new Loan();
         loanList.add(loan1);
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
-        assertTrue(loanManager.checkIfOverDue(loan));
+        assertTrue(loanManager.checkIfOverDue(member));
 
-    }*/
+    }
 
     @Test
     @DisplayName("should return empty string if limit not reached")
@@ -788,6 +740,26 @@ class LoanManagerImplTest {
 
         when(loanManager.getTodayDate()).thenReturn(today);
         assertTrue(loanManager.checkAddingRenewDurationGivesLaterThanToday(loanDate));
+
+    }
+
+    @Test
+    @DisplayName("should return a book if available")
+    void getBookIfAvailable(){
+        Book book = new Book();
+        Loan loan = new Loan();
+        String isbn = "isbn123";
+        loan.setIsbn(isbn);
+        when(loanDAO.getNextAvailableBook(anyString())).thenReturn(book);
+        assertEquals(book, loanManager.getBookIfAvailable(loan));
+
+    }
+
+    @Test
+    @DisplayName("should null if no book available")
+    void getBookIfAvailable1(){
+        when(loanDAO.getNextAvailableBook(anyString())).thenReturn(null);
+        assertNull( loanManager.getBookIfAvailable(new Loan()));
 
     }
 
