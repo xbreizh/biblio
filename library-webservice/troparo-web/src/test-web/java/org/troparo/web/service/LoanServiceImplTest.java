@@ -63,6 +63,7 @@ class LoanServiceImplTest {
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         loanService.setDateConvertedHelper(dateConvertedHelper);
         when(loanManager.addLoan(anyString(), anyInt())).thenReturn("");
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertDoesNotThrow(() -> loanService.addLoan(parameters));
 
     }
@@ -77,6 +78,7 @@ class LoanServiceImplTest {
         request.setToken(token);
 
         when(loanManager.reserve(anyString(), anyString())).thenReturn("");
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertTrue(loanService.reserve(request).getReturn().isEmpty());
 
     }
@@ -125,6 +127,7 @@ class LoanServiceImplTest {
         parameters.setToken(token);
         String exception = "exception";
         when(loanManager.cancelLoan(anyString(), anyInt())).thenReturn(exception);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals(exception, loanService.cancelLoan(parameters).getReturn());
 
     }
@@ -139,6 +142,7 @@ class LoanServiceImplTest {
         parameters.setToken(token);
         String exception = "";
         when(loanManager.cancelLoan(anyString(), anyInt())).thenReturn(exception);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals(exception, loanService.cancelLoan(parameters).getReturn());
 
     }
@@ -174,6 +178,7 @@ class LoanServiceImplTest {
         loan.setStartDate(new Date());
         loan.setPlannedEndDate(new Date());
         when(loanManager.getLoanById(2)).thenReturn(loan);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertAll(
                 () -> assertEquals(bookId, loanService.getLoanById(parameters).getLoanTypeOut().getBookId()),
                 () -> assertEquals(login, loanService.getLoanById(parameters).getLoanTypeOut().getLogin())
@@ -207,6 +212,7 @@ class LoanServiceImplTest {
     void getAllLoans() {
         LoanListRequestType parameters = new LoanListRequestType();
         parameters.setToken("token123");
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertDoesNotThrow(() -> loanService.getAllLoans(parameters));
     }
 
@@ -216,7 +222,7 @@ class LoanServiceImplTest {
         GetLoanByCriteriasRequestType parameters = new GetLoanByCriteriasRequestType();
         parameters.setToken("token123");
         parameters.setLoanCriterias(null);
-
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertDoesNotThrow(() -> loanService.getLoanByCriteria(parameters));
     }
 
@@ -232,6 +238,7 @@ class LoanServiceImplTest {
         map.put("login", "KOLIO");
         List<Loan> loanList = new ArrayList<>();
         when(loanManager.getLoansByCriteria(map)).thenReturn(loanList);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals(0, loanService.getLoanByCriteria(parameters).getLoanListType().getLoanTypeOut().size());
     }
 
@@ -245,6 +252,7 @@ class LoanServiceImplTest {
         parameters.setLoanCriterias(loanCriterias);
         Map<String, String> map = new HashMap<>();
         map.put("invalid.criteria", "invalid");
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals(0, loanService.getLoanByCriteria(parameters).getLoanListType().getLoanTypeOut().size());
     }
 
@@ -256,6 +264,7 @@ class LoanServiceImplTest {
         parameters.setToken("tok");
         parameters.setId(3);
         when(loanManager.getLoanStatus(anyInt())).thenReturn("OVERDUE");
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals("OVERDUE", loanService.getLoanStatus(parameters).getStatus());
 
     }
@@ -267,6 +276,7 @@ class LoanServiceImplTest {
         parameters.setToken("tok123");
         parameters.setId(3);
         when(loanManager.isRenewable(anyInt())).thenReturn(true);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertTrue(loanService.isRenewable(parameters).isReturn());
     }
 
@@ -277,6 +287,7 @@ class LoanServiceImplTest {
         parameters.setToken("tok123");
         parameters.setId(3);
         when(loanManager.isRenewable(anyInt())).thenReturn(false);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertFalse(loanService.isRenewable(parameters).isReturn());
     }
 
@@ -288,6 +299,7 @@ class LoanServiceImplTest {
         parameters.setId(3);
         String stringFromManager = "feedback from manager";
         when(loanManager.renewLoan(anyInt())).thenReturn(stringFromManager);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals(stringFromManager, loanService.renewLoan(parameters).getReturn());
     }
 
@@ -299,13 +311,8 @@ class LoanServiceImplTest {
         parameters.setId(3);
         String stringFromManager = "feedback from manager";
         when(loanManager.terminate(anyInt())).thenReturn(stringFromManager);
+        when(connectService.checkToken(anyString())).thenReturn(true);
         assertEquals(stringFromManager, loanService.terminateLoan(parameters).getReturn());
     }
-    /*  @Test
-      void isAvailable(){
-          IsAvailableRequestType parameters = new IsAvailableRequestType();
-          parameters.setToken("tok123");
-          parameters.setId(2);
-          loanManager.
-      }*/
+
 }
