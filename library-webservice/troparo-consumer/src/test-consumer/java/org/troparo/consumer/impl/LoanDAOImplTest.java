@@ -33,7 +33,7 @@ class LoanDAOImplTest {
 
     private Logger logger = Logger.getLogger(LoanDAOImplTest.class);
 
-
+    private static Object LOCK = new Object();
 
     @Inject
     private LoanDAO loanDAO;
@@ -56,7 +56,7 @@ class LoanDAOImplTest {
         loan.setReservationDate(new Date());
         loan.setStartDate(null);
         loan1.setStartDate(null);
-        wait(500);
+        LOCK.wait(500);
         loan1.setReservationDate(new Date());
         loanDAO.updateLoan(loan);
         loanDAO.updateLoan(loan1);
