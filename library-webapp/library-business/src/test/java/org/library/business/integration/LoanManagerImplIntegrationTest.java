@@ -23,8 +23,6 @@ class LoanManagerImplIntegrationTest {
     //@Inject
     private LoanManagerImpl loanManager;
 
-    //private ConnectManagerImpl connectManager;
-    String token = "81bcec45-55b5-4cb1-a0fd-1599a670f54f";
 
     @BeforeEach
     void init(){
@@ -37,7 +35,7 @@ class LoanManagerImplIntegrationTest {
     @DisplayName("should return error")
     void reserve()  {
         loanManager = new LoanManagerImpl();
-        assertEquals("s", loanManager.reserve(token, "1234567824"));
+        assertEquals("invalid member", loanManager.reserve("dede", "1234567824"));
 
     }
 

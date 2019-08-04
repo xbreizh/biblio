@@ -1,53 +1,31 @@
 package org.library.business.integration;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.library.business.impl.LoanManagerImpl;
 import org.library.business.impl.MemberManagerImpl;
-import org.library.model.Member;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.troparo.entities.member.*;
-import org.troparo.services.bookservice.BusinessExceptionBook;
-import org.troparo.services.loanservice.BusinessExceptionLoan;
-import org.troparo.services.memberservice.BusinessExceptionMember;
-import org.troparo.services.memberservice.IMemberService;
-import org.troparo.services.memberservice.MemberService;
 
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {MemberManagerImpl.class, LoanManagerImpl.class})
+//@ExtendWith(SpringExtension.class)
+//@ContextConfiguration(classes = {MemberManagerImpl.class, LoanManagerImpl.class})
 class MemberManagerImplIntegrationTest {
 
-
+    //@Inject
     private MemberManagerImpl memberManager;
 
-    private LoanManagerImpl loanManager;
-    private MemberService memberService;
+  /*  private LoanManagerImpl loanManager;
+    private MemberService memberService;*/
 
-    @BeforeEach
+  /*  @BeforeEach
     void init() {
-        memberManager = spy(MemberManagerImpl.class);
+       // memberManager = new MemberManagerImpl();
         loanManager = mock(LoanManagerImpl.class);
         memberService = mock(MemberService.class);
         memberManager.setMemberService(memberService);
         memberManager.setLoanManager(loanManager);
-    }
+    }*/
 
-    @Test
+   /* @Test
     @DisplayName("should return member")
     void getMember() throws BusinessExceptionMember, BusinessExceptionLoan, DatatypeConfigurationException, BusinessExceptionBook {
         GetMemberByLoginResponseType getMemberByLoginResponseType = new GetMemberByLoginResponseType();
@@ -176,9 +154,9 @@ class MemberManagerImplIntegrationTest {
                 () -> assertEquals(isbn, memberManager.convertBookTypeOutIntoBook(bookTypeOut).getIsbn())
 
         );
-    }
+    }*/
 
-    @Test
+  /*  @Test
     void convertGregorianCalendarIntoDate() throws ParseException {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
@@ -189,5 +167,5 @@ class MemberManagerImplIntegrationTest {
 
         assertEquals(date, memberManager.convertGregorianCalendarIntoDate(gc));
 
-    }
+    }*/
 }
