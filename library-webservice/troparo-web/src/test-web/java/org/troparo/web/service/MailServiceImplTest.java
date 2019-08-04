@@ -8,10 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.troparo.business.impl.MailManagerImpl;
-import org.troparo.entities.mail.GetLoanReadyRequest;
-import org.troparo.entities.mail.GetOverdueMailListRequest;
-import org.troparo.entities.mail.MailListType;
-import org.troparo.entities.mail.MailTypeOut;
+import org.troparo.entities.mail.*;
 import org.troparo.model.Mail;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.web.service.helper.DateConvertedHelper;
@@ -69,6 +66,37 @@ class MailServiceImplTest {
         parameters.setToken("tchok");
         //assertDoesNotThrow(()->mailService.getOverdueMailList(parameters));
         assertNotNull(mailService.getLoanReady(parameters));
+    }
+
+    @Test
+    @DisplayName("should return reminder List")
+    void  getReminderMailList() throws BusinessExceptionMail {
+        GetReminderMailListRequest request = new GetReminderMailListRequest();
+        String token = "token123";
+        request.setToken(token);
+        List<Mail> list = new ArrayList<>();
+        when(mailManager.getLoansReminder(anyString())).thenReturn(list);
+        assertEquals(0, mailService.getReminderMailList(request).getMailListType().getMailTypeOut().size());
+    }
+
+    @Test
+    @DisplayName("should convert list")
+    void convertMailListIntoPasswordResetListType(){
+        List<Mail> list = new ArrayList<>();
+        Mail mail = new Mail();
+        String email = "test@test.test";
+        String login = "loginash";
+        String token = "token123";
+        mail.setEmail(email);
+        mail.setLogin(login);
+        mail.setToken(token);
+        list.add(mail);
+        PasswordResetListType passwordResetListType = mailService.convertMailListIntoPasswordResetListType(list);
+        assertAll(
+                ()-> assertEquals(email, passwordResetListType.getPasswordResetTypeOut().get(0).getEmail()),
+                ()-> assertEquals(token, passwordResetListType.getPasswordResetTypeOut().get(0).getToken()),
+                ()-> assertEquals(login, passwordResetListType.getPasswordResetTypeOut().get(0).getLogin())
+        );
     }
 
     @Test

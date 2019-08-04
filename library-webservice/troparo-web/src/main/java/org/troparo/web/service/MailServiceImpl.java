@@ -74,7 +74,7 @@ public class MailServiceImpl implements IMailService {
         return ar;
     }
 
-    private PasswordResetListType convertMailListIntoPasswordResetListType(List<Mail> mailList) {
+    PasswordResetListType convertMailListIntoPasswordResetListType(List<Mail> mailList) {
         PasswordResetListType passwordResetListType = new PasswordResetListType();
         for (Mail mail : mailList) {
             PasswordResetTypeOut passwordResetTypeOut = new PasswordResetTypeOut();
