@@ -9,6 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
+import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.enums.LoanStatus;
@@ -173,17 +174,16 @@ class LoanManagerImplTest {
 
     }
 
-/*    @Test
-    @DisplayName("should return \"book is not available: \" when bookmanager.isAvailable returns false")
+    @Test
+    @DisplayName("should return an empty string")
     void addLoan2() {
-        Loan loan = new Loan();
-        loan.setBorrower(new Member());
+        Member member = new Member();
         Book book = new Book();
-        book.setId(2);
-        loan.setBook(book);
-        when(bookManager.isAvailable(2)).thenReturn(false);
-        assertEquals("the book is unavailable for that date", loanManager.addLoan(loan));
-    }*/
+        when(memberManager.getMemberByLogin(anyString())).thenReturn(member);
+        when(bookManager.getBookById(anyInt())).thenReturn(book);
+        when(bookManager.isAvailable(anyInt())).thenReturn(true);
+        assertEquals("", loanManager.addLoan("dede", 3));
+    }
 
     @Test
     @DisplayName("should return \"max number of books rented reached\" when member has reached the max possible loans")
@@ -324,6 +324,13 @@ class LoanManagerImplTest {
         loanList.add(loan);
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
         assertTrue( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+    }
+
+    @Test
+    @DisplayName("should return the values")
+    void workaroundConfigFile(){
+        loanManager.workaroundConfigFile();
+
     }
 
     @Test
@@ -515,15 +522,20 @@ class LoanManagerImplTest {
     }
 
 
-   /* @Test
+    @Test
     @DisplayName("should return error while reserving")
     void reserve() throws ParseException {
         LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
         loanManager.setLoanDAO(loanDAO);
+        loanManager.setMemberManager(memberManager);
+        loanManager.setBookManager(bookManager);
+        String token = "token123";
+        String isbn = "ijshshshsbmn";
         Loan loan = new Loan();
         Book book = new Book();
         Member member = new Member();
         book.setId(2);
+        book.setIsbn(isbn);
         member.setLogin("John");
         loan.setBook(book);
         loan.setBorrower(member);
@@ -538,13 +550,14 @@ class LoanManagerImplTest {
         List<Book> bookList = new ArrayList<>();
         bookList.add(new Book());
         Date today = simpleDateFormat.parse("2019-03-09");
+        when(memberManager.getMemberByToken(token)).thenReturn(member);
+        when(bookManager.getBookByIsbn(isbn)).thenReturn(book);
         when(loanManager.getTodayDate()).thenReturn(today);
-       *//* when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);
-        when(loanDAO.addLoan(loan)).thenReturn(false);*//*
-        assertEquals("Issue while reserving", loanManager.reserve(loan));
+        when(loanDAO.addLoan(loan)).thenReturn(false);
+        assertEquals("Issue while reserving", loanManager.reserve(token, isbn));
 
 
-    }*/
+    }
 
     @Test
     void checkAddingRenewDurationGivesLaterThanTodayReturnsTrue() throws ParseException {

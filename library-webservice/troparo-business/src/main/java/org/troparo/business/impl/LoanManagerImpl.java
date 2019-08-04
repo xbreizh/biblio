@@ -110,7 +110,7 @@ public class LoanManagerImpl implements LoanManager {
         return "";
     }
 
-    private String checkAddLoanDetailsAreValid(Member member, Book book) {
+    String checkAddLoanDetailsAreValid(Member member, Book book) {
         logger.info("member to check: " + member);
 
         if (member == null) return "Invalid member";
