@@ -530,8 +530,6 @@ class LoanManagerImplTest {
     }
 
 
-
-
     @Test
     @DisplayName("should return error if date in past")
     void checkLoanStartDateIsNotInPastOrNull() throws ParseException {
@@ -577,7 +575,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return error if overdue")
-    void checkIfOverDue1(){
+    void checkIfOverDue1() {
         Loan loan = new Loan();
         Book book = new Book();
         Member member = new Member();
@@ -644,7 +642,7 @@ class LoanManagerImplTest {
         loanManager1.setMemberManager(memberManager);
         String exception = "exception";
         Member member = new Member();
-        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        when(memberManager.getMemberByToken(anyString())).thenReturn(member);
         doReturn(exception).when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
         assertEquals(exception, loanManager1.reserve("token123", "isbn123"));
 
@@ -656,7 +654,7 @@ class LoanManagerImplTest {
         LoanManagerImpl loanManager1 = spy(loanManager);
         loanManager1.setMemberManager(memberManager);
         Member member = new Member();
-        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        when(memberManager.getMemberByToken(anyString())).thenReturn(member);
         doReturn("").when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
         when(loanDAO.addLoan(any(Loan.class))).thenReturn(false);
         assertEquals("Issue while reserving", loanManager1.reserve("token123", "isbn123"));
@@ -670,7 +668,7 @@ class LoanManagerImplTest {
         LoanManagerImpl loanManager1 = spy(loanManager);
         loanManager1.setMemberManager(memberManager);
         Member member = new Member();
-        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        when(memberManager.getMemberByToken(anyString())).thenReturn(member);
         doReturn("").when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
         when(loanDAO.addLoan(any(Loan.class))).thenReturn(true);
         doReturn(new Book()).when(loanManager1).getBookIfAvailable(any(Loan.class));
@@ -684,7 +682,7 @@ class LoanManagerImplTest {
         LoanManagerImpl loanManager1 = spy(loanManager);
         loanManager1.setMemberManager(memberManager);
         Member member = new Member();
-        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        when(memberManager.getMemberByToken(anyString())).thenReturn(member);
         doReturn("").when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
         when(loanDAO.addLoan(any(Loan.class))).thenReturn(true);
         doReturn(null).when(loanManager1).getBookIfAvailable(any(Loan.class));
@@ -693,10 +691,9 @@ class LoanManagerImplTest {
     }
 
 
-
     @Test
     @DisplayName("should return an error if book or member invalid")
-    void checkReserveLoanDetailsAreValid(){
+    void checkReserveLoanDetailsAreValid() {
         LoanManagerImpl loanManager1 = spy(loanManager);
         String exception = "exception";
         doReturn(exception).when(loanManager1).checkBookAndMemberValidity(any(Member.class), anyString());
@@ -706,7 +703,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return an error if book or member invalid")
-    void checkReserveLoanDetailsAreValid1(){
+    void checkReserveLoanDetailsAreValid1() {
         LoanManagerImpl loanManager1 = spy(loanManager);
         Member member = new Member();
         member.setLogin("loginash");
@@ -719,7 +716,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return empty string if loan details are valid")
-    void checkReserveLoanDetailsAreValid2(){
+    void checkReserveLoanDetailsAreValid2() {
         LoanManagerImpl loanManager1 = spy(loanManager);
         Member member = new Member();
         member.setLogin("loginash");
@@ -745,7 +742,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return a book if available")
-    void getBookIfAvailable(){
+    void getBookIfAvailable() {
         Book book = new Book();
         Loan loan = new Loan();
         String isbn = "isbn123";
@@ -757,11 +754,41 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should null if no book available")
-    void getBookIfAvailable1(){
+    void getBookIfAvailable1() {
         when(loanDAO.getNextAvailableBook(anyString())).thenReturn(null);
-        assertNull( loanManager.getBookIfAvailable(new Loan()));
+        assertNull(loanManager.getBookIfAvailable(new Loan()));
 
     }
+
+
+    @Test
+    @DisplayName("should return null")
+    void getReminderLoans() {
+        when(loanDAO.getReminderLoans(anyInt())).thenReturn(null);
+        assertNull(loanManager.getReminderLoans(2));
+
+    }
+
+    @Test
+    @DisplayName("should return 0 if list empty")
+    void fillPendingReservation() {
+        List<Loan> pendingList = new ArrayList<>();
+        when(loanDAO.getAllPendingReservationWithNoBook()).thenReturn(pendingList);
+        assertEquals(0, loanManager.fillPendingReservation());
+    }
+
+    @Test
+    @DisplayName("should return nb if list not empty")
+    void fillPendingReservation1() {
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        List<Loan> pendingList = new ArrayList<>();
+        Loan loan = new Loan();
+        pendingList.add(loan);
+        when(loanManager1.getBookIfAvailable(loan)).thenReturn(null);
+        when(loanDAO.getAllPendingReservationWithNoBook()).thenReturn(pendingList);
+        assertEquals(1, loanManager1.fillPendingReservation());
+    }
+
 
     @Test
     void checkAddingRenewDurationGivesLaterThanTodayReturnsFalse() throws ParseException {
@@ -899,6 +926,8 @@ class LoanManagerImplTest {
 
     }
 
+
+
     @Test
     @DisplayName("should return OVERDUE if endDate is not null")
     void getLoanStatus2() throws ParseException {
@@ -938,6 +967,15 @@ class LoanManagerImplTest {
     void getLoanStatus4() {
         when(loanDAO.getLoanById(anyInt())).thenReturn(null);
         assertNull(loanManager.getLoanStatus(55));
+
+    }
+
+    @Test
+    @DisplayName("should return PLANNED if startdate is not null")
+    void getLoanStatus5() {
+        Loan loan = new Loan();
+        when(loanDAO.getLoanById(anyInt())).thenReturn(loan);
+        assertEquals("PLANNED", loanManager.getLoanStatus(55));
 
     }
 

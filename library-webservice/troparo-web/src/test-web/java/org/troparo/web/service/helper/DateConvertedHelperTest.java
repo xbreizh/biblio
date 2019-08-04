@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 class DateConvertedHelperTest {
 
@@ -32,6 +32,8 @@ class DateConvertedHelperTest {
 
     }
 
+
+
     @Test
     void convertXmlDateIntoDate() throws ParseException, DatatypeConfigurationException {
         String pattern = "yyyy-MM-dd";
@@ -43,4 +45,11 @@ class DateConvertedHelperTest {
         XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         assertEquals("Sun Sep 09 00:00:00 UTC 2018", dateConvertedHelper.convertXmlDateIntoDate(xmlCalendar).toString());
     }
+
+    @Test
+    void convertXmlDateIntoDate1() {
+
+        assertNull(dateConvertedHelper.convertXmlDateIntoDate(null));
+    }
+
 }

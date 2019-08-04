@@ -447,19 +447,21 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
-    public void fillPendingReservation(){
+    public int fillPendingReservation(){
        List<Loan> pendingLoanList = loanDAO.getAllPendingReservationWithNoBook();
        List<Loan> updatedList = new ArrayList<>();
        if (!pendingLoanList.isEmpty()){
            logger.info("pending list is not empty");
            for (Loan loan: pendingLoanList
                 ) {
-               getBookIfAvailable(loan);
+               Book book = getBookIfAvailable(loan);
+               if (book!=null)loan.setBook(book);
               updatedList.add(loan);
+              logger.info("adding loan");
            }
        }
        logger.info("number of updates: "+updatedList.size());
-
+        return updatedList.size();
     }
 
 

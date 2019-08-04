@@ -38,7 +38,7 @@ public interface LoanManager {
 
     void transferBookToPendingLoanIfAny(Book book);
 
-    void fillPendingReservation();
+    int fillPendingReservation();
 
     void cleanupExpiredReservation();
 

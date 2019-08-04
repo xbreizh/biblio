@@ -17,10 +17,11 @@ public class DateConvertedHelper {
     public XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
         // converting Date into XML date
         if (date == null) return null;
-        GregorianCalendar cal = new GregorianCalendar();
-        cal.setTime(date);
         XMLGregorianCalendar xmlCalendar = null;
         try {
+            GregorianCalendar cal = new GregorianCalendar();
+            cal.setTime(date);
+
             xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
         } catch (DatatypeConfigurationException e) {
             logger.error(e.getMessage());
@@ -29,7 +30,7 @@ public class DateConvertedHelper {
     }
 
 
-    public Date convertXmlDateIntoDate(XMLGregorianCalendar startDate) {
+    Date convertXmlDateIntoDate(XMLGregorianCalendar startDate) {
         if (startDate == null) return null;
         return startDate.toGregorianCalendar().getTime();
     }
