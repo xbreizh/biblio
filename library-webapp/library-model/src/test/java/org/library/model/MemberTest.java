@@ -180,7 +180,7 @@ class MemberTest {
         member.setFirstName("Paul");
         member.setLogin("koko");
         member.setId(123);
-        assertEquals("Member{id=123, login='koko', firstName='Paul', lastName='Boki', password='bhbh222', role='boss', token='bnjnj3222', email='bob@gmail.com', dateJoin=Fri Dec 31 00:00:00 UTC 2010, dateConnect=Thu Dec 31 00:00:00 UTC 2009, loanList=[]}", member.toString());
+        assertEquals("Member{id=123, login='koko', firstName='Paul', lastName='Boki', password='bhbh222', role='boss', token='bnjnj3222', email='bob@gmail.com', dateJoin=Fri Dec 31 00:00:00 UTC 2010, dateConnect=Thu Dec 31 00:00:00 UTC 2009, loanList=0}", member.toString());
     }
 
 }
