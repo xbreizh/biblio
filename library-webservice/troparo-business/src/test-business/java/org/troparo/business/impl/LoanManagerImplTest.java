@@ -9,7 +9,6 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
-import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.enums.LoanStatus;
@@ -140,14 +139,14 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return \"Invalid Member\"")
-    void cancelLoan(){
+    void cancelLoan() {
         when(memberManager.getMemberByToken(anyString())).thenReturn(null);
         assertEquals("Invalid Member", loanManager.cancelLoan("rerer", 2));
     }
 
     @Test
     @DisplayName("should return \"Invalid Loan\"")
-    void cancelLoan1(){
+    void cancelLoan1() {
         when(memberManager.getMemberByToken(anyString())).thenReturn(new Member());
         when(loanDAO.getLoanById(anyInt())).thenReturn(null);
         assertEquals("Invalid Loan", loanManager.cancelLoan("rerer", 2));
@@ -155,7 +154,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return \"The loan has been cancelled\"")
-    void cancelLoan2(){
+    void cancelLoan2() {
         when(memberManager.getMemberByToken(anyString())).thenReturn(new Member());
         when(memberManager.checkAdmin(anyString())).thenReturn(true);
         when(loanDAO.getLoanById(anyInt())).thenReturn(new Loan());
@@ -163,8 +162,6 @@ class LoanManagerImplTest {
         assertEquals("The loan has been cancelled", loanManager.cancelLoan("rerer", 2));
 
     }
-
-
 
 
     @Test
@@ -250,7 +247,7 @@ class LoanManagerImplTest {
         map.put("status", LoanStatus.OVERDUE.toString());
         List<Loan> loanList = new ArrayList<>();
         loanList.add(new Loan());
-      /*  when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);*/
+        /*  when(loanDAO.getListBooksAvailableOnThoseDates(loan)).thenReturn(bookList);*/
         when(loanDAO.getLoansByCriteria(map)).thenReturn(loanList);
         loanManager1.setLoanDAO(loanDAO);
         loanList.remove(0);
@@ -268,20 +265,20 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return invalid member if member is null")
-    void checkBookAndMemberValidity(){
+    void checkBookAndMemberValidity() {
         assertEquals("invalid member", loanManager.checkBookAndMemberValidity(null, "isbn123"));
     }
 
     @Test
     @DisplayName("should return invalid book if member is null")
-    void checkBookAndMemberValidity1(){
+    void checkBookAndMemberValidity1() {
         when(bookManager.getBookByIsbn(anyString())).thenReturn(null);
         assertEquals("invalid book", loanManager.checkBookAndMemberValidity(new Member(), "isbn123"));
     }
 
     @Test
     @DisplayName("should return \" max Loans reached\" if member is null")
-    void checkBookAndMemberValidity2(){
+    void checkBookAndMemberValidity2() {
         LoanManagerImpl loanManager1 = spy(loanManager);
         loanManager1.setBookManager(bookManager);
         Book book = new Book();
@@ -292,7 +289,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return \" There are overdue items\" if member is null")
-    void checkBookAndMemberValidity3(){
+    void checkBookAndMemberValidity3() {
         LoanManagerImpl loanManager1 = spy(loanManager);
         loanManager1.setBookManager(bookManager);
         Book book = new Book();
@@ -305,7 +302,7 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return \" That book is already has a renting in progress or planned for that user\" if member is null")
-    void checkBookAndMemberValidity4(){
+    void checkBookAndMemberValidity4() {
         LoanManagerImpl loanManager1 = spy(loanManager);
         loanManager1.setBookManager(bookManager);
         Book book = new Book();
@@ -361,8 +358,8 @@ class LoanManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return true if Max loans reached")
-    void checkIfBorrowerHasReachedMaxLoan(){
+    @DisplayName("should return false if loans have no start date")
+    void checkIfBorrowerHasReachedMaxLoan() {
         Member member = new Member();
         member.setLogin("logan");
         Book book = new Book();
@@ -373,17 +370,66 @@ class LoanManagerImplTest {
         List<Loan> loanList = new ArrayList<>();
         loanList.add(loan);
         member.setLoanList(loanList);
-        System.out.println(member.getLoanList());
 
         assertFalse(loanManager.checkIfBorrowerHasReachedMaxLoan(member));
 
     }
 
+    @Test
+    @DisplayName("should return true if loan has start date and no end date")
+    void checkIfBorrowerHasReachedMaxLoan3() {
+        Member member = new Member();
+        List<Loan> loanList = new ArrayList<>();
+        while (loanList.size() <= 3) {
+            Loan loan = new Loan();
+            loan.setStartDate(new Date());
+            loanList.add(loan);
+        }
+        member.setLoanList(loanList);
 
+        assertTrue(loanManager.checkIfBorrowerHasReachedMaxLoan(member));
+
+    }
+
+    @Test
+    @DisplayName("should return true if loan has start date and ignore those with  end date")
+    void checkIfBorrowerHasReachedMaxLoan4() {
+        Member member = new Member();
+        List<Loan> loanList = new ArrayList<>();
+        while (loanList.size() <= 2) {
+            Loan loan = new Loan();
+            loan.setStartDate(new Date());
+            loanList.add(loan);
+        }
+        Loan loan = new Loan();
+        loan.setStartDate(new Date());
+        loan.setEndDate(new Date());
+        loanList.add(loan);
+        member.setLoanList(loanList);
+
+        assertFalse(loanManager.checkIfBorrowerHasReachedMaxLoan(member));
+
+    }
+
+    @Test
+    @DisplayName("should return false if LoanList empty ")
+    void checkIfBorrowerHasReachedMaxLoan1() {
+        Member member = new Member();
+        assertFalse(loanManager.checkIfBorrowerHasReachedMaxLoan(member));
+    }
+
+    @Test
+    @DisplayName("should return false if LoanList empty ")
+    void checkIfBorrowerHasReachedMaxLoan2() {
+        Member member = new Member();
+        List<Loan> loanList = new ArrayList<>();
+        member.setLoanList(loanList);
+        assertFalse(loanManager.checkIfBorrowerHasReachedMaxLoan(member));
+    }
 
     @Test
     @DisplayName("should return true if loan already in progress ")
-    void checkIfMemberHasSimilarLoanPlannedOrInProgress(){
+    void checkIfMemberHasSimilarLoanPlannedOrInProgress() {
         // will return true if similar isbn and endDate is null
         Loan loan = new Loan();
         Member member = new Member();
@@ -401,17 +447,13 @@ class LoanManagerImplTest {
         loan.setIsbn(isbn);
         loanList.add(loan);
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
-        assertTrue( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+        assertTrue(loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
-
-
-
-
 
 
     @Test
     @DisplayName("should return false if loan no longer in progress ")
-    void checkIfSimilarLoanPlannedOrInProgress1(){
+    void checkIfSimilarLoanPlannedOrInProgress1() {
         Loan loan = new Loan();
         Member member = new Member();
         String login = "momo56";
@@ -429,44 +471,44 @@ class LoanManagerImplTest {
         loan.setIsbn(isbn);
         loanList.add(loan);
         when(loanDAO.getLoanByLogin(login)).thenReturn(loanList);
-        assertFalse( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+        assertFalse(loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
     @Test
     @DisplayName("should return false if loanList null")
-    void checkIfMemberHasSimilarLoanPlannedOrInProgress2(){
+    void checkIfMemberHasSimilarLoanPlannedOrInProgress2() {
         Member member = new Member();
         String isbn = "dede333";
         when(loanDAO.getLoanByLogin(anyString())).thenReturn(null);
-        assertFalse( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+        assertFalse(loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
 
     @Test
     @DisplayName("should return false if loanList empty")
-    void checkIfMemberHasSimilarLoanPlannedOrInProgress3(){
+    void checkIfMemberHasSimilarLoanPlannedOrInProgress3() {
         Member member = new Member();
         String isbn = "dede333";
         List<Loan> loanList = new ArrayList<>();
         when(loanDAO.getLoanByLogin(anyString())).thenReturn(loanList);
-        assertFalse( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+        assertFalse(loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
     @Test
     @DisplayName("should return false if isbn different")
-    void checkIfMemberHasSimilarLoanPlannedOrInProgress4(){
+    void checkIfMemberHasSimilarLoanPlannedOrInProgress4() {
         Member member = new Member();
         String isbn = "dede333";
         List<Loan> loanList = new ArrayList<>();
         Loan loan = new Loan();
         loan.setIsbn("isbn123");
         when(loanDAO.getLoanByLogin(anyString())).thenReturn(loanList);
-        assertFalse( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+        assertFalse(loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
     @Test
     @DisplayName("should return false if end date !=null")
-    void checkIfMemberHasSimilarLoanPlannedOrInProgress5(){
+    void checkIfMemberHasSimilarLoanPlannedOrInProgress5() {
         Member member = new Member();
         String isbn = "dede333";
         List<Loan> loanList = new ArrayList<>();
@@ -474,7 +516,7 @@ class LoanManagerImplTest {
         loan.setIsbn(isbn);
         loan.setEndDate(new Date());
         when(loanDAO.getLoanByLogin(anyString())).thenReturn(loanList);
-        assertFalse( loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
+        assertFalse(loanManager.checkIfMemberHasSimilarLoanPlannedOrInProgress(member, isbn));
     }
 
 
@@ -644,39 +686,94 @@ class LoanManagerImplTest {
 
 
     @Test
-    @DisplayName("should return error while reserving")
-    void reserve() throws ParseException {
-        LoanManagerImpl loanManager = spy(LoanManagerImpl.class);
-        loanManager.setLoanDAO(loanDAO);
-        loanManager.setMemberManager(memberManager);
-        loanManager.setBookManager(bookManager);
-        String token = "token123";
-        String isbn = "ijshshshsbmn";
-        Loan loan = new Loan();
-        Book book = new Book();
+    @DisplayName("should return exception if x1 not empty")
+    void reserve() {
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        loanManager1.setMemberManager(memberManager);
+        String exception = "exception";
         Member member = new Member();
-        book.setId(2);
-        book.setIsbn(isbn);
-        member.setLogin("John");
-        loan.setBook(book);
-        loan.setBorrower(member);
+        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        doReturn(exception).when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
+        assertEquals(exception, loanManager1.reserve("token123", "isbn123"));
 
-        String pattern = "yyyy-MM-dd";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+    }
 
-        Date startDate = simpleDateFormat.parse("2020-04-09");
-        Date plannedEndDate = simpleDateFormat.parse("2020-05-10");
-        loan.setStartDate(startDate);
-        loan.setPlannedEndDate(plannedEndDate);
-        List<Book> bookList = new ArrayList<>();
-        bookList.add(new Book());
-        Date today = simpleDateFormat.parse("2019-03-09");
-        when(memberManager.getMemberByToken(token)).thenReturn(member);
-        when(bookManager.getBookByIsbn(isbn)).thenReturn(book);
-        when(loanManager.getTodayDate()).thenReturn(today);
-        when(loanDAO.addLoan(loan)).thenReturn(false);
-        assertEquals("Issue while reserving", loanManager.reserve(token, isbn));
+    @Test
+    @DisplayName("should return \"Issue while reserving\" is issue while adding from Dao")
+    void reserve1() {
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        loanManager1.setMemberManager(memberManager);
+        Member member = new Member();
+        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        doReturn("").when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
+        when(loanDAO.addLoan(any(Loan.class))).thenReturn(false);
+        assertEquals("Issue while reserving", loanManager1.reserve("token123", "isbn123"));
 
+    }
+
+
+    @Test
+    @DisplayName("should return \"The book has been reserved and is available for collection for 4 days\" is issue while adding from Dao")
+    void reserve2() {
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        loanManager1.setMemberManager(memberManager);
+        Member member = new Member();
+        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        doReturn("").when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
+        when(loanDAO.addLoan(any(Loan.class))).thenReturn(true);
+        doReturn(new Book()).when(loanManager1).getBookIfAvailable(any(Loan.class));
+        assertEquals("The book has been reserved and is available for collection for 4 days", loanManager1.reserve("token123", "isbn123"));
+
+    }
+
+    @Test
+    @DisplayName("should return \"The book has been reserved but is currently unavailable. We will contact you as soon as it's ready\" is issue while adding from Dao")
+    void reserve3() {
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        loanManager1.setMemberManager(memberManager);
+        Member member = new Member();
+        when( memberManager.getMemberByToken(anyString())).thenReturn(member);
+        doReturn("").when(loanManager1).checkReserveLoanDetailsAreValid(any(Member.class), anyString());
+        when(loanDAO.addLoan(any(Loan.class))).thenReturn(true);
+        doReturn(null).when(loanManager1).getBookIfAvailable(any(Loan.class));
+        assertEquals("The book has been reserved but is currently unavailable. We will contact you as soon as it's ready", loanManager1.reserve("token123", "isbn123"));
+
+    }
+
+
+
+    @Test
+    @DisplayName("should return an error if book or member invalid")
+    void checkReserveLoanDetailsAreValid(){
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        String exception = "exception";
+        doReturn(exception).when(loanManager1).checkBookAndMemberValidity(any(Member.class), anyString());
+        assertEquals(exception, loanManager1.checkReserveLoanDetailsAreValid(new Member(), "isbn123"));
+
+    }
+
+    @Test
+    @DisplayName("should return an error if book or member invalid")
+    void checkReserveLoanDetailsAreValid1(){
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        Member member = new Member();
+        member.setLogin("loginash");
+        String exception = "exception";
+        doReturn("").when(loanManager1).checkBookAndMemberValidity(any(Member.class), anyString());
+        doReturn(exception).when(loanManager1).checkIfReserveLimitNotReached(anyString());
+        assertEquals(exception, loanManager1.checkReserveLoanDetailsAreValid(member, "isbn123"));
+
+    }
+
+    @Test
+    @DisplayName("should return empty string if loan details are valid")
+    void checkReserveLoanDetailsAreValid2(){
+        LoanManagerImpl loanManager1 = spy(loanManager);
+        Member member = new Member();
+        member.setLogin("loginash");
+        doReturn("").when(loanManager1).checkBookAndMemberValidity(any(Member.class), anyString());
+        doReturn("").when(loanManager1).checkIfReserveLimitNotReached(anyString());
+        assertEquals("", loanManager1.checkReserveLoanDetailsAreValid(member, "isbn123"));
 
     }
 
@@ -716,10 +813,6 @@ class LoanManagerImplTest {
         //logger.info("loanDuration: " + loanManager.getLoanDuration());
         assertEquals("loan already terminated: " + loan.getEndDate(), loanManager.renewLoan(45));
     }
-
-
-
-
 
 
     @Test

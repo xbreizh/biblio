@@ -133,7 +133,7 @@ public class LoanManagerImpl implements LoanManager {
         List<Loan> wholeLoanList = new ArrayList<>();
         for (Loan loan : member.getLoanList()
         ) {
-            if (loan.getStartDate() != null && loan.getEndDate() != null) {
+            if (loan.getStartDate() != null && loan.getEndDate() == null) {
                 wholeLoanList.add(loan);
                 logger.info("adding loan");
             }
@@ -164,8 +164,9 @@ public class LoanManagerImpl implements LoanManager {
         loan.setBorrower(member);
         if (!(loanDAO.addLoan(loan))) return "Issue while reserving";
         logger.info("loan has been reserved: " + isbn);
-        getBookIfAvailable(loan);
-        if (loan.getBook() != null) {
+        Book book = getBookIfAvailable(loan);
+        if (book!=null) {
+            loan.setBook(book);
             loan.setAvailableDate(getTodayDate());
             loanDAO.updateLoan(loan);
             return "The book has been reserved and is available for collection for 4 days";
@@ -174,9 +175,9 @@ public class LoanManagerImpl implements LoanManager {
     }
 
 
-    private void getBookIfAvailable(Loan loan) {
+    Book getBookIfAvailable(Loan loan) {
         logger.info("trying to get available book");
-        loan.setBook(loanDAO.getNextAvailableBook(loan.getIsbn()));
+        return loanDAO.getNextAvailableBook(loan.getIsbn());
     }
 
 
