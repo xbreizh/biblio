@@ -1,7 +1,6 @@
 package org.troparo.web.service;
 
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,10 +17,12 @@ import org.troparo.model.Member;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.web.service.helper.DateConvertedHelper;
 
+import javax.xml.datatype.XMLGregorianCalendar;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,24 +50,23 @@ class LoanServiceImplTest {
 
     }
 
-  /*  @Test
+    @Test
     @DisplayName("should not throw any exception when trying to add loan")
     void addLoan() {
         AddLoanRequestType parameters = new AddLoanRequestType();
         parameters.setToken("derr");
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
-        loanTypeIn.setISBN("12345");
+        loanTypeIn.setBookId(12345);
         parameters.setLoanTypeIn(loanTypeIn);
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         loanService.setDateConvertedHelper(dateConvertedHelper);
-        when(loanManager.addLoan(any(Loan.class))).thenReturn("");
+        when(loanManager.addLoan(anyString(), anyInt())).thenReturn("");
         assertDoesNotThrow(() -> loanService.addLoan(parameters));
 
     }
 
     @Test
-    @Disabled
     @DisplayName("should throw an exception when trying to add loan")
     void addLoan1() throws BusinessExceptionLoan {
         loanService = spy(LoanServiceImpl.class);
@@ -75,20 +75,18 @@ class LoanServiceImplTest {
         parameters.setToken(token);
         LoanTypeIn loanTypeIn = new LoanTypeIn();
         loanTypeIn.setLogin("Bobb");
-        loanTypeIn.setISBN("12345");
+        loanTypeIn.setBookId(12345);
         parameters.setLoanTypeIn(loanTypeIn);
         DateConvertedHelper dateConvertedHelper = new DateConvertedHelper();
         loanService.setDateConvertedHelper(dateConvertedHelper);
         XMLGregorianCalendar date = dateConvertedHelper.convertDateIntoXmlDate(new Date());
-        loanTypeIn.setStartDate(date);
         doThrow(new BusinessExceptionLoan()).when(loanService).checkAuthentication(token);
         assertThrows(BusinessExceptionLoan.class, ()-> loanService.addLoan(parameters));
 
-    }*/
+    }
 
 
     @Test
-    @Disabled
     @DisplayName("should throw an exception when trying to remove loan")
     void removeLoan() throws BusinessExceptionLoan {
         loanService = spy(LoanServiceImpl.class);
@@ -102,7 +100,6 @@ class LoanServiceImplTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("should return exception is non empty string returned from manager")
     void removeLoan1() throws BusinessExceptionLoan {
         CancelLoanRequestType parameters = new CancelLoanRequestType();
@@ -117,7 +114,6 @@ class LoanServiceImplTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("should return empty string if removal ok")
     void removeLoan2() throws BusinessExceptionLoan {
         CancelLoanRequestType parameters = new CancelLoanRequestType();

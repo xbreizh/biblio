@@ -596,6 +596,11 @@ class LoanManagerImplTest {
         assertEquals("loan already terminated: " + loan.getEndDate(), loanManager.renewLoan(45));
     }
 
+
+
+
+
+
     @Test
     @DisplayName("should return an empty string if loan renewed")
     void renewLoan1() {

@@ -436,6 +436,16 @@ public class LoanManagerImpl implements LoanManager {
     }
 
     @Override
+    public List<Loan> getReminderLoans(int daysReminder) {
+        return loanDAO.getReminderLoans(daysReminder);
+    }
+
+    @Override
+    public List<Loan> getLoansReadyForStart() {
+        return loanDAO.getLoansReadyForStart();
+    }
+
+    @Override
     public void fillPendingReservation(){
        List<Loan> pendingLoanList = loanDAO.getAllPendingReservationWithNoBook();
        List<Loan> updatedList = new ArrayList<>();

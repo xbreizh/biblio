@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MailManager;
+import org.troparo.business.contract.MemberManager;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
@@ -22,6 +23,10 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
@@ -33,13 +38,15 @@ class MailManagerImplTest {
 
     private LoanManagerImpl loanManager;
 
+    private MemberManager memberManager;
+
     @BeforeEach
     void init() {
         mailManager = new MailManagerImpl();
-        loanManager = new LoanManagerImpl();
+        loanManager = mock(LoanManagerImpl.class);
+        memberManager = mock(MemberManagerImpl.class);
+        mailManager.setMemberManager(memberManager);
         mailManager.setLoanManager(loanManager);
-        LoanDAO loanDAO = new LoanDAOImpl();
-        loanManager.setLoanDAO(loanDAO);
     }
 
 
@@ -64,7 +71,40 @@ class MailManagerImplTest {
     }
 
     @Test
-    @DisplayName("should set loanmanager")
+    @DisplayName("should return empty list")
+    void getLoansReminder(){
+        String token = "token1234";
+        when(memberManager.checkAdmin(anyString())).thenReturn(false);
+        assertEquals(0,mailManager.getLoansReminder(token).size());
+
+    }
+
+    @Test
+    @DisplayName("should return empty list")
+    void getLoansReminder1(){
+        List<Loan> loanList = new ArrayList<>();
+        Loan loan = new Loan();
+        loanList.add(loan);
+        String token = "token1234";
+        Member member = new Member();
+        member.setEmail("dede@dede.de");
+        member.setFirstName("Paul");
+        member.setLastName("Jorki");
+        Book book = new Book();
+        book.setTitle("koko");
+        book.setAuthor("Joe dassi");
+        book.setEdition("darmond");
+        book.setIsbn("isbn332");
+        loan.setBook(book);
+        loan.setBorrower(member);
+        when(loanManager.getReminderLoans(anyInt())).thenReturn(loanList);
+        when(memberManager.checkAdmin(anyString())).thenReturn(true);
+        assertEquals(1,mailManager.getLoansReminder(token).size());
+
+    }
+
+    @Test
+    @DisplayName("should set loanManager")
     void setLoanManager() {
 
         assertEquals(loanManager, mailManager.getLoanManager());

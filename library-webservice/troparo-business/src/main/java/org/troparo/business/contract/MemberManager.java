@@ -50,4 +50,6 @@ public interface MemberManager {
     Member getMemberByToken(String token);
 
     boolean switchReminder(String token, String login);
+
+    List<Member> getPasswordResetList();
 }

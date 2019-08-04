@@ -44,5 +44,9 @@ public interface LoanManager {
 
     int getNbDaysReservation();
 
+    List<Loan> getReminderLoans(int daysReminder);
+
+    List<Loan> getLoansReadyForStart();
+
 
 }

@@ -14,8 +14,12 @@ import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.LoanManagerImpl;
 import org.troparo.business.impl.MailManagerImpl;
 import org.troparo.consumer.impl.LoanDAOImpl;
+import org.troparo.model.Member;
 
 import javax.inject.Inject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -47,6 +51,31 @@ class MailManagerImplIntegrationTest {
       mailManager.setMemberManager(memberManager);
         logger.info("reset db");
     }
+
+
+
+    @Test
+    @DisplayName("should return empty list")
+    void getPasswordResetList(){
+        when(memberManager.checkAdmin(anyString())).thenReturn(false);
+        assertEquals(0, mailManager.getPasswordResetList("test").size());
+
+    }
+
+    @Test
+    @DisplayName("should return empty list")
+    void getPasswordResetList1(){
+        when(memberManager.checkAdmin(anyString())).thenReturn(true);
+        List<Member> memberList = new ArrayList<>();
+        Member member = new Member();
+        String token  = "token123";
+        member.setToken(token);
+        memberList.add(member);
+        when(memberManager.getPasswordResetList()).thenReturn(memberList);
+        assertEquals(1, mailManager.getPasswordResetList("test").size());
+
+    }
+
 
 
     @Test

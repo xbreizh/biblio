@@ -79,6 +79,9 @@ class MailServiceImplTest {
         assertEquals(0, mailService.getReminderMailList(request).getMailListType().getMailTypeOut().size());
     }
 
+
+
+
     @Test
     @DisplayName("should convert list")
     void convertMailListIntoPasswordResetListType(){

@@ -55,11 +55,63 @@ class MailTest {
     }
 
     @Test
+    @DisplayName("should set token")
+    void getToken() {
+        String token = "token123";
+        mail.setToken(token);
+        assertEquals(token, mail.getToken());
+    }
+
+    @Test
+    @DisplayName("should set token")
+    void setToken() {
+        String token = "token123";
+        mail.setToken(token);
+        assertEquals(token, mail.getToken());
+    }
+
+
+    @Test
+    @DisplayName("should set login")
+    void getLogin() {
+        String login = "Bobby";
+        mail.setLogin(login);
+        assertEquals(login, mail.getLogin());
+    }
+
+    @Test
+    @DisplayName("should set login")
+    void setLogin() {
+        String login = "Bobby";
+        mail.setLogin(login);
+        assertEquals(login, mail.getLogin());
+    }
+
+    @Test
     @DisplayName("should set lastname")
     void setLastname() {
         mail.setLastName("Sand");
         assertEquals("Sand", mail.getLastName());
     }
+
+    @Test
+    @DisplayName("should get end available date")
+    void getEndAvailableDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        mail.setEndAvailableDate(date);
+        assertEquals(date, mail.getEndAvailableDate());
+    }
+
+    @Test
+    @DisplayName("should get end available date")
+    void setEndAvailableDate() throws ParseException {
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        mail.setEndAvailableDate(date);
+        assertEquals(date, mail.getEndAvailableDate());
+    }
+
 
     @Test
     @DisplayName("should get due date")

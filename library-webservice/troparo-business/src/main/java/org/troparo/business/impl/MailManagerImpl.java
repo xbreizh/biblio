@@ -7,8 +7,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MailManager;
 import org.troparo.business.contract.MemberManager;
-import org.troparo.consumer.contract.LoanDAO;
-import org.troparo.consumer.contract.MemberDAO;
 import org.troparo.model.Loan;
 import org.troparo.model.Mail;
 import org.troparo.model.Member;
@@ -24,10 +22,7 @@ import java.util.*;
 public class MailManagerImpl implements MailManager {
     @Inject
     LoanManager loanManager;
-    @Inject
-    MemberDAO memberDAO;
-    @Inject
-    LoanDAO loanDAO;
+
 
     @Inject
     MemberManager memberManager;
@@ -40,10 +35,10 @@ public class MailManagerImpl implements MailManager {
     private int daysReminder;
 
     public MailManagerImpl() {
-        if (daysReminder==0)daysReminder=5;
+        if (daysReminder == 0) daysReminder = 5;
     }
 
-    private static  Logger logger = Logger.getLogger(MailManagerImpl.class);
+    private static Logger logger = Logger.getLogger(MailManagerImpl.class);
 
     @Override
     public int calculateDaysBetweenDates(Date d1, Date d2) {
@@ -66,18 +61,18 @@ public class MailManagerImpl implements MailManager {
     @Override
     public List<Mail> getLoansReadyForStart(String token) {
         List<Mail> list = new ArrayList<>();
-        if (!memberManager.checkAdmin(token) )return list;
+        if (!memberManager.checkAdmin(token)) return list;
         logger.info("getting loans ready for start");
-        List<Loan> loans = loanDAO.getLoansReadyForStart();
+        List<Loan> loans = loanManager.getLoansReadyForStart();
         return gettingDataForLoan(loans);
     }
 
     @Override
     public List<Mail> getLoansReminder(String token) {
         List<Mail> list = new ArrayList<>();
-        if (!memberManager.checkAdmin(token) )return list;
-        List<Loan> loans = loanDAO.getReminderLoans(daysReminder);
-        logger.info("size of list found: "+loans.size());
+        if (!memberManager.checkAdmin(token)) return list;
+        List<Loan> loans = loanManager.getReminderLoans(daysReminder);
+        logger.info("size of list found: " + loans.size());
         return gettingDataForLoan(loans);
     }
 
@@ -95,10 +90,10 @@ public class MailManagerImpl implements MailManager {
             mail.setAuthor(loan.getBook().getAuthor());
             mail.setEdition(loan.getBook().getEdition());
             mail.setDueDate(loan.getPlannedEndDate());
-            if(loan.getAvailableDate()!=null) {
+            if (loan.getAvailableDate() != null) {
                 mail.setEndAvailableDate(calculateEndAvailableDate(loan, loanManager.getNbDaysReservation()));
             }
-            if(loan.getPlannedEndDate()!=null){
+            if (loan.getPlannedEndDate() != null) {
                 int overDays = calculateDaysBetweenDates(getTodaySDate(), loan.getPlannedEndDate());
                 mail.setDiffDays(overDays);
             }
@@ -108,15 +103,14 @@ public class MailManagerImpl implements MailManager {
     }
 
 
-
     @Override
-    public Date calculateEndAvailableDate(Loan loan,int  nbDays){
+    public Date calculateEndAvailableDate(Loan loan, int nbDays) {
         logger.debug("calculating endAvailable date");
         Date availableDate = loan.getAvailableDate();
         Calendar c = Calendar.getInstance();
         c.setTime(availableDate);
         c.add(Calendar.DATE, nbDays);  // number of days to add
-       return c.getTime();
+        return c.getTime();
 
     }
 
@@ -137,15 +131,15 @@ public class MailManagerImpl implements MailManager {
     @Override
     public List<Mail> getPasswordResetList(String token) {
         List<Mail> list = new ArrayList<>();
-        if (!memberManager.checkAdmin(token) )return list;
-        List<Member> memberList = memberDAO.getPasswordResetList();
+        if (!memberManager.checkAdmin(token)) return list;
+        List<Member> memberList = memberManager.getPasswordResetList();
         logger.info("number of member pwd to reset: " + memberList.size());
         for (Member member : memberList
         ) {
             if (member.getToken().startsWith("TEMP")) {
                 member.setToken(removeTempFromToken(member.getToken()));
                 member.setTokenexpiration(getTodaySDate());
-                memberDAO.updateMember(member);
+                memberManager.updateMember(member);
             }
         }
         return convertMemberListIntoMailList(memberList);
@@ -157,6 +151,7 @@ public class MailManagerImpl implements MailManager {
 
     public List<Mail> convertMemberListIntoMailList(List<Member> memberList) {
         List<Mail> mailList = new ArrayList<>();
+        logger.info("size of memberList received: " + memberList.size());
         for (Member member : memberList
         ) {
             Mail mail = new Mail();

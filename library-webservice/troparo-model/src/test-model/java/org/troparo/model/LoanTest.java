@@ -124,6 +124,22 @@ class LoanTest {
     }
 
     @Test
+    @DisplayName("should get Isbn")
+    void getIsbn() {
+        String isbn = "isbn123";
+        loan.setIsbn(isbn);
+        assertEquals(isbn, loan.getIsbn());
+    }
+
+    @Test
+    @DisplayName("should set Borrower")
+    void setIsbn() {
+        String isbn = "isbn123";
+        loan.setIsbn(isbn);
+        assertEquals(isbn, loan.getIsbn());
+    }
+
+    @Test
     @DisplayName("should get Borrower")
     void getBorrower() {
         Member borrower = new Member();
@@ -172,4 +188,20 @@ class LoanTest {
         loan.setEndDate(format.parse("2010-01-17"));
         assertEquals("Loan{id=123, reservationDate=null, availableDate=null, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, isbn=null, borrower=Member{id=0, login='Diego23', firstName='null', lastName='null', password='null', role='null', token='null', email='null', dateJoin=null, dateConnect=null, loanList=0, tokenExpiration=null, reminder=false}, book=Captain Cook}", loan.toString());
     }
+
+    @Test
+    @DisplayName("should return Loan details")
+    void toString2() throws ParseException {
+        loan.setId(123);
+        Member borrower = new Member();
+        borrower.setLogin("Diego23");
+        loan.setBorrower(borrower);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = format.parse("2009-12-31");
+        loan.setStartDate(date);
+        loan.setPlannedEndDate(format.parse("2010-01-07"));
+        loan.setEndDate(format.parse("2010-01-17"));
+        assertEquals("Loan{id=123, reservationDate=null, availableDate=null, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, isbn=null, borrower=Member{id=0, login='Diego23', firstName='null', lastName='null', password='null', role='null', token='null', email='null', dateJoin=null, dateConnect=null, loanList=0, tokenExpiration=null, reminder=false}, book=no book}", loan.toString());
+    }
+
 }

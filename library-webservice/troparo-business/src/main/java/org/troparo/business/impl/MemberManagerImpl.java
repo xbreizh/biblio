@@ -395,6 +395,11 @@ public class MemberManagerImpl implements MemberManager {
         return memberDAO.updateMember(member);
     }
 
+    @Override
+    public List<Member> getPasswordResetList() {
+        return memberDAO.getPasswordResetList();
+    }
+
     String generateToken() {
         int nbTries = 0;
         while (nbTries < 5) {
