@@ -34,7 +34,7 @@ public class LoanServiceImpl implements ILoanService {
     private MemberManager memberManager;
 
     @Inject
-    private ConnectServiceImpl authentication;
+    private ConnectServiceImpl connectService;
     @Inject
     private DateConvertedHelper dateConvertedHelper;
 
@@ -276,12 +276,13 @@ public class LoanServiceImpl implements ILoanService {
 
 
     void checkAuthentication(String token) throws BusinessExceptionLoan {
-        try {
-            authentication.checkToken(token);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            throw new BusinessExceptionLoan("invalid token");
-        }
+
+            if(!connectService.checkToken(token)){
+
+                logger.error("Invalid token");
+                throw new BusinessExceptionLoan("invalid token");
+            }
+
     }
 
     void setLoanManager(LoanManager loanManager) {
@@ -296,8 +297,8 @@ public class LoanServiceImpl implements ILoanService {
         this.memberManager = memberManager;
     }
 
-    void setAuthentication(ConnectServiceImpl authentication) {
-        this.authentication = authentication;
+    void setConnectService(ConnectServiceImpl connectService) {
+        this.connectService = connectService;
     }
 
 }

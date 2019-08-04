@@ -10,6 +10,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
 import org.troparo.business.impl.BookManagerImpl;
+import org.troparo.business.impl.LoanManagerImpl;
 import org.troparo.entities.loan.*;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
@@ -43,7 +44,7 @@ class LoanServiceImplTest {
     @BeforeEach
     void init() {
         loanService = new LoanServiceImpl();
-        loanService.setAuthentication(connectService);
+        loanService.setConnectService(connectService);
         loanService.setLoanManager(loanManager);
         loanService.setBookManager(bookManager);
         loanService.setMemberManager(memberManager);
@@ -67,6 +68,21 @@ class LoanServiceImplTest {
     }
 
     @Test
+    @DisplayName("should return empty string")
+    void reserve() throws BusinessExceptionLoan {
+        ReserveRequestType request = new ReserveRequestType();
+        String isbn = "isbn123";
+        request.setISBN(isbn);
+        String token = "token123";
+        request.setToken(token);
+
+        when(loanManager.reserve(anyString(), anyString())).thenReturn("");
+        assertTrue(loanService.reserve(request).getReturn().isEmpty());
+
+    }
+
+
+    @Test
     @DisplayName("should throw an exception when trying to add loan")
     void addLoan1() throws BusinessExceptionLoan {
         loanService = spy(LoanServiceImpl.class);
@@ -81,7 +97,7 @@ class LoanServiceImplTest {
         loanService.setDateConvertedHelper(dateConvertedHelper);
         XMLGregorianCalendar date = dateConvertedHelper.convertDateIntoXmlDate(new Date());
         doThrow(new BusinessExceptionLoan()).when(loanService).checkAuthentication(token);
-        assertThrows(BusinessExceptionLoan.class, ()-> loanService.addLoan(parameters));
+        assertThrows(BusinessExceptionLoan.class, () -> loanService.addLoan(parameters));
 
     }
 
@@ -127,6 +143,16 @@ class LoanServiceImplTest {
 
     }
 
+    @Test
+    @DisplayName("should throw an exception if token is invalid")
+    void checkAuthentication() {
+        ConnectServiceImpl connectService1 = mock(ConnectServiceImpl.class);
+        loanService.setConnectService(connectService1);
+        when(connectService1.checkToken(anyString())).thenReturn(false);
+        assertThrows(BusinessExceptionLoan.class, () -> loanService.checkAuthentication("trok"));
+
+    }
+
 
     @Test
     @DisplayName("should return member by ID")
@@ -154,6 +180,26 @@ class LoanServiceImplTest {
         );
 
 
+    }
+
+    @Test
+    @DisplayName("should throw an exception")
+    void getLoanById1() {
+        assertThrows(BusinessExceptionLoan.class, () -> loanService.getLoanById(new GetLoanByIdRequestType()));
+
+
+    }
+
+    @Test
+    @DisplayName("should return true when checkinBooking is true")
+    void checkInLoan() {
+        CheckInLoanRequestType request = new CheckInLoanRequestType();
+        request.setToken("token123");
+        request.setId(3);
+        loanManager = mock(LoanManagerImpl.class);
+        loanService.setLoanManager(loanManager);
+        when(loanManager.checkinBooking(anyString(), anyInt())).thenReturn(true);
+        assertTrue(loanService.checkInLoan(request).isReturn());
     }
 
     @Test
