@@ -5,6 +5,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.business.contract.BookManager;
 import org.library.model.Member;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.troparo.entities.connect.RequestPasswordResetLinkRequestType;
+import org.troparo.entities.connect.RequestPasswordResetLinkResponseType;
 import org.troparo.entities.connect.ResetPasswordRequestType;
 import org.troparo.entities.connect.ResetPasswordResponseType;
 import org.troparo.entities.member.*;
@@ -89,9 +92,26 @@ class MemberManagerImplTest {
         assertNull( memberManager.getMember("", "login"));
     }
 
+    @Test
+    void getMemberServicePort(){
+        memberManager.setMemberService(null);
+        assertNotNull(memberManager.getMemberServicePort());
+    }
+
 
     @Test
     @DisplayName("should return true when trying to reset password")
+    void sendResetPasswordLink() throws  BusinessExceptionConnect {
+        RequestPasswordResetLinkResponseType response = new RequestPasswordResetLinkResponseType();
+        response.setReturn(true);
+        when(connectService.getConnectServicePort()).thenReturn(iConnectService);
+        when(connectService.getConnectServicePort().requestPasswordResetLink(any(RequestPasswordResetLinkRequestType.class))).thenReturn(response);
+
+        assertTrue( memberManager.sendResetPasswordLink( "", "login"));
+    }
+
+    @Test
+    @DisplayName("should return true when trying to send Password links")
     void resetPassword() throws  BusinessExceptionConnect {
         ResetPasswordResponseType response = new ResetPasswordResponseType();
         response.setReturn(true);
@@ -255,8 +275,32 @@ class MemberManagerImplTest {
     }
 
 
+    @Test
+    void getLoanManager(){
+        LoanManagerImpl loanManager1 = new LoanManagerImpl();
+        memberManager.setLoanManager(loanManager1);
+        assertEquals(loanManager1, memberManager.getLoanManager());
+    }
+    @Test
+    void setLoanManager(){
+        LoanManagerImpl loanManager1 = new LoanManagerImpl();
+        memberManager.setLoanManager(loanManager1);
+        assertEquals(loanManager1, memberManager.getLoanManager());
+    }
 
+    @Test
+    void getMemberService(){
+        MemberService memberService1 = new MemberService();
+        memberManager.setMemberService(memberService1);
+        assertEquals(memberService1, memberManager.getMemberService());
+    }
 
+    @Test
+    void setMemberService(){
+        MemberService memberService1 = new MemberService();
+        memberManager.setMemberService(memberService1);
+        assertEquals(memberService1, memberManager.getMemberService());
+    }
 
 
     @Test

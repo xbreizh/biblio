@@ -33,12 +33,12 @@ import java.util.List;
 @Named
 public class MemberManagerImpl implements MemberManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    //@Inject
+
     private LoanManager loanManager;
     private MemberService memberService;
     private ConnectService connectService;
 
-    public LoanManager getLoanManager() {
+    LoanManager getLoanManager() {
         return loanManager;
     }
 
@@ -127,7 +127,7 @@ public class MemberManagerImpl implements MemberManager {
         return connectService.getConnectServicePort();
     }
 
-    private IMemberService getMemberServicePort() {
+    IMemberService getMemberServicePort() {
         if (memberService == null) memberService = new MemberService();
         return memberService.getMemberServicePort();
     }

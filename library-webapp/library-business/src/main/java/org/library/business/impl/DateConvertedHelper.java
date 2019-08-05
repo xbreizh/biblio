@@ -14,9 +14,10 @@ public class DateConvertedHelper {
 
     private Logger logger = Logger.getLogger(this.getClass().getName());
 
-    public XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
+    XMLGregorianCalendar convertDateIntoXmlDate(Date date) {
         // converting Date into XML date
         if (date == null) return null;
+        logger.info("not null");
         GregorianCalendar cal = new GregorianCalendar();
         cal.setTime(date);
         XMLGregorianCalendar xmlCalendar = null;
