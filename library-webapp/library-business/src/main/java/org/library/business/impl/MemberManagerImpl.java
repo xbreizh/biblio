@@ -37,6 +37,19 @@ public class MemberManagerImpl implements MemberManager {
     private LoanManager loanManager;
     private MemberService memberService;
     private ConnectService connectService;
+
+    public LoanManager getLoanManager() {
+        return loanManager;
+    }
+
+    MemberService getMemberService() {
+        return memberService;
+    }
+
+    BookManager getBookManager() {
+        return bookManager;
+    }
+
     //@Inject
     private BookManager bookManager;
 
@@ -47,7 +60,7 @@ public class MemberManagerImpl implements MemberManager {
         this.connectService = new ConnectService();
     }
 
-    public void setBookManager(BookManager bookManager) {
+    void setBookManager(BookManager bookManager) {
         this.bookManager = bookManager;
     }
 
@@ -119,7 +132,7 @@ public class MemberManagerImpl implements MemberManager {
         return memberService.getMemberServicePort();
     }
 
-    public Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan, BusinessExceptionBook {
+    Member convertMemberTypeOutIntoMember(String token, MemberTypeOut memberTypeOut) throws BusinessExceptionLoan, BusinessExceptionBook {
         Member member = new Member();
         member.setFirstName(memberTypeOut.getFirstName());
         member.setLastName(memberTypeOut.getLastName());
@@ -138,7 +151,7 @@ public class MemberManagerImpl implements MemberManager {
         return member;
     }
 
-    public List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan, BusinessExceptionBook {
+    List<Loan> convertLoanListTypeIntoList(String token, LoanListType loanListType) throws BusinessExceptionLoan, BusinessExceptionBook {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert LoanListType into List<Loan>");
         for (LoanTypeOut loanTypeOut : loanListType.getLoanTypeOut()
@@ -182,7 +195,7 @@ public class MemberManagerImpl implements MemberManager {
         return loanList;
     }
 
-    public Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
+    Book convertBookTypeOutIntoBook(BookTypeOut bookTypeOut) {
         if (bookTypeOut == null) return null;
         logger.info("trying to convert book");
         Book book = new Book();
@@ -198,7 +211,7 @@ public class MemberManagerImpl implements MemberManager {
         return book;
     }
 
-    public Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
+    Date convertGregorianCalendarIntoDate(GregorianCalendar gDate) {
         if (gDate != null) {
             XMLGregorianCalendar xmlCalendar;
             try {
@@ -213,11 +226,11 @@ public class MemberManagerImpl implements MemberManager {
 
     }
 
-    public ConnectService getConnectService() {
+    ConnectService getConnectService() {
         return connectService;
     }
 
-    public void setConnectService(ConnectService connectService) {
+    void setConnectService(ConnectService connectService) {
         this.connectService = connectService;
     }
 
