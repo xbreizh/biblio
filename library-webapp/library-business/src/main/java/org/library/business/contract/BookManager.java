@@ -14,8 +14,8 @@ public interface BookManager {
 
     Book getBookByISBN(String token, String isbn) throws BusinessExceptionBook;
 
-    void setBookService(BookService bookService);
-
     BookService getBookService();
+
+    void setBookService(BookService bookService);
 
 }

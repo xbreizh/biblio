@@ -6,25 +6,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.library.business.contract.BookManager;
 import org.library.business.impl.BookManagerImpl;
-import org.library.business.impl.LoanManagerImpl;
-import org.library.business.impl.MemberManagerImpl;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.book.*;
 import org.troparo.services.bookservice.BookService;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.bookservice.IBookService;
-import org.troparo.services.memberservice.IMemberService;
-import org.troparo.services.memberservice.MemberService;
 
-import javax.inject.Inject;
 import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -35,7 +28,7 @@ class BookManagerImplIntegrationTest {
 
     private static Logger logger = Logger.getLogger(BookManagerImpl.class);
     private BookManagerImpl bookManager;
-
+    //private LoanManager loanManager;
     private BookService bookService;
     private IBookService iBookService;
 
@@ -43,11 +36,12 @@ class BookManagerImplIntegrationTest {
     void init() {
         bookManager = new BookManagerImpl();
         bookService = mock(BookService.class);
+        //loanManager = mock(LoanManager.class);
         bookManager.setBookService(bookService);
         iBookService = mock(IBookService.class);
-        MemberManagerImpl memberManager = new MemberManagerImpl();
-        LoanManagerImpl loanManager = mock(LoanManagerImpl.class);
-        memberManager.setLoanManager(loanManager);
+        /*MemberManagerImpl memberManager = new MemberManagerImpl(loanManager, bookManager);
+        LoanManagerImpl loanManager = mock(LoanManagerImpl.class);*/
+
     }
 
 

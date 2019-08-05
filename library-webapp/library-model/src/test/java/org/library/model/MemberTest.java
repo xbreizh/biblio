@@ -110,14 +110,14 @@ class MemberTest {
     @Test
     void isReminder() {
         member.setReminder(true);
-        assertTrue( member.isReminder());
+        assertTrue(member.isReminder());
     }
 
 
     @Test
     void setReminder() {
         member.setReminder(true);
-        assertTrue( member.isReminder());
+        assertTrue(member.isReminder());
     }
 
     @Test

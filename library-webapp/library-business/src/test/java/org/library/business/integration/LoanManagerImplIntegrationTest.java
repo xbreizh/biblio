@@ -1,3 +1,4 @@
+/*
 package org.library.business.integration;
 
 
@@ -11,23 +12,23 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @ContextConfiguration(classes = LoanManagerImpl.class)
 class LoanManagerImplIntegrationTest {
 
-    //@Inject
-    private LoanManagerImpl loanManager;
-
 
     @BeforeEach
     void init() {
-        loanManager = new LoanManagerImpl();
+        //@Inject
+        LoanManagerImpl loanManager = new LoanManagerImpl();
 
     }
 
 
+*/
 /*    @Test
     @DisplayName("should return error")
     void reserve()  {
         assertEquals("invalid member", loanManager.reserve("dede", "1234567824"));
 
-    }*/
+    }*//*
 
 
-}
+
+}*/

@@ -204,7 +204,7 @@ class MemberManagerImplIntegrationTest {
         int id = 4;
         String isbn = "njahsui2";
        *//*
-*/
+ */
 /* BookTypeOut bookTypeOut = new BookTypeOut();
         String author = "Joricho";
         String title = "le temps des pruneaux";
@@ -214,10 +214,10 @@ class MemberManagerImplIntegrationTest {
         int nbPages = 231;
         int publicationYear = 1982;
         int id = 4;*//*
-*/
+ */
 /*
-       *//*
-*/
+ *//*
+ */
 /* bookTypeOut.setAuthor(author);
         bookTypeOut.setTitle(title);
         bookTypeOut.setEdition(edition);
@@ -225,7 +225,7 @@ class MemberManagerImplIntegrationTest {
         bookTypeOut.setKeywords(keywords);
         bookTypeOut.setNbPages(nbPages);
         bookTypeOut.setPublicationYear(publicationYear);*//*
-*/
+ */
 /*
         loanTypeOut.setBookTypeOut(null);
         loanTypeOut.setId(id);

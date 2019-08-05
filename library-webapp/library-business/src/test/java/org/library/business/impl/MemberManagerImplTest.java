@@ -5,7 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.library.business.contract.BookManager;
 import org.library.model.Member;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.troparo.entities.connect.RequestPasswordResetLinkRequestType;
 import org.troparo.entities.connect.RequestPasswordResetLinkResponseType;
 import org.troparo.entities.connect.ResetPasswordRequestType;
@@ -29,7 +28,8 @@ import java.util.GregorianCalendar;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class MemberManagerImplTest {
 
@@ -38,29 +38,29 @@ class MemberManagerImplTest {
 
     private LoanManagerImpl loanManager;
     private MemberService memberService;
-    private BookManager bookManager;
     private IMemberService iMemberService;
     private ConnectService connectService;
     private IConnectService iConnectService;
 
     @BeforeEach
     void init() {
-        memberManager = new MemberManagerImpl();
         loanManager = mock(LoanManagerImpl.class);
-        bookManager = mock(BookManager.class);
+        BookManager bookManager = mock(BookManager.class);
         memberService = mock(MemberService.class);
         iMemberService = mock(IMemberService.class);
         iConnectService = mock(IConnectService.class);
-        memberManager.setMemberService(memberService);
+        // memberManager.setMemberService(memberService);
         connectService = mock(ConnectService.class);
+        memberManager = new MemberManagerImpl(loanManager, bookManager);
         memberManager.setConnectService(connectService);
-        memberManager.setLoanManager(loanManager);
+        memberManager.setMemberService(memberService);
+        //memberManager.setLoanManager(loanManager);
     }
 
     @Test
     @DisplayName("should return member")
     void getMember() throws BusinessExceptionMember, DatatypeConfigurationException {
-        GetMemberByLoginResponseType getMemberByLoginResponseType = new GetMemberByLoginResponseType();
+        GetMemberByLoginResponseType response = new GetMemberByLoginResponseType();
         MemberTypeOut memberTypeOut = new MemberTypeOut();
         String email = "loki.fr@frfr.eter";
         String firstName = "John";
@@ -75,9 +75,9 @@ class MemberManagerImplTest {
         memberTypeOut.setLogin(login);
         LoanListType loanListType = new LoanListType();
         memberTypeOut.setLoanListType(loanListType);
-        getMemberByLoginResponseType.setMemberTypeOut(memberTypeOut);
+        response.setMemberTypeOut(memberTypeOut);
         when(memberService.getMemberServicePort()).thenReturn(iMemberService);
-        when(memberService.getMemberServicePort().getMemberByLogin(any(GetMemberByLoginRequestType.class))).thenReturn(getMemberByLoginResponseType);
+        when(memberService.getMemberServicePort().getMemberByLogin(any(GetMemberByLoginRequestType.class))).thenReturn(response);
 
         assertEquals(email, memberManager.getMember("", login).getEmail());
     }
@@ -89,43 +89,42 @@ class MemberManagerImplTest {
         when(memberService.getMemberServicePort()).thenReturn(iMemberService);
         when(memberService.getMemberServicePort().getMemberByLogin(any(GetMemberByLoginRequestType.class))).thenReturn(response);
 
-        assertNull( memberManager.getMember("", "login"));
+        assertNull(memberManager.getMember("", "login"));
     }
 
-    @Test
+   /* @Test
     void getMemberServicePort(){
         memberManager.setMemberService(null);
         assertNotNull(memberManager.getMemberServicePort());
-    }
+    }*/
 
 
     @Test
     @DisplayName("should return true when trying to reset password")
-    void sendResetPasswordLink() throws  BusinessExceptionConnect {
+    void sendResetPasswordLink() throws BusinessExceptionConnect {
         RequestPasswordResetLinkResponseType response = new RequestPasswordResetLinkResponseType();
         response.setReturn(true);
         when(connectService.getConnectServicePort()).thenReturn(iConnectService);
         when(connectService.getConnectServicePort().requestPasswordResetLink(any(RequestPasswordResetLinkRequestType.class))).thenReturn(response);
 
-        assertTrue( memberManager.sendResetPasswordLink( "", "login"));
+        assertTrue(memberManager.sendResetPasswordLink("", "login"));
     }
 
     @Test
     @DisplayName("should return true when trying to send Password links")
-    void resetPassword() throws  BusinessExceptionConnect {
+    void resetPassword() throws BusinessExceptionConnect {
         ResetPasswordResponseType response = new ResetPasswordResponseType();
         response.setReturn(true);
         when(connectService.getConnectServicePort()).thenReturn(iConnectService);
         when(connectService.getConnectServicePort().resetPassword(any(ResetPasswordRequestType.class))).thenReturn(response);
 
-        assertTrue( memberManager.resetPassword("", "", "login"));
+        assertTrue(memberManager.resetPassword("", "", "login"));
     }
 
 
     @Test
     @DisplayName("should return true if memberService returns true")
     void switchReminder() throws BusinessExceptionMember {
-        when(memberService.getMemberServicePort()).thenReturn(iMemberService);
         SwitchReminderRequestType request = new SwitchReminderRequestType();
         String token = "token123";
         String login = "loginash";
@@ -133,6 +132,7 @@ class MemberManagerImplTest {
         request.setLogin(login);
         SwitchReminderResponseType response = new SwitchReminderResponseType();
         response.setReturn(true);
+        when(memberService.getMemberServicePort()).thenReturn(iMemberService);
         when(memberService.getMemberServicePort().switchReminder(any(SwitchReminderRequestType.class))).thenReturn(response);
         assertTrue(memberManager.switchReminder(token, login, false));
     }
@@ -153,8 +153,6 @@ class MemberManagerImplTest {
         assertFalse(memberManager.switchReminder(token, login, false));
 
     }
-
-
 
 
     @Test
@@ -262,7 +260,7 @@ class MemberManagerImplTest {
         );
     }
 
-    @Test
+   /* @Test
     void setBookManager(){
         memberManager.setBookManager(bookManager);
         assertEquals(bookManager, memberManager.getBookManager());
@@ -300,7 +298,7 @@ class MemberManagerImplTest {
         MemberService memberService1 = new MemberService();
         memberManager.setMemberService(memberService1);
         assertEquals(memberService1, memberManager.getMemberService());
-    }
+    }*/
 
 
     @Test

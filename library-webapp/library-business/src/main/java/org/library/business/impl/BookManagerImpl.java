@@ -17,19 +17,17 @@ import java.util.Map;
 @Named
 public class BookManagerImpl implements BookManager {
     private static Logger logger = Logger.getLogger(BookManagerImpl.class);
-
-    @Override
-    public void setBookService(BookService bookService) {
-        this.bookService = bookService;
-    }
+    private BookService bookService;
 
     @Override
     public BookService getBookService() {
         return bookService;
     }
 
-    private BookService bookService;
-
+    @Override
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
 
     @Override
     public List<Book> searchBooks(String token, Map<String, String> criteria) throws BusinessExceptionBook {

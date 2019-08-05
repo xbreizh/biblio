@@ -37,14 +37,14 @@ class LoanTest {
     @DisplayName("should get checked")
     void isChecked() {
         loan.setChecked(true);
-        assertTrue( loan.isChecked());
+        assertTrue(loan.isChecked());
     }
 
     @Test
     @DisplayName("should set checked")
     void setChecked() {
         loan.setChecked(true);
-        assertTrue( loan.isChecked());
+        assertTrue(loan.isChecked());
     }
 
     @Test

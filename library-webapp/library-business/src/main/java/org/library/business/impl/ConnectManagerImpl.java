@@ -74,7 +74,6 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
 
-
     private IConnectService getConnectServicePort() {
         if (connectService == null) connectService = new ConnectService();
         return connectService.getConnectServicePort();

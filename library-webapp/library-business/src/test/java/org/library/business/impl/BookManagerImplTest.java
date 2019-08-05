@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.library.business.contract.LoanManager;
 import org.troparo.entities.book.*;
 import org.troparo.services.bookservice.BookService;
 import org.troparo.services.bookservice.BusinessExceptionBook;
@@ -11,7 +12,7 @@ import org.troparo.services.bookservice.IBookService;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -20,7 +21,6 @@ class BookManagerImplTest {
 
     private static Logger logger = Logger.getLogger(BookManagerImpl.class);
     private BookManagerImpl bookManager;
-
     private BookService bookService;
     private IBookService iBookService;
 
@@ -30,9 +30,10 @@ class BookManagerImplTest {
         bookService = mock(BookService.class);
         bookManager.setBookService(bookService);
         iBookService = mock(IBookService.class);
-        MemberManagerImpl memberManager = new MemberManagerImpl();
+        LoanManager loanManager1 = mock(LoanManager.class);
+        MemberManagerImpl memberManager = new MemberManagerImpl(loanManager1, bookManager);
         LoanManagerImpl loanManager = mock(LoanManagerImpl.class);
-        memberManager.setLoanManager(loanManager);
+        //memberManager.setLoanManager(loanManager);
     }
 
 
@@ -99,6 +100,7 @@ class BookManagerImplTest {
         bookManager.setBookService(bookService);
         assertEquals(bookService, bookManager.getBookService());
     }
+
     @Test
     void getBookService() {
         BookService bookService = new BookService();
