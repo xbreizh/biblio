@@ -2,31 +2,27 @@ package org.library.business.impl;
 
 import org.apache.log4j.Logger;
 import org.library.business.contract.LoanManager;
-import org.library.model.Book;
-import org.library.model.Loan;
 import org.troparo.entities.loan.*;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.loanservice.ILoanService;
 import org.troparo.services.loanservice.LoanService;
 
 import javax.inject.Named;
-import java.util.ArrayList;
-import java.util.List;
 
 @Named
 public class LoanManagerImpl implements LoanManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private LoanService loanService;
-    private DateConvertedHelper dateConvertedHelper;
+    // private DateConvertedHelper dateConvertedHelper;
 
 
-    public LoanManagerImpl() {
+  /*  public LoanManagerImpl() {
         this.setDateConvertedHelper(new DateConvertedHelper());
-    }
+    }*/
 
-    private void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+   /* private void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
         this.dateConvertedHelper = dateConvertedHelper;
-    }
+    }*/
 
     void setLoanService(LoanService loanService) {
         this.loanService = loanService;
@@ -80,7 +76,7 @@ public class LoanManagerImpl implements LoanManager {
         return getLoanServicePort().getLoanStatus(requestType).getStatus();
     }
 
-    @Override
+   /* @Override
     public String renew(String token, int bookId, String login) throws BusinessExceptionLoan {
         AddLoanRequestType addLoanRequestType = new AddLoanRequestType();
         addLoanRequestType.setToken(token);
@@ -91,9 +87,9 @@ public class LoanManagerImpl implements LoanManager {
         addLoanRequestType.setLoanTypeIn(loanTypeIn);
         AddLoanResponseType responseType = getLoanServicePort().addLoan(addLoanRequestType);
         return responseType.getReturn();
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public List<Loan> getLoansForIsbn(String token, String isbn) {
         GetLoanByCriteriasResponseType responseType;
         logger.info("getting into manager: " + isbn);
@@ -113,9 +109,9 @@ public class LoanManagerImpl implements LoanManager {
         }
         logger.info("returning loanList");
         return loans;
-    }
+    }*/
 
-    private List<Loan> convertLoanByCriteriaIntoLoanList(LoanListType list) {
+   /* private List<Loan> convertLoanByCriteriaIntoLoanList(LoanListType list) {
         List<Loan> loanList = new ArrayList<>();
         logger.info("trying to convert");
         if (list.getLoanTypeOut().isEmpty()) return loanList;
@@ -134,9 +130,9 @@ public class LoanManagerImpl implements LoanManager {
         logger.info("converted " + loanList.size() + " items");
         return loanList;
     }
+*/
 
-
-    private Book convertLoanBookIntoBook(LoanBook loanBook) {
+/*    private Book convertLoanBookIntoBook(LoanBook loanBook) {
         Book book = new Book();
         book.setTitle(loanBook.getTitle());
         book.setAuthor(loanBook.getAuthor());
@@ -145,7 +141,7 @@ public class LoanManagerImpl implements LoanManager {
         book.setPublicationYear(loanBook.getPublicationYear());
         book.setEdition(loanBook.getEdition());
         return book;
-    }
+    }*/
 
 
     @Override

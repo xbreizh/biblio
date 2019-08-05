@@ -49,13 +49,8 @@ class LoanManagerImplTest {
         ILoanService iLoanService = mock(ILoanService.class);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(loanService.getLoanServicePort().renewLoan(any(RenewLoanRequestType.class))).thenReturn(renewLoanResponseType);
+        when(iLoanService.renewLoan(any(RenewLoanRequestType.class))).thenReturn(renewLoanResponseType);
         assertTrue(loanManager.renewLoan("", 1));
-    }
-
-    @Test
-    void getLoanServicePort() {
-        loanManager.setLoanService(null);
-        assertNotNull(loanManager.getLoanServicePort());
     }
 
     @Test
@@ -69,6 +64,12 @@ class LoanManagerImplTest {
         when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
         assertTrue(loanManager.isRenewable("", 2));
 
+    }
+
+    @Test
+    void getLoanServicePort() {
+        loanManager.setLoanService(null);
+        assertNotNull(loanManager.getLoanServicePort());
     }
 
     @Test

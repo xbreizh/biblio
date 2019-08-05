@@ -1,10 +1,7 @@
 package org.library.business.contract;
 
 
-import org.library.model.Loan;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
-
-import java.util.List;
 
 public interface LoanManager {
 
@@ -15,12 +12,12 @@ public interface LoanManager {
 
     String getStatus(String token, int id) throws BusinessExceptionLoan;
 
-    String renew(String token, int bookId, String login) throws BusinessExceptionLoan;
+    //String renew(String token, int bookId, String login) throws BusinessExceptionLoan;
 
     boolean removeLoan(String token, int id) throws BusinessExceptionLoan;
 
 
-    List<Loan> getLoansForIsbn(String token, String isbn);
+    //List<Loan> getLoansForIsbn(String token, String isbn);
 
     String reserve(String token, String isbn);
 }
