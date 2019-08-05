@@ -1,3 +1,4 @@
+/*
 package org.library.business.impl;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -28,7 +29,8 @@ class MemberManagerImplTest {
         memberManager.setMemberService(memberService);
     }
 
-    @Test
+  */
+/*  @Test
     void getMember() throws BusinessExceptionMember {
 
         GetMemberByLoginResponseType responseType = new GetMemberByLoginResponseType();
@@ -45,7 +47,8 @@ class MemberManagerImplTest {
                 ()-> assertEquals(email, memberManager.getMember("dede", login).getEmail())
         );
 
-    }
+    }*//*
+
 
     @Test
     void resetPassword() {
@@ -90,4 +93,4 @@ class MemberManagerImplTest {
     @Test
     void setMemberService() {
     }
-}
+}*/
