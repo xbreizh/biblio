@@ -195,13 +195,13 @@ class MemberManagerImplIntegrationTest {
 
     }
 
-    @Test
+/*    @Test
     void convertLoanListTypeIntoList1() throws DatatypeConfigurationException, ParseException, BusinessExceptionLoan, BusinessExceptionBook {
         LoanListType loanListType = new LoanListType();
         LoanTypeOut loanTypeOut = new LoanTypeOut();
         int id = 4;
         String isbn = "njahsui2";
-       /* BookTypeOut bookTypeOut = new BookTypeOut();
+       *//* BookTypeOut bookTypeOut = new BookTypeOut();
         String author = "Joricho";
         String title = "le temps des pruneaux";
         String edition = "duchat";
@@ -209,14 +209,14 @@ class MemberManagerImplIntegrationTest {
         String keywords = "pluie, eau";
         int nbPages = 231;
         int publicationYear = 1982;
-        int id = 4;*/
-       /* bookTypeOut.setAuthor(author);
+        int id = 4;*//*
+       *//* bookTypeOut.setAuthor(author);
         bookTypeOut.setTitle(title);
         bookTypeOut.setEdition(edition);
         bookTypeOut.setISBN(isbn);
         bookTypeOut.setKeywords(keywords);
         bookTypeOut.setNbPages(nbPages);
-        bookTypeOut.setPublicationYear(publicationYear);*/
+        bookTypeOut.setPublicationYear(publicationYear);*//*
         loanTypeOut.setBookTypeOut(null);
         loanTypeOut.setId(id);
 
@@ -239,7 +239,7 @@ class MemberManagerImplIntegrationTest {
         assertEquals(isbn, memberManager.convertLoanListTypeIntoList("", loanListType).get(0).getIsbn());
 
 
-    }
+    }*/
 
 
     @Test
