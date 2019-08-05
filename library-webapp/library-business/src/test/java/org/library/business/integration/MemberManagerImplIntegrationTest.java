@@ -13,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.member.*;
 import org.troparo.services.bookservice.BusinessExceptionBook;
+import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
@@ -27,8 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -59,7 +59,6 @@ class MemberManagerImplIntegrationTest {
     @Test
     @DisplayName("should return member")
     void getMember() throws BusinessExceptionMember, DatatypeConfigurationException {
-        System.out.println(memberManager);
         GetMemberByLoginResponseType getMemberByLoginResponseType = new GetMemberByLoginResponseType();
         MemberTypeOut memberTypeOut = new MemberTypeOut();
         String email = "loki.fr@frfr.eter";
@@ -81,6 +80,49 @@ class MemberManagerImplIntegrationTest {
 
         assertEquals(email, memberManager.getMember("", login).getEmail());
     }
+
+
+    @Test
+    @DisplayName("should return true if memberService returns true")
+    void switchReminder() throws BusinessExceptionMember {
+        when(memberService.getMemberServicePort()).thenReturn(iMemberService);
+        SwitchReminderRequestType request = new SwitchReminderRequestType();
+        String token="token123";
+        String login="loginash";
+        request.setToken(login);
+        request.setLogin(login);
+        SwitchReminderResponseType response = new SwitchReminderResponseType();
+        response.setReturn(true);
+        when(memberService.getMemberServicePort().switchReminder(any(SwitchReminderRequestType.class))).thenReturn(response);
+        assertTrue(memberManager.switchReminder(token, login, false));
+    }
+
+    @Test
+    @DisplayName("should return false if memberService returns true")
+    void switchReminder1() throws BusinessExceptionMember {
+        when(memberService.getMemberServicePort()).thenReturn(iMemberService);
+        SwitchReminderRequestType request = new SwitchReminderRequestType();
+        String token="token123";
+        String login="loginash";
+        request.setToken(login);
+        request.setLogin(login);
+        SwitchReminderResponseType response = new SwitchReminderResponseType();
+        response.setReturn(false);
+        when(memberService.getMemberServicePort().switchReminder(any(SwitchReminderRequestType.class))).thenReturn(response);
+
+        assertFalse(memberManager.switchReminder(token, login, false));
+
+    }
+
+    @Test
+    void getConnectService(){
+        ConnectService connectService = new ConnectService();
+        memberManager.setConnectService(connectService);
+        assertEquals(connectService, memberManager.getConnectService());
+    }
+
+
+
 
     @Test
     void convertMemberTypeOutIntoMember() throws DatatypeConfigurationException {
@@ -157,6 +199,10 @@ class MemberManagerImplIntegrationTest {
 
     }
 
+
+
+
+
     @Test
     void convertBookTypeOutIntoBook() {
         BookTypeOut bookTypeOut = new BookTypeOut();
@@ -186,6 +232,7 @@ class MemberManagerImplIntegrationTest {
 
         );
     }
+
 
     @Test
     void convertGregorianCalendarIntoDate() throws ParseException {

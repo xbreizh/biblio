@@ -104,10 +104,10 @@ public class MemberManagerImpl implements MemberManager {
 
     @Override
     public boolean switchReminder(String token, String login, boolean reminder) throws BusinessExceptionMember {
-        SwitchReminderRequestType switchReminderRequestType = new SwitchReminderRequestType();
-        switchReminderRequestType.setLogin(login);
-        switchReminderRequestType.setToken(token);
-        return getMemberServicePort().switchReminder(switchReminderRequestType).isReturn();
+        SwitchReminderRequestType requestType = new SwitchReminderRequestType();
+        requestType.setLogin(login);
+        requestType.setToken(token);
+        return getMemberServicePort().switchReminder(requestType).isReturn();
 
     }
 
