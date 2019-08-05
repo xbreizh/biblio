@@ -254,11 +254,7 @@ class MemberManagerImplTest {
         assertEquals(bookManager, memberManager.getBookManager());
     }
 
-    @Test
-    void getMemberServicePort() {
-        memberManager.setMemberService(null);
-        assertNotNull(memberManager.getMemberService());
-    }
+
 
 
 
