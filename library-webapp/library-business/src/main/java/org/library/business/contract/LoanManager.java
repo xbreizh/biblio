@@ -22,7 +22,5 @@ public interface LoanManager {
 
     List<Loan> getLoansForIsbn(String token, String isbn);
 
-    //String[] createArrayFromLoanDates(List<Loan> loanList);
-
     String reserve(String token, String isbn);
 }

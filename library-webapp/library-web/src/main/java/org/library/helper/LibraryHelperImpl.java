@@ -12,9 +12,8 @@ import java.util.*;
 
 @Named
 public class LibraryHelperImpl implements LibraryHelper {
-    private static Logger logger = Logger.getLogger(LibraryHelperImpl.class);
     private static final int MAX_RESERVATION = 3;
-
+    private static Logger logger = Logger.getLogger(LibraryHelperImpl.class);
 
     @Override
     public void addingPopup(ModelAndView mv, String error) {

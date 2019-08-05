@@ -1,4 +1,3 @@
-
 function toggle_displays(t, d) {
     var x = document.getElementById(t);
     var y = document.getElementById(d);
@@ -16,7 +15,7 @@ function toggle_displays(t, d) {
     }
 }
 
-function showLoans(){
+function showLoans() {
     var x = document.getElementById('myLoans');
     x.style.display = "block";
 }

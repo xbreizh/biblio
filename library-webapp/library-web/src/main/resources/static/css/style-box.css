@@ -1,21 +1,22 @@
-.container{
+.container {
     margin-top: 10vh;
     height: 80vh;
 }
 
-.row{
-    height:30%;
+.row {
+    height: 30%;
 }
 
-h2, h4, h5{
-    text-align:  center;
+h2, h4, h5 {
+    text-align: center;
 }
-a{
+
+a {
     text-decoration: none;
 }
 
 
-roundBorder{
+roundBorder {
     border-radius: 5px;
     border: 2px solid lightslategrey;
 }

@@ -20,16 +20,13 @@ public class LoanManagerImpl implements LoanManager {
     private DateConvertedHelper dateConvertedHelper;
 
 
-
-    void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
-        this.dateConvertedHelper = dateConvertedHelper;
-    }
-
-
     public LoanManagerImpl() {
         this.setDateConvertedHelper(new DateConvertedHelper());
     }
 
+    private void setDateConvertedHelper(DateConvertedHelper dateConvertedHelper) {
+        this.dateConvertedHelper = dateConvertedHelper;
+    }
 
     void setLoanService(LoanService loanService) {
         this.loanService = loanService;

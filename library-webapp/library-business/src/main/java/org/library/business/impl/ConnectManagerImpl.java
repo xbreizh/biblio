@@ -23,8 +23,8 @@ import java.util.Set;
 @Named
 public class ConnectManagerImpl implements AuthenticationProvider {
 
-    private Logger logger = Logger.getLogger(this.getClass().getName());
     private static final String ROLE = "USER";
+    private Logger logger = Logger.getLogger(this.getClass().getName());
     private ConnectService connectService;
 
     public void setConnectService(ConnectService connectService) {
@@ -47,7 +47,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
             responseType = getConnectServicePort().getToken(getTokenRequestType);
             token = responseType.getReturn();
         } catch (WebServiceException e) {
-            exception="issue connecting to remote API: "+e.getMessage();
+            exception = "issue connecting to remote API: " + e.getMessage();
             logger.error(exception);
 
         } catch (BusinessExceptionConnect businessExceptionConnect) {
@@ -89,9 +89,13 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         Set<GrantedAuthority> setAuths = new HashSet<>();
 
         // Build user's authorities
-        setAuths.add(new SimpleGrantedAuthority(ROLE));
+        setAuths.add(getSimpleGrantedAuthority(ROLE));
 
         return new ArrayList<>(setAuths);
+    }
+
+    private SimpleGrantedAuthority getSimpleGrantedAuthority(String role) {
+        return new SimpleGrantedAuthority(role);
     }
 
 

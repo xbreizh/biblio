@@ -18,6 +18,16 @@ import java.util.Map;
 public class BookManagerImpl implements BookManager {
     private static Logger logger = Logger.getLogger(BookManagerImpl.class);
 
+    @Override
+    public void setBookService(BookService bookService) {
+        this.bookService = bookService;
+    }
+
+    @Override
+    public BookService getBookService() {
+        return bookService;
+    }
+
     private BookService bookService;
 
 
@@ -79,7 +89,7 @@ public class BookManagerImpl implements BookManager {
         return bookList;
     }
 
-    public int getNbAvailable(String token, String isbn) throws BusinessExceptionBook {
+    int getNbAvailable(String token, String isbn) throws BusinessExceptionBook {
         GetAvailableRequestType requestType = new GetAvailableRequestType();
         requestType.setISBN(isbn.toUpperCase());
         requestType.setToken(token);

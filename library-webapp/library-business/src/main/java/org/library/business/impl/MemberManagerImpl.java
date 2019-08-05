@@ -21,7 +21,6 @@ import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
 import org.troparo.services.memberservice.MemberService;
 
-import javax.inject.Inject;
 import javax.inject.Named;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
@@ -38,19 +37,18 @@ public class MemberManagerImpl implements MemberManager {
     private LoanManager loanManager;
     private MemberService memberService;
     private ConnectService connectService;
-
-    public void setBookManager(BookManager bookManager) {
-        this.bookManager = bookManager;
-    }
-
     //@Inject
     private BookManager bookManager;
 
     public MemberManagerImpl() {
-        this.loanManager=new LoanManagerImpl();
-        this.bookManager=new BookManagerImpl();
+        this.loanManager = new LoanManagerImpl();
+        this.bookManager = new BookManagerImpl();
         this.memberService = new MemberService();
         this.connectService = new ConnectService();
+    }
+
+    public void setBookManager(BookManager bookManager) {
+        this.bookManager = bookManager;
     }
 
     @Override
@@ -148,7 +146,7 @@ public class MemberManagerImpl implements MemberManager {
             if (loanTypeOut.getEndDate() == null) {
                 Loan loan = new Loan();
                 loan.setId(loanTypeOut.getId());
-                logger.info("ISBN get: "+loanTypeOut.getISBN());
+                logger.info("ISBN get: " + loanTypeOut.getISBN());
                 if (loanTypeOut.getStartDate() != null) {
                     logger.info("converting dates: " + loanTypeOut.getStartDate());
                     Date date;

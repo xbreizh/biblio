@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 class MemberTest {
@@ -107,6 +108,19 @@ class MemberTest {
     }
 
     @Test
+    void isReminder() {
+        member.setReminder(true);
+        assertTrue( member.isReminder());
+    }
+
+
+    @Test
+    void setReminder() {
+        member.setReminder(true);
+        assertTrue( member.isReminder());
+    }
+
+    @Test
     void getEmail() {
         member.setEmail("tofo@gmail.fr");
         assertEquals("tofo@gmail.fr", member.getEmail());
@@ -169,7 +183,6 @@ class MemberTest {
         List<Loan> loanList = new ArrayList<>();
         member.setLoanList(loanList);
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = format.parse("2009-12-31");
         member.setDateConnect(format.parse("2009-12-31"));
         member.setDateJoin(format.parse("2010-12-31"));
         member.setEmail("bob@gmail.com");

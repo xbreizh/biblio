@@ -31,6 +31,20 @@ class SearchTest {
     }
 
     @Test
+    void getBook() {
+        Book book = new Book();
+        search.setBook(book);
+        assertEquals(book, search.getBook());
+    }
+
+    @Test
+    void setBook() {
+        Book book = new Book();
+        search.setBook(book);
+        assertEquals(book, search.getBook());
+    }
+
+    @Test
     void getTitle() {
         String title = "Title33";
         search.setTitle(title);

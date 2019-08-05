@@ -16,7 +16,6 @@ import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.UnknownHostException;
@@ -194,7 +193,7 @@ public class UserController {
     }
 
     @PostMapping("/reminder")
-    public ModelAndView reminder(String login, boolean reminder) throws  BusinessExceptionMember {
+    public ModelAndView reminder(String login, boolean reminder) throws BusinessExceptionMember {
         String token = helper.getConnectedToken();
         logger.info("updating reminder");
         memberManager.switchReminder(token, login, reminder);

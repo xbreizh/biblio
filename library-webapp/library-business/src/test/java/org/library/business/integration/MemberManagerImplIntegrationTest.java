@@ -12,14 +12,12 @@ import org.library.model.Member;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.member.*;
-import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 import org.troparo.services.memberservice.IMemberService;
 import org.troparo.services.memberservice.MemberService;
 
-import javax.inject.Inject;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -87,8 +85,8 @@ class MemberManagerImplIntegrationTest {
     void switchReminder() throws BusinessExceptionMember {
         when(memberService.getMemberServicePort()).thenReturn(iMemberService);
         SwitchReminderRequestType request = new SwitchReminderRequestType();
-        String token="token123";
-        String login="loginash";
+        String token = "token123";
+        String login = "loginash";
         request.setToken(login);
         request.setLogin(login);
         SwitchReminderResponseType response = new SwitchReminderResponseType();
@@ -102,8 +100,8 @@ class MemberManagerImplIntegrationTest {
     void switchReminder1() throws BusinessExceptionMember {
         when(memberService.getMemberServicePort()).thenReturn(iMemberService);
         SwitchReminderRequestType request = new SwitchReminderRequestType();
-        String token="token123";
-        String login="loginash";
+        String token = "token123";
+        String login = "loginash";
         request.setToken(login);
         request.setLogin(login);
         SwitchReminderResponseType response = new SwitchReminderResponseType();
@@ -115,13 +113,11 @@ class MemberManagerImplIntegrationTest {
     }
 
     @Test
-    void getConnectService(){
+    void getConnectService() {
         ConnectService connectService = new ConnectService();
         memberManager.setConnectService(connectService);
         assertEquals(connectService, memberManager.getConnectService());
     }
-
-
 
 
     @Test
@@ -189,7 +185,6 @@ class MemberManagerImplIntegrationTest {
         loanTypeOut.setStartDate(xmlGregorianCalendar);
         loanTypeOut.setPlannedEndDate(xmlGregorianCalendar1);
         loanListType.getLoanTypeOut().add(loanTypeOut);
-        System.out.println(loanListType.getLoanTypeOut().get(0).getBookTypeOut().getEdition());
         when(loanManager.isRenewable("", id)).thenReturn(true);
         when(loanManager.getStatus("", id)).thenReturn("plouf");
         assertAll(
@@ -198,9 +193,6 @@ class MemberManagerImplIntegrationTest {
 
 
     }
-
-
-
 
 
     @Test

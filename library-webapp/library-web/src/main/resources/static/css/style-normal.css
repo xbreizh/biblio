@@ -1,13 +1,13 @@
-.container{
+.container {
     margin-top: 10vh;
     height: 80vh;
 }
 
-.row{
-    height:30%;
+.row {
+    height: 30%;
 }
 
-.login{
+.login {
     color: #1e678b;
     font-weight: bold;
 }

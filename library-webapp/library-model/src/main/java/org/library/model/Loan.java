@@ -38,7 +38,6 @@ public class Loan {
     private String isbn;
 
 
-
     @Override
     public String toString() {
         return "Loan{" +

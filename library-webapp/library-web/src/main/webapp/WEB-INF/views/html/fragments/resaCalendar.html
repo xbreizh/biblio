@@ -1,10 +1,9 @@
 <div th:fragment="resaCalendar" xmlns:th="http://www.w3.org/1999/xhtml">
 
 
-
     <form method="post" th:action="@{/reserve}" th:object="${reservePreForm}">
 
-        <input id="datepicker" name="startDate" width="312" />
+        <input id="datepicker" name="startDate" width="312"/>
 
         <input class="form-control"
                id="Isbn"
@@ -21,8 +20,6 @@
 
     </form>
     <p>to be removed</p>
-
-
 
 
     <script th:inline="javascript">

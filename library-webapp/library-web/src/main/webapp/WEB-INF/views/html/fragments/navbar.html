@@ -4,7 +4,7 @@
     <div class="navbar navbar-inverse navbar-fixed-top">
 
         <div class="navbar-header">
-            <a th:href="@{'/'}" style="text-decoration: none; color: black">
+            <a style="text-decoration: none; color: black" th:href="@{'/'}">
                 <img alt="book" class="navbar-brand"
                      height="42"
                      src="https://d3n8a8pro7vhmx.cloudfront.net/sundayassemblyla/pages/2543/attachments/original/1528303608/book.jpg?1528303608"
@@ -12,8 +12,8 @@
                 Troparo</a>
         </div>
 
-            <button class="btn btn-info" onclick="toggle_displays('myLoans', 'myProfile')">Loans</button>
-            <button class="btn btn-info" onclick="toggle_displays('myProfile', 'myLoans')">Profile</button>
+        <button class="btn btn-info" onclick="toggle_displays('myLoans', 'myProfile')">Loans</button>
+        <button class="btn btn-info" onclick="toggle_displays('myProfile', 'myLoans')">Profile</button>
 
         <h2 class="login">
             <td data-th-text="${member.login}"></td>

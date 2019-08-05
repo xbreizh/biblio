@@ -8,8 +8,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class LoanTest {
@@ -32,6 +31,35 @@ class LoanTest {
     void setId() {
         loan.setId(123);
         assertEquals(123, loan.getId());
+    }
+
+    @Test
+    @DisplayName("should get checked")
+    void isChecked() {
+        loan.setChecked(true);
+        assertTrue( loan.isChecked());
+    }
+
+    @Test
+    @DisplayName("should set checked")
+    void setChecked() {
+        loan.setChecked(true);
+        assertTrue( loan.isChecked());
+    }
+
+    @Test
+    @DisplayName("should set isbn")
+    void getIsbn() {
+        loan.setIsbn("ISBN123");
+        assertEquals("ISBN123", loan.getIsbn());
+    }
+
+
+    @Test
+    @DisplayName("should set isbn")
+    void setIsbn() {
+        loan.setIsbn("ISBN123");
+        assertEquals("ISBN123", loan.getIsbn());
     }
 
     @Test
