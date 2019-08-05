@@ -4,6 +4,7 @@ package org.library.business.contract;
 import org.library.model.Member;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.memberservice.BusinessExceptionMember;
+import org.troparo.services.memberservice.MemberService;
 
 public interface MemberManager {
 
@@ -15,4 +16,6 @@ public interface MemberManager {
     boolean sendResetPasswordLink(String login, String email) throws BusinessExceptionConnect;
 
     boolean switchReminder(String token, String login, boolean reminder) throws BusinessExceptionMember;
+
+    void setMemberService(MemberService memberService);
 }

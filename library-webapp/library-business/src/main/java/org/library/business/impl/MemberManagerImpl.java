@@ -34,14 +34,21 @@ import java.util.List;
 @Named
 public class MemberManagerImpl implements MemberManager {
     private Logger logger = Logger.getLogger(this.getClass().getName());
-    @Inject
-    LoanManager loanManager;
+    //@Inject
+    private LoanManager loanManager;
     private MemberService memberService;
     private ConnectService connectService;
-    @Inject
+
+    public void setBookManager(BookManager bookManager) {
+        this.bookManager = bookManager;
+    }
+
+    //@Inject
     private BookManager bookManager;
 
     public MemberManagerImpl() {
+        this.loanManager=new LoanManagerImpl();
+        this.bookManager=new BookManagerImpl();
         this.memberService = new MemberService();
         this.connectService = new ConnectService();
     }
@@ -55,8 +62,8 @@ public class MemberManagerImpl implements MemberManager {
             GetMemberByLoginRequestType requestType = new GetMemberByLoginRequestType();
             requestType.setToken(token);
             requestType.setLogin(login);
-
             GetMemberByLoginResponseType responseType = getMemberServicePort().getMemberByLogin(requestType);
+            logger.info("here");
             logger.info("response: " + responseType.getMemberTypeOut().getEmail());
             memberTypeOut = responseType.getMemberTypeOut();
             // converting into Member
