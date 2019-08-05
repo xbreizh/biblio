@@ -20,12 +20,14 @@ class LoanManagerImplTest {
 
     private LoanManagerImpl loanManager;
     private LoanService loanService;
+    private ILoanService iLoanService;
 
     @BeforeEach
     void init() {
         loanManager = spy(LoanManagerImpl.class);
         loanService = mock(LoanService.class);
         loanManager.setLoanService(loanService);
+        iLoanService = mock(ILoanService.class);
     }
 
     @Test
@@ -34,7 +36,6 @@ class LoanManagerImplTest {
         String response = "plok";
         RenewLoanResponseType renewLoanResponseType = new RenewLoanResponseType();
         renewLoanResponseType.setReturn(response);
-        ILoanService iLoanService = mock(ILoanService.class);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(loanService.getLoanServicePort().renewLoan(any(RenewLoanRequestType.class))).thenReturn(renewLoanResponseType);
         assertFalse(loanManager.renewLoan("", 1));
@@ -46,7 +47,6 @@ class LoanManagerImplTest {
         String response = "";
         RenewLoanResponseType renewLoanResponseType = new RenewLoanResponseType();
         renewLoanResponseType.setReturn(response);
-        ILoanService iLoanService = mock(ILoanService.class);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(loanService.getLoanServicePort().renewLoan(any(RenewLoanRequestType.class))).thenReturn(renewLoanResponseType);
         when(iLoanService.renewLoan(any(RenewLoanRequestType.class))).thenReturn(renewLoanResponseType);
@@ -55,10 +55,22 @@ class LoanManagerImplTest {
 
     @Test
     @DisplayName("should return true")
+    void remove() throws BusinessExceptionLoan {
+        CancelLoanResponseType response = new CancelLoanResponseType();
+        String returns = "";
+        response.setReturn(returns);
+        when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
+        when(loanService.getLoanServicePort().cancelLoan(any(CancelLoanRequestType.class))).thenReturn(response);
+        when(iLoanService.cancelLoan(any(CancelLoanRequestType.class))).thenReturn(response);
+        assertTrue(loanManager.removeLoan("", 1));
+    }
+
+
+    @Test
+    @DisplayName("should return true")
     void isRenewable() throws BusinessExceptionLoan {
         IsRenewableResponseType responseType = mock(IsRenewableResponseType.class);
         responseType.setReturn(true);
-        ILoanService iLoanService = mock(ILoanService.class);
         when(responseType.isReturn()).thenReturn(true);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
@@ -77,7 +89,7 @@ class LoanManagerImplTest {
     void isRenewable1() throws BusinessExceptionLoan {
         IsRenewableResponseType responseType = mock(IsRenewableResponseType.class);
         responseType.setReturn(false);
-        ILoanService iLoanService = mock(ILoanService.class);
+
         when(responseType.isReturn()).thenReturn(true);
         when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
         when(iLoanService.isRenewable(any(IsRenewableRequestType.class))).thenReturn(responseType);
@@ -112,23 +124,16 @@ class LoanManagerImplTest {
     }
 
 
-   /* @Test
-    void createArrayFromLoanDates() throws ParseException {
-        List<Loan> loanList = new ArrayList<>();
-        String pattern = "MM/dd/yyyy";
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
-
-        Date start = simpleDateFormat.parse("12/20/2019");
-        Date end = simpleDateFormat.parse("12/24/2019");
-        Loan loan = new Loan();
-        loan.setStartDate(start);
-        loan.setPlannedEndDate(end);
-        loanList.add(loan);
-        assertEquals("[12/20/2019, 12/21/2019, 12/22/2019, 12/23/2019]", Arrays.toString(loanManager.createArrayFromLoanDates(loanList)));
-
-
-
-    }*/
+    @Test
+    @DisplayName(" ")
+    void reserve() throws BusinessExceptionLoan {
+        ReserveResponseType response = new ReserveResponseType();
+        String returns = "";
+        response.setReturn(returns);
+        when(loanManager.getLoanServicePort()).thenReturn(iLoanService);
+        when(iLoanService.reserve(any(ReserveRequestType.class))).thenReturn(response);
+        assertEquals(returns, loanManager.reserve("", "isbn123"));
+    }
 
 
 }

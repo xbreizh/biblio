@@ -12,12 +12,7 @@ public interface LoanManager {
 
     String getStatus(String token, int id) throws BusinessExceptionLoan;
 
-    //String renew(String token, int bookId, String login) throws BusinessExceptionLoan;
-
     boolean removeLoan(String token, int id) throws BusinessExceptionLoan;
-
-
-    //List<Loan> getLoansForIsbn(String token, String isbn);
 
     String reserve(String token, String isbn);
 }

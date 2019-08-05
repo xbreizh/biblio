@@ -12,6 +12,7 @@ import org.library.model.Member;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.member.*;
+import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
@@ -194,6 +195,52 @@ class MemberManagerImplIntegrationTest {
 
     }
 
+    @Test
+    void convertLoanListTypeIntoList1() throws DatatypeConfigurationException, ParseException, BusinessExceptionLoan, BusinessExceptionBook {
+        LoanListType loanListType = new LoanListType();
+        LoanTypeOut loanTypeOut = new LoanTypeOut();
+        int id = 4;
+        String isbn = "njahsui2";
+       /* BookTypeOut bookTypeOut = new BookTypeOut();
+        String author = "Joricho";
+        String title = "le temps des pruneaux";
+        String edition = "duchat";
+        String isbn = "njahsui2";
+        String keywords = "pluie, eau";
+        int nbPages = 231;
+        int publicationYear = 1982;
+        int id = 4;*/
+       /* bookTypeOut.setAuthor(author);
+        bookTypeOut.setTitle(title);
+        bookTypeOut.setEdition(edition);
+        bookTypeOut.setISBN(isbn);
+        bookTypeOut.setKeywords(keywords);
+        bookTypeOut.setNbPages(nbPages);
+        bookTypeOut.setPublicationYear(publicationYear);*/
+        loanTypeOut.setBookTypeOut(null);
+        loanTypeOut.setId(id);
+
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date1 = simpleDateFormat.parse("2018-09-09");
+        Date date2 = simpleDateFormat.parse("2019-01-01");
+        GregorianCalendar c = new GregorianCalendar();
+        c.setTime(date1);
+        XMLGregorianCalendar xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
+        GregorianCalendar c1 = new GregorianCalendar();
+        c.setTime(date2);
+        XMLGregorianCalendar xmlGregorianCalendar1 = DatatypeFactory.newInstance().newXMLGregorianCalendar(c1);
+        loanTypeOut.setStartDate(xmlGregorianCalendar);
+        loanTypeOut.setPlannedEndDate(xmlGregorianCalendar1);
+        loanListType.getLoanTypeOut().add(loanTypeOut);
+        when(loanManager.isRenewable("", id)).thenReturn(true);
+        when(loanManager.getStatus("", id)).thenReturn("plouf");
+        assertEquals(isbn, memberManager.convertLoanListTypeIntoList("", loanListType).get(0).getIsbn());
+
+
+    }
+
 
     @Test
     void convertBookTypeOutIntoBook() {
@@ -238,4 +285,5 @@ class MemberManagerImplIntegrationTest {
         assertEquals(date, memberManager.convertGregorianCalendarIntoDate(gc));
 
     }
+
 }
