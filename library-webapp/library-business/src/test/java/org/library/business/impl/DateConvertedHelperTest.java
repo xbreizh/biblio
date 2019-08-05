@@ -37,7 +37,7 @@ class DateConvertedHelperTest {
     @Test
     void convertDateIntoXmlDate1() {
 
-        assertNull(dateConvertedHelper.convertDateIntoXmlDate(null).toString());
+        assertNull(dateConvertedHelper.convertDateIntoXmlDate(null));
 
     }
 
