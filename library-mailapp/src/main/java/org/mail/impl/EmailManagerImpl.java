@@ -245,9 +245,6 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    Map<String, String> getReminderTemplateItems(Mail mail) {
-        return getTemplateItems(mail);
-    }
 
     Map<String, String> getTemplateItems(Mail mail) {
         logger.info("getting overdue template items");

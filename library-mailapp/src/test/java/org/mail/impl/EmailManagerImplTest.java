@@ -466,7 +466,7 @@ class EmailManagerImplTest {
     void getItemsForSubject4() {
         EmailManagerImpl emailManager1 = spy(emailManager);
         Map<String, String> template = new HashMap<>();
-        doReturn(template).when(emailManager1).getReminderTemplateItems(any(Mail.class));
+        doReturn(template).when(emailManager1).getTemplateItems(any(Mail.class));
         assertEquals(template, emailManager1.getItemsForSubject("subjectReminder", new Mail()));
 
     }
