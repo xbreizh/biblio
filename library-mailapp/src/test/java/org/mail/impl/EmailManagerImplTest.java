@@ -391,9 +391,7 @@ class EmailManagerImplTest {
         assertFalse(emailManager1.sendPasswordResetEmail());
     }
 
-    @Test
-    void convertOverdueListTypeIntoMailList() {
-    }
+
 
     @Test
     void convertGregorianCalendarIntoDate1() throws DatatypeConfigurationException, ParseException {
@@ -448,7 +446,7 @@ class EmailManagerImplTest {
     void getItemsForSubject2() {
         EmailManagerImpl emailManager1 = spy(emailManager);
         Map<String, String> template = new HashMap<>();
-        doReturn(template).when(emailManager1).getOverdueTemplateItems(any(Mail.class));
+        doReturn(template).when(emailManager1).getTemplateItems(any(Mail.class));
         assertEquals(template, emailManager1.getItemsForSubject("subjectOverDue", new Mail()));
 
     }
@@ -458,7 +456,7 @@ class EmailManagerImplTest {
     void getItemsForSubject3() {
         EmailManagerImpl emailManager1 = spy(emailManager);
         Map<String, String> template = new HashMap<>();
-        doReturn(template).when(emailManager1).getReadyTemplateItems(any(Mail.class));
+        doReturn(template).when(emailManager1).getTemplateItems(any(Mail.class));
         assertEquals(template, emailManager1.getItemsForSubject("subjectLoanReady", new Mail()));
 
     }

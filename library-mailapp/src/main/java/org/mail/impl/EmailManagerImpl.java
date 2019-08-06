@@ -60,11 +60,13 @@ public class EmailManagerImpl implements EmailManager {
                 List<Mail> overdueList = getOverdueList(token);
                 return sendEmail(template, subject, overdueList);
             }
-        } else {
-            logger.error("There is an issue with the file source");
-            return false;
         }
-        return true;
+        shoutFileError();
+        return false;
+    }
+
+    private void shoutFileError() {
+        logger.error("There is an issue with the file source");
     }
 
     boolean checkIfFileExist(String template) {
@@ -91,8 +93,8 @@ public class EmailManagerImpl implements EmailManager {
                 return sendEmail(template, subject, loanReady);
             }
         }
-            logger.error("there is an issue with the file source");
-            return false;
+        shoutFileError();
+        return false;
 
 
     }
@@ -114,8 +116,8 @@ public class EmailManagerImpl implements EmailManager {
             }
         }
 
-            logger.error("there is an issue with the file source");
-            return false;
+        shoutFileError();
+        return false;
 
     }
 
@@ -136,8 +138,8 @@ public class EmailManagerImpl implements EmailManager {
                 return sendEmail(template, subject, passwordResetList);
             }
         }
-            logger.error("there is an issue with the file source");
-            return false;
+        shoutFileError();
+        return false;
 
     }
 
@@ -164,20 +166,12 @@ public class EmailManagerImpl implements EmailManager {
 
     Map<String, String> getItemsForSubject(String subject, Mail mail) {
         logger.info("trying to get items");
-        switch (subject) {
-            case "subjectPasswordReset":
-                return getPasswordResetTemplateItems(mail);
-            case "subjectOverDue":
-                return getOverdueTemplateItems(mail);
-            case "subjectLoanReady":
-                return getReadyTemplateItems(mail);
-            case "subjectReminder":
-                return getReminderTemplateItems(mail);
-            default:
-
-                logger.warn("wrong email subject: " + subject + ", returning null");
-
+        String[] validSubjectsList = {"subjectPasswordReset", "subjectOverDue", "subjectLoanReady", "subjectReminder"};
+        if (Arrays.asList(validSubjectsList).contains(subject)) {
+            if (subject.equals("subjectPasswordReset")) return getPasswordResetTemplateItems(mail);
+            return getTemplateItems(mail);
         }
+        logger.warn("wrong email subject: " + subject + ", returning null");
         return null;
     }
 
@@ -250,34 +244,20 @@ public class EmailManagerImpl implements EmailManager {
         return msg;
     }
 
-    Map<String, String> getOverdueTemplateItems(Mail mail) {
-        logger.info("getting overdue template items");
-        //Set key values
-        Map<String, String> input = new HashMap<>();
-
-        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
-        String dueDate = dt1.format(mail.getDueDate());
-        input.put("DUEDATE", dueDate);
-        int overDays = mail.getDiffdays();
-        input.put("DIFFDAYS", Integer.toString(overDays));
-        input.put("FIRSTNAME", mail.getFirstname());
-        input.put("LASTNAME", mail.getLastname());
-        input.put("Isbn", mail.getIsbn());
-        input.put("TITLE", mail.getTitle());
-        input.put("AUTHOR", mail.getAuthor());
-        input.put("EDITION", mail.getEdition());
-        return input;
-    }
 
     Map<String, String> getReminderTemplateItems(Mail mail) {
-        return getOverdueTemplateItems(mail);
+        return getTemplateItems(mail);
     }
 
-    Map<String, String> getReadyTemplateItems(Mail mail) {
+    Map<String, String> getTemplateItems(Mail mail) {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
-
+        if (mail.getDueDate() != null) {
+            SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
+            String dueDate = dt1.format(mail.getDueDate());
+            input.put("DUEDATE", dueDate);
+        }
         int overDays = mail.getDiffdays();
         input.put("DIFFDAYS", Integer.toString(overDays));
         input.put("FIRSTNAME", mail.getFirstname());
@@ -286,9 +266,11 @@ public class EmailManagerImpl implements EmailManager {
         input.put("TITLE", mail.getTitle());
         input.put("AUTHOR", mail.getAuthor());
         input.put("EDITION", mail.getEdition());
-        SimpleDateFormat dt2 = new SimpleDateFormat("dd-MM-yyyy");
-        String endAvailableDate = dt2.format(mail.getEndAvailableDate());
-        input.put("ENDAVAILABLEDATE", endAvailableDate);
+        if (mail.getEndAvailableDate() != null) {
+            SimpleDateFormat dt2 = new SimpleDateFormat("dd-MM-yyyy");
+            String endAvailableDate = dt2.format(mail.getEndAvailableDate());
+            input.put("ENDAVAILABLEDATE", endAvailableDate);
+        }
         return input;
 
     }
@@ -302,17 +284,15 @@ public class EmailManagerImpl implements EmailManager {
         //use buffering, reading one line at a time
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
-        try {
+
             String line;
             while ((line = reader.readLine()) != null) {
                 contents.append(line);
                 contents.append(System.getProperty("line.separator"));
             }
-        } catch (IOException e) {
-            logger.error(e.getMessage());
-        } finally {
-            reader.close();
-        }
+
+
+
         logger.info("html file converted ok");
         return contents.toString();
     }
@@ -367,7 +347,7 @@ public class EmailManagerImpl implements EmailManager {
     List<Mail> convertPasswordResetListTypeIntoMailList(GetPasswordResetListResponse response) {
         logger.info("trying to convert password reset list into mailList");
         List<Mail> mailList = new ArrayList<>();
-        if(response.getPasswordResetListType()!=null) {
+        if (response.getPasswordResetListType() != null) {
             for (PasswordResetTypeOut passwordResetTypeOutTypeOut : response.getPasswordResetListType().getPasswordResetTypeOut()) {
                 Mail mail = new Mail();
                 mail.setEmail(passwordResetTypeOutTypeOut.getEmail());
