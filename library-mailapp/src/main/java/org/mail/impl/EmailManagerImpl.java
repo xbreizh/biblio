@@ -334,7 +334,7 @@ public class EmailManagerImpl implements EmailManager {
 
     }
 
-    private List<Mail> getReadyList(String token) throws BusinessExceptionMail {
+    List<Mail> getReadyList(String token) throws BusinessExceptionMail {
         logger.info("getting ready list");
         GetLoanReadyRequest requestType = new GetLoanReadyRequest();
         requestType.setToken(token);

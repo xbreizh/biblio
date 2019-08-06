@@ -185,8 +185,8 @@ class EmailManagerImplTest {
         mailList.add(mail);
         EmailManagerImpl emailManager1 = spy(emailManager);
         when(connectManager.authenticate()).thenReturn("");
-        doReturn(true).when(emailManager1).sendReadyEmail();
-        when(emailManager1.sendReadyEmail()).thenReturn(true);
+        doReturn(mailList).when(emailManager1).getReadyList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(true);
         assertTrue(emailManager1.sendReadyEmail());
     }
 
