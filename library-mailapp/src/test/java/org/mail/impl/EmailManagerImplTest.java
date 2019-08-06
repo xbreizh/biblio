@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mail.contract.ConnectManager;
+import org.mail.contract.EmailManager;
 import org.mail.model.Mail;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -23,10 +24,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -322,4 +320,59 @@ class EmailManagerImplTest {
         emailManager.setMailService(mailService1);
         assertEquals(mailService1, emailManager.getMailService());
     }
+
+
+    @Test
+    @DisplayName("should return null when wrong subject")
+    void getItemsForSubject(){
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        Map<String, String> template = new HashMap<>();
+        //when(emailManager1.getPasswordResetTemplateItems(any(Mail.class))).thenReturn(template);
+        doReturn(template).when(emailManager1).getPasswordResetTemplateItems(any(Mail.class));
+        assertNull( emailManager1.getItemsForSubject("", new Mail()));
+
+    }
+
+    @Test
+    @DisplayName("should return getPasswordResetTemplateItems when subject \"subjectPasswordReset\"")
+    void getItemsForSubject1(){
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        Map<String, String> template = new HashMap<>();
+        doReturn(template).when(emailManager1).getPasswordResetTemplateItems(any(Mail.class));
+        assertEquals(template,  emailManager1.getItemsForSubject("subjectPasswordReset", new Mail()));
+
+    }
+
+    @Test
+    @DisplayName("should return getOverdueTemplateItems when subject \"subjectOverDue\"")
+    void getItemsForSubject2(){
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        Map<String, String> template = new HashMap<>();
+        doReturn(template).when(emailManager1).getOverdueTemplateItems(any(Mail.class));
+        assertEquals(template,  emailManager1.getItemsForSubject("subjectOverDue", new Mail()));
+
+    }
+
+    @Test
+    @DisplayName("should return getOverdueTemplateItems when subject \"subjectLoanReady\"")
+    void getItemsForSubject3(){
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        Map<String, String> template = new HashMap<>();
+        doReturn(template).when(emailManager1).getReadyTemplateItems(any(Mail.class));
+        assertEquals(template,  emailManager1.getItemsForSubject("subjectLoanReady", new Mail()));
+
+    }
+
+    @Test
+    @DisplayName("should return getOverdueTemplateItems when subject \"subjectReminder\"")
+    void getItemsForSubject4(){
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        Map<String, String> template = new HashMap<>();
+        doReturn(template).when(emailManager1).getReminderTemplateItems(any(Mail.class));
+        assertEquals(template,  emailManager1.getItemsForSubject("subjectReminder", new Mail()));
+
+    }
+
+
+
 }

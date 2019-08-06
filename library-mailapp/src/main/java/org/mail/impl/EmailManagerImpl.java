@@ -162,32 +162,27 @@ public class EmailManagerImpl implements EmailManager {
         return true;
     }
 
-    private Map<String, String> getItemsForSubject(String subject, Mail mail) {
+    Map<String, String> getItemsForSubject(String subject, Mail mail) {
         logger.info("trying to get items");
-        Map<String, String> input;
         switch (subject) {
             case "subjectPasswordReset":
-                input = getPasswordResetTemplateItems(mail);
-                break;
+                return getPasswordResetTemplateItems(mail);
             case "subjectOverDue":
-                input = getOverdueTemplateItems(mail);
-                break;
+                return getOverdueTemplateItems(mail);
             case "subjectLoanReady":
-                input = getReadyTemplateItems(mail);
-                break;
+                return getReadyTemplateItems(mail);
             case "subjectReminder":
-                input = getReminderTemplateItems(mail);
-                break;
+                return getReminderTemplateItems(mail);
             default:
-                input = null;
+
                 logger.warn("wrong email subject: " + subject + ", returning null");
-                break;
+
         }
-        return input;
+        return null;
     }
 
 
-    private Map<String, String> getPasswordResetTemplateItems(Mail mail) {
+    Map<String, String> getPasswordResetTemplateItems(Mail mail) {
         //Set key values
         Map<String, String> input = new HashMap<>();
         input.put("TOKEN", mail.getToken());
@@ -255,7 +250,7 @@ public class EmailManagerImpl implements EmailManager {
         return msg;
     }
 
-    private Map<String, String> getOverdueTemplateItems(Mail mail) {
+    Map<String, String> getOverdueTemplateItems(Mail mail) {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
@@ -274,11 +269,11 @@ public class EmailManagerImpl implements EmailManager {
         return input;
     }
 
-    private Map<String, String> getReminderTemplateItems(Mail mail) {
+    Map<String, String> getReminderTemplateItems(Mail mail) {
         return getOverdueTemplateItems(mail);
     }
 
-    private Map<String, String> getReadyTemplateItems(Mail mail) {
+    Map<String, String> getReadyTemplateItems(Mail mail) {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
