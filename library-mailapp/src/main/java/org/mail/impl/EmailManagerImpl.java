@@ -358,25 +358,26 @@ public class EmailManagerImpl implements EmailManager {
 
     }
 
-    private IMailService getMailServicePort() {
+    IMailService getMailServicePort() {
         logger.info("getting email service port");
         if (mailService == null) mailService = new MailService();
         return mailService.getMailServicePort();
     }
 
-    private List<Mail> convertPasswordResetListTypeIntoMailList(GetPasswordResetListResponse response) {
+    List<Mail> convertPasswordResetListTypeIntoMailList(GetPasswordResetListResponse response) {
         logger.info("trying to convert password reset list into mailList");
         List<Mail> mailList = new ArrayList<>();
+        if(response.getPasswordResetListType()!=null) {
+            for (PasswordResetTypeOut passwordResetTypeOutTypeOut : response.getPasswordResetListType().getPasswordResetTypeOut()) {
+                Mail mail = new Mail();
+                mail.setEmail(passwordResetTypeOutTypeOut.getEmail());
+                mail.setLogin(passwordResetTypeOutTypeOut.getLogin());
+                mail.setToken(passwordResetTypeOutTypeOut.getToken());
 
-        for (PasswordResetTypeOut passwordResetTypeOutTypeOut : response.getPasswordResetListType().getPasswordResetTypeOut()) {
-            Mail mail = new Mail();
-            mail.setEmail(passwordResetTypeOutTypeOut.getEmail());
-            mail.setLogin(passwordResetTypeOutTypeOut.getLogin());
-            mail.setToken(passwordResetTypeOutTypeOut.getToken());
-
-            mailList.add(mail);
+                mailList.add(mail);
+            }
+            if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         }
-        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         return mailList;
     }
 
@@ -451,5 +452,9 @@ public class EmailManagerImpl implements EmailManager {
 
     void setConnectManager(ConnectManager connectManager) {
         this.connectManager = connectManager;
+    }
+
+    void setPropertiesLoad(PropertiesLoad propertiesLoad) {
+        this.propertiesLoad = propertiesLoad;
     }
 }

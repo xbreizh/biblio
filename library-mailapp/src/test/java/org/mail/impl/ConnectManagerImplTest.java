@@ -25,14 +25,13 @@ class ConnectManagerImplTest {
 
     private ConnectManagerImpl connectManager;
     private ConnectService connectService;
-    private PropertiesLoad propertiesLoad;
 
     @BeforeEach
     void init() throws IOException {
         connectManager = spy(ConnectManagerImpl.class);
         connectService = mock(ConnectService.class);
         connectManager.setConnectService(connectService);
-        propertiesLoad = new PropertiesLoad();
+        PropertiesLoad propertiesLoad = new PropertiesLoad();
         connectManager.setPropertiesLoad(propertiesLoad);
     }
 
@@ -68,11 +67,16 @@ class ConnectManagerImplTest {
     }
 
     @Test
-    @DisplayName("should return IConnectService")
+    @DisplayName("should return IConnectService if not null")
     void getConnectServicePort(){
         ConnectService connectService2 = new ConnectService();
         assertNotNull(connectManager.getConnectServicePort(connectService2));
     }
 
+    @Test
+    @DisplayName("should return IConnectService if null")
+    void getConnectServicePort1(){
+        assertNotNull(connectManager.getConnectServicePort(null));
+    }
 
 }

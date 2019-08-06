@@ -10,7 +10,7 @@ import java.util.Date;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
-public class MailTest {
+class MailTest {
 
     private Mail mail;
 
@@ -20,77 +20,77 @@ public class MailTest {
     }
 
     @Test
-    public void getEmail() {
+    void getEmail() {
         String email = "frfr@frfr.fr";
         mail.setEmail(email);
         assertEquals(email, mail.getEmail());
     }
 
     @Test
-    public void setEmail() {
+    void setEmail() {
         String email = "frfr@frfr.fr";
         mail.setEmail(email);
         assertEquals(email, mail.getEmail());
     }
 
     @Test
-    public void getToken() {
+    void getToken() {
         String token = "dede343fgfgfgf";
         mail.setToken(token);
         assertEquals(token, mail.getToken());
     }
 
     @Test
-    public void setToken() {
+    void setToken() {
         String token = "dede343fgfgfgf";
         mail.setToken(token);
         assertEquals(token, mail.getToken());
     }
 
     @Test
-    public void getLogin() {
+    void getLogin() {
         String login = "George1";
         mail.setLogin(login);
         assertEquals(login, mail.getLogin());
     }
 
     @Test
-    public void setLogin() {
+    void setLogin() {
         String login = "George1";
         mail.setLogin(login);
         assertEquals(login, mail.getLogin());
     }
 
     @Test
-    public void getFirstname() {
+    void getFirstname() {
         String firstName = "George";
         mail.setFirstname(firstName);
         assertEquals(firstName, mail.getFirstname());
     }
 
     @Test
-    public void setFirstname() {
+    void setFirstname() {
         String firstName = "George";
         mail.setFirstname(firstName);
         assertEquals(firstName, mail.getFirstname());
     }
 
     @Test
-    public void getLastname() {
+    void getLastname() {
         String lastName = "Boulet";
         mail.setLastname(lastName);
         assertEquals(lastName, mail.getLastname());
     }
 
     @Test
-    public void setLastname() {
+    void setLastname() {
         String lastName = "Boulet";
         mail.setLastname(lastName);
         assertEquals(lastName, mail.getLastname());
     }
 
     @Test
-    public void getDueDate() throws ParseException {
+    void getDueDate() throws ParseException {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
@@ -100,7 +100,7 @@ public class MailTest {
     }
 
     @Test
-    public void setDueDate() throws ParseException {
+    void setDueDate() throws ParseException {
         String pattern = "yyyy-MM-dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
 
@@ -110,77 +110,97 @@ public class MailTest {
     }
 
     @Test
-    public void getDiffdays() {
+    void getEndAvailableDate() throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date = simpleDateFormat.parse("2018-09-09");
+        mail.setEndAvailableDate(date);
+        assertEquals(date, mail.getEndAvailableDate());
+    }
+
+    @Test
+    void setEndAvailableDate() throws ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date = simpleDateFormat.parse("2018-09-09");
+        mail.setEndAvailableDate(date);
+        assertEquals(date, mail.getEndAvailableDate());
+    }
+
+    @Test
+    void getDiffdays() {
         int diffDays = 34;
         mail.setDiffdays(diffDays);
         assertEquals(diffDays, mail.getDiffdays());
     }
 
     @Test
-    public void setDiffdays() {
+    void setDiffdays() {
         int diffDays = 34;
         mail.setDiffdays(diffDays);
         assertEquals(diffDays, mail.getDiffdays());
     }
 
     @Test
-    public void getIsbn() {
+    void getIsbn() {
         String isbn= "hbbhr444";
         mail.setIsbn(isbn);
         assertEquals(isbn, mail.getIsbn());
     }
 
     @Test
-    public void setIsbn() {
+    void setIsbn() {
         String isbn= "hbbhr444";
         mail.setIsbn(isbn);
         assertEquals(isbn, mail.getIsbn());
     }
 
     @Test
-    public void getTitle() {
+    void getTitle() {
         String title= "Bonimoko";
         mail.setTitle(title);
         assertEquals(title, mail.getTitle());
     }
 
     @Test
-    public void setTitle() {
+    void setTitle() {
         String title= "Bonimoko";
         mail.setTitle(title);
         assertEquals(title, mail.getTitle());
     }
 
     @Test
-    public void getAuthor() {
+    void getAuthor() {
         String author= "Geronimo";
         mail.setAuthor(author);
         assertEquals(author, mail.getAuthor());
     }
 
     @Test
-    public void setAuthor() {
+    void setAuthor() {
         String author= "Geronimo";
         mail.setAuthor(author);
         assertEquals(author, mail.getAuthor());
     }
 
     @Test
-    public void getEdition() {
+    void getEdition() {
         String edition= "Dujardin";
         mail.setEdition(edition);
         assertEquals(edition, mail.getEdition());
     }
 
     @Test
-    public void setEdition() {
+    void setEdition() {
         String edition= "Dujardin";
         mail.setEdition(edition);
         assertEquals(edition, mail.getEdition());
     }
 
     @Test
-    public void toString1() throws ParseException {
+    void toString1() throws ParseException {
         String email = "frfr@frfr.fr";
         mail.setEmail(email);
         String firstName = "George";
