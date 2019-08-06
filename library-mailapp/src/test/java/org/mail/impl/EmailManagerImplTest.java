@@ -14,7 +14,7 @@ import org.troparo.services.mailservice.MailService;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,7 +34,7 @@ class EmailManagerImplTest {
 
 
     @BeforeEach
-    void init(){
+    void init() {
 
         emailManager = spy(EmailManagerImpl.class);
         mailService = mock(MailService.class);
@@ -44,7 +44,7 @@ class EmailManagerImplTest {
 
     @Test
     @DisplayName("should set mailService")
-    void getMailService(){
+    void getMailService() {
         MailService mailService1 = new MailService();
         emailManager.setMailService(mailService1);
         assertEquals(mailService1, emailManager.getMailService());
@@ -65,11 +65,9 @@ class EmailManagerImplTest {
     }
 
 
-
-
     @Test
     @DisplayName("should convert MailLisType into List<Mail>")
-    void convertMailingListTypeIntoMailList() throws DatatypeConfigurationException, ParseException {
+    void convertListTypeIntoMailList() throws DatatypeConfigurationException, ParseException {
         GetOverdueMailListResponse getOverdueMailListResponse = new GetOverdueMailListResponse();
         MailListType mailListType = new MailListType();
 
@@ -98,24 +96,69 @@ class EmailManagerImplTest {
         GregorianCalendar c = new GregorianCalendar();
         c.setTime(date1);
         XMLGregorianCalendar xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(c);
-        mailTypeOut.setDueDate(xmlGregorianCalendar );
+        mailTypeOut.setDueDate(xmlGregorianCalendar);
         mailListType.getMailTypeOut().add(mailTypeOut);
         getOverdueMailListResponse.setMailListType(mailListType);
 
-        assertAll(
-                ()-> assertEquals(title, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getTitle()),
-                ()-> assertEquals(author, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getAuthor()),
-                ()-> assertEquals(email, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getEmail()),
-                ()-> assertEquals(edition, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getEdition()),
-                ()-> assertEquals(firstName, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getFirstname()),
-                ()-> assertEquals(lastName, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getLastname()),
-                ()-> assertEquals(diffDays, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getDiffdays()),
-                ()-> assertEquals(isbn, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getIsbn()),
-                ()-> assertEquals(date1, emailManager.convertOverdueListTypeIntoMailList(getOverdueMailListResponse).get(0).getDueDate())
-        );
 
+        assertAll(
+                () -> assertEquals(title, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getTitle()),
+                () -> assertEquals(author, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getAuthor()),
+                () -> assertEquals(email, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getEmail()),
+                () -> assertEquals(edition, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getEdition()),
+                () -> assertEquals(firstName, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getFirstname()),
+                () -> assertEquals(lastName, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getLastname()),
+                () -> assertEquals(diffDays, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getDiffdays()),
+                () -> assertEquals(isbn, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getIsbn()),
+                () -> assertEquals(date1, emailManager.convertListTypeIntoMailList(getOverdueMailListResponse).get(0).getDueDate())
+        );
 
 
     }
 
+    @Test
+    void sendOverdueMail() {
+    }
+
+    @Test
+    @DisplayName("should return true if the file exist")
+    void checkIfFileExist()  {
+        String path = "templates/Overdue.html";
+        assertTrue(emailManager.checkIfFileExist(path));
+    }
+
+    @Test
+    @DisplayName("should return true if the file exist")
+    void checkIfFileExist1()  {
+        String path="templates/Overdues.html";
+        assertFalse(emailManager.checkIfFileExist(path));
+    }
+
+    @Test
+    void sendReadyEmail() {
+    }
+
+    @Test
+    void sendReminderEmail() {
+    }
+
+    @Test
+    void sendPasswordResetEmail() {
+    }
+
+    @Test
+    void convertOverdueListTypeIntoMailList() {
+    }
+
+    @Test
+    void convertGregorianCalendarIntoDate1() {
+    }
+
+    @Test
+    void getMailService1() {
+    }
+
+    @Test
+    void setMailService() {
+    }
 }

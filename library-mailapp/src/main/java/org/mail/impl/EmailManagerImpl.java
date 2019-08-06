@@ -26,10 +26,8 @@ import javax.mail.internet.MimeMessage;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
@@ -41,17 +39,17 @@ import java.util.*;
 public class EmailManagerImpl implements EmailManager {
 
 
+    private static final String AES = "AES";
+    private static final String MAIL_LIST_SIZE ="mailList size: ";
     @Inject
     ConnectManager connectManager;
 
     private MailService mailService;
-    private Logger logger = Logger.getLogger(ConnectManagerImpl.class);
+    private Logger logger = Logger.getLogger(EmailManagerImpl.class);
 
     @Inject
     PropertiesLoad propertiesLoad;
 
-    private static final String AES = "AES";
-    private static final String MAIL_LIST_SIZE ="mailList size: ";
 
 
     @Override
@@ -59,12 +57,26 @@ public class EmailManagerImpl implements EmailManager {
     //@Scheduled(fixedRate = 500000)
     public void sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
         String template = "templates/Overdue.html";
-        String subject = "subjectOverDue";
-        String token = connectManager.authenticate();
-        if (token != null) {
-            List<Mail> overdueList = getOverdueList(token);
-            sendEmail(template, subject, overdueList);
+        if (checkIfFileExist(template)) {
+            String subject = "subjectOverDue";
+            String token = connectManager.authenticate();
+            if (token != null) {
+                List<Mail> overdueList = getOverdueList(token);
+                sendEmail(template, subject, overdueList);
+            }
+        }else {
+            logger.error("there is an issue with the file source");
         }
+    }
+
+    boolean checkIfFileExist(String template)  {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(template);
+        if(resource==null){
+            logger.error("File not found: "+template);
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -73,11 +85,15 @@ public class EmailManagerImpl implements EmailManager {
     public void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
         logger.info("sending Book ready email");
         String template = "templates/LoanReady.html";
-        String subject = "subjectLoanReady";
-        String token = connectManager.authenticate();
-        if (token != null) {
-            List<Mail> loanReady = getReadyList(token);
-            sendEmail(template, subject, loanReady);
+        if (checkIfFileExist(template)) {
+            String subject = "subjectLoanReady";
+            String token = connectManager.authenticate();
+            if (token != null) {
+                List<Mail> loanReady = getReadyList(token);
+                sendEmail(template, subject, loanReady);
+            }
+        }else {
+            logger.error("there is an issue with the file source");
         }
     }
 
@@ -88,12 +104,17 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("sending Reminder email");
         List<Mail> reminderList ;
         String template = "templates/Reminder.html";
-        String subject = "subjectReminder";
-        String token = connectManager.authenticate();
-        if (token != null) {
-           reminderList = getReminderList(token);
-            logger.info("list for reminder: "+reminderList.size());
-            sendEmail(template, subject, reminderList);
+        if (checkIfFileExist(template)) {
+            String subject = "subjectReminder";
+            String token = connectManager.authenticate();
+            if (token != null) {
+                reminderList = getReminderList(token);
+                logger.info("list for reminder: " + reminderList.size());
+                sendEmail(template, subject, reminderList);
+            }
+        }
+        else {
+            logger.error("there is an issue with the file source");
         }
     }
 
@@ -105,12 +126,17 @@ public class EmailManagerImpl implements EmailManager {
     public void sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending password reset email");
         String template = "templates/resetPassword.html";
-        String subject = "subjectPasswordReset";
-        String token = connectManager.authenticate();
-        if (token != null) {
-            List<Mail> passwordResetList = getPasswordResetList(token);
+        if (checkIfFileExist(template)) {
+            String subject = "subjectPasswordReset";
+            String token = connectManager.authenticate();
+            if (token != null) {
+                List<Mail> passwordResetList = getPasswordResetList(token);
 
-            sendEmail(template, subject, passwordResetList);
+                sendEmail(template, subject, passwordResetList);
+            }
+        }
+        else {
+            logger.error("there is an issue with the file source");
         }
     }
 
@@ -188,7 +214,7 @@ public class EmailManagerImpl implements EmailManager {
 
         String recipient = mail.getEmail();
 
-        // adding condition for testign purposes
+        // adding condition for testing purposes
         if (propertiesLoad.getProperty("test").equalsIgnoreCase("true")) {
             logger.info("test email detected");
             recipient = propertiesLoad.getProperty("testRecipient");
@@ -230,15 +256,15 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
-        input.put("FIRSTNAME", mail.getFirstname());
-        input.put("LASTNAME", mail.getLastname());
+
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
         String dueDate = dt1.format(mail.getDueDate());
         input.put("DUEDATE", dueDate);
-
         int overDays = mail.getDiffdays();
-        input.put("Isbn", mail.getIsbn());
         input.put("DIFFDAYS", Integer.toString(overDays));
+        input.put("FIRSTNAME", mail.getFirstname());
+        input.put("LASTNAME", mail.getLastname());
+        input.put("Isbn", mail.getIsbn());
         input.put("TITLE", mail.getTitle());
         input.put("AUTHOR", mail.getAuthor());
         input.put("EDITION", mail.getEdition());
@@ -253,12 +279,12 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
-        input.put("FIRSTNAME", mail.getFirstname());
-        input.put("LASTNAME", mail.getLastname());
 
         int overDays = mail.getDiffdays();
-        input.put("Isbn", mail.getIsbn());
         input.put("DIFFDAYS", Integer.toString(overDays));
+        input.put("FIRSTNAME", mail.getFirstname());
+        input.put("LASTNAME", mail.getLastname());
+        input.put("Isbn", mail.getIsbn());
         input.put("TITLE", mail.getTitle());
         input.put("AUTHOR", mail.getAuthor());
         input.put("EDITION", mail.getEdition());
@@ -310,7 +336,7 @@ public class EmailManagerImpl implements EmailManager {
         requestType.setToken(token);
         GetOverdueMailListResponse response = getMailServicePort().getOverdueMailList(requestType);
 
-        return convertOverdueListTypeIntoMailList(response);
+        return convertListTypeIntoMailList(response);
 
     }
 
@@ -320,7 +346,7 @@ public class EmailManagerImpl implements EmailManager {
         requestType.setToken(token);
         GetLoanReadyResponse response = getMailServicePort().getLoanReady(requestType);
 
-        return convertReadyListTypeIntoMailList(response);
+        return convertListTypeIntoMailList(response);
 
     }
 
@@ -330,7 +356,7 @@ public class EmailManagerImpl implements EmailManager {
         requestType.setToken(token);
         GetReminderMailListResponse response = getMailServicePort().getReminderMailList(requestType);
         logger.info("nb Elements returned: "+response.getMailListType().getMailTypeOut().size());
-        return convertReminderListTypeIntoMailList(response);
+        return convertListTypeIntoMailList(response);
     }
 
 
@@ -369,30 +395,49 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    private List<Mail> convertReadyListTypeIntoMailList(GetLoanReadyResponse response) throws DatatypeConfigurationException {
-
-
-        List<Mail> mailList = new ArrayList<>();
-
-        for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
-            Mail mail = new Mail();
-            mail.setEmail(mailTypeOut.getEmail());
-            mail.setFirstname(mailTypeOut.getFirstName());
-            mail.setLastname(mailTypeOut.getLastName());
-            mail.setIsbn(mailTypeOut.getIsbn());
-            mail.setTitle(mailTypeOut.getTitle());
-            mail.setAuthor(mailTypeOut.getAuthor());
-            mail.setDiffdays(mailTypeOut.getDiffDays());
-            mail.setEdition(mailTypeOut.getEdition());
-            mail.setEndAvailableDate(convertGregorianCalendarIntoDate(mailTypeOut.getEndAvailableDate().toGregorianCalendar()));
-            mailList.add(mail);
+    List<Mail> convertListTypeIntoMailList(Object response) throws DatatypeConfigurationException {
+        List<MailTypeOut> mailTypeOutList =null;
+        logger.info("type: "+response.getClass());
+        if(response.getClass() == GetLoanReadyResponse.class){
+            mailTypeOutList = ((GetLoanReadyResponse) response).getMailListType().getMailTypeOut();
         }
-        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
+        else if(response.getClass()== GetReminderMailListResponse.class){
+            mailTypeOutList = ((GetReminderMailListResponse) response).getMailListType().getMailTypeOut();
+        }
+        else if(response.getClass() == GetOverdueMailListResponse.class){
+            mailTypeOutList = ((GetOverdueMailListResponse) response).getMailListType().getMailTypeOut();
+            logger.info("here");
+        }
+        logger.info(mailTypeOutList.size());
+        List<Mail> mailList = new ArrayList<>();
+        if(!mailTypeOutList.isEmpty()) {
+
+            for (MailTypeOut mailTypeOut : mailTypeOutList) {
+                logger.info("due date: "+mailTypeOut.getDueDate());
+                Mail mail = new Mail();
+                mail.setEmail(mailTypeOut.getEmail());
+                mail.setFirstname(mailTypeOut.getFirstName());
+                mail.setLastname(mailTypeOut.getLastName());
+                mail.setIsbn(mailTypeOut.getIsbn());
+                mail.setTitle(mailTypeOut.getTitle());
+                mail.setAuthor(mailTypeOut.getAuthor());
+                mail.setDiffdays(mailTypeOut.getDiffDays());
+                mail.setEdition(mailTypeOut.getEdition());
+                if(mailTypeOut.getDueDate()!=null) {
+                    mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate().toGregorianCalendar()));
+                }
+                if(mailTypeOut.getEndAvailableDate()!=null) {
+                    mail.setEndAvailableDate(convertGregorianCalendarIntoDate(mailTypeOut.getEndAvailableDate().toGregorianCalendar()));
+                }
+                mailList.add(mail);
+            }
+            if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
+        }
         return mailList;
     }
 
 
-    private List<Mail> convertReminderListTypeIntoMailList(GetReminderMailListResponse response) throws DatatypeConfigurationException {
+    /*private List<Mail> convertReminderListTypeIntoMailList(GetReminderMailListResponse response) throws DatatypeConfigurationException {
         List<Mail> mailList = new ArrayList<>();
         for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
 
@@ -410,10 +455,10 @@ public class EmailManagerImpl implements EmailManager {
         }
         if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         return mailList;
-    }
+    }*/
 
 
-    List<Mail> convertOverdueListTypeIntoMailList(GetOverdueMailListResponse response) throws DatatypeConfigurationException {
+   /* List<Mail> convertOverdueListTypeIntoMailList(GetOverdueMailListResponse response) throws DatatypeConfigurationException {
 
 
         List<Mail> mailList = new ArrayList<>();
@@ -434,7 +479,7 @@ public class EmailManagerImpl implements EmailManager {
         }
         if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
         return mailList;
-    }
+    }*/
 
 
     Date convertGregorianCalendarIntoDate(GregorianCalendar gregorianCalendar) throws DatatypeConfigurationException {
