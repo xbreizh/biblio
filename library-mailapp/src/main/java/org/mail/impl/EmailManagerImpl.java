@@ -88,13 +88,13 @@ public class EmailManagerImpl implements EmailManager {
             String token = connectManager.authenticate();
             if (token != null) {
                 List<Mail> loanReady = getReadyList(token);
-                sendEmail(template, subject, loanReady);
+                return sendEmail(template, subject, loanReady);
             }
-        } else {
+        }
             logger.error("there is an issue with the file source");
             return false;
-        }
-        return true;
+
+
     }
 
     @Override
@@ -110,13 +110,13 @@ public class EmailManagerImpl implements EmailManager {
             if (token != null) {
                 reminderList = getReminderList(token);
                 logger.info("list for reminder: " + reminderList.size());
-                sendEmail(template, subject, reminderList);
+                return sendEmail(template, subject, reminderList);
             }
-        } else {
+        }
+
             logger.error("there is an issue with the file source");
             return false;
-        }
-        return true;
+
     }
 
 
@@ -133,13 +133,12 @@ public class EmailManagerImpl implements EmailManager {
             if (token != null) {
                 List<Mail> passwordResetList = getPasswordResetList(token);
 
-                sendEmail(template, subject, passwordResetList);
+                return sendEmail(template, subject, passwordResetList);
             }
-        } else {
+        }
             logger.error("there is an issue with the file source");
             return false;
-        }
-        return true;
+
     }
 
     boolean sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
@@ -344,7 +343,7 @@ public class EmailManagerImpl implements EmailManager {
 
     }
 
-    private List<Mail> getReminderList(String token) throws BusinessExceptionMail {
+    List<Mail> getReminderList(String token) throws BusinessExceptionMail {
         logger.info("getting reminder list");
         GetReminderMailListRequest requestType = new GetReminderMailListRequest();
         requestType.setToken(token);
@@ -354,7 +353,7 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    private List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
+    List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
         logger.info("getting password reset list");
         GetPasswordResetListRequest request = new GetPasswordResetListRequest();
         request.setToken(token);

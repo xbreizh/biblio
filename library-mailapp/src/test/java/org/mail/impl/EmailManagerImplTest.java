@@ -179,6 +179,7 @@ class EmailManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return true")
     void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
         List<Mail> mailList = new ArrayList<>();
         Mail mail = new Mail();
@@ -191,27 +192,105 @@ class EmailManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return false if sendEmail false")
+    void sendReadyEmail1() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(mailList).when(emailManager1).getReadyList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(false);
+        assertFalse(emailManager1.sendReadyEmail());
+    }
+
+
+    @Test
+    @DisplayName("should return false if file not found")
+    void sendReadyEmail11() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(false);
+        assertFalse(emailManager1.sendReadyEmail());
+    }
+
+    @Test
+    @DisplayName("should return true when all ok")
     void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
         List<Mail> mailList = new ArrayList<>();
         Mail mail = new Mail();
         mailList.add(mail);
         EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
         when(connectManager.authenticate()).thenReturn("");
-        doReturn(true).when(emailManager1).sendReminderEmail();
-        when(emailManager1.sendReminderEmail()).thenReturn(true);
+        doReturn(mailList).when(emailManager1).getReminderList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(true);
         assertTrue(emailManager1.sendReminderEmail());
     }
 
     @Test
+    @DisplayName("should return false when file not found")
+    void sendReminderEmail1() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(false);
+        assertFalse(emailManager1.sendReminderEmail());
+    }
+
+    @Test
+    @DisplayName("should return false when sendMail ko")
+    void sendReminderEmail2() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(mailList).when(emailManager1).getReminderList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(false);
+        assertFalse(emailManager1.sendReminderEmail());
+    }
+
+    @Test
+    @DisplayName("should return true if all ok")
     void sendPasswordResetEmail() throws BusinessExceptionConnect, BusinessExceptionMail, MessagingException, IOException {
         List<Mail> mailList = new ArrayList<>();
         Mail mail = new Mail();
         mailList.add(mail);
         EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
         when(connectManager.authenticate()).thenReturn("");
-        doReturn(true).when(emailManager1).sendPasswordResetEmail();
-        when(emailManager1.sendPasswordResetEmail()).thenReturn(true);
+        doReturn(mailList).when(emailManager1).getPasswordResetList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(true);
         assertTrue(emailManager1.sendPasswordResetEmail());
+    }
+
+    @Test
+    @DisplayName("should return true if file missing")
+    void sendPasswordResetEmail1() throws BusinessExceptionConnect, BusinessExceptionMail, MessagingException, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(false);
+        assertFalse(emailManager1.sendPasswordResetEmail());
+    }
+
+    @Test
+    @DisplayName("should return true if sendMail ko")
+    void sendPasswordResetEmail2() throws BusinessExceptionConnect, BusinessExceptionMail, MessagingException, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
+        doReturn(mailList).when(emailManager1).getPasswordResetList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(false);
+        assertFalse(emailManager1.sendPasswordResetEmail());
     }
 
     @Test
