@@ -9,12 +9,12 @@ import java.io.IOException;
 
 public interface EmailManager {
 
-    void sendPasswordResetEmail()  throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail;
+    boolean sendPasswordResetEmail()  throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail;
 
-    void sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
+    boolean sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
 
-    void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
+    boolean sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
 
-    void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
+    boolean sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException;
 
 }

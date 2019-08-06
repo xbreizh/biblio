@@ -4,25 +4,32 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mail.contract.ConnectManager;
+import org.mail.model.Mail;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.mail.GetOverdueMailListResponse;
 import org.troparo.entities.mail.MailListType;
 import org.troparo.entities.mail.MailTypeOut;
+import org.troparo.services.connectservice.BusinessExceptionConnect;
+import org.troparo.services.mailservice.BusinessExceptionMail;
+import org.troparo.services.mailservice.IMailService;
 import org.troparo.services.mailservice.MailService;
 
+import javax.mail.MessagingException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.*;
 
 
 @ExtendWith(SpringExtension.class)
@@ -30,15 +37,17 @@ import static org.mockito.Mockito.spy;
 class EmailManagerImplTest {
 
     private EmailManagerImpl emailManager;
-    private MailService mailService;
+    private ConnectManager connectManager;
 
 
     @BeforeEach
     void init() {
-
         emailManager = spy(EmailManagerImpl.class);
-        mailService = mock(MailService.class);
+        MailService mailService = mock(MailService.class);
         emailManager.setMailService(mailService);
+        //IMailService iMailService = mock(IMailService.class);
+        connectManager = mock(ConnectManager.class);
+        emailManager.setConnectManager(connectManager);
     }
 
 
@@ -60,7 +69,7 @@ class EmailManagerImplTest {
         GregorianCalendar gregorianCalendar = new GregorianCalendar();
         gregorianCalendar.setTime(date1);
         XMLGregorianCalendar xmlGregorianCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
-        assertEquals(date1, emailManager.convertGregorianCalendarIntoDate(xmlGregorianCalendar.toGregorianCalendar()));
+        assertEquals(date1, emailManager.convertGregorianCalendarIntoDate(xmlGregorianCalendar));
 
     }
 
@@ -117,33 +126,92 @@ class EmailManagerImplTest {
     }
 
     @Test
-    void sendOverdueMail() {
+    @DisplayName("should return true when trying to send overDue mails")
+    void sendOverdueMail() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(mailList).when(emailManager1).getOverdueList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(true);
+        assertTrue(emailManager1.sendOverdueMail());
+    }
+
+    @Test
+    @DisplayName("should return false when trying to send overDue mails")
+    void sendOverdueMail1() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(mailList).when(emailManager1).getOverdueList(anyString());
+        when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(false);
+        assertFalse(emailManager1.sendOverdueMail());
+    }
+
+    @Test
+    @DisplayName("should return false if file doesn't exist")
+    void sendOverdueMail2() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(mailList).when(emailManager1).getOverdueList(anyString());
+        doReturn(false).when(emailManager1).checkIfFileExist(anyString());
+        assertFalse(emailManager1.sendOverdueMail());
     }
 
     @Test
     @DisplayName("should return true if the file exist")
-    void checkIfFileExist()  {
+    void checkIfFileExist() {
         String path = "templates/Overdue.html";
         assertTrue(emailManager.checkIfFileExist(path));
     }
 
     @Test
     @DisplayName("should return true if the file exist")
-    void checkIfFileExist1()  {
-        String path="templates/Overdues.html";
+    void checkIfFileExist1() {
+        String path = "templates/Overdues.html";
         assertFalse(emailManager.checkIfFileExist(path));
     }
 
     @Test
-    void sendReadyEmail() {
+    void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(true).when(emailManager1).sendReadyEmail();
+        when(emailManager1.sendReadyEmail()).thenReturn(true);
+        assertTrue(emailManager1.sendReadyEmail());
     }
 
     @Test
-    void sendReminderEmail() {
+    void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(true).when(emailManager1).sendReminderEmail();
+        when(emailManager1.sendReminderEmail()).thenReturn(true);
+        assertTrue(emailManager1.sendReminderEmail());
     }
 
     @Test
-    void sendPasswordResetEmail() {
+    void sendPasswordResetEmail() throws BusinessExceptionConnect, BusinessExceptionMail, MessagingException, IOException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        doReturn(true).when(emailManager1).sendPasswordResetEmail();
+        when(emailManager1.sendPasswordResetEmail()).thenReturn(true);
+        assertTrue(emailManager1.sendPasswordResetEmail());
     }
 
     @Test
@@ -151,14 +219,28 @@ class EmailManagerImplTest {
     }
 
     @Test
-    void convertGregorianCalendarIntoDate1() {
+    void convertGregorianCalendarIntoDate1() throws DatatypeConfigurationException, ParseException {
+        String pattern = "yyyy-MM-dd";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+
+        Date date = simpleDateFormat.parse("2018-09-09");
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(date);
+        XMLGregorianCalendar xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+        assertEquals("Sun Sep 09 00:00:00 UTC 2018", emailManager.convertGregorianCalendarIntoDate(xmlCalendar).toString());
     }
 
     @Test
     void getMailService1() {
+        MailService mailService1 = new MailService();
+        emailManager.setMailService(mailService1);
+        assertEquals(mailService1, emailManager.getMailService());
     }
 
     @Test
     void setMailService() {
+        MailService mailService1 = new MailService();
+        emailManager.setMailService(mailService1);
+        assertEquals(mailService1, emailManager.getMailService());
     }
 }

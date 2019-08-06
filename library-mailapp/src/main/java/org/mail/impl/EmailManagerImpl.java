@@ -7,73 +7,71 @@ import org.mail.contract.EmailManager;
 import org.mail.model.Mail;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
 import org.troparo.entities.mail.*;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
 import org.troparo.services.mailservice.MailService;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.net.URL;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-@Component
+@Named
 @PropertySource("classpath:mail.properties")
 @PropertySource("classpath:templates/Overdue.html")
 public class EmailManagerImpl implements EmailManager {
 
-
-    private static final String AES = "AES";
-    private static final String MAIL_LIST_SIZE ="mailList size: ";
-    @Inject
-    ConnectManager connectManager;
-
+    private static final String MAIL_LIST_SIZE = "mailList size: ";
+    private ConnectManager connectManager;
+    private PropertiesLoad propertiesLoad;
     private MailService mailService;
     private Logger logger = Logger.getLogger(EmailManagerImpl.class);
 
+    public EmailManagerImpl() {
+    }
+
+    //@Inject
     @Inject
-    PropertiesLoad propertiesLoad;
-
-
+    public EmailManagerImpl(ConnectManager connectManager, PropertiesLoad propertiesLoad) {
+        this.connectManager = connectManager;
+        this.propertiesLoad = propertiesLoad;
+    }
 
     @Override
     @Scheduled(cron = "* 00 11 * * *")
     //@Scheduled(fixedRate = 500000)
-    public void sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
+    public boolean sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         String template = "templates/Overdue.html";
         if (checkIfFileExist(template)) {
             String subject = "subjectOverDue";
             String token = connectManager.authenticate();
             if (token != null) {
                 List<Mail> overdueList = getOverdueList(token);
-                sendEmail(template, subject, overdueList);
+                return sendEmail(template, subject, overdueList);
             }
-        }else {
-            logger.error("there is an issue with the file source");
+        } else {
+            logger.error("There is an issue with the file source");
+            return false;
         }
+        return true;
     }
 
-    boolean checkIfFileExist(String template)  {
+    boolean checkIfFileExist(String template) {
         ClassLoader classLoader = getClass().getClassLoader();
         URL resource = classLoader.getResource(template);
-        if(resource==null){
-            logger.error("File not found: "+template);
+        if (resource == null) {
+            logger.error("File not found: " + template);
             return false;
         }
         return true;
@@ -82,7 +80,7 @@ public class EmailManagerImpl implements EmailManager {
     @Override
     //@Scheduled(cron = "0 8,14 * * 1-5 *") // runs every week day at 08:00 and 14:00
     @Scheduled(fixedRate = 500000)
-    public void sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
+    public boolean sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Book ready email");
         String template = "templates/LoanReady.html";
         if (checkIfFileExist(template)) {
@@ -92,17 +90,19 @@ public class EmailManagerImpl implements EmailManager {
                 List<Mail> loanReady = getReadyList(token);
                 sendEmail(template, subject, loanReady);
             }
-        }else {
+        } else {
             logger.error("there is an issue with the file source");
+            return false;
         }
+        return true;
     }
 
     @Override
     @Scheduled(cron = "0 9,13 * * 1-5 *") // runs every week day at 08:00 and 14:00
     //@Scheduled(fixedRate = 500000)
-    public void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail, DatatypeConfigurationException {
+    public boolean sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Reminder email");
-        List<Mail> reminderList ;
+        List<Mail> reminderList;
         String template = "templates/Reminder.html";
         if (checkIfFileExist(template)) {
             String subject = "subjectReminder";
@@ -112,18 +112,19 @@ public class EmailManagerImpl implements EmailManager {
                 logger.info("list for reminder: " + reminderList.size());
                 sendEmail(template, subject, reminderList);
             }
-        }
-        else {
+        } else {
             logger.error("there is an issue with the file source");
+            return false;
         }
+        return true;
     }
 
 
-
     //@Scheduled(fixedRate = 2000000000)
+
     @Override
     @Scheduled(fixedRate = 500000)
-    public void sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
+    public boolean sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending password reset email");
         String template = "templates/resetPassword.html";
         if (checkIfFileExist(template)) {
@@ -134,13 +135,14 @@ public class EmailManagerImpl implements EmailManager {
 
                 sendEmail(template, subject, passwordResetList);
             }
-        }
-        else {
+        } else {
             logger.error("there is an issue with the file source");
+            return false;
         }
+        return true;
     }
 
-    private void sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
+    boolean sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
         logger.info(MAIL_LIST_SIZE + mailList.size());
         Map<String, String> input;
         if (!mailList.isEmpty()) {
@@ -158,6 +160,7 @@ public class EmailManagerImpl implements EmailManager {
                 }
             }
         }
+        return true;
     }
 
     private Map<String, String> getItemsForSubject(String subject, Mail mail) {
@@ -185,21 +188,19 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-
     private Map<String, String> getPasswordResetTemplateItems(Mail mail) {
         //Set key values
         Map<String, String> input = new HashMap<>();
         input.put("TOKEN", mail.getToken());
         input.put("EMAIL", mail.getEmail());
         input.put("LOGIN", mail.getLogin());
-        input.put("PWDACTION",propertiesLoad.getProperty("pwdResetAction"));
+        input.put("PWDACTION", propertiesLoad.getProperty("pwdResetAction"));
         logger.info("getting template items: " + input);
         return input;
     }
 
 
     // general
-
     private Message prepareMessage(Mail mail, String template, String subject, Map<String, String> input) throws MessagingException, IOException {
         final String username = propertiesLoad.getProperty("mailFrom");
 
@@ -233,20 +234,23 @@ public class EmailManagerImpl implements EmailManager {
 
 
     //Method to replace the values for keys
+
     private String replaceValuesForKeys(String template, Map<String, String> input) throws IOException {
         logger.info("replacing values for keys");
         String msg = null;
-        try {
-            File file = new File(EmailManagerImpl.class.getClassLoader().getResource(template).getFile());
-            msg = readContentFromFile(file);
+        if (checkIfFileExist(template)) {
+            try {
+                File file = new File(template);
+                msg = readContentFromFile(file);
 
 
-            Set<Map.Entry<String, String>> entries = input.entrySet();
-            for (Map.Entry<String, String> entry : entries) {
-                msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
+                Set<Map.Entry<String, String>> entries = input.entrySet();
+                for (Map.Entry<String, String> entry : entries) {
+                    msg = msg.replace(entry.getKey().trim(), entry.getValue().trim());
+                }
+            } catch (NullPointerException e) {
+                logger.error("Issue while getting file");
             }
-        } catch (NullPointerException e) {
-            logger.error("Issue while getting file");
         }
 
         return msg;
@@ -297,6 +301,7 @@ public class EmailManagerImpl implements EmailManager {
 
 
     //Method to read HTML file as a String
+
     private String readContentFromFile(File file) throws IOException {
         logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
@@ -319,18 +324,7 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    private byte[] hexStringToByteArray(String s) {
-        logger.info("converting hexString into ByteArray");
-        byte[] b = new byte[s.length() / 2];
-        for (int i = 0; i < b.length; i++) {
-            int index = i * 2;
-            int v = Integer.parseInt(s.substring(index, index + 2), 16);
-            b[i] = (byte) v;
-        }
-        return b;
-    }
-
-    private List<Mail> getOverdueList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
+    List<Mail> getOverdueList(String token) throws BusinessExceptionMail {
         logger.info("getting overdue list");
         GetOverdueMailListRequest requestType = new GetOverdueMailListRequest();
         requestType.setToken(token);
@@ -340,7 +334,7 @@ public class EmailManagerImpl implements EmailManager {
 
     }
 
-    private List<Mail> getReadyList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
+    private List<Mail> getReadyList(String token) throws BusinessExceptionMail {
         logger.info("getting ready list");
         GetLoanReadyRequest requestType = new GetLoanReadyRequest();
         requestType.setToken(token);
@@ -350,16 +344,14 @@ public class EmailManagerImpl implements EmailManager {
 
     }
 
-    private List<Mail> getReminderList(String token) throws BusinessExceptionMail, DatatypeConfigurationException {
+    private List<Mail> getReminderList(String token) throws BusinessExceptionMail {
         logger.info("getting reminder list");
         GetReminderMailListRequest requestType = new GetReminderMailListRequest();
         requestType.setToken(token);
         GetReminderMailListResponse response = getMailServicePort().getReminderMailList(requestType);
-        logger.info("nb Elements returned: "+response.getMailListType().getMailTypeOut().size());
+        logger.info("nb Elements returned: " + response.getMailListType().getMailTypeOut().size());
         return convertListTypeIntoMailList(response);
     }
-
-
 
 
     private List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
@@ -395,25 +387,23 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    List<Mail> convertListTypeIntoMailList(Object response) throws DatatypeConfigurationException {
-        List<MailTypeOut> mailTypeOutList =null;
-        logger.info("type: "+response.getClass());
-        if(response.getClass() == GetLoanReadyResponse.class){
+    List<Mail> convertListTypeIntoMailList(Object response) {
+        List<MailTypeOut> mailTypeOutList = null;
+        logger.info("type: " + response.getClass());
+        if (response.getClass() == GetLoanReadyResponse.class) {
             mailTypeOutList = ((GetLoanReadyResponse) response).getMailListType().getMailTypeOut();
-        }
-        else if(response.getClass()== GetReminderMailListResponse.class){
+        } else if (response.getClass() == GetReminderMailListResponse.class) {
             mailTypeOutList = ((GetReminderMailListResponse) response).getMailListType().getMailTypeOut();
-        }
-        else if(response.getClass() == GetOverdueMailListResponse.class){
+        } else if (response.getClass() == GetOverdueMailListResponse.class) {
             mailTypeOutList = ((GetOverdueMailListResponse) response).getMailListType().getMailTypeOut();
             logger.info("here");
         }
-        logger.info(mailTypeOutList.size());
         List<Mail> mailList = new ArrayList<>();
-        if(!mailTypeOutList.isEmpty()) {
+        if (mailTypeOutList != null && !mailTypeOutList.isEmpty()) {
+            logger.info(mailTypeOutList.size());
 
             for (MailTypeOut mailTypeOut : mailTypeOutList) {
-                logger.info("due date: "+mailTypeOut.getDueDate());
+                logger.info("due date: " + mailTypeOut.getDueDate());
                 Mail mail = new Mail();
                 mail.setEmail(mailTypeOut.getEmail());
                 mail.setFirstname(mailTypeOut.getFirstName());
@@ -423,11 +413,11 @@ public class EmailManagerImpl implements EmailManager {
                 mail.setAuthor(mailTypeOut.getAuthor());
                 mail.setDiffdays(mailTypeOut.getDiffDays());
                 mail.setEdition(mailTypeOut.getEdition());
-                if(mailTypeOut.getDueDate()!=null) {
-                    mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate().toGregorianCalendar()));
+                if (mailTypeOut.getDueDate() != null) {
+                    mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate()));
                 }
-                if(mailTypeOut.getEndAvailableDate()!=null) {
-                    mail.setEndAvailableDate(convertGregorianCalendarIntoDate(mailTypeOut.getEndAvailableDate().toGregorianCalendar()));
+                if (mailTypeOut.getEndAvailableDate() != null) {
+                    mail.setEndAvailableDate(convertGregorianCalendarIntoDate(mailTypeOut.getEndAvailableDate()));
                 }
                 mailList.add(mail);
             }
@@ -437,56 +427,10 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    /*private List<Mail> convertReminderListTypeIntoMailList(GetReminderMailListResponse response) throws DatatypeConfigurationException {
-        List<Mail> mailList = new ArrayList<>();
-        for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
-
-            Mail mail = new Mail();
-            mail.setEmail(mailTypeOut.getEmail());
-            mail.setFirstname(mailTypeOut.getFirstName());
-            mail.setLastname(mailTypeOut.getLastName());
-            mail.setIsbn(mailTypeOut.getIsbn());
-            mail.setTitle(mailTypeOut.getTitle());
-            mail.setAuthor(mailTypeOut.getAuthor());
-            mail.setDiffdays(mailTypeOut.getDiffDays());
-            mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate().toGregorianCalendar()));
-            mail.setEdition(mailTypeOut.getEdition());
-            mailList.add(mail);
-        }
-        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
-        return mailList;
-    }*/
-
-
-   /* List<Mail> convertOverdueListTypeIntoMailList(GetOverdueMailListResponse response) throws DatatypeConfigurationException {
-
-
-        List<Mail> mailList = new ArrayList<>();
-
-        for (MailTypeOut mailTypeOut : response.getMailListType().getMailTypeOut()) {
-            Mail mail = new Mail();
-            mail.setEmail(mailTypeOut.getEmail());
-            mail.setFirstname(mailTypeOut.getFirstName());
-            mail.setLastname(mailTypeOut.getLastName());
-            mail.setIsbn(mailTypeOut.getIsbn());
-            mail.setTitle(mailTypeOut.getTitle());
-            mail.setAuthor(mailTypeOut.getAuthor());
-            mail.setDiffdays(mailTypeOut.getDiffDays());
-            mail.setDueDate(convertGregorianCalendarIntoDate(mailTypeOut.getDueDate().toGregorianCalendar()));
-            mail.setEdition(mailTypeOut.getEdition());
-
-            mailList.add(mail);
-        }
-        if (!mailList.isEmpty()) logger.info(MAIL_LIST_SIZE + mailList.size());
-        return mailList;
-    }*/
-
-
-    Date convertGregorianCalendarIntoDate(GregorianCalendar gregorianCalendar) throws DatatypeConfigurationException {
+    Date convertGregorianCalendarIntoDate(XMLGregorianCalendar startDate) {
         logger.info("converting xml date into Date");
-        XMLGregorianCalendar xmlCalendar;
-        xmlCalendar = DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar);
-        return xmlCalendar.toGregorianCalendar().getTime();
+        if (startDate == null) return null;
+        return startDate.toGregorianCalendar().getTime();
     }
 
 
@@ -502,21 +446,6 @@ public class EmailManagerImpl implements EmailManager {
                 });
     }
 
-    private String getPassword() throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
-        logger.info("trying to get Password");
-        String tempKey = propertiesLoad.getProperty("Key");
-        String password = propertiesLoad.getProperty("Encrypted_Password");
-
-        byte[] byteKey = hexStringToByteArray(tempKey);
-        SecretKeySpec sks = new SecretKeySpec(byteKey, AES);
-        Cipher cipher = Cipher.getInstance(AES);
-        cipher.init(Cipher.DECRYPT_MODE, sks);
-        byte[] decrypted = cipher.doFinal(hexStringToByteArray(password));
-
-
-        return new String(decrypted);
-    }
-
 
     MailService getMailService() {
         return mailService;
@@ -524,5 +453,9 @@ public class EmailManagerImpl implements EmailManager {
 
     void setMailService(MailService mailService) {
         this.mailService = mailService;
+    }
+
+    void setConnectManager(ConnectManager connectManager) {
+        this.connectManager = connectManager;
     }
 }

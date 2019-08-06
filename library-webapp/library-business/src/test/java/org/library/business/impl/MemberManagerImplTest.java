@@ -92,12 +92,6 @@ class MemberManagerImplTest {
         assertNull(memberManager.getMember("", "login"));
     }
 
-   /* @Test
-    void getMemberServicePort(){
-        memberManager.setMemberService(null);
-        assertNotNull(memberManager.getMemberServicePort());
-    }*/
-
 
     @Test
     @DisplayName("should return true when trying to reset password")
