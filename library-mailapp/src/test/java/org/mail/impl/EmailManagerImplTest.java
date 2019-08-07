@@ -16,7 +16,10 @@ import org.troparo.services.mailservice.BusinessExceptionMail;
 import org.troparo.services.mailservice.IMailService;
 import org.troparo.services.mailservice.MailService;
 
+import javax.mail.Message;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.MimeMessage;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -767,7 +770,6 @@ class EmailManagerImplTest {
     @DisplayName("should read content from file is exist and not empty")
     void readContentFromFile() throws IOException, URISyntaxException, NullPointerException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-        EmailManagerImpl emailManager = new EmailManagerImpl();
         URL url = classLoader.getResource("test.html");
         if (url != null) {
             File file = new File(url.toURI().getPath());
@@ -780,11 +782,60 @@ class EmailManagerImplTest {
     }
 
     @Test
-    @DisplayName("should send email")
-    void sendEmail(){
+    @DisplayName("should return true if mailList is null")
+    void sendEmail() throws IOException, MessagingException {
+        assertTrue(emailManager.sendEmail("", "", null));
 
+    }
 
+    @Test
+    @DisplayName("should return true if mailList is empty")
+    void sendEmail1() throws IOException, MessagingException {
+        List<Mail> mailList = new ArrayList<>();
+        assertTrue(emailManager.sendEmail("", "", mailList));
 
+    }
+
+    @Test
+    @DisplayName("should return true if input is null")
+    void sendEmail2() throws IOException, MessagingException {
+        List<Mail> mailList = new ArrayList<>();
+        Mail mail = new Mail();
+        mailList.add(mail);
+        doReturn(null).when(emailManager).getItemsForSubject(anyString(), any(Mail.class));
+        assertTrue(emailManager.sendEmail("", "", mailList));
+    }
+
+    @Test
+    @DisplayName("should return true if input is not null")
+    void sendEmail3() throws IOException, MessagingException {
+        Map<String, String> input = new HashMap<>();
+        // Recipient's email ID needs to be mentioned.
+        String to = "abcd@gmail.com";
+
+        // Sender's email ID needs to be mentioned
+        String from = "web@gmail.com";
+
+        // Assuming you are sending email from localhost
+        String host = "localhost";
+
+        // Get system properties
+        Properties properties = System.getProperties();
+
+        // Setup mail server
+        properties.setProperty("mail.smtp.host", host);
+
+        // Get the default Session object.
+        Session session = Session.getDefaultInstance(properties);
+        Message message = new MimeMessage(session);
+        List<Mail> mailList = new ArrayList<>();
+        String template = "template";
+        String subject = "subject";
+        Mail mail = new Mail();
+        mailList.add(mail);
+        doReturn(input).when(emailManager).getItemsForSubject(subject, mail);
+        doReturn(message).when(emailManager).prepareMessage(mail, template, subject, input);
+        assertTrue(emailManager.sendEmail("", "", mailList));
     }
 
 }

@@ -160,9 +160,9 @@ public class EmailManagerImpl implements EmailManager {
     }
 
     boolean sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
-        logger.info(MAIL_LIST_SIZE + mailList.size());
         Map<String, String> input;
-        if (!mailList.isEmpty()) {
+        if ((mailList!=null) && (!mailList.isEmpty())) {
+            logger.info(MAIL_LIST_SIZE + mailList.size());
             for (Mail mail : mailList
             ) {
                 input = getItemsForSubject(subject, mail);
@@ -208,7 +208,7 @@ public class EmailManagerImpl implements EmailManager {
 
 
     // general
-    private Message prepareMessage(Mail mail, String template, String subject, Map<String, String> input) throws MessagingException, IOException {
+    Message prepareMessage(Mail mail, String template, String subject, Map<String, String> input) throws MessagingException, IOException {
         final String username = propertiesLoad.getProperty("mailFrom");
 
         Properties props = new Properties();
