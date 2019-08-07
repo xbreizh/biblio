@@ -214,7 +214,6 @@ public class EmailManagerImpl implements EmailManager {
     // general
     Message prepareMessage(Mail mail, String template, String subject, Map<String, String> input) throws MessagingException, IOException {
         final String username = propertiesLoad.getProperty("mailFrom");
-
         Properties props = new Properties();
         props.put("mail.smtp.auth", propertiesLoad.getProperty("mail.smtp.auth"));
         props.put("mail.smtp.starttls.enable", propertiesLoad.getProperty("mail.smtp.starttls.enable"));
@@ -223,8 +222,8 @@ public class EmailManagerImpl implements EmailManager {
         Session session = getSession(props);
         Message message = createNewMimeMessage(session);
         message.setFrom(new InternetAddress(username));
-
         String recipient = mail.getEmail();
+
 
         // adding condition for testing purposes
         if (propertiesLoad.getProperty("test").equalsIgnoreCase("true")) {
@@ -235,7 +234,6 @@ public class EmailManagerImpl implements EmailManager {
         message.setRecipients(Message.RecipientType.TO,
                 InternetAddress.parse(recipient));
         String htmlText = replaceValuesForKeys(template, input);
-
         message.setContent(htmlText, "text/html");
         message.setSubject(propertiesLoad.getProperty(subject));
         logger.info("message ready");

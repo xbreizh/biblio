@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mail.contract.ConnectManager;
 import org.mail.contract.EmailManager;
 import org.mail.model.Mail;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.mail.*;
@@ -35,7 +36,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-
+@PropertySource("classpath:mail.properties")
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {EmailManagerImpl.class, ConnectManagerImpl.class, PropertiesLoad.class})
 class EmailManagerImplTest {
@@ -43,7 +44,7 @@ class EmailManagerImplTest {
     private EmailManagerImpl emailManager;
     private ConnectManager connectManager;
     private Logger logger = Logger.getLogger(EmailManagerImplTest.class);
-
+    private PropertiesLoad propertiesLoad;
 
     @BeforeEach
     void init() throws IOException {
@@ -51,7 +52,8 @@ class EmailManagerImplTest {
         MailService mailService = mock(MailService.class);
         emailManager.setMailService(mailService);
 
-        PropertiesLoad propertiesLoad = new PropertiesLoad();
+        propertiesLoad = new PropertiesLoad();
+        //propertiesLoad = mock(PropertiesLoad.class);
         connectManager = mock(ConnectManager.class);
         emailManager.setConnectManager(connectManager);
         emailManager.setPropertiesLoad(propertiesLoad);
@@ -836,13 +838,28 @@ class EmailManagerImplTest {
 
     @Test
     @DisplayName("should prepare message")
-    void prepareMessage(){
+    void prepareMessage() throws MessagingException, IOException {
         String host = "localhost";
         Properties properties = System.getProperties();
         properties.setProperty("mail.smtp.host", host);
         Session session = Session.getDefaultInstance(properties);
         Message message = new MimeMessage(session);
         doReturn(message).when(emailManager).createNewMimeMessage(session);
+        Mail mail = new Mail();
+        mail.setEmail("dede@dede.de");
+        String template = "";
+        String subject = "subjectPasswordReset";
+        String subjectContent = propertiesLoad.getProperty(subject);
+        Map<String, String> input = new HashMap<>();
+
+        String content = "plok";
+        doReturn(content).when(emailManager).replaceValuesForKeys(template, input);
+        Message messageReturned = emailManager.prepareMessage(mail, template, subject, input);
+        assertAll(
+                ()->assertEquals(content, messageReturned.getContent()),
+                ()->assertEquals(subjectContent, messageReturned.getSubject())
+        );
+
 
     }
 
