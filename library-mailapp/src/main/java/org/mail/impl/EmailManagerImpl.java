@@ -173,13 +173,17 @@ public class EmailManagerImpl implements EmailManager {
                     logger.info("template: " + template);
                     logger.info("subject: " + subject);
                     logger.info("input: " + input);
-                    Transport.send(message);
+                    if(readyToSend())Transport.send(message);
                 }
             }
         }
         return true;
     }
 
+    // special method added for testing purpose only
+    boolean readyToSend() {
+        return true;
+    }
 
 
     Map<String, String> getItemsForSubject(String subject, Mail mail) {

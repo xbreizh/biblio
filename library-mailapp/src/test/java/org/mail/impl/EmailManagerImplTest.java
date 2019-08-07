@@ -835,7 +835,8 @@ class EmailManagerImplTest {
         mailList.add(mail);
         doReturn(input).when(emailManager).getItemsForSubject(subject, mail);
         doReturn(message).when(emailManager).prepareMessage(mail, template, subject, input);
-        assertTrue(emailManager.sendEmail("", "", mailList));
+        doReturn(false).when(emailManager).readyToSend();
+        assertTrue(emailManager.sendEmail(template, subject, mailList));
     }
 
 }
