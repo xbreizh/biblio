@@ -665,6 +665,25 @@ class EmailManagerImplTest {
         assertEquals("The author is Maurice. The title is tropa. The login is jonas.", emailManager1.replaceValuesForKeys("", input));
     }
 
+    @Test
+    @DisplayName("should return null if no file found")
+    void replaceValuesForKeys1() throws IOException {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        doReturn(false).when(emailManager1).checkIfFileExist(anyString());
+        Map<String, String> input = new HashMap<>();
+        assertNull(emailManager1.replaceValuesForKeys("", input));
+    }
+
+    @Test
+    @DisplayName("should return null if no file found")
+    void replaceValuesForKeys2() throws IOException {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        doReturn(true).when(emailManager1).checkIfFileExist(anyString());
+        doThrow(NullPointerException.class).when(emailManager1).readContentFromFile(any(File.class));
+        Map<String, String> input = new HashMap<>();
+        assertNull(emailManager1.replaceValuesForKeys("", input));
+    }
+
 
     @Test
     @DisplayName("should getOverdueList")
@@ -757,7 +776,6 @@ class EmailManagerImplTest {
             String fileContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ";
             writer.write(fileContent);
             writer.close();
-
 
             assertEquals(fileContent, emailManager.readContentFromFile(file));
         }
