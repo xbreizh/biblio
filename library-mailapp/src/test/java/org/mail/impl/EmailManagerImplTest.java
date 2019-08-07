@@ -6,6 +6,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mail.contract.ConnectManager;
+import org.mail.contract.EmailManager;
 import org.mail.model.Mail;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -766,13 +767,15 @@ class EmailManagerImplTest {
     @DisplayName("should read content from file is exist and not empty")
     void readContentFromFile() throws IOException, URISyntaxException, NullPointerException {
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-
+        EmailManagerImpl emailManager = new EmailManagerImpl();
         URL url = classLoader.getResource("test.html");
         if (url != null) {
             File file = new File(url.toURI().getPath());
             String fileContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,";
 
             assertEquals(fileContent, emailManager.readContentFromFile(file));
+        }else{
+            System.out.println("test did not pass");
         }
     }
 

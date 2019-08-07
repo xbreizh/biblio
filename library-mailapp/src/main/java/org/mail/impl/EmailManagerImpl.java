@@ -180,6 +180,8 @@ public class EmailManagerImpl implements EmailManager {
         return true;
     }
 
+
+
     Map<String, String> getItemsForSubject(String subject, Mail mail) {
         logger.info("trying to get items");
         String[] validSubjectsList = {SUBJECT_RESET, SUBJECT_OVERDUE, SUBJECT_LOAN_READY, SUBJECT_REMINDER};
