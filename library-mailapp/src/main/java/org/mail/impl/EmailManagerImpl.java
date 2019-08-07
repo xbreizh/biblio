@@ -33,6 +33,11 @@ import java.util.*;
 public class EmailManagerImpl implements EmailManager {
 
     private static final String MAIL_LIST_SIZE = "mailList size: ";
+    private static final String SUBJECT_RESET = "subjectPasswordReset";
+    private static final String SUBJECT_OVERDUE = "subjectOverDue";
+    private static final String SUBJECT_LOAN_READY = "subjectLoanReady";
+    private static final String SUBJECT_REMINDER = "subjectReminder";
+
     private ConnectManager connectManager;
     private PropertiesLoad propertiesLoad;
     private MailService mailService;
@@ -62,6 +67,7 @@ public class EmailManagerImpl implements EmailManager {
     public void sendReminderEmailCron() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         sendReminderEmail();
     }
+
     @Scheduled(fixedRate = 60000) // runs every mn
     public void sendPasswordResetEmailCron() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         sendPasswordResetEmail();
@@ -69,16 +75,14 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-
     @Override
     public boolean sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         String template = "templates/Overdue.html";
         if (checkIfFileExist(template)) {
-            String subject = "subjectOverDue";
             String token = connectManager.authenticate();
             if (token != null) {
                 List<Mail> overdueList = getOverdueList(token);
-                return sendEmail(template, subject, overdueList);
+                return sendEmail(template, SUBJECT_OVERDUE, overdueList);
             }
         }
         shoutFileError();
@@ -100,18 +104,15 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-
-
     @Override
     public boolean sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Book ready email");
         String template = "templates/LoanReady.html";
         if (checkIfFileExist(template)) {
-            String subject = "subjectLoanReady";
             String token = connectManager.authenticate();
             if (token != null) {
                 List<Mail> loanReady = getReadyList(token);
-                return sendEmail(template, subject, loanReady);
+                return sendEmail(template, SUBJECT_LOAN_READY, loanReady);
             }
         }
         shoutFileError();
@@ -119,8 +120,6 @@ public class EmailManagerImpl implements EmailManager {
 
 
     }
-
-
 
 
     @Override
@@ -129,12 +128,11 @@ public class EmailManagerImpl implements EmailManager {
         List<Mail> reminderList;
         String template = "templates/Reminder.html";
         if (checkIfFileExist(template)) {
-            String subject = "subjectReminder";
             String token = connectManager.authenticate();
             if (token != null) {
                 reminderList = getReminderList(token);
                 logger.info("list for reminder: " + reminderList.size());
-                return sendEmail(template, subject, reminderList);
+                return sendEmail(template, SUBJECT_REMINDER, reminderList);
             }
         }
 
@@ -144,18 +142,16 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-
     @Override
     public boolean sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending password reset email");
         String template = "templates/resetPassword.html";
         if (checkIfFileExist(template)) {
-            String subject = "subjectPasswordReset";
             String token = connectManager.authenticate();
             if (token != null) {
                 List<Mail> passwordResetList = getPasswordResetList(token);
 
-                return sendEmail(template, subject, passwordResetList);
+                return sendEmail(template, SUBJECT_RESET, passwordResetList);
             }
         }
         shoutFileError();
@@ -186,9 +182,9 @@ public class EmailManagerImpl implements EmailManager {
 
     Map<String, String> getItemsForSubject(String subject, Mail mail) {
         logger.info("trying to get items");
-        String[] validSubjectsList = {"subjectPasswordReset", "subjectOverDue", "subjectLoanReady", "subjectReminder"};
+        String[] validSubjectsList = {SUBJECT_RESET, SUBJECT_OVERDUE, SUBJECT_LOAN_READY, SUBJECT_REMINDER};
         if (Arrays.asList(validSubjectsList).contains(subject)) {
-            if (subject.equals("subjectPasswordReset")) return getPasswordResetTemplateItems(mail);
+            if (subject.equals(SUBJECT_RESET)) return getPasswordResetTemplateItems(mail);
             return getTemplateItems(mail);
         }
         logger.warn("wrong email subject: " + subject + ", returning null");
@@ -199,6 +195,7 @@ public class EmailManagerImpl implements EmailManager {
     Map<String, String> getPasswordResetTemplateItems(Mail mail) {
         //Set key values
         Map<String, String> input = new HashMap<>();
+        if (mail == null) return input;
         input.put("TOKEN", mail.getToken());
         input.put("EMAIL", mail.getEmail());
         input.put("LOGIN", mail.getLogin());
@@ -269,7 +266,7 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
-        if (mail==null) {
+        if (mail == null) {
             logger.warn("item passed was null");
             return input;
         }
@@ -304,14 +301,14 @@ public class EmailManagerImpl implements EmailManager {
         //use buffering, reading one line at a time
 
 
-        try(BufferedReader reader = new BufferedReader(new FileReader(file)))  {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        contents.append(line);
-                        contents.append(System.getProperty("line.separator"));
-                    }
-                }
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contents.append(line);
+                contents.append(System.getProperty("line.separator"));
+            }
+        }
 
 
         logger.info("html file converted ok");

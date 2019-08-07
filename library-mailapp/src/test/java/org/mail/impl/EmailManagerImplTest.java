@@ -392,7 +392,6 @@ class EmailManagerImplTest {
     }
 
 
-
     @Test
     void convertGregorianCalendarIntoDate1() throws DatatypeConfigurationException, ParseException {
         String pattern = "yyyy-MM-dd";
@@ -507,6 +506,7 @@ class EmailManagerImplTest {
         emailManager.setMailService(new MailService());
         assertNotNull(emailManager.getMailServicePort());
     }
+
     @Test
     @DisplayName("should return an ImailService")
     void getMailServicePort1() {
@@ -517,14 +517,14 @@ class EmailManagerImplTest {
 
     @Test
     @DisplayName("should return empty map if mail passed is null")
-    void getTemplateItems(){
+    void getTemplateItems() {
         assertTrue(emailManager.getTemplateItems(null).isEmpty());
 
     }
 
     @Test
     @DisplayName("should return full map")
-    void getTemplateItems1(){
+    void getTemplateItems1() {
         SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
         Mail mail = new Mail();
         Date dueDate = new Date();
@@ -551,15 +551,15 @@ class EmailManagerImplTest {
         String dueDateC = dt1.format(mail.getDueDate());
         String endAvailableDateC = dt1.format(mail.getEndAvailableDate());
         assertAll(
-                ()-> assertTrue(map.containsKey("DUEDATE") && map.containsValue(dueDateC)),
-                ()-> assertTrue(map.containsKey("ENDAVAILABLEDATE") && map.containsValue(endAvailableDateC)),
-                ()-> assertTrue(map.containsKey("TITLE") && map.containsValue(title)),
-                ()-> assertTrue(map.containsKey("AUTHOR") && map.containsValue(author)),
-                ()-> assertTrue(map.containsKey("EDITION") && map.containsValue(edition)),
-                ()-> assertTrue(map.containsKey("DIFFDAYS") && map.containsValue(Integer.toString(overdays))),
-                ()-> assertTrue(map.containsKey("ISBN") && map.containsValue(isbn)),
-                ()-> assertTrue(map.containsKey("FIRSTNAME") && map.containsValue(firstName)),
-                ()-> assertTrue(map.containsKey("LASTNAME") && map.containsValue(lastName))
+                () -> assertTrue(map.containsKey("DUEDATE") && map.containsValue(dueDateC)),
+                () -> assertTrue(map.containsKey("ENDAVAILABLEDATE") && map.containsValue(endAvailableDateC)),
+                () -> assertTrue(map.containsKey("TITLE") && map.containsValue(title)),
+                () -> assertTrue(map.containsKey("AUTHOR") && map.containsValue(author)),
+                () -> assertTrue(map.containsKey("EDITION") && map.containsValue(edition)),
+                () -> assertTrue(map.containsKey("DIFFDAYS") && map.containsValue(Integer.toString(overdays))),
+                () -> assertTrue(map.containsKey("ISBN") && map.containsValue(isbn)),
+                () -> assertTrue(map.containsKey("FIRSTNAME") && map.containsValue(firstName)),
+                () -> assertTrue(map.containsKey("LASTNAME") && map.containsValue(lastName))
 
         );
 
@@ -582,4 +582,36 @@ class EmailManagerImplTest {
         );
 
     }
+
+    @Test
+    @DisplayName("should return full map")
+    void getPasswordResetTemplateItems() {
+        Mail mail = new Mail();
+        String token = "token123";
+        String email = "dede@deded.fr";
+        String login = "loginded";
+        String pwdAction = "http://localhost:8084/library_webapp/passwordReset";
+        mail.setToken(token);
+        mail.setEmail(email);
+        mail.setLogin(login);
+        Map<String, String> map = emailManager.getPasswordResetTemplateItems(mail);
+
+        assertAll(
+                () -> assertTrue(map.containsKey("TOKEN") && map.containsValue(token)),
+                () -> assertTrue(map.containsKey("EMAIL") && map.containsValue(email)),
+                () -> assertTrue(map.containsKey("LOGIN") && map.containsValue(login)),
+                () -> assertTrue(map.containsKey("PWDACTION") && map.containsValue(pwdAction))
+
+        );
+
+    }
+
+    @Test
+    @DisplayName("should return empty map if mail is null")
+    void getPasswordResetTemplateItems1() {
+       assertTrue(emailManager.getPasswordResetTemplateItems(null).isEmpty());
+
+    }
+
+
 }
