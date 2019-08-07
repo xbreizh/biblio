@@ -277,9 +277,11 @@ class EmailManagerImplTest {
     @DisplayName("should return false if no token")
     void sendOverdueMail3() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
         EmailManagerImpl emailManager1 = spy(emailManager);
-        doReturn(false).when(emailManager1).checkIfFileExist(anyString());
+        doReturn(true).when(emailManager1).checkIfFileExist(anyString());
         assertFalse(emailManager1.sendOverdueMail());
     }
+
+
 
     @Test
     @DisplayName("should return true if the file exist")
@@ -339,7 +341,7 @@ class EmailManagerImplTest {
     void sendReadyEmail12() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
         EmailManagerImpl emailManager1 = spy(emailManager);
         when(connectManager.authenticate()).thenReturn("");
-        when(emailManager1.checkIfFileExist(anyString())).thenReturn(false);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
         assertFalse(emailManager1.sendReadyEmail());
     }
 
@@ -810,13 +812,6 @@ class EmailManagerImplTest {
     @DisplayName("should return true if input is not null")
     void sendEmail3() throws IOException, MessagingException {
         Map<String, String> input = new HashMap<>();
-        // Recipient's email ID needs to be mentioned.
-        String to = "abcd@gmail.com";
-
-        // Sender's email ID needs to be mentioned
-        String from = "web@gmail.com";
-
-        // Assuming you are sending email from localhost
         String host = "localhost";
 
         // Get system properties
@@ -838,5 +833,14 @@ class EmailManagerImplTest {
         doReturn(false).when(emailManager).readyToSend();
         assertTrue(emailManager.sendEmail(template, subject, mailList));
     }
+
+    @Test
+    @DisplayName("should prepare message")
+    void prepareMessage(){
+
+
+
+    }
+
 
 }
