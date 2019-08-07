@@ -41,16 +41,36 @@ public class EmailManagerImpl implements EmailManager {
     public EmailManagerImpl() {
     }
 
-    //@Inject
     @Inject
     public EmailManagerImpl(ConnectManager connectManager, PropertiesLoad propertiesLoad) {
         this.connectManager = connectManager;
         this.propertiesLoad = propertiesLoad;
     }
 
+
+    @Scheduled(cron = "* 00 11 * * *") // runs every day at 11:00
+    public void sendOverdueMailCron() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
+        sendOverdueMail();
+    }
+
+    @Scheduled(cron = "0 8,14 * * 1-5 *") // runs every week day at 08:00 and 14:00
+    public void sendReadyEmailCron() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
+        sendReadyEmail();
+    }
+
+    @Scheduled(cron = "0 9,13 * * 1-5 *") // runs every week day at 09:00 and 13:00
+    public void sendReminderEmailCron() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
+        sendReminderEmail();
+    }
+    @Scheduled(fixedRate = 60000) // runs every mn
+    public void sendPasswordResetEmailCron() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
+        sendPasswordResetEmail();
+
+    }
+
+
+
     @Override
-    @Scheduled(cron = "* 00 11 * * *")
-    //@Scheduled(fixedRate = 500000)
     public boolean sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         String template = "templates/Overdue.html";
         if (checkIfFileExist(template)) {
@@ -79,9 +99,10 @@ public class EmailManagerImpl implements EmailManager {
         return true;
     }
 
+
+
+
     @Override
-    //@Scheduled(cron = "0 8,14 * * 1-5 *") // runs every week day at 08:00 and 14:00
-    @Scheduled(fixedRate = 500000)
     public boolean sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Book ready email");
         String template = "templates/LoanReady.html";
@@ -99,9 +120,10 @@ public class EmailManagerImpl implements EmailManager {
 
     }
 
+
+
+
     @Override
-    @Scheduled(cron = "0 9,13 * * 1-5 *") // runs every week day at 08:00 and 14:00
-    //@Scheduled(fixedRate = 500000)
     public boolean sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Reminder email");
         List<Mail> reminderList;
@@ -122,10 +144,8 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-    //@Scheduled(fixedRate = 2000000000)
 
     @Override
-    @Scheduled(fixedRate = 500000)
     public boolean sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending password reset email");
         String template = "templates/resetPassword.html";
@@ -249,6 +269,10 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("getting overdue template items");
         //Set key values
         Map<String, String> input = new HashMap<>();
+        if (mail==null) {
+            logger.warn("item passed was null");
+            return input;
+        }
         if (mail.getDueDate() != null) {
             SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
             String dueDate = dt1.format(mail.getDueDate());
@@ -258,7 +282,7 @@ public class EmailManagerImpl implements EmailManager {
         input.put("DIFFDAYS", Integer.toString(overDays));
         input.put("FIRSTNAME", mail.getFirstname());
         input.put("LASTNAME", mail.getLastname());
-        input.put("Isbn", mail.getIsbn());
+        input.put("ISBN", mail.getIsbn());
         input.put("TITLE", mail.getTitle());
         input.put("AUTHOR", mail.getAuthor());
         input.put("EDITION", mail.getEdition());

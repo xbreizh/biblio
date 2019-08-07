@@ -515,4 +515,71 @@ class EmailManagerImplTest {
     }
 
 
+    @Test
+    @DisplayName("should return empty map if mail passed is null")
+    void getTemplateItems(){
+        assertTrue(emailManager.getTemplateItems(null).isEmpty());
+
+    }
+
+    @Test
+    @DisplayName("should return full map")
+    void getTemplateItems1(){
+        SimpleDateFormat dt1 = new SimpleDateFormat("dd-MM-yyyy");
+        Mail mail = new Mail();
+        Date dueDate = new Date();
+        String firstName = "toto";
+        String lastName = "mom";
+        String isbn = "isbn123";
+        String title = "le patron";
+        String author = "Maurice po";
+        String edition = "palomino";
+        int overdays = 3;
+        Date endAvailableDate = new Date();
+        mail.setDueDate(dueDate);
+        mail.setFirstname(firstName);
+        mail.setLastname(lastName);
+        mail.setIsbn(isbn);
+        mail.setTitle(title);
+        mail.setAuthor(author);
+        mail.setEdition(edition);
+        mail.setEndAvailableDate(endAvailableDate);
+        mail.setDiffdays(overdays);
+        Map<String, String> map = emailManager.getTemplateItems(mail);
+
+
+        String dueDateC = dt1.format(mail.getDueDate());
+        String endAvailableDateC = dt1.format(mail.getEndAvailableDate());
+        assertAll(
+                ()-> assertTrue(map.containsKey("DUEDATE") && map.containsValue(dueDateC)),
+                ()-> assertTrue(map.containsKey("ENDAVAILABLEDATE") && map.containsValue(endAvailableDateC)),
+                ()-> assertTrue(map.containsKey("TITLE") && map.containsValue(title)),
+                ()-> assertTrue(map.containsKey("AUTHOR") && map.containsValue(author)),
+                ()-> assertTrue(map.containsKey("EDITION") && map.containsValue(edition)),
+                ()-> assertTrue(map.containsKey("DIFFDAYS") && map.containsValue(Integer.toString(overdays))),
+                ()-> assertTrue(map.containsKey("ISBN") && map.containsValue(isbn)),
+                ()-> assertTrue(map.containsKey("FIRSTNAME") && map.containsValue(firstName)),
+                ()-> assertTrue(map.containsKey("LASTNAME") && map.containsValue(lastName))
+
+        );
+
+    }
+
+    @Test
+    @DisplayName("should return full map")
+    void getTemplateItems2() {
+        Mail mail = new Mail();
+        Date dueDate = null;
+        Date endAvailableDate = null;
+        mail.setDueDate(dueDate);
+        mail.setEndAvailableDate(endAvailableDate);
+        Map<String, String> map = emailManager.getTemplateItems(mail);
+
+        assertAll(
+                () -> assertFalse(map.containsKey("DUEDATE")),
+                () -> assertFalse(map.containsKey("ENDAVAILABLEDATE"))
+
+        );
+
+    }
 }
