@@ -221,7 +221,7 @@ public class EmailManagerImpl implements EmailManager {
         props.put("mail.smtp.host", propertiesLoad.getProperty("mailServer"));
         props.put("mail.smtp.port", propertiesLoad.getProperty("mailServerPort"));
         Session session = getSession(props);
-        Message message = new MimeMessage(session);
+        Message message = createNewMimeMessage(session);
         message.setFrom(new InternetAddress(username));
 
         String recipient = mail.getEmail();
@@ -241,6 +241,10 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("message ready");
         return message;
 
+    }
+
+    MimeMessage createNewMimeMessage(Session session) {
+        return new MimeMessage(session);
     }
 
 

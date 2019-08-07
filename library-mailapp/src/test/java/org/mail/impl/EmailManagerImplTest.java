@@ -277,7 +277,7 @@ class EmailManagerImplTest {
     @DisplayName("should return false if no token")
     void sendOverdueMail3() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
         EmailManagerImpl emailManager1 = spy(emailManager);
-        doReturn(true).when(emailManager1).checkIfFileExist(anyString());
+        doReturn(true).when(emailManager1).checkIfFileExist("templates/Overdue.html");
         assertFalse(emailManager1.sendOverdueMail());
     }
 
@@ -326,7 +326,7 @@ class EmailManagerImplTest {
 
     @Test
     @DisplayName("should return false if file not found")
-    void sendReadyEmail11() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+    void sendReadyEmail2() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
         List<Mail> mailList = new ArrayList<>();
         Mail mail = new Mail();
         mailList.add(mail);
@@ -338,11 +338,11 @@ class EmailManagerImplTest {
 
     @Test
     @DisplayName("should return false if token null")
-    void sendReadyEmail12() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+    void sendReadyEmail3() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
         EmailManagerImpl emailManager1 = spy(emailManager);
-        when(connectManager.authenticate()).thenReturn("");
-        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
+        doReturn(true).when(emailManager1).checkIfFileExist(anyString());
         assertFalse(emailManager1.sendReadyEmail());
+
     }
 
     @Test
@@ -837,8 +837,12 @@ class EmailManagerImplTest {
     @Test
     @DisplayName("should prepare message")
     void prepareMessage(){
-
-
+        String host = "localhost";
+        Properties properties = System.getProperties();
+        properties.setProperty("mail.smtp.host", host);
+        Session session = Session.getDefaultInstance(properties);
+        Message message = new MimeMessage(session);
+        doReturn(message).when(emailManager).createNewMimeMessage(session);
 
     }
 
