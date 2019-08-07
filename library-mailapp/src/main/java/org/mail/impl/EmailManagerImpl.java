@@ -245,7 +245,6 @@ public class EmailManagerImpl implements EmailManager {
     }
 
 
-
     Map<String, String> getTemplateItems(Mail mail) {
         logger.info("getting overdue template items");
         //Set key values
@@ -280,14 +279,15 @@ public class EmailManagerImpl implements EmailManager {
         StringBuilder contents = new StringBuilder();
         //use buffering, reading one line at a time
 
-        BufferedReader reader = new BufferedReader(new FileReader(file));
 
-            String line;
-            while ((line = reader.readLine()) != null) {
-                contents.append(line);
-                contents.append(System.getProperty("line.separator"));
-            }
+        try(BufferedReader reader = new BufferedReader(new FileReader(file)))  {
 
+                    String line;
+                    while ((line = reader.readLine()) != null) {
+                        contents.append(line);
+                        contents.append(System.getProperty("line.separator"));
+                    }
+                }
 
 
         logger.info("html file converted ok");
