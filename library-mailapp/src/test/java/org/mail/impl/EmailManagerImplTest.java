@@ -770,7 +770,7 @@ class EmailManagerImplTest {
         URL url = classLoader.getResource("test.html");
         if (url != null) {
             File file = new File(url.toURI().getPath());
-            String fileContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ";
+            String fileContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,";
 
             assertEquals(fileContent, emailManager.readContentFromFile(file));
         }
