@@ -770,15 +770,16 @@ class EmailManagerImplTest {
         URL url = classLoader.getResource("test.html");
         if (url != null) {
             File file = new File(url.toURI().getPath());
-
-            //Write Content
-            FileWriter writer = new FileWriter(file);
             String fileContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ";
-            writer.write(fileContent);
-            writer.close();
 
             assertEquals(fileContent, emailManager.readContentFromFile(file));
         }
+    }
+
+    @Test
+    @DisplayName("should send email")
+    void sendEmail(){
+
 
 
     }

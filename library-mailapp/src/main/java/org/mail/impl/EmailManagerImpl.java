@@ -307,7 +307,6 @@ public class EmailManagerImpl implements EmailManager {
             }
         }
 
-
         logger.info("html file converted ok");
         return contents.toString();
     }
