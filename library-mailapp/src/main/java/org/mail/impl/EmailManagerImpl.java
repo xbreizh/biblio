@@ -240,7 +240,7 @@ public class EmailManagerImpl implements EmailManager {
 
     //Method to replace the values for keys
 
-    private String replaceValuesForKeys(String template, Map<String, String> input) throws IOException {
+    String replaceValuesForKeys(String template, Map<String, String> input) throws IOException {
         logger.info("replacing values for keys");
         String msg = null;
         if (checkIfFileExist(template)) {
@@ -295,18 +295,15 @@ public class EmailManagerImpl implements EmailManager {
 
     //Method to read HTML file as a String
 
-    private String readContentFromFile(File file) throws IOException {
+    String readContentFromFile(File file) throws IOException {
         logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
         //use buffering, reading one line at a time
 
-
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
-
             String line;
             while ((line = reader.readLine()) != null) {
                 contents.append(line);
-                contents.append(System.getProperty("line.separator"));
             }
         }
 
@@ -389,7 +386,6 @@ public class EmailManagerImpl implements EmailManager {
             mailTypeOutList = ((GetReminderMailListResponse) response).getMailListType().getMailTypeOut();
         } else if (response.getClass() == GetOverdueMailListResponse.class) {
             mailTypeOutList = ((GetOverdueMailListResponse) response).getMailListType().getMailTypeOut();
-            logger.info("here");
         }
         List<Mail> mailList = new ArrayList<>();
         if (mailTypeOutList != null && !mailTypeOutList.isEmpty()) {

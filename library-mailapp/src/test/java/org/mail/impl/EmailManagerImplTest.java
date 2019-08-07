@@ -1,5 +1,6 @@
 package org.mail.impl;
 
+import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,13 +12,18 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.troparo.entities.mail.*;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.mailservice.BusinessExceptionMail;
+import org.troparo.services.mailservice.IMailService;
 import org.troparo.services.mailservice.MailService;
 
 import javax.mail.MessagingException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -32,6 +38,7 @@ class EmailManagerImplTest {
 
     private EmailManagerImpl emailManager;
     private ConnectManager connectManager;
+    private Logger logger = Logger.getLogger(EmailManagerImplTest.class);
 
 
     @BeforeEach
@@ -39,7 +46,7 @@ class EmailManagerImplTest {
         emailManager = spy(EmailManagerImpl.class);
         MailService mailService = mock(MailService.class);
         emailManager.setMailService(mailService);
-        //IMailService iMailService = mock(IMailService.class);.
+
         PropertiesLoad propertiesLoad = new PropertiesLoad();
         connectManager = mock(ConnectManager.class);
         emailManager.setConnectManager(connectManager);
@@ -263,6 +270,14 @@ class EmailManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return false if no token")
+    void sendOverdueMail3() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        doReturn(false).when(emailManager1).checkIfFileExist(anyString());
+        assertFalse(emailManager1.sendOverdueMail());
+    }
+
+    @Test
     @DisplayName("should return true if the file exist")
     void checkIfFileExist() {
         String path = "templates/Overdue.html";
@@ -314,6 +329,16 @@ class EmailManagerImplTest {
         assertFalse(emailManager1.sendReadyEmail());
     }
 
+
+    @Test
+    @DisplayName("should return false if token null")
+    void sendReadyEmail12() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(connectManager.authenticate()).thenReturn("");
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(false);
+        assertFalse(emailManager1.sendReadyEmail());
+    }
+
     @Test
     @DisplayName("should return true when all ok")
     void sendReminderEmail() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
@@ -350,6 +375,14 @@ class EmailManagerImplTest {
         when(connectManager.authenticate()).thenReturn("");
         doReturn(mailList).when(emailManager1).getReminderList(anyString());
         when(emailManager1.sendEmail(anyString(), anyString(), anyList())).thenReturn(false);
+        assertFalse(emailManager1.sendReminderEmail());
+    }
+
+    @Test
+    @DisplayName("should return false when token null")
+    void sendReminderEmail3() throws BusinessExceptionConnect, MessagingException, BusinessExceptionMail, IOException {
+        EmailManagerImpl emailManager1 = spy(emailManager);
+        when(emailManager1.checkIfFileExist(anyString())).thenReturn(true);
         assertFalse(emailManager1.sendReminderEmail());
     }
 
@@ -609,9 +642,127 @@ class EmailManagerImplTest {
     @Test
     @DisplayName("should return empty map if mail is null")
     void getPasswordResetTemplateItems1() {
-       assertTrue(emailManager.getPasswordResetTemplateItems(null).isEmpty());
+        assertTrue(emailManager.getPasswordResetTemplateItems(null).isEmpty());
 
     }
 
+
+    @Test
+    @DisplayName("should replace the values")
+    void replaceValuesForKeys() throws IOException {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        Map<String, String> input = new HashMap<>();
+        String title = "tropa";
+        String author = "Maurice";
+        String login = "jonas";
+        input.put("TITLE", title);
+        input.put("AUTHOR", author);
+        input.put("LOGIN", login);
+        String templateString = "The author is AUTHOR. ";
+        templateString += "The title is TITLE. ";
+        templateString += "The login is LOGIN.";
+        doReturn(templateString).when(emailManager1).readContentFromFile(any(File.class));
+        assertEquals("The author is Maurice. The title is tropa. The login is jonas.", emailManager1.replaceValuesForKeys("", input));
+    }
+
+
+    @Test
+    @DisplayName("should getOverdueList")
+    void getOverdueList() throws BusinessExceptionMail {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        IMailService iMailService = mock(IMailService.class);
+        List<Mail> mailList = new ArrayList<>();
+        GetOverdueMailListRequest request = new GetOverdueMailListRequest();
+        String token = "token123";
+        request.setToken(token);
+        GetOverdueMailListResponse response = new GetOverdueMailListResponse();
+        MailListType mailListType = new MailListType();
+        response.setMailListType(mailListType);
+        doReturn(iMailService).when(emailManager1).getMailServicePort();
+        doReturn(response).when(iMailService).getOverdueMailList(any(GetOverdueMailListRequest.class));
+        doReturn(mailList).when(emailManager1).convertListTypeIntoMailList(request);
+        assertEquals(mailList, emailManager1.getOverdueList(token));
+
+    }
+
+    @Test
+    @DisplayName("should getReadyList")
+    void getReadyList() throws BusinessExceptionMail {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        IMailService iMailService = mock(IMailService.class);
+        List<Mail> mailList = new ArrayList<>();
+        GetLoanReadyRequest request = new GetLoanReadyRequest();
+        String token = "token123";
+        request.setToken(token);
+        GetLoanReadyResponse response = new GetLoanReadyResponse();
+        MailListType mailListType = new MailListType();
+        response.setMailListType(mailListType);
+        doReturn(iMailService).when(emailManager1).getMailServicePort();
+        doReturn(response).when(iMailService).getLoanReady(any(GetLoanReadyRequest.class));
+        doReturn(mailList).when(emailManager1).convertListTypeIntoMailList(request);
+        assertEquals(mailList, emailManager1.getReadyList(token));
+
+    }
+
+    @Test
+    @DisplayName("should getReminderList")
+    void getReminderList() throws BusinessExceptionMail {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        IMailService iMailService = mock(IMailService.class);
+        List<Mail> mailList = new ArrayList<>();
+        GetReminderMailListRequest request = new GetReminderMailListRequest();
+        String token = "token123";
+        request.setToken(token);
+        GetReminderMailListResponse response = new GetReminderMailListResponse();
+        MailListType mailListType = new MailListType();
+        response.setMailListType(mailListType);
+        doReturn(iMailService).when(emailManager1).getMailServicePort();
+        doReturn(response).when(iMailService).getReminderMailList(any(GetReminderMailListRequest.class));
+        doReturn(mailList).when(emailManager1).convertListTypeIntoMailList(request);
+        assertEquals(mailList, emailManager1.getReminderList(token));
+
+    }
+
+
+    @Test
+    @DisplayName("should getPasswordResetList")
+    void getPasswordResetList() throws BusinessExceptionMail {
+        EmailManagerImpl emailManager1 = spy(EmailManagerImpl.class);
+        IMailService iMailService = mock(IMailService.class);
+        List<Mail> mailList = new ArrayList<>();
+        GetPasswordResetListRequest request = new GetPasswordResetListRequest();
+        String token = "token123";
+        request.setToken(token);
+        GetPasswordResetListResponse response = new GetPasswordResetListResponse();
+        PasswordResetListType mailListType = new PasswordResetListType();
+        response.setPasswordResetListType(mailListType);
+        doReturn(iMailService).when(emailManager1).getMailServicePort();
+        doReturn(response).when(iMailService).getPasswordResetList(any(GetPasswordResetListRequest.class));
+        doReturn(mailList).when(emailManager1).convertListTypeIntoMailList(request);
+        assertEquals(mailList, emailManager1.getPasswordResetList(token));
+
+    }
+
+    @Test
+    @DisplayName("should read content from file is exist and not empty")
+    void readContentFromFile() throws IOException, URISyntaxException, NullPointerException {
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+
+        URL url = classLoader.getResource("test.html");
+        if (url != null) {
+            File file = new File(url.toURI().getPath());
+
+            //Write Content
+            FileWriter writer = new FileWriter(file);
+            String fileContent = "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, ";
+            writer.write(fileContent);
+            writer.close();
+
+
+            assertEquals(fileContent, emailManager.readContentFromFile(file));
+        }
+
+
+    }
 
 }
