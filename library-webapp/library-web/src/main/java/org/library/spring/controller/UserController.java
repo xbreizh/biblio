@@ -16,6 +16,7 @@ import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
 import org.troparo.services.memberservice.BusinessExceptionMember;
 
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.xml.ws.soap.SOAPFaultException;
 import java.net.UnknownHostException;
@@ -42,6 +43,7 @@ public class UserController {
     //@Inject
     private LibraryHelper helper;
 
+    @Inject
     public UserController(MemberManager memberManager, BookManager bookManager, LoanManager loanManager, LibraryHelper helper) {
         this.memberManager = memberManager;
         this.bookManager = bookManager;
@@ -132,7 +134,7 @@ public class UserController {
 
     @PostMapping("/passwordResetSendEmail")
     public ModelAndView passwordResetSendEmail1(String login, String email) throws BusinessExceptionConnect {
-        logger.info(LOGIN + login);
+        logger.info(LOGIN +" "+ login);
         logger.info("email: " + email);
         ModelAndView mv = new ModelAndView();
         mv.addObject(LOGIN, login);

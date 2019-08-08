@@ -89,19 +89,7 @@ public class EmailManagerImpl implements EmailManager {
         return false;
     }
 
-    private void shoutFileError() {
-        logger.error("There is an issue with the file source");
-    }
 
-    boolean checkIfFileExist(String template) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(template);
-        if (resource == null) {
-            logger.error("File not found: " + template);
-            return false;
-        }
-        return true;
-    }
 
 
     @Override
@@ -144,14 +132,18 @@ public class EmailManagerImpl implements EmailManager {
 
     @Override
     public boolean sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
-        logger.info("sending password reset email");
+        logger.info("checking if password reset email");
         String template = "templates/resetPassword.html";
         if (checkIfFileExist(template)) {
             String token = connectManager.authenticate();
             if (token != null) {
                 List<Mail> passwordResetList = getPasswordResetList(token);
-
-                return sendEmail(template, SUBJECT_RESET, passwordResetList);
+                if (!passwordResetList.isEmpty()) {
+                    logger.info("there are password reset email to be sent");
+                    return sendEmail(template, SUBJECT_RESET, passwordResetList);
+                }else{
+                    return true;
+                }
             }
         }
         shoutFileError();
@@ -185,6 +177,19 @@ public class EmailManagerImpl implements EmailManager {
         return true;
     }
 
+    private void shoutFileError() {
+        logger.error("There is an issue with the file source");
+    }
+
+    boolean checkIfFileExist(String template) {
+        ClassLoader classLoader = getClass().getClassLoader();
+        URL resource = classLoader.getResource(template);
+        if (resource == null) {
+            logger.error("File not found: " + template);
+            return false;
+        }
+        return true;
+    }
 
     Map<String, String> getItemsForSubject(String subject, Mail mail) {
         logger.info("trying to get items");
@@ -253,7 +258,7 @@ public class EmailManagerImpl implements EmailManager {
         String msg = null;
         if (checkIfFileExist(template)) {
             try {
-                File file = new File(template);
+                File file = new File("src/main/resources/"+template);
                 msg = readContentFromFile(file);
 
 
@@ -307,7 +312,7 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
         //use buffering, reading one line at a time
-
+        logger.info("file location: "+file.getCanonicalPath());
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -351,11 +356,16 @@ public class EmailManagerImpl implements EmailManager {
 
 
     List<Mail> getPasswordResetList(String token) throws BusinessExceptionMail {
+        List<Mail> mailList = new ArrayList<>();
         logger.info("getting password reset list");
         GetPasswordResetListRequest request = new GetPasswordResetListRequest();
         request.setToken(token);
 
         GetPasswordResetListResponse response = getMailServicePort().getPasswordResetList(request);
+        if(response.getPasswordResetListType().getPasswordResetTypeOut().isEmpty()){
+            logger.info("nothing to send");
+            return mailList;
+        }
         return convertPasswordResetListTypeIntoMailList(response);
 
     }

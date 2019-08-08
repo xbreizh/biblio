@@ -109,6 +109,7 @@ public class MemberManagerImpl implements MemberManager {
 
 
     private IConnectService getConnectServicePort() {
+        if (connectService == null) connectService = new ConnectService();
         return connectService.getConnectServicePort();
     }
 
