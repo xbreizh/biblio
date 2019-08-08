@@ -312,7 +312,7 @@ public class EmailManagerImpl implements EmailManager {
         logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
         //use buffering, reading one line at a time
-        logger.info("file location: "+file.getCanonicalPath());
+        //logger.info("file location: "+file.getCanonicalPath());
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {

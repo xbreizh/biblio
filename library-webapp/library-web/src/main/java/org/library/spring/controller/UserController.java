@@ -5,6 +5,7 @@ import org.library.business.contract.BookManager;
 import org.library.business.contract.LoanManager;
 import org.library.business.contract.MemberManager;
 import org.library.helper.LibraryHelper;
+import org.library.helper.PasswordCheckerImpl;
 import org.library.model.Book;
 import org.library.model.Member;
 import org.springframework.stereotype.Controller;
@@ -43,12 +44,15 @@ public class UserController {
     //@Inject
     private LibraryHelper helper;
 
+    private PasswordCheckerImpl passwordChecker;
+
     @Inject
-    public UserController(MemberManager memberManager, BookManager bookManager, LoanManager loanManager, LibraryHelper helper) {
+    public UserController(MemberManager memberManager, BookManager bookManager, LoanManager loanManager, LibraryHelper helper, PasswordCheckerImpl passwordChecker) {
         this.memberManager = memberManager;
         this.bookManager = bookManager;
         this.loanManager = loanManager;
         this.helper = helper;
+        this.passwordChecker = passwordChecker;
     }
 
     @ExceptionHandler({IndexOutOfBoundsException.class, NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
@@ -162,8 +166,10 @@ public class UserController {
         ModelAndView mv = new ModelAndView();
         mv.addObject(LOGIN, login);
         mv.addObject("token", token);
-        if (!passwordCheck(password, confirmPassword)) {
-            mv.setViewName("redirect:/passwordReset");
+        String error = passwordChecker.checkValidity(password, confirmPassword);
+        if (!error.isEmpty()) {
+            mv.addObject("error", error);
+            mv.setViewName("passwordReset/passwordReset");
             logger.info("View  /d login: " + login + " / password: " + password + " / password2: " + confirmPassword + " / token: " + token);
             return mv;
         } else {
@@ -177,10 +183,6 @@ public class UserController {
 
     }
 
-    private boolean passwordCheck(String password, String confirmPassword) {
-        return !password.isEmpty() && password.equals(confirmPassword);
-
-    }
 
 
     @PostMapping("/renew")

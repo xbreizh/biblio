@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html layout:decorate="~{fragments/layout}"
+<html lang="en" layout:decorate="~{fragments/layout}"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.w3.org/1999/xhtml">
 
 <div th:replace="fragments/header :: head-box"></div>
@@ -61,12 +61,15 @@
         <div class="col-4 "></div>
     </div>
     <div class="row ">
-
+        <div class="col-4 "></div>
+        <div class="col-4 ">
+            <div th:replace="fragments/header :: foot"></div>
+        </div>
+        <div class="col-4 "></div>
     </div>
 </div>
+
 </body>
 
-
-<div th:replace="fragments/header :: foot"></div>
 
 </html>
