@@ -265,7 +265,9 @@ public class MemberManagerImpl implements MemberManager {
         Date now = getNow();
         Calendar c = Calendar.getInstance();
         c.setTime(now);
+        logger.info("now is: "+now);
         c.add(Calendar.MINUTE, 20);  // number of mn to add
+        logger.info("future is: "+c.getTime());
         return c.getTime();
     }
 
