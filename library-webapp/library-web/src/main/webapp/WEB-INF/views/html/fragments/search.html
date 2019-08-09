@@ -1,45 +1,57 @@
 <div th:fragment="search" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
 
-    <form method="post" th:action="@{/search}" th:object="${search}">
-        <div class="form-group">
-            <input autofocus="autofocus"
-                   class="form-control"
-                   id="ISBN"
-                   name="isbn"
-                   placeholder="ISBN"
-                   th:value="${isbn}"
-                   type="text">
-        </div>
-        <div class="form-group">
-            <input class="form-control"
-                   id="Title"
-                   name="title"
-                   placeholder="Title"
-                   th:value="${title}"
-                   type="text">
-        </div>
-        <div class="form-group">
-            <input class="form-control"
-                   id="Author"
-                   name="author"
-                   placeholder="Author"
-                   th:value="${author}"
-                   type="text">
-        </div>
-        <div class="form-group">
-            <div class="row">
-                <div class="col text-center">
-                    <input class="form-control btn btn-info"
-                           id="search-submit"
-                           name="search-submit"
-                           type="submit"
-                           value="Search">
+        <div class="col-6">
+            <form method="post" th:action="@{/search}" th:object="${search}">
+                <div class="form-group col text-center ">
+                    <input
+                            class="form-control"
+                            id="ISBN"
+                            name="isbn"
+                            placeholder="ISBN"
+                            th:value="${isbn}"
+                            type="text">
                 </div>
-            </div>
+                <div class="form-group col text-center ">
+                    <input autofocus="autofocus"
+                           class="form-control"
+                           id="Title"
+                           name="title"
+                           placeholder="Title"
+                           th:value="${title}"
+                           type="text">
+                </div>
+                <div class="form-group col text-center ">
+                    <input class="form-control"
+                           id="Author"
+                           name="author"
+                           placeholder="Author"
+                           th:value="${author}"
+                           type="text">
+                </div>
+                <div class="form-group">
+
+                    <div class="col text-center">
+                        <input class="form-control btn btn-info"
+                               id="search-submit"
+                               name="search-submit"
+                               type="submit"
+                               value="Search">
+                    </div>
+
+                </div>
+            </form>
+
         </div>
-    </form>
+        <div class="col-6">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
+            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
+            into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
+            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
+            software like Aldus PageMaker including versions of Lorem Ipsum.
+        </div>
 
-    <br><br>
 
+    </div>
 
 </div>

@@ -10,15 +10,15 @@
     </td>
 
     <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == false && maxReservation ==true}">
-        <button class="btn btn-info first" onclick="alertMaxRented()">Reserve it!</button>
+        <button class="btn btn-info first btn-block" onclick="alertMaxRented()">Reserve it!</button>
     </td>
 
     <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == false && maxReservation ==true}">
-        <button class="btn btn-info first" onclick="alertMaxRented()">Reserve it!</button>
+        <button class="btn btn-info first btn-block" onclick="alertMaxRented()">Reserve it!</button>
     </td>
 
     <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==true && overdue == false && maxReservation ==false}">
-        <button class="btn btn-info first" onclick="alertAlreadyRented()">Reserve it!</button>
+        <button class="btn btn-info first btn-block" onclick="alertAlreadyRented()">Reserve it!</button>
     </td>
 
     <td th:if="${#arrays.contains(isbnList, ''+book.isbn) ==false && overdue == false && maxReservation ==false}">
@@ -31,7 +31,7 @@
                    th:value="${book.isbn}"
                    type="hidden">
 
-            <input class="form-control btn btn-info first"
+            <input class="form-control btn btn-info first btn-block"
                    id="search-submit"
                    name="search-submit"
                    type="submit"

@@ -1,28 +1,29 @@
 <div th:fragment="search_result" xmlns:th="http://www.w3.org/1999/xhtml">
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-striped">
+                <tr>
+                    <th>ISBN</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Available</th>
+                    <th></th>
+                </tr>
+                <th:block data-th-each="book : ${books}">
+                    <tr th:style="${book.nbAvailable == 0} ? 'color:red' : 'color:green'">
+                        <td data-th-text="${book.isbn}"></td>
+                        <td data-th-text="${book.title}"></td>
+                        <td data-th-text="${book.author}"></td>
+                        <td data-th-text="${book.nbAvailable}"></td>
 
+                        <td th:replace="fragments/reserve :: reserve"></td>
 
-    <table class="table table-striped">
-        <tr>
-            <th>ISBN</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Available</th>
-            <th></th>
-        </tr>
-        <th:block data-th-each="book : ${books}">
-            <tr th:style="${book.nbAvailable == 0} ? 'color:red' : 'color:green'">
-                <td data-th-text="${book.isbn}"></td>
-                <td data-th-text="${book.title}"></td>
-                <td data-th-text="${book.author}"></td>
-                <td data-th-text="${book.nbAvailable}"></td>
+                    </tr>
 
-                <td th:replace="fragments/reserve :: reserve"></td>
-
-            </tr>
-
-        </th:block>
-    </table>
-
+                </th:block>
+            </table>
+        </div>
+    </div>
 </div>
 
 
