@@ -28,7 +28,7 @@
                 <td data-th-text="${loan.status}">status</td>
                 <td>
                     <div th:unless="${loan.startDate}">
-                        <div>
+                        <div class="col text-center">
                             <form method="post" th:action="@{/remove}" th:object="${remove}">
 
 
@@ -44,7 +44,7 @@
 
                     <div th:if="${loan.startDate}">
                         <div th:if="${loan.renewable}">
-                            <div>
+                            <div class="col text-center">
                                 <form method="post" th:action="@{/renew}" th:object="${renew}">
 
 
@@ -58,7 +58,7 @@
                             </div>
 
                         </div>
-                        <div th:unless="${loan.renewable}">
+                        <div th:unless="${loan.renewable}" class="col text-center">
                             &#9940;
                         </div>
                     </div>
