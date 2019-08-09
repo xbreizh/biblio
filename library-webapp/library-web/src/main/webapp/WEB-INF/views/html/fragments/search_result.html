@@ -1,30 +1,33 @@
 <div th:fragment="search_result" xmlns:th="http://www.w3.org/1999/xhtml">
-    <div class="row">
-        <div class="col-12">
-            <table class="table table-striped">
-                <tr>
-                    <th>ISBN</th>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Available</th>
-                    <th></th>
+    <div class="container-fluid">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="col-2">ISBN</th>
+                <th class="col-3">Title</th>
+                <th class="col-4">Author</th>
+                <th class="col-1">Available</th>
+                <th class="col-2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <th:block data-th-each="book : ${books}">
+                <tr th:style="${book.nbAvailable == 0} ? 'color:red' : 'color:green'">
+                    <td class="col-2" data-th-text="${book.isbn}"></td>
+                    <td  class="col-3" data-th-text="${book.title}"></td>
+                    <td  class="col-4" data-th-text="${book.author}"></td>
+                    <td  class="col-1" data-th-text="${book.nbAvailable}"></td>
+
+                    <td  class="col-2" th:replace="fragments/reserve :: reserve"></td>
+
                 </tr>
-                <th:block data-th-each="book : ${books}">
-                    <tr th:style="${book.nbAvailable == 0} ? 'color:red' : 'color:green'">
-                        <td data-th-text="${book.isbn}"></td>
-                        <td data-th-text="${book.title}"></td>
-                        <td data-th-text="${book.author}"></td>
-                        <td data-th-text="${book.nbAvailable}"></td>
 
-                        <td th:replace="fragments/reserve :: reserve"></td>
-
-                    </tr>
-
-                </th:block>
-            </table>
-        </div>
+            </th:block>
+            </tbody>
+        </table>
     </div>
 </div>
+
 
 
 

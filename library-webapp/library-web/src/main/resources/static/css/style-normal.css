@@ -14,6 +14,9 @@ h2, h4, h5 {
 a {
     text-decoration: none;
 }
+td, tr { overflow:hidden;
+    text-align: center;
+    vertical-align: middle;}
 
 
 .roundBorder {
