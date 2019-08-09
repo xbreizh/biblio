@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class Loan {
+public class Loan implements Comparable<Loan> {
 
     // member variables
 
@@ -49,6 +49,25 @@ public class Loan {
                 ", status=" + status +
                 ", book=" + book.getTitle() +
                 '}';
+    }
+
+
+    @Override
+    public int compareTo(Loan loan) {
+        return this.status.compareTo(loan.status);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj==null)return false;
+        if (getClass() != obj.getClass())
+            return false;
+        return this.equals(obj);
+    }
+
+    @Override
+    public int hashCode() {
+        return 1;
     }
 
 

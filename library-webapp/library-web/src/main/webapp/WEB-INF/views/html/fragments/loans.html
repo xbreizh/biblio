@@ -15,58 +15,56 @@
                 </thead>
 
 
-                <tbody>
-                <th:block data-th-each="loan : ${member.loanList}">
-                    <tr>
-                        <td data-th-text="${loan.id}">loanId</td>
-                        <td data-th-text="${loan.startDate} ? ${#dates.format(loan.startDate, 'dd-MM-yyyy')}:'N/A' ">
-                            startDate
-                        </td>
-                        <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}:'N/A'">
-                            plannedEndDate
-                        </td>
-                        <td data-th-text="${loan.book.isbn}">ISBN</td>
-                        <td data-th-text="${loan.book.title}">title</td>
-                        <td data-th-text="${loan.status}">status</td>
-                        <td>
-                            <div th:unless="${loan.startDate}">
+                <tbody th:each="loan : ${#lists.sort(member.loanList)}">
+                <tr th:style="${loan.status == 'OVERDUE'} ? 'background-color:#ff9999' : 'background-color:white' ">
+                    <td data-th-text="${loan.id}">loanId</td>
+                    <td data-th-text="${loan.startDate} ? ${#dates.format(loan.startDate, 'dd-MM-yyyy')}:'N/A' ">
+                    startDate
+                    </td>
+                    <td data-th-text="${loan.plannedEndDate} ? ${#dates.format(loan.plannedEndDate, 'dd-MM-yyyy')}:'N/A'">
+                    plannedEndDate
+                    </td>
+                    <td data-th-text="${loan.book.isbn}">ISBN</td>
+                    <td data-th-text="${loan.book.title}">title</td>
+                    <td data-th-text="${loan.status}">status</td>
+                    <td>
+                        <div th:unless="${loan.startDate}">
+                            <div class="col text-center">
+                                <form method="post" th:action="@{/remove}" th:object="${remove}">
+
+
+                                    <input id="loanId" name="loanId" th:value="${loan.id}" type="hidden">
+
+
+                                    <button class="btn btn-outline-danger btn-block" type="submit">Remove
+                                    </button>
+
+                                </form>
+                            </div>
+                        </div>
+
+                        <div th:if="${loan.startDate}">
+                            <div th:if="${loan.renewable}">
                                 <div class="col text-center">
-                                    <form method="post" th:action="@{/remove}" th:object="${remove}">
+                                    <form method="post" th:action="@{/renew}" th:object="${renew}">
 
 
-                                        <input id="loanId" name="loanId" th:value="${loan.id}" type="hidden">
+                                        <input id="id" name="id" th:value="${loan.id}" type="hidden">
 
 
-                                        <button class="btn btn-outline-danger btn-block" type="submit">Remove
+                                        <button class="btn btn-outline-info btn-block" type="submit">Renew
                                         </button>
 
                                     </form>
                                 </div>
+
                             </div>
+                            <div th:unless="${loan.renewable}" class="col text-center">
 
-                            <div th:if="${loan.startDate}">
-                                <div th:if="${loan.renewable}">
-                                    <div class="col text-center">
-                                        <form method="post" th:action="@{/renew}" th:object="${renew}">
-
-
-                                            <input id="id" name="id" th:value="${loan.id}" type="hidden">
-
-
-                                            <button class="btn btn-outline-info btn-block" type="submit">Renew
-                                            </button>
-
-                                        </form>
-                                    </div>
-
-                                </div>
-                                <div th:unless="${loan.renewable}" class="col text-center">
-
-                                </div>
                             </div>
-                        </td>
-                    </tr>
-                </th:block>
+                        </div>
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>

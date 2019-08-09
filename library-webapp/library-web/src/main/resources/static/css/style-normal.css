@@ -17,10 +17,15 @@ h2, h4, h5 {
 a {
     text-decoration: none;
 }
-td, tr { overflow:hidden;
-    text-align: center;
-    vertical-align: middle;}
 
+table {table-layout:fixed; }
+tr, td { overflow:hidden;white-space:nowrap;  }
+td:hover{
+    overflow: visible;
+    word-break: break-all;
+    white-space: normal;
+    height:auto;
+}
 
 .roundBorder {
     border-radius: 5px;

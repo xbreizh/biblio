@@ -97,6 +97,8 @@ VALUES ('MAURICE MOSS', 'GALLIMARD', '2019-01-18 15:25:33.546', '12345678OK', 'I
         'BOKANA')
      , ('ALPHONSE DAUDET', 'FLAMMARION', '2019-02-21 15:25:33.546', '555784913P', 'MULE STOIQUE', 33, 1988,
         'MAZOR')
+     , ('CHARLIE KAUFMAN', 'DULOC', '2019-02-21 15:25:33.546', '555784944P', 'MULOTIER', 33, 1988,
+        'ETERNAL SUNSHINE OF THE SPOTLESS MIND')
 ;
 
 INSERT INTO public.loan (reservation_date, available_date, start_date, planned_end_date, end_date, isbn, book_id,

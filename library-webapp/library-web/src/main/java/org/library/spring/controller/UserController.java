@@ -169,7 +169,7 @@ public class UserController {
         String error = passwordChecker.checkValidity(password, confirmPassword);
         if (!error.isEmpty()) {
             mv.addObject("error", error);
-            mv.setViewName("passwordReset/passwordReset");
+            mv.setViewName(RESET);
             logger.info("View  /d login: " + login + " / password: " + password + " / password2: " + confirmPassword + " / token: " + token);
             return mv;
         } else {
@@ -248,6 +248,8 @@ public class UserController {
 
 
         Member member = memberManager.getMember(token, login);
+        if(member==null) return new ModelAndView(LOGIN);
+
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);
         mv.addObject("books", books);
