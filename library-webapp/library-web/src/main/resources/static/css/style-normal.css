@@ -2,6 +2,9 @@
     margin-top: 10vh;
     height: 80vh;
 }
+html {
+    overflow-y: scroll;
+}
 
 .row {
     height: 30%;
