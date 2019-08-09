@@ -367,6 +367,10 @@ public class LoanManagerImpl implements LoanManager {
             logger.info("endDate false");
             return false;
         }
+        if (loan.getStartDate()==null){
+            logger.info("startDate is null");
+            return false;
+        }
 
         Date start = loan.getStartDate();
         Date end = loan.getPlannedEndDate();

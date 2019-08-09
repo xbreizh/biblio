@@ -881,6 +881,15 @@ class LoanManagerImplTest {
     }
 
     @Test
+    @DisplayName("should return false if start date !=null")
+    void isRenewable3() {
+        Loan loan = new Loan();
+        loan.setStartDate(null);
+        when(loanDAO.getLoanById(2)).thenReturn(loan);
+        assertFalse(loanManager.isRenewable(2));
+    }
+
+    @Test
     @DisplayName("should return \" loan already terminated\" if loan has an end date")
     void terminate() {
         Loan loan = new Loan();
