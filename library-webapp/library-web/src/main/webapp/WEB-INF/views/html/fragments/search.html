@@ -43,15 +43,20 @@
             </form>
 
         </div>
-        <div class="col-6">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has
-            been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type
-            and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap
-            into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the
-            release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing
-            software like Aldus PageMaker including versions of Lorem Ipsum.
+        <div class="col-6 my-auto " style="background-color: #fff2e6" >For better performance, the system currently limits the search result to <strong>30</strong> items.<br>
+            If you can't find what you're looking for, please refine the search or get in touch with our team. Thanks
         </div>
 
 
     </div>
 
+    <br><br><br>
+    <div th:if="${!#strings.isEmpty(title) or !#strings.isEmpty(author) or !#strings.isEmpty(isbn) }">
+        <div th:if="${#lists.isEmpty(books)}">
+            <h2 style="background-color: #ff9999">No Result found!</h2>
+        </div>
+        <div th:unless="${#lists.isEmpty(books)}">
+    <div th:replace="fragments/search_result :: search_result"></div>
+        </div>
+    </div>
 </div>

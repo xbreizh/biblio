@@ -43,8 +43,10 @@ public class BookManagerImpl implements BookManager {
 
         result = convertBookTypeOutListIntoBookList(token, responseType.getBookListType().getBookTypeOut());
         logger.info("result: " + result);
-
-        return result.subList(0, MAX_BOOK_LIST);
+        if (result.size() >= MAX_BOOK_LIST) {
+            return result.subList(0, MAX_BOOK_LIST);
+        }
+    return result;
     }
 
     @Override
