@@ -16,6 +16,7 @@ import java.util.Map;
 
 @Named
 public class BookManagerImpl implements BookManager {
+    private static final int MAX_BOOK_LIST = 30;
     private static Logger logger = Logger.getLogger(BookManagerImpl.class);
     private BookService bookService;
 
@@ -43,7 +44,7 @@ public class BookManagerImpl implements BookManager {
         result = convertBookTypeOutListIntoBookList(token, responseType.getBookListType().getBookTypeOut());
         logger.info("result: " + result);
 
-        return result;
+        return result.subList(0, MAX_BOOK_LIST);
     }
 
     @Override
