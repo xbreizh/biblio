@@ -18,7 +18,7 @@ a {
     text-decoration: none;
 }
 
-
+table {table-layout:fixed; }
 tr, td { overflow:hidden;white-space:nowrap;  }
 td:hover{
     overflow: visible;
