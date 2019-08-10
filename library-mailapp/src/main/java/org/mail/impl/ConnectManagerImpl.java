@@ -5,10 +5,8 @@ import org.mail.contract.ConnectManager;
 import org.springframework.context.annotation.PropertySource;
 import org.troparo.entities.connect.GetTokenRequestType;
 import org.troparo.entities.connect.GetTokenResponseType;
-import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.connectservice.ConnectService;
 import org.troparo.services.connectservice.IConnectService;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -17,32 +15,34 @@ import javax.inject.Named;
 public class ConnectManagerImpl implements ConnectManager {
 
     private Logger logger = Logger.getLogger(ConnectManagerImpl.class);
+    private ConnectService connectService;
+    private PropertiesLoad propertiesLoad;
 
 
 
-    void setPropertiesLoad(PropertiesLoad propertiesLoad) {
+    @Inject
+    public ConnectManagerImpl(PropertiesLoad propertiesLoad) {
         this.propertiesLoad = propertiesLoad;
     }
 
-    @Inject
-    PropertiesLoad propertiesLoad;
-
-    private ConnectService connectService;
 
     @Override
-    public String authenticate() throws BusinessExceptionConnect {
+    public String authenticate()  {
 
         GetTokenRequestType getTokenRequestType = new GetTokenRequestType();
         getTokenRequestType.setLogin(propertiesLoad.getProperty("login"));
         getTokenRequestType.setPassword(propertiesLoad.getProperty("passwordApp"));
+        String token = null;
+        try {
+            GetTokenResponseType responseType = getConnectServicePort(connectService).getToken(getTokenRequestType);
+            token = responseType.getReturn();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
 
-        GetTokenResponseType responseType = getConnectServicePort(connectService).getToken(getTokenRequestType);
-        String token = responseType.getReturn();
-
-
-        if (!token.equals("wrong LOGIN or pwd")) {
+        if (token != null && !token.equals("wrong LOGIN or pwd")) {
             logger.info("authentication successful!");
-            logger.info("token: "+token);
+            logger.info("token: " + token);
             return token;
         } else {
             logger.error("authentication issue!");
@@ -66,5 +66,9 @@ public class ConnectManagerImpl implements ConnectManager {
         return connectService.getConnectServicePort();
     }
 
+
+    void setPropertiesLoad(PropertiesLoad propertiesLoad) {
+        this.propertiesLoad = propertiesLoad;
+    }
 
 }

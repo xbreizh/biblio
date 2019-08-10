@@ -84,12 +84,11 @@ public class EmailManagerImpl implements EmailManager {
                 List<Mail> overdueList = getOverdueList(token);
                 return sendEmail(template, SUBJECT_OVERDUE, overdueList);
             }
+            return false;
         }
         shoutFileError();
         return false;
     }
-
-
 
 
     @Override
@@ -102,6 +101,8 @@ public class EmailManagerImpl implements EmailManager {
                 List<Mail> loanReady = getReadyList(token);
                 return sendEmail(template, SUBJECT_LOAN_READY, loanReady);
             }
+
+            return false;
         }
         shoutFileError();
         return false;
@@ -122,6 +123,7 @@ public class EmailManagerImpl implements EmailManager {
                 logger.info("list for reminder: " + reminderList.size());
                 return sendEmail(template, SUBJECT_REMINDER, reminderList);
             }
+            return false;
         }
 
         shoutFileError();
@@ -141,10 +143,11 @@ public class EmailManagerImpl implements EmailManager {
                 if (!passwordResetList.isEmpty()) {
                     logger.info("there are password reset email to be sent");
                     return sendEmail(template, SUBJECT_RESET, passwordResetList);
-                }else{
+                } else {
                     return true;
                 }
             }
+            return false;
         }
         shoutFileError();
         return false;
@@ -153,7 +156,7 @@ public class EmailManagerImpl implements EmailManager {
 
     boolean sendEmail(String template, String subject, List<Mail> mailList) throws MessagingException, IOException {
         Map<String, String> input;
-        if ((mailList!=null) && (!mailList.isEmpty())) {
+        if ((mailList != null) && (!mailList.isEmpty())) {
             logger.info(MAIL_LIST_SIZE + mailList.size());
             for (Mail mail : mailList
             ) {
@@ -165,7 +168,7 @@ public class EmailManagerImpl implements EmailManager {
                     logger.info("template: " + template);
                     logger.info("subject: " + subject);
                     logger.info("input: " + input);
-                    if(readyToSend())Transport.send(message);
+                    if (readyToSend()) Transport.send(message);
                 }
             }
         }
@@ -258,7 +261,7 @@ public class EmailManagerImpl implements EmailManager {
         String msg = null;
         if (checkIfFileExist(template)) {
             try {
-                File file = new File("src/main/resources/"+template);
+                File file = new File("src/main/resources/" + template);
                 msg = readContentFromFile(file);
 
 
@@ -311,8 +314,6 @@ public class EmailManagerImpl implements EmailManager {
     String readContentFromFile(File file) throws IOException {
         logger.info("trying to read content from html file and returning a String");
         StringBuilder contents = new StringBuilder();
-        //use buffering, reading one line at a time
-        //logger.info("file location: "+file.getCanonicalPath());
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = reader.readLine()) != null) {
@@ -362,7 +363,7 @@ public class EmailManagerImpl implements EmailManager {
         request.setToken(token);
 
         GetPasswordResetListResponse response = getMailServicePort().getPasswordResetList(request);
-        if(response.getPasswordResetListType().getPasswordResetTypeOut().isEmpty()){
+        if (response.getPasswordResetListType().getPasswordResetTypeOut().isEmpty()) {
             logger.info("nothing to send");
             return mailList;
         }
