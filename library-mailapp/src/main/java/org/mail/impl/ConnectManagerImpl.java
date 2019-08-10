@@ -25,6 +25,8 @@ public class ConnectManagerImpl implements ConnectManager {
         this.propertiesLoad = propertiesLoad;
     }
 
+    public ConnectManagerImpl() {
+    }
 
     @Override
     public String authenticate()  {
