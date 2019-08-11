@@ -55,6 +55,8 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         if (!token.equals("wrong credentials") && exception.isEmpty()) {
 
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
+            //UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, );
+            //auth.setAuthenticated(true);
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());
             logger.info("login: " + auth.getName());
@@ -83,10 +85,11 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
     public List<GrantedAuthority> buildUserAuthority() {
 
-        List<GrantedAuthority> list = new ArrayList<>();
+       /* List<GrantedAuthority> list = new ArrayList<>();
         list.add(new SimpleGrantedAuthority(ROLE));
 
-        return list;
+        return list;*/
+       return Arrays.asList(new SimpleGrantedAuthority(ROLE));
     }
 
 
