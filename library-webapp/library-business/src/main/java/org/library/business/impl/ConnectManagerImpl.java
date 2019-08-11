@@ -15,7 +15,7 @@ import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Named;
 import javax.xml.ws.WebServiceException;
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Named
@@ -52,12 +52,9 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
         logger.info("token found: " + token);
 
-        List<String> privileges = new ArrayList<>();
-        privileges.add(ROLE);
-
         if (!token.equals("wrong credentials") && exception.isEmpty()) {
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority(privileges));
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
 
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());
@@ -85,12 +82,8 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
 
-    public List<GrantedAuthority> buildUserAuthority(List<String> privileges) {
-        List<GrantedAuthority> authorities = new ArrayList<>();
-        for (String privilege : privileges) {
-            authorities.add(new SimpleGrantedAuthority(privilege));
-        }
-        return authorities;
+    public List<GrantedAuthority> buildUserAuthority() {
+        return Arrays.asList(new SimpleGrantedAuthority(ROLE));
     }
 
 
