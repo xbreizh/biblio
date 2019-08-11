@@ -27,6 +27,7 @@ public class LoanDAOImpl implements LoanDAO {
     private SessionFactory sessionFactory;
     private static final Class cl = Loan.class;
 
+
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
@@ -267,16 +268,19 @@ public class LoanDAOImpl implements LoanDAO {
         if (map == null) return loanList;
         if (map.isEmpty()) return loanList;
         if (!checkValidMapEntries(map)) return loanList;
+        map = replaceKeysIfNeeded(map);
         logger.info("map received in DAO: " + map);
         request.append("From Loan ");
         request.append(createRequestFromMap(map));
 
-        logger.info("request: " + request);
         if (map.containsKey(STATUS)) {
             request.append(addStatusToRequest(map));
         }
+        logger.info("request: " + request);
+        logger.info(map);
         try {
             Query query = sessionFactory.getCurrentSession().createQuery(request.toString(), cl);
+
             addingParametersToCriteriaQuery(map, query);
             logger.info("map again: " + map);
 
@@ -291,21 +295,42 @@ public class LoanDAOImpl implements LoanDAO {
 
     }
 
+    private Map<String, String> replaceKeysIfNeeded(Map<String, String> map) {
+        Map<String, String> newMap = new HashMap<>();
+        for (Map.Entry<String, String> entry : map.entrySet()
+        ) {
+            switch(entry.getKey()) {
+                case LOGIN:
+                    newMap.put("borrower.login", entry.getValue());
+                    break;
+                case ISBN:
+                    newMap.put("book.isbn", entry.getValue());
+                    break;
+                default:
+                    newMap.put(entry.getKey(), entry.getValue());
+            }
+
+
+        }
+
+        return newMap;
+    }
+
 
     private void addingParametersToCriteriaQuery(Map<String, String> map, Query query) {
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
             if (!entry.getKey().equalsIgnoreCase(STATUS)) {
                 logger.info("criteria: " + entry.getValue());
-                if (entry.getKey().toLowerCase().contains(LOGIN)) {
-                    query.setParameter(LOGIN, entry.getValue().toUpperCase());
+                if (entry.getKey().toLowerCase().contains("borrower.login")) {
+                    query.setParameter("borrower_login", entry.getValue().toUpperCase());
 
                 }
                 if (entry.getKey().toLowerCase().contains(BOOK_ID)) {
                     query.setParameter(BOOK_ID, +Integer.parseInt(entry.getValue()));
                 }
-                if (entry.getKey().toLowerCase().contains(ISBN)) {
-                    query.setParameter(ISBN, entry.getValue().toUpperCase());
+                if (entry.getKey().toLowerCase().contains("book.isbn")) {
+                    query.setParameter("book_isbn", entry.getValue().toUpperCase());
                 }
 
             }
@@ -322,21 +347,11 @@ public class LoanDAOImpl implements LoanDAO {
                 } else {
                     criteria.append("where ");
                 }
-                if (entry.getKey().equalsIgnoreCase(LOGIN)) {
-                    criteria.append("borrower.login");
-                    criteria.append(" = :");
-                    criteria.append(LOGIN);
-                }
-                if (entry.getKey().equalsIgnoreCase(BOOK_ID)) {
-                    criteria.append(BOOK_ID);
-                    criteria.append(" = :");
-                    criteria.append(entry.getKey());
-                }
-                if (entry.getKey().equalsIgnoreCase(ISBN)) {
-                    criteria.append("book.isbn");
-                    criteria.append(" = :");
-                    criteria.append(entry.getKey());
-                }
+
+                criteria.append(entry.getKey());
+                criteria.append(" = :");
+                String cleanValue = entry.getKey().replace(".", "_");
+                criteria.append(cleanValue);
 
             } else {
                 logger.info("status has been passed: " + entry.getValue());

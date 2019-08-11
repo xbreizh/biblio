@@ -2,7 +2,6 @@ package org.troparo.consumer.impl;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,11 +13,8 @@ import org.troparo.consumer.contract.BookDAO;
 import org.troparo.consumer.contract.LoanDAO;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
-import org.troparo.model.Member;
-import static org.mockito.Mockito.*;
+
 import javax.inject.Inject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -74,7 +70,7 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return pending loans with no books")
-    void getAllPendingReservationWithNoBook(){
+    void getAllPendingReservationWithNoBook() {
         assertEquals(1, loanDAO.getAllPendingReservationWithNoBook().size());
     }
 
@@ -87,17 +83,16 @@ class LoanDAOImplTest {
 
     @Test
     @DisplayName("should return reminder list")
-    void getReminderLoans(){
-       // System.out.println(loanDAO.getReminderLoans(3).get(0).getClass());
-        assertEquals(1,loanDAO.getReminderLoans(5).size());
+    void getReminderLoans() {
+        // System.out.println(loanDAO.getReminderLoans(3).get(0).getClass());
+        assertEquals(1, loanDAO.getReminderLoans(5).size());
 
     }
 
 
-
     @Test
     @DisplayName("should return loans having books but no startDate")
-    void getLoansReadyForStart(){
+    void getLoansReadyForStart() {
         assertEquals(1, loanDAO.getLoansReadyForStart().size());
     }
 
@@ -396,7 +391,7 @@ class LoanDAOImplTest {
     @DisplayName("should return true when cleaning expired reservations")
     void cleanupExpiredReservation() {
 
-        assertTrue( loanDAO.cleanupExpiredReservation(4));
+        assertTrue(loanDAO.cleanupExpiredReservation(4));
 
     }
 
@@ -406,8 +401,6 @@ class LoanDAOImplTest {
     void cleanupExpiredReservationCount() {
         assertEquals(2, loanDAO.cleanupExpiredReservationCount(4));
     }
-
-
 
 
     @Test
@@ -461,7 +454,7 @@ class LoanDAOImplTest {
         LoanDAOImpl loanDAO = new LoanDAOImpl();
         Map<String, String> map = new HashMap<>();
         map.put("login", "bob");
-        assertEquals("where borrower.login = :login", loanDAO.createRequestFromMap(map));
+        assertEquals("where login = :login", loanDAO.createRequestFromMap(map));
     }
 
     @Test
@@ -471,7 +464,7 @@ class LoanDAOImplTest {
         Map<String, String> map = new HashMap<>();
         map.put("login", "bob");
         map.put("book_id", "ob");
-        assertEquals("where book_id = :book_id and borrower.login = :login", loanDAO.createRequestFromMap(map));
+        assertEquals("where book_id = :book_id and login = :login", loanDAO.createRequestFromMap(map));
     }
 
 
