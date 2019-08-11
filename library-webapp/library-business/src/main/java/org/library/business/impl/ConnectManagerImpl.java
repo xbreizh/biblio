@@ -15,7 +15,8 @@ import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Named;
 import javax.xml.ws.WebServiceException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Named
 public class ConnectManagerImpl implements AuthenticationProvider {
@@ -23,7 +24,6 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     private static final String ROLE = "USER";
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private ConnectService connectService;
-
 
 
     @Override
@@ -52,11 +52,13 @@ public class ConnectManagerImpl implements AuthenticationProvider {
 
         logger.info("token found: " + token);
 
+        List<String> privileges = new ArrayList<>();
+        privileges.add(ROLE);
+
         if (!token.equals("wrong credentials") && exception.isEmpty()) {
 
-            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
-            //UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, );
-            //auth.setAuthenticated(true);
+            UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority(privileges));
+
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());
             logger.info("login: " + auth.getName());
@@ -83,15 +85,13 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
 
-    public List<GrantedAuthority> buildUserAuthority() {
-
-       /* List<GrantedAuthority> list = new ArrayList<>();
-        list.add(new SimpleGrantedAuthority(ROLE));
-
-        return list;*/
-       return Arrays.asList(new SimpleGrantedAuthority(ROLE));
+    public List<GrantedAuthority> buildUserAuthority(List<String> privileges) {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+        for (String privilege : privileges) {
+            authorities.add(new SimpleGrantedAuthority(privilege));
+        }
+        return authorities;
     }
-
 
 
     public void setConnectService(ConnectService connectService) {
