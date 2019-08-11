@@ -14,7 +14,7 @@ import java.util.GregorianCalendar;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
-class DateConvertedHelperTest {
+class DateConvertedStringHelperTest {
 
     private DateConvertedHelper dateConvertedHelper;
 
