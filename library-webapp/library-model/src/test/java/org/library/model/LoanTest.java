@@ -200,25 +200,103 @@ class LoanTest {
     @Test
     @DisplayName("should return false when null")
     void compareTo(){
-        assertNotEquals(null, loan);
+        Loan loan2 = new Loan();
+        loan2.setStatus("");
+        loan.setStatus("plok");
+        assertEquals(4,  loan.compareTo(loan2));
     }
 
     @Test
     @DisplayName("should return false when different class")
-    void compareTo1(){
-        assertNotEquals(new Book(), loan);
+    void equals(){
+        assertFalse( loan.equals(new Book()));
     }
 
     @Test
     @DisplayName("should return false when different ")
-    void compareTo2(){
+    void equals2(){
         loan.setIsbn("isbn123");
-        assertNotEquals(new Loan(), loan);
+        assertFalse( loan.equals(new Loan()));
     }
 
     @Test
     @DisplayName("should return true when equals ")
-    void compareTo3(){
+    void equals4(){
+        Date startDate = new Date();
+        Loan loan2 = new Loan();
+        loan.setStartDate(startDate);
+        assertFalse(loan.equals(loan2));
+    }
+
+    @Test
+    @DisplayName("should return true when equals ")
+    void equals5(){
+        Loan loan2 = new Loan();
+        Date startDate = new Date();
+        String isbn = "isbn123";
+        loan2.setStartDate(startDate);
+        loan.setStartDate(startDate);
+        loan.setIsbn(isbn);
+        assertFalse(loan.equals(loan2));
+    }
+
+    @Test
+    @DisplayName("should return true when equals ")
+    void equals6(){
+        Loan loan2 = new Loan();
+        Date startDate = new Date();
+        String isbn = "isbn123";
+        Book book = new Book();
+        loan2.setStartDate(startDate);
+        loan2.setIsbn(isbn);
+        loan.setStartDate(startDate);
+        loan.setIsbn(isbn);
+        loan.setBook(book);
+        assertFalse(loan.equals(loan2));
+    }
+
+    @Test
+    @DisplayName("should return true when equals ")
+    void equals7(){
+        Loan loan2 = new Loan();
+        Date startDate = new Date();
+        String isbn = "isbn123";
+        Book book = new Book();
+        Member member = new Member();
+        loan2.setStartDate(startDate);
+        loan2.setIsbn(isbn);
+        loan2.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setIsbn(isbn);
+        loan.setBook(book);
+        loan.setBorrower(member);
+        assertFalse(loan.equals(loan2));
+    }
+
+    @Test
+    @DisplayName("should return true when equals ")
+    void equals8(){
+        Loan loan2 = new Loan();
+        Date startDate = new Date();
+        String isbn = "isbn123";
+        Book book = new Book();
+        Member member = new Member();
+        Date endDate = new Date();
+        loan2.setStartDate(startDate);
+        loan2.setEndDate(endDate);
+        loan2.setIsbn(isbn);
+        loan2.setBook(book);
+        loan.setStartDate(startDate);
+        loan.setEndDate(endDate);
+        loan.setIsbn(isbn);
+        loan.setBook(book);
+        loan.setBorrower(member);
+        assertFalse(loan.equals(loan2));
+    }
+
+    @Test
+    @DisplayName("should return true when equals ")
+    void equals3(){
         Date startDate = new Date();
         Date endDate = new Date();
         Book book = new Book();
@@ -235,7 +313,7 @@ class LoanTest {
         loan.setIsbn(isbn);
         loan.setBook(book);
         loan.setBorrower(member);
-        assertEquals(loan2, loan);
+        assertTrue(loan.equals(loan2));
     }
 
     @Test
