@@ -108,12 +108,12 @@ public class MemberManagerImpl implements MemberManager {
     }
 
 
-    private IConnectService getConnectServicePort() {
+    IConnectService getConnectServicePort() {
         if (connectService == null) connectService = new ConnectService();
         return connectService.getConnectServicePort();
     }
 
-    private IMemberService getMemberServicePort() {
+    IMemberService getMemberServicePort() {
         if (memberService == null) memberService = new MemberService();
         return memberService.getMemberServicePort();
     }

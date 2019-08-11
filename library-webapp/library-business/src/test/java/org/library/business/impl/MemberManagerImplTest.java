@@ -254,6 +254,42 @@ class MemberManagerImplTest {
         );
     }
 
+    @Test
+    @DisplayName("should return connectServicePort if connectService is not null")
+    void getConnectServicePort(){
+        when(connectService.getConnectServicePort()).thenReturn(iConnectService);
+        assertNotNull(memberManager.getConnectServicePort());
+
+    }
+
+    @Test
+    @DisplayName("should return connectServicePort if connectService is null")
+    void getConnectServicePort1(){
+        memberManager.setConnectService(null);
+        when(connectService.getConnectServicePort()).thenReturn(iConnectService);
+        assertNotNull(memberManager.getConnectServicePort());
+
+    }
+
+    @Test
+    @DisplayName("should return memberServicePort if connectService is not null")
+    void getMemberServicePort(){
+        when(memberService.getMemberServicePort()).thenReturn(iMemberService);
+        assertNotNull(memberManager.getMemberServicePort());
+
+    }
+
+    @Test
+    @DisplayName("should return memberServicePort if connectService is null")
+    void getMemberServicePort1(){
+        memberManager.setMemberService(null);
+        when(memberService.getMemberServicePort()).thenReturn(iMemberService);
+        assertNotNull(memberManager.getMemberServicePort());
+
+    }
+
+
+
    /* @Test
     void setBookManager(){
         memberManager.setBookManager(bookManager);
