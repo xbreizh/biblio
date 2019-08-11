@@ -15,10 +15,7 @@ import org.troparo.services.connectservice.IConnectService;
 
 import javax.inject.Named;
 import javax.xml.ws.WebServiceException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Named
 public class ConnectManagerImpl implements AuthenticationProvider {
@@ -56,6 +53,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         logger.info("token found: " + token);
 
         if (!token.equals("wrong credentials") && exception.isEmpty()) {
+
             UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(login, token, buildUserAuthority());
             logger.info("trucko: " + auth.getAuthorities());
             logger.info("cred: " + auth.getCredentials());
@@ -83,19 +81,15 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     }
 
 
-    public Collection<GrantedAuthority> buildUserAuthority() {
+    public List<GrantedAuthority> buildUserAuthority() {
 
-        Set<GrantedAuthority> setAuths = new HashSet<>();
+        List<GrantedAuthority> list = new ArrayList<>();
+        list.add(new SimpleGrantedAuthority(ROLE));
 
-        // Build user's authorities
-        setAuths.add(getSimpleGrantedAuthority());
-
-        return new ArrayList<>(setAuths);
+        return list;
     }
 
-    private SimpleGrantedAuthority getSimpleGrantedAuthority() {
-        return new SimpleGrantedAuthority(ROLE);
-    }
+
 
     public void setConnectService(ConnectService connectService) {
         this.connectService = connectService;
