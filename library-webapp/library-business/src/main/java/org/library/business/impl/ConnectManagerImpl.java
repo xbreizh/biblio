@@ -27,9 +27,7 @@ public class ConnectManagerImpl implements AuthenticationProvider {
     private Logger logger = Logger.getLogger(this.getClass().getName());
     private ConnectService connectService;
 
-    public void setConnectService(ConnectService connectService) {
-        this.connectService = connectService;
-    }
+
 
     @Override
     public UsernamePasswordAuthenticationToken authenticate(Authentication authentication) {
@@ -90,14 +88,16 @@ public class ConnectManagerImpl implements AuthenticationProvider {
         Set<GrantedAuthority> setAuths = new HashSet<>();
 
         // Build user's authorities
-        setAuths.add(getSimpleGrantedAuthority(ROLE));
+        setAuths.add(getSimpleGrantedAuthority());
 
         return new ArrayList<>(setAuths);
     }
 
-    private SimpleGrantedAuthority getSimpleGrantedAuthority(String role) {
-        return new SimpleGrantedAuthority(role);
+    private SimpleGrantedAuthority getSimpleGrantedAuthority() {
+        return new SimpleGrantedAuthority(ROLE);
     }
 
-
+    public void setConnectService(ConnectService connectService) {
+        this.connectService = connectService;
+    }
 }

@@ -62,7 +62,12 @@ public class Loan implements Comparable<Loan> {
         if(obj==null)return false;
         if (getClass() != obj.getClass())
             return false;
-        return this.equals(obj);
+       Loan loan = (Loan) obj;
+       if(startDate ==null || startDate != loan.startDate)return false;
+       if(!isbn.equals(loan.getIsbn()))return false;
+       if(book!=loan.getBook())return false;
+       if(borrower!=loan.getBorrower())return false;
+       return endDate==loan.getEndDate();
     }
 
     @Override

@@ -196,4 +196,53 @@ class LoanTest {
         assertEquals("Loan{id=123, startDate=Thu Dec 31 00:00:00 UTC 2009, plannedEndDate=Thu Jan 07 00:00:00 UTC 2010, endDate=Sun Jan 17 00:00:00 UTC 2010, renewable=false, status=null, book=Captain Cook}", loan.toString());
     }
 
+
+    @Test
+    @DisplayName("should return false when null")
+    void compareTo(){
+        assertNotEquals(null, loan);
+    }
+
+    @Test
+    @DisplayName("should return false when different class")
+    void compareTo1(){
+        assertNotEquals(new Book(), loan);
+    }
+
+    @Test
+    @DisplayName("should return false when different ")
+    void compareTo2(){
+        loan.setIsbn("isbn123");
+        assertNotEquals(new Loan(), loan);
+    }
+
+    @Test
+    @DisplayName("should return true when equals ")
+    void compareTo3(){
+        Date startDate = new Date();
+        Date endDate = new Date();
+        Book book = new Book();
+        Member member = new Member();
+        String isbn = "isbn123";
+        Loan loan2 = new Loan();
+        loan2.setStartDate(startDate);
+        loan2.setEndDate(endDate);
+        loan2.setIsbn(isbn);
+        loan2.setBook(book);
+        loan2.setBorrower(member);
+        loan.setStartDate(startDate);
+        loan.setEndDate(endDate);
+        loan.setIsbn(isbn);
+        loan.setBook(book);
+        loan.setBorrower(member);
+        assertEquals(loan2, loan);
+    }
+
+    @Test
+    @DisplayName("should return hashCode")
+    void hashCode1(){
+        assertEquals(1, loan.hashCode());
+
+    }
+
 }
