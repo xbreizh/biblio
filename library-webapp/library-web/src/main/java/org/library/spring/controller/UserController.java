@@ -9,6 +9,7 @@ import org.library.helper.PasswordCheckerImpl;
 import org.library.model.Book;
 import org.library.model.Member;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
@@ -19,8 +20,6 @@ import org.troparo.services.memberservice.BusinessExceptionMember;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.xml.ws.soap.SOAPFaultException;
-import java.net.UnknownHostException;
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -55,17 +54,18 @@ public class UserController {
         this.passwordChecker = passwordChecker;
     }
 
-    @ExceptionHandler({IndexOutOfBoundsException.class, NoHandlerFoundException.class, SOAPFaultException.class, BusinessExceptionConnect.class, UnknownHostException.class, NullPointerException.class})
-    public ModelAndView handleNoHandlerFoundException(BusinessExceptionConnect ex) {
-        ModelAndView model = new ModelAndView(ERROR);
-        model.addObject("exception", ex.getMessage());
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public ModelAndView handleError404(HttpServletRequest request, Exception e) {
+        ModelAndView mav = new ModelAndView("/errors/404");
+        mav.addObject("exception", e);
+        return mav;
+    }
 
-
-        if (ex.getMessage().startsWith("No handler found")) {
-            model.setViewName(NOT_FOUND);
-        }
-
-        return model;
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public ModelAndView handleError405(HttpServletRequest request, Exception e) {
+        ModelAndView mav = new ModelAndView("/errors/405");
+        mav.addObject("exception", e);
+        return mav;
     }
 
 
@@ -138,7 +138,7 @@ public class UserController {
 
     @PostMapping("/passwordResetSendEmail")
     public ModelAndView passwordResetSendEmail1(String login, String email) throws BusinessExceptionConnect {
-        logger.info(LOGIN +" "+ login);
+        logger.info(LOGIN + " " + login);
         logger.info("email: " + email);
         ModelAndView mv = new ModelAndView();
         mv.addObject(LOGIN, login);
@@ -182,7 +182,6 @@ public class UserController {
         }
 
     }
-
 
 
     @PostMapping("/renew")
@@ -248,7 +247,7 @@ public class UserController {
 
 
         Member member = memberManager.getMember(token, login);
-        if(member==null) return new ModelAndView(LOGIN);
+        if (member == null) return new ModelAndView(LOGIN);
 
         mv.addObject("loanList", member.getLoanList());
         mv.addObject("member", member);
