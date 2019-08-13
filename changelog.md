@@ -1,5 +1,31 @@
 ## Unreleased
-
+## [0.6.0] 2019-08-13, 14- Refactoring
+			14-  added robots exception
+			14- added exception 404, 405
+			14- adding stringHelper
+			14- refactoring on searchByCriteria  / loan
+			14- added tests for Loan
+			14- trying to solve security recommandation
+			14- trying to fix security bug
+			14- added tests to Loan
+			14- fixed wrong table class
+			14- hiding list when no search performed + no result found alert + scrollable result table
+			14- added MAX_BOOK_LIST
+			14- added color by status
+			14- added log for connection issue
+			14- order loans by status
+			14- scrollbar workaround
+			14- table formatting / overflow
+			14- fixed decalage when toggling loans
+			14- refined submit button
+			14- fixing adding20Mn function + fixing isRenewable issue for planned loans
+			14- updated sql for testing
+			14- added password reset check
+			14- fixed issue on filePath
+			14- adding changelog
+			14- fixed bug on bufferedReader
+			14- corrected test
+			14- updated gitignore
 
 ## [0.5.0] 2019-07-30, 13- Added reminder (alerte avant date)
 			13- added dao for reminder
