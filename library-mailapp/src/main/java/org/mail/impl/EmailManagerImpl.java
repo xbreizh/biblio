@@ -29,7 +29,7 @@ import java.util.*;
 
 @Named
 @PropertySource("classpath:mail.properties")
-@PropertySource("classpath:templates/Overdue.html")
+@PropertySource("classpath:Overdue.html")
 public class EmailManagerImpl implements EmailManager {
 
     private static final String MAIL_LIST_SIZE = "mailList size: ";
@@ -77,7 +77,7 @@ public class EmailManagerImpl implements EmailManager {
 
     @Override
     public boolean sendOverdueMail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
-        String template = "templates/Overdue.html";
+        String template = "Overdue.html";
         if (checkIfFileExist(template)) {
             String token = connectManager.authenticate();
             if (token != null) {
@@ -94,7 +94,7 @@ public class EmailManagerImpl implements EmailManager {
     @Override
     public boolean sendReadyEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Book ready email");
-        String template = "templates/LoanReady.html";
+        String template = "LoanReady.html";
         if (checkIfFileExist(template)) {
             String token = connectManager.authenticate();
             if (token != null) {
@@ -115,7 +115,7 @@ public class EmailManagerImpl implements EmailManager {
     public boolean sendReminderEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("sending Reminder email");
         List<Mail> reminderList;
-        String template = "templates/Reminder.html";
+        String template = "Reminder.html";
         if (checkIfFileExist(template)) {
             String token = connectManager.authenticate();
             if (token != null) {
@@ -135,7 +135,7 @@ public class EmailManagerImpl implements EmailManager {
     @Override
     public boolean sendPasswordResetEmail() throws BusinessExceptionConnect, MessagingException, IOException, BusinessExceptionMail {
         logger.info("checking if password reset email");
-        String template = "templates/resetPassword.html";
+        String template = "resetPassword.html";
         if (checkIfFileExist(template)) {
             String token = connectManager.authenticate();
             if (token != null) {
@@ -185,9 +185,10 @@ public class EmailManagerImpl implements EmailManager {
     }
 
     boolean checkIfFileExist(String template) {
-        ClassLoader classLoader = getClass().getClassLoader();
-        URL resource = classLoader.getResource(template);
-        if (resource == null) {
+       // ClassLoader classLoader = getClass().getClassLoader();
+        //URL resource = classLoader.getResource(template);
+       // String resource = template;
+        if (template == null) {
             logger.error("File not found: " + template);
             return false;
         }
@@ -261,7 +262,7 @@ public class EmailManagerImpl implements EmailManager {
         String msg = null;
         if (checkIfFileExist(template)) {
             try {
-                File file = new File("src/main/resources/" + template);
+                File file = new File("resources/" + template);
                 msg = readContentFromFile(file);
 
 

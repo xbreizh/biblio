@@ -6,7 +6,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mail.contract.ConnectManager;
-import org.mail.contract.EmailManager;
 import org.mail.model.Mail;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.ContextConfiguration;
@@ -25,7 +24,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -279,7 +277,7 @@ class EmailManagerImplTest {
     @DisplayName("should return false if no token")
     void sendOverdueMail3() throws MessagingException, BusinessExceptionConnect, BusinessExceptionMail, IOException {
         EmailManagerImpl emailManager1 = spy(emailManager);
-        doReturn(true).when(emailManager1).checkIfFileExist("templates/Overdue.html");
+        doReturn(true).when(emailManager1).checkIfFileExist("Overdue.html");
         assertFalse(emailManager1.sendOverdueMail());
     }
 
@@ -288,7 +286,7 @@ class EmailManagerImplTest {
     @Test
     @DisplayName("should return true if the file exist")
     void checkIfFileExist() {
-        String path = "templates/Overdue.html";
+        String path = "Overdue.html";
         assertTrue(emailManager.checkIfFileExist(path));
     }
 

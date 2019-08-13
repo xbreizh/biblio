@@ -23,7 +23,7 @@
         <spring.version>5.1.8.RELEASE</spring.version>
         <spring-boot-autoconfigure.version>2.1.6.RELEASE</spring-boot-autoconfigure.version>
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
-        <github-sha>2a6ebc49a9521f46dc4dbcbee35651d35279b2c1</github-sha>
+        <github-sha>48de6675c9a47fb7db09067a0563f0ed64f61f6b</github-sha>
     </properties>
     <profiles>
         <!-- Local profile -->

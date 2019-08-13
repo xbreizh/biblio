@@ -32,10 +32,10 @@ public class UserController {
     private static final String HOME = "home";
     private static final String RESET = "passwordReset/passwordReset";
     private static final String REDIRECT_HOME = "redirect:/";
-    private static final String DENIED = "/errors/denied";
+    private static final String DENIED = "/errors/403";
     private static final String ERROR = "/errors/service";
     private static final String NOT_FOUND = "/errors/404";
-    private static final String RESET_OK = "passwordReset/passwordResetLinkOk";
+    private static final String RESET_OK = "passwordReset/passwordResetOk";
     private static final String RESET_KO = "passwordReset/passwordResetLinkKo";
     private static final String SEND_EMAIL = "passwordReset/passwordResetSendEmail";
     private static Logger logger = Logger.getLogger(UserController.class);
