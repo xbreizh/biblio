@@ -11,6 +11,7 @@ import org.library.model.Member;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.troparo.services.bookservice.BusinessExceptionBook;
@@ -20,7 +21,7 @@ import org.troparo.services.memberservice.BusinessExceptionMember;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
+import javax.xml.ws.WebServiceException;
 import java.util.List;
 import java.util.Map;
 
@@ -30,17 +31,17 @@ public class UserController {
     private static final String LOGIN = "login";
     private static final String HOME = "home";
     private static final String RESET = "passwordReset/passwordReset";
-    private static final String ERROR = "403";
-    private static final String NOT_FOUND = "404";
     private static final String REDIRECT_HOME = "redirect:/";
+    private static final String DENIED = "/errors/denied";
+    private static final String ERROR = "/errors/service";
+    private static final String NOT_FOUND = "/errors/404";
+    private static final String RESET_OK = "passwordReset/passwordResetLinkOk";
+    private static final String RESET_KO = "passwordReset/passwordResetLinkKo";
+    private static final String SEND_EMAIL = "passwordReset/passwordResetSendEmail";
     private static Logger logger = Logger.getLogger(UserController.class);
-    //@Inject
     private MemberManager memberManager;
-    //@Inject
     private BookManager bookManager;
-    //@Inject
     private LoanManager loanManager;
-    //@Inject
     private LibraryHelper helper;
 
     private PasswordCheckerImpl passwordChecker;
@@ -56,18 +57,35 @@ public class UserController {
 
     @ExceptionHandler(NoHandlerFoundException.class)
     public ModelAndView handleError404(HttpServletRequest request, Exception e) {
-        ModelAndView mav = new ModelAndView("/errors/404");
-        mav.addObject("exception", e);
-        return mav;
+        logError(request, e);
+        return new ModelAndView(NOT_FOUND);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ModelAndView handleError405(HttpServletRequest request, Exception e) {
-        ModelAndView mav = new ModelAndView("/errors/405");
-        mav.addObject("exception", e);
-        return mav;
+        logError(request, e);
+        return new ModelAndView(ERROR);
     }
 
+    @ExceptionHandler({WebServiceException.class, NullPointerException.class})
+    public ModelAndView handleErrorWebServiceException(HttpServletRequest request, Exception e) {
+        logError(request, e);
+        logger.error(request.getMethod());
+        return new ModelAndView(ERROR);
+    }
+
+
+
+    @ExceptionHandler({HttpClientErrorException.Unauthorized.class})
+    @RequestMapping("/denied")
+    public ModelAndView error(HttpServletRequest request, Exception e) {
+        logError(request, e);
+        return new ModelAndView(DENIED);
+    }
+
+    private void logError(HttpServletRequest request, Exception e) {
+        logger.error("error: " + e + " / request: " + request.getMethod());
+    }
 
     @RequestMapping("/")
     public ModelAndView home(String error) {
@@ -89,7 +107,7 @@ public class UserController {
             mv.addObject("member", member);
 
         } else {
-            mv.setViewName(LOGIN);
+            return new ModelAndView(LOGIN);
         }
         return mv;
     }
@@ -106,24 +124,6 @@ public class UserController {
         }
 
         return mv;
-    }
-
-    @RequestMapping("/denied")
-    public ModelAndView error(Principal user, HttpServletRequest req) {
-        logger.info("error");
-        ModelAndView model = new ModelAndView(ERROR);
-        model.addObject("errorCode", "Error 403");
-
-        logger.info(req.getAttribute("javax.servlet.error.status_code"));
-        if (user != null) {
-            model.addObject("msg", "Hi " + user.getName()
-                    + ", you do not have permission to access this page!");
-        } else {
-            model.addObject("msg",
-                    "You do not have permission to access this page!");
-        }
-
-        return model;
     }
 
 
@@ -145,9 +145,9 @@ public class UserController {
         mv.addObject("email", email);
         if (memberManager.sendResetPasswordLink(login, email)) {
 
-            mv.setViewName("passwordReset/passwordResetLinkOk");
+            mv.setViewName(RESET_OK);
         } else {
-            mv.setViewName("passwordReset/passwordResetLinkKo");
+            mv.setViewName(RESET_KO);
         }
         return mv;
     }
@@ -155,9 +155,7 @@ public class UserController {
     @GetMapping("/recover")
     public ModelAndView passwordResetSendEmail() {
 
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("passwordReset/passwordResetSendEmail");
-        return mv;
+        return new ModelAndView(SEND_EMAIL);
     }
 
 
@@ -178,7 +176,7 @@ public class UserController {
             } catch (BusinessExceptionConnect businessExceptionConnect) {
                 logger.error(businessExceptionConnect.getMessage());
             }
-            return new ModelAndView("passwordReset/passwordResetOk");
+            return new ModelAndView(RESET_OK);
         }
 
     }
