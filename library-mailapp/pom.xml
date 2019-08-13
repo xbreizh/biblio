@@ -23,7 +23,7 @@
         <spring.version>5.1.8.RELEASE</spring.version>
         <spring-boot-autoconfigure.version>2.1.6.RELEASE</spring-boot-autoconfigure.version>
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
-        <github-sha>0274938fdc3a505970ecd56f35e7af3638b05975</github-sha>
+        <github-sha>2a6ebc49a9521f46dc4dbcbee35651d35279b2c1</github-sha>
     </properties>
     <profiles>
         <!-- Local profile -->
@@ -88,7 +88,7 @@
                                         </wsdlOption>
                                         <wsdlOption>
                                             <wsdl>
-                                                https://raw.githubusercontent.com/xbreizh/biblio/${github-sha}/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/local/ConnectService.wsdl
+                                                https://raw.githubusercontent.com/xbreizh/biblio/${github-sha}/library-webservice/troparo-web/src/main/resources/org/troparo/web/services/docker/ConnectService.wsdl
                                             </wsdl>
                                         </wsdlOption>
                                     </wsdlOptions>
