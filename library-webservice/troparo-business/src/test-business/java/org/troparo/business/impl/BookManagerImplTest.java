@@ -38,7 +38,6 @@ class BookManagerImplTest {
     }
 
 
-
     @Test
     @DisplayName("should say that the ISBN already exist")
     void addBook() {
@@ -145,9 +144,6 @@ class BookManagerImplTest {
     }
 
 
-
-
-
     @Test
     @DisplayName("should remove invalid entries from criterias Map")
     void removeInvalidEntriesFromCriterias() {
@@ -165,9 +161,6 @@ class BookManagerImplTest {
 
         assertEquals(criteriaResults, bookManager2.removeInvalidEntriesFromCriterias(criterias));
     }
-
-
-
 
 
     @Test

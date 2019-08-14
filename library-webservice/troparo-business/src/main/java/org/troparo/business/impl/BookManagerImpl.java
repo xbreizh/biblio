@@ -15,12 +15,11 @@ import java.util.*;
 @Transactional
 @Named
 public class BookManagerImpl implements BookManager {
+    private static Logger logger = Logger.getLogger(BookManagerImpl.class);
     @Inject
     BookDAO bookDAO;
     @Inject
     StringValidatorBook stringValidatorBook;
-    private static  Logger logger = Logger.getLogger(BookManagerImpl.class);
-
 
     public void setStringValidatorBook(StringValidatorBook stringValidatorBook) {
         this.stringValidatorBook = stringValidatorBook;
@@ -43,10 +42,6 @@ public class BookManagerImpl implements BookManager {
 
         return "there was an issue while inserting the book";
     }
-
-
-
-
 
 
     public String checkValidityOfParametersForInsertBook(Book book) {

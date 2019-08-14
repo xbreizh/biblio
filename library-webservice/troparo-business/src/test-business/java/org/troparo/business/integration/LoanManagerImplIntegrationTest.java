@@ -2,7 +2,6 @@ package org.troparo.business.integration;
 
 import org.apache.log4j.Logger;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,21 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.BookManager;
 import org.troparo.business.contract.LoanManager;
 import org.troparo.business.contract.MemberManager;
-import org.troparo.business.impl.LoanManagerImpl;
-import org.troparo.model.Book;
-import org.troparo.model.Loan;
-import org.troparo.model.Member;
 
 import javax.inject.Inject;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.when;
 
 @ContextConfiguration("classpath:/application-context-test.xml")
 @ExtendWith(SpringExtension.class)
@@ -45,7 +35,6 @@ class LoanManagerImplIntegrationTest {
 
     @Inject
     private BookManager bookManager;
-
 
 
     @BeforeEach
@@ -86,6 +75,7 @@ class LoanManagerImplIntegrationTest {
         map.put("status", "termindeated");
         assertEquals(0, loanManager.getLoansByCriteria(map).size());
     }
+
     @Test
     @DisplayName("should return an empty list when wrong status")
     void getLoansByCriteria4() {

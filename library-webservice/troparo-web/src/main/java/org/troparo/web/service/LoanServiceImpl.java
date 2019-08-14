@@ -61,9 +61,9 @@ public class LoanServiceImpl implements ILoanService {
     public ReserveResponseType reserve(ReserveRequestType parameters) throws BusinessExceptionLoan {
         ReserveResponseType ar = new ReserveResponseType();
         checkAuthentication(parameters.getToken());
-        logger.info("new reserve call. token: "+parameters.getToken()+" / isbn: "+parameters.getISBN());
+        logger.info("new reserve call. token: " + parameters.getToken() + " / isbn: " + parameters.getISBN());
         ar.setReturn(loanManager.reserve(parameters.getToken(), parameters.getISBN()));
-        logger.info("getting reserve return: "+ar.getReturn());
+        logger.info("getting reserve return: " + ar.getReturn());
         return ar;
     }
 
@@ -237,7 +237,7 @@ public class LoanServiceImpl implements ILoanService {
             loanTypeOut = new LoanTypeOut();
             loanTypeOut.setId(loan.getId());
             loanTypeOut.setLogin(loan.getBorrower().getLogin());
-            if(loan.getBook()!=null) {
+            if (loan.getBook() != null) {
                 loanTypeOut.setBookId(loan.getBook().getId());
                 loanTypeOut.setISBN(loan.getIsbn());
                 LoanBook bookLoan = new LoanBook();
@@ -277,11 +277,11 @@ public class LoanServiceImpl implements ILoanService {
 
     void checkAuthentication(String token) throws BusinessExceptionLoan {
 
-            if(!connectService.checkToken(token)){
+        if (!connectService.checkToken(token)) {
 
-                logger.error("Invalid token");
-                throw new BusinessExceptionLoan("invalid token");
-            }
+            logger.error("Invalid token");
+            throw new BusinessExceptionLoan("invalid token");
+        }
 
     }
 

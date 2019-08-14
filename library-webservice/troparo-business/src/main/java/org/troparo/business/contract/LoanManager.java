@@ -32,7 +32,7 @@ public interface LoanManager {
 
     String reserve(String token, String isbn);
 
-    boolean checkinBooking( String token, int id);
+    boolean checkinBooking(String token, int id);
 
     boolean checkIfPendingReservation(String isbn);
 

@@ -20,17 +20,11 @@ import java.util.*;
 @Transactional
 @PropertySource("classpath:config.properties")
 public class MailManagerImpl implements MailManager {
+    private static Logger logger = Logger.getLogger(MailManagerImpl.class);
     @Inject
     LoanManager loanManager;
-
-
     @Inject
     MemberManager memberManager;
-
-    public void setMemberManager(MemberManager memberManager) {
-        this.memberManager = memberManager;
-    }
-
     @Value("${daysReminder}")
     private int daysReminder;
 
@@ -38,7 +32,9 @@ public class MailManagerImpl implements MailManager {
         if (daysReminder == 0) daysReminder = 5;
     }
 
-    private static Logger logger = Logger.getLogger(MailManagerImpl.class);
+    public void setMemberManager(MemberManager memberManager) {
+        this.memberManager = memberManager;
+    }
 
     @Override
     public int calculateDaysBetweenDates(Date d1, Date d2) {

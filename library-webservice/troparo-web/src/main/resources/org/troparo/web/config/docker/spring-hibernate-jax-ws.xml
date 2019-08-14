@@ -8,14 +8,19 @@ http://www.springframework.org/schema/context ">
 
     <!-- to activate annotations in beans already registered in the ApplicationContext -->
     <context:annotation-config/>
-    <context:property-placeholder location="classpath:log4j.properties"/>
+
     <!-- scans packages to find and register beans within the application context -->
-    <!-- <context:component-scan base-package="org.troparo.web"/>
-     <context:component-scan base-package="org.troparo.business"/>-->
+    <context:component-scan base-package="org.troparo.web"/>
+    <context:component-scan base-package="org.troparo.business"/>
     <context:component-scan base-package="org.troparo.model"/>
     <context:component-scan base-package="org.troparo.consumer"/>
-    <context:component-scan base-package="org.troparo.technical"/>
+     <context:component-scan base-package="org.troparo.technical"/>
     <context:component-scan base-package="org.troparo"/>
+
+    <context:property-placeholder location="classpath:config.properties"/>
+    <context:property-placeholder location="classpath:log4j.properties"/>
+
+
 
     <!-- turn on spring transaction annotation -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -53,6 +58,7 @@ http://www.springframework.org/schema/context ">
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
         <property name="url" value="jdbc:postgresql://127.0.0.1:5432/troparo"/>
+         <!--<property name="url" value="jdbc:postgresql://db:5432/troparo"/>-->
         <property name="username" value="ocp"/>
         <property name="password" value="123"/>
     </bean>

@@ -11,7 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 class DateConvertedHelperTest {
 
@@ -31,7 +32,6 @@ class DateConvertedHelperTest {
         assertEquals("2018-09-09T00:00:00.000Z", dateConvertedHelper.convertDateIntoXmlDate(date).toString());
 
     }
-
 
 
     @Test

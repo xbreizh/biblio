@@ -51,7 +51,7 @@ public class Loan {
     @Override
     public String toString() {
         String title = "no book";
-        if(book!=null)title=book.getTitle();
+        if (book != null) title = book.getTitle();
         return "Loan{" +
                 "id=" + id +
                 ", reservationDate=" + reservationDate +

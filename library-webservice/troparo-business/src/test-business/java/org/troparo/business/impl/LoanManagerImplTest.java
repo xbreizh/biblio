@@ -936,7 +936,6 @@ class LoanManagerImplTest {
     }
 
 
-
     @Test
     @DisplayName("should return OVERDUE if endDate is not null")
     void getLoanStatus2() throws ParseException {

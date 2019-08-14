@@ -9,8 +9,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MailManager;
 import org.troparo.business.contract.MemberManager;
-import org.troparo.consumer.contract.LoanDAO;
-import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Book;
 import org.troparo.model.Loan;
 import org.troparo.model.Member;
@@ -60,7 +58,7 @@ class MailManagerImplTest {
         Calendar c = Calendar.getInstance();
 
         c.setTime(sdf.parse(dt));
-        Date availableDate=c.getTime();
+        Date availableDate = c.getTime();
 
         c.setTime(sdf.parse(dt2));
         Date endAvailable = c.getTime();
@@ -72,16 +70,16 @@ class MailManagerImplTest {
 
     @Test
     @DisplayName("should return empty list")
-    void getLoansReminder(){
+    void getLoansReminder() {
         String token = "token1234";
         when(memberManager.checkAdmin(anyString())).thenReturn(false);
-        assertEquals(0,mailManager.getLoansReminder(token).size());
+        assertEquals(0, mailManager.getLoansReminder(token).size());
 
     }
 
     @Test
     @DisplayName("should return empty list")
-    void getLoansReminder1(){
+    void getLoansReminder1() {
         List<Loan> loanList = new ArrayList<>();
         Loan loan = new Loan();
         loanList.add(loan);
@@ -99,7 +97,7 @@ class MailManagerImplTest {
         loan.setBorrower(member);
         when(loanManager.getReminderLoans(anyInt())).thenReturn(loanList);
         when(memberManager.checkAdmin(anyString())).thenReturn(true);
-        assertEquals(1,mailManager.getLoansReminder(token).size());
+        assertEquals(1, mailManager.getLoansReminder(token).size());
 
     }
 

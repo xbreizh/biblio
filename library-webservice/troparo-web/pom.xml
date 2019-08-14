@@ -89,6 +89,11 @@
                         <directory>src/test-web/resources/docker</directory>
                     </testResource>
                 </testResources>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources/org/troparo/web/config/docker</directory>
+                    </resource>
+                </resources>
             </build>
         </profile>
         <profile>
@@ -165,6 +170,11 @@
                         <directory>src/test-web/resources/local</directory>
                     </testResource>
                 </testResources>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources/org/troparo/web/config/local</directory>
+                    </resource>
+                </resources>
             </build>
         </profile>
     </profiles>

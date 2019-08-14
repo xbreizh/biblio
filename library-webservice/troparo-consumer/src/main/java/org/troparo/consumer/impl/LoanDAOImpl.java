@@ -21,12 +21,11 @@ public class LoanDAOImpl implements LoanDAO {
     private static final String ISBN = "isbn";
     private static final String BOOK_ID = "book_id";
     private static final String LOGIN = "login";
-    private static final String QUERY ="query: ";
+    private static final String QUERY = "query: ";
+    private static final Class cl = Loan.class;
     private static Logger logger = Logger.getLogger(LoanDAOImpl.class);
     @Inject
     private SessionFactory sessionFactory;
-    private static final Class cl = Loan.class;
-
 
     public void setSessionFactory(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -147,7 +146,7 @@ public class LoanDAOImpl implements LoanDAO {
                 "select * from Book where isbn = " + isbn + " and exists(" +
                         "select book_id from loan where isbn = " + isbn + " and end_date is not null)";
         try {
-            logger.info(QUERY+request);
+            logger.info(QUERY + request);
             Query query = sessionFactory.getCurrentSession().createNativeQuery(request).addEntity(Book.class);
             bookList = query.getResultList();
             if (!bookList.isEmpty()) return bookList.get(0);
@@ -161,10 +160,10 @@ public class LoanDAOImpl implements LoanDAO {
     public boolean cleanupExpiredReservation(int expiration) {
         StringBuilder sb = new StringBuilder();
         int beforeCleanup = cleanupExpiredReservationCount(expiration);
-        logger.info("number reservations to clean: "+beforeCleanup);
+        logger.info("number reservations to clean: " + beforeCleanup);
         try {
             sb.append("update loan set end_date = current_date where available_date < (now() - interval ");
-            sb.append( "'"+expiration+" day'");
+            sb.append("'" + expiration + " day'");
             sb.append(") and start_date is null and end_date is null");
 
 
@@ -173,9 +172,9 @@ public class LoanDAOImpl implements LoanDAO {
 
             query.executeUpdate();
             int afterCleanup = cleanupExpiredReservationCount(expiration);
-            logger.info("number reservations to clean: "+afterCleanup);
-            if(afterCleanup==0) return true;
-        }catch (Exception e){
+            logger.info("number reservations to clean: " + afterCleanup);
+            if (afterCleanup == 0) return true;
+        } catch (Exception e) {
             logger.error(e.getMessage());
         }
         return false;
@@ -186,19 +185,18 @@ public class LoanDAOImpl implements LoanDAO {
 
         try {
             sb.append("select * from  Loan where available_date < (now() - ");
-            sb.append("interval '"+expiration+" day'");
+            sb.append("interval '" + expiration + " day'");
             sb.append(") and start_date is null and end_date is null");
             Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString());
-            logger.info(QUERY+sb.toString());
-            if( query.getResultList().isEmpty()) {
+            logger.info(QUERY + sb.toString());
+            if (query.getResultList().isEmpty()) {
                 logger.info("no expired reservation found");
                 return 0;
-            }
-            else{
+            } else {
                 logger.info(query.getFetchSize());
-            return query.getResultList().size();
+                return query.getResultList().size();
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return 999;
         }
@@ -229,14 +227,14 @@ public class LoanDAOImpl implements LoanDAO {
         StringBuilder sb = new StringBuilder();
         sb.append("select * from loan where id in (");
         sb.append("select id from (");
-        sb.append("select * from ("+
-                "SELECT id, EXTRACT(DAY FROM planned_end_date - current_date) as diff "+
+        sb.append("select * from (" +
+                "SELECT id, EXTRACT(DAY FROM planned_end_date - current_date) as diff " +
                 "FROM loan ) as a where a.diff >=0 and ");
-        sb.append("a.diff <= "+daysReminder);
+        sb.append("a.diff <= " + daysReminder);
         sb.append(" and borrower_id in (select id from member where reminder = true) and end_date is null and start_date is not null and planned_end_date is not null"
-                );
+        );
         sb.append(") b)");
-        logger.info(QUERY+sb.toString());
+        logger.info(QUERY + sb.toString());
         Query query = sessionFactory.getCurrentSession().createNativeQuery(sb.toString()).addEntity(Loan.class);
         return query.getResultList();
     }
@@ -245,7 +243,6 @@ public class LoanDAOImpl implements LoanDAO {
     Date getTodayDate() {
         return new Date();
     }
-
 
 
     @Override
@@ -299,7 +296,7 @@ public class LoanDAOImpl implements LoanDAO {
         Map<String, String> newMap = new HashMap<>();
         for (Map.Entry<String, String> entry : map.entrySet()
         ) {
-            switch(entry.getKey()) {
+            switch (entry.getKey()) {
                 case LOGIN:
                     newMap.put("borrower.login", entry.getValue());
                     break;

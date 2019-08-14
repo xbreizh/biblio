@@ -22,19 +22,17 @@ import java.util.*;
 @Configuration
 @PropertySource("classpath:config.properties")
 public class MemberManagerImpl implements MemberManager {
+    private static Logger logger = Logger.getLogger(MemberManagerImpl.class);
     @Inject
     MemberDAO memberDAO;
     @Inject
     StringValidatorMember stringValidatorMember;
-
-
     @Value("${pepper}")
     private String pepper;
-    private static Logger logger = Logger.getLogger(MemberManagerImpl.class);
 
     public MemberManagerImpl() {
-        if (pepper==null){
-            pepper="TIPIAK";
+        if (pepper == null) {
+            pepper = "TIPIAK";
         }
     }
 
@@ -261,13 +259,14 @@ public class MemberManagerImpl implements MemberManager {
 
         return wrongCredentials;
     }
+
     Date adding20MnToCurrentDate() {
         Date now = getNow();
         Calendar c = Calendar.getInstance();
         c.setTime(now);
-        logger.info("now is: "+now);
+        logger.info("now is: " + now);
         c.add(Calendar.MINUTE, 20);  // number of mn to add
-        logger.info("future is: "+c.getTime());
+        logger.info("future is: " + c.getTime());
         return c.getTime();
     }
 
@@ -337,11 +336,12 @@ public class MemberManagerImpl implements MemberManager {
         }
         return false;
     }
+
     @Override
     public boolean checkAdmin(String token) {
         Member m = memberDAO.getMemberByToken(token);
         if (m != null && m.getRole() != null) {
-            logger.info("role: "+m.getRole());
+            logger.info("role: " + m.getRole());
             return m.getRole().equalsIgnoreCase("Admin");
         }
         logger.info("not an admin");
@@ -384,12 +384,12 @@ public class MemberManagerImpl implements MemberManager {
     public boolean switchReminder(String token, String login) {
         logger.info("switching reminder");
         Member member = getMemberByLogin(login);
-        if (!checkAdmin(token) && getMemberByToken(token)!=member)return false;
+        if (!checkAdmin(token) && getMemberByToken(token) != member) return false;
 
-        if(member.isReminder()){
+        if (member.isReminder()) {
             member.setReminder(false);
             logger.info("disabling reminder");
-        }else{
+        } else {
             member.setReminder(true);
             logger.info("activating reminder");
         }

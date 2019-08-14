@@ -70,7 +70,7 @@ class MailServiceImplTest {
 
     @Test
     @DisplayName("should return reminder List")
-    void  getReminderMailList() throws BusinessExceptionMail {
+    void getReminderMailList() throws BusinessExceptionMail {
         GetReminderMailListRequest request = new GetReminderMailListRequest();
         String token = "token123";
         request.setToken(token);
@@ -80,11 +80,9 @@ class MailServiceImplTest {
     }
 
 
-
-
     @Test
     @DisplayName("should convert list")
-    void convertMailListIntoPasswordResetListType(){
+    void convertMailListIntoPasswordResetListType() {
         List<Mail> list = new ArrayList<>();
         Mail mail = new Mail();
         String email = "test@test.test";
@@ -96,9 +94,9 @@ class MailServiceImplTest {
         list.add(mail);
         PasswordResetListType passwordResetListType = mailService.convertMailListIntoPasswordResetListType(list);
         assertAll(
-                ()-> assertEquals(email, passwordResetListType.getPasswordResetTypeOut().get(0).getEmail()),
-                ()-> assertEquals(token, passwordResetListType.getPasswordResetTypeOut().get(0).getToken()),
-                ()-> assertEquals(login, passwordResetListType.getPasswordResetTypeOut().get(0).getLogin())
+                () -> assertEquals(email, passwordResetListType.getPasswordResetTypeOut().get(0).getEmail()),
+                () -> assertEquals(token, passwordResetListType.getPasswordResetTypeOut().get(0).getToken()),
+                () -> assertEquals(login, passwordResetListType.getPasswordResetTypeOut().get(0).getLogin())
         );
     }
 

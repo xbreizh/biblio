@@ -11,13 +11,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.business.contract.MailManager;
 import org.troparo.business.contract.MemberManager;
-import org.troparo.business.impl.LoanManagerImpl;
-import org.troparo.business.impl.MailManagerImpl;
-import org.troparo.consumer.impl.LoanDAOImpl;
 import org.troparo.model.Member;
 
 import javax.inject.Inject;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,15 +44,14 @@ class MailManagerImplIntegrationTest {
     @BeforeEach
     void reset() {
         memberManager = mock(MemberManager.class);
-      mailManager.setMemberManager(memberManager);
+        mailManager.setMemberManager(memberManager);
         logger.info("reset db");
     }
 
 
-
     @Test
     @DisplayName("should return empty list")
-    void getPasswordResetList(){
+    void getPasswordResetList() {
         when(memberManager.checkAdmin(anyString())).thenReturn(false);
         assertEquals(0, mailManager.getPasswordResetList("test").size());
 
@@ -64,18 +59,17 @@ class MailManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return empty list")
-    void getPasswordResetList1(){
+    void getPasswordResetList1() {
         when(memberManager.checkAdmin(anyString())).thenReturn(true);
         List<Member> memberList = new ArrayList<>();
         Member member = new Member();
-        String token  = "token123";
+        String token = "token123";
         member.setToken(token);
         memberList.add(member);
         when(memberManager.getPasswordResetList()).thenReturn(memberList);
         assertEquals(1, mailManager.getPasswordResetList("test").size());
 
     }
-
 
 
     @Test
@@ -86,7 +80,7 @@ class MailManagerImplIntegrationTest {
 
     @Test
     @DisplayName("should return loans having books but no startDate")
-    void getLoansReadyForStart(){
+    void getLoansReadyForStart() {
         when(memberManager.checkAdmin(anyString())).thenReturn(true);
         assertEquals(1, mailManager.getLoansReadyForStart("dede").size());
     }

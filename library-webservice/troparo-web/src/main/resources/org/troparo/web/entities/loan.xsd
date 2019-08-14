@@ -293,7 +293,6 @@
     </xsd:element>
 
 
-
     <!-- Loan Criterias-->
     <xsd:element name="LoanCriterias">
         <xsd:complexType>

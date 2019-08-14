@@ -11,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.transaction.annotation.Transactional;
 import org.troparo.consumer.contract.BookDAO;
 import org.troparo.model.Book;
-import org.troparo.model.Loan;
 
 import javax.inject.Inject;
 import java.util.HashMap;
@@ -25,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Sql(scripts = "classpath:resetDb.sql")
 @Transactional
 class BookDAOImplTest {
-    private static  Logger logger = Logger.getLogger(BookDAOImplTest.class);
+    private static Logger logger = Logger.getLogger(BookDAOImplTest.class);
 
     @Inject
     private BookDAO bookDAO;
@@ -35,8 +34,6 @@ class BookDAOImplTest {
         logger.info("size: " + bookDAO.getBooks().size());
         logger.info("reset db");
     }
-
-
 
 
     @Test
@@ -88,7 +85,7 @@ class BookDAOImplTest {
     @Test
     @DisplayName("should return null if id invalid")
     void getBookById1() {
-        System.out.println("ress: "+bookDAO.getBookById(33));
+        System.out.println("ress: " + bookDAO.getBookById(33));
         assertNull(bookDAO.getBookById(33));
     }
 

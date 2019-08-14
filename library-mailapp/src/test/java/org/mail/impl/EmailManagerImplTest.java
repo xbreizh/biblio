@@ -293,8 +293,8 @@ class EmailManagerImplTest {
     @Test
     @DisplayName("should return true if the file exist")
     void checkIfFileExist1() {
-        String path = "templates/Overdues.html";
-        assertFalse(emailManager.checkIfFileExist(path));
+        String path = "Overdues.html";
+        assertTrue(emailManager.checkIfFileExist(path));
     }
 
     @Test
@@ -629,7 +629,7 @@ class EmailManagerImplTest {
         String token = "token123";
         String email = "dede@deded.fr";
         String login = "loginded";
-        String pwdAction = "http://localhost:8084/library_webapp/passwordReset";
+        String pwdAction = "http://localhost:8090/library-webapp/passwordReset";
         mail.setToken(token);
         mail.setEmail(email);
         mail.setLogin(login);

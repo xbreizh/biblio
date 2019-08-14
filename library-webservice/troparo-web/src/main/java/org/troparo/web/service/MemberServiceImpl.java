@@ -122,7 +122,7 @@ public class MemberServiceImpl implements IMemberService {
         SwitchReminderResponseType responseType = new SwitchReminderResponseType();
         boolean verdict = memberManager.switchReminder(parameters.getToken(), parameters.getLogin());
         responseType.setReturn(verdict);
-        logger.info("reminder activation: "+verdict);
+        logger.info("reminder activation: " + verdict);
         return responseType;
     }
 
@@ -220,8 +220,6 @@ public class MemberServiceImpl implements IMemberService {
         memberListResponseType.setMemberListType(memberListType);
         return memberListResponseType;
     }
-
-
 
 
     // Get List By Criterias
