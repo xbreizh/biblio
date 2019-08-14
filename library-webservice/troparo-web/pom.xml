@@ -16,7 +16,7 @@
     <profiles>
         <!-- Profile utilisé pour lancer les tests d'intégration de la couche Web -->
         <profile>
-            <id>docker-test-web</id>
+            <id>test-web</id>
             <build>
                 <plugins>
                     <!-- Ajout du répertoire src/test-web/java en tant que source de test du module -->
