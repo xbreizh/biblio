@@ -57,8 +57,15 @@ http://www.springframework.org/schema/context ">
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="org.postgresql.Driver"/>
-        <property name="url" value="jdbc:postgresql://127.0.0.1:5432/troparo"/>
-         <!--<property name="url" value="jdbc:postgresql://db:5432/troparo"/>-->
+        <!--for local testing-->
+        <!---->
+        <!--<property name="url" value="jdbc:postgresql://127.0.0.1:5432/troparo"/>-->
+        <!--for docker testing-->
+        <!---->
+         <property name="url" value="jdbc:postgresql://dbtest:5432/troparo"/>
+        <!--for production-->
+        <!---->
+        <!--<property name="url" value="jdbc:postgresql://db:5432/troparo"/>-->
         <property name="username" value="ocp"/>
         <property name="password" value="123"/>
     </bean>

@@ -1,6 +1,10 @@
+body{
+    background-color: #f7cfc1;
+}
 .container {
     margin-top: 10vh;
     height: 80vh;
+    background-color: #e6e1e1;
 }
 
 .row {

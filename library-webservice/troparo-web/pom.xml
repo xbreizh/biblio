@@ -16,7 +16,7 @@
     <profiles>
         <!-- Profile utilisé pour lancer les tests d'intégration de la couche Web -->
         <profile>
-            <id>test-web</id>
+            <id>docker-test-web</id>
             <build>
                 <plugins>
                     <!-- Ajout du répertoire src/test-web/java en tant que source de test du module -->
@@ -89,11 +89,6 @@
                         <directory>src/test-web/resources/docker</directory>
                     </testResource>
                 </testResources>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/org/troparo/web/config/docker</directory>
-                    </resource>
-                </resources>
             </build>
         </profile>
         <profile>
@@ -170,11 +165,6 @@
                         <directory>src/test-web/resources/local</directory>
                     </testResource>
                 </testResources>
-                <resources>
-                    <resource>
-                        <directory>src/main/resources/org/troparo/web/config/local</directory>
-                    </resource>
-                </resources>
             </build>
         </profile>
     </profiles>

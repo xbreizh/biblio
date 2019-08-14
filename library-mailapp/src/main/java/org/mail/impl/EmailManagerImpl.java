@@ -23,7 +23,6 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -185,9 +184,6 @@ public class EmailManagerImpl implements EmailManager {
     }
 
     boolean checkIfFileExist(String template) {
-       // ClassLoader classLoader = getClass().getClassLoader();
-        //URL resource = classLoader.getResource(template);
-       // String resource = template;
         if (template == null) {
             logger.error("File not found: " + template);
             return false;

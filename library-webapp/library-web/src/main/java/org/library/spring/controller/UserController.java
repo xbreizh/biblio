@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.thymeleaf.exceptions.TemplateInputException;
 import org.troparo.services.bookservice.BusinessExceptionBook;
 import org.troparo.services.connectservice.BusinessExceptionConnect;
 import org.troparo.services.loanservice.BusinessExceptionLoan;
@@ -36,7 +37,7 @@ public class UserController {
     private static final String ERROR = "/errors/service";
     private static final String NOT_FOUND = "/errors/404";
     private static final String RESET_OK = "passwordReset/passwordResetOk";
-    private static final String SEND_EMAIL_OK = "passwordResetLinkOk";
+    private static final String SEND_EMAIL_OK = "passwordReset/passwordResetLinkOk";
     private static final String RESET_KO = "passwordReset/passwordResetLinkKo";
     private static final String SEND_EMAIL = "passwordReset/passwordResetSendEmail";
     private static Logger logger = Logger.getLogger(UserController.class);
@@ -68,7 +69,7 @@ public class UserController {
         return new ModelAndView(ERROR);
     }
 
-    @ExceptionHandler({WebServiceException.class, NullPointerException.class})
+    @ExceptionHandler({WebServiceException.class, NullPointerException.class, TemplateInputException.class})
     public ModelAndView handleErrorWebServiceException(HttpServletRequest request, Exception e) {
         logError(request, e);
         logger.error(request.getMethod());
