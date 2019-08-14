@@ -1,3 +1,80 @@
+-- Cleanup
+
+DROP TABLE IF EXISTS public.loan;
+DROP TABLE IF EXISTS public.member;
+DROP TABLE IF EXISTS public.book;
+
+DROP SEQUENCE IF EXISTS hibernate_sequence;
+DROP SEQUENCE IF EXISTS loan_id_seq cascade;
+DROP SEQUENCE IF EXISTS member_id_seq cascade;
+DROP SEQUENCE IF EXISTS book_id_seq cascade;
+
+DROP SCHEMA IF EXISTS TROPARO;
+
+
+-- Start Creation
+
+CREATE SCHEMA TROPARO;
+
+
+-- Specify timezone
+SET TIME ZONE 'CET';
+
+
+CREATE TABLE public."member"
+(
+    id                SERIAL,
+    dateConnect       timestamp    NULL,
+    dateJoin          timestamp    NULL,
+    email             varchar(255) NULL,
+    firstName         varchar(255) NULL,
+    lastName          varchar(255) NULL,
+    login             varchar(255) NULL,
+    "password"        varchar(255) NULL,
+    "role"            varchar(255) NULL,
+    "token"           varchar(255) NULL,
+    "tokenexpiration" timestamp    NULL,
+    "reminder"          BOOLEAN NOT NULL,
+    CONSTRAINT member_pkey PRIMARY KEY (id)
+);
+
+
+
+
+CREATE TABLE public.book
+(
+    id              SERIAL,
+    author          varchar(255) NULL,
+    edition         varchar(255) NULL,
+    insert_date     timestamp    NULL,
+    isbn            varchar(255) NOT NULL,
+    keywords        varchar(255) NULL,
+    nb_pages        int4         NULL,
+    publicationYear int4         NULL,
+    title           varchar(255) NULL,
+    CONSTRAINT book_pkey PRIMARY KEY (id)
+);
+
+
+
+
+CREATE TABLE public.loan
+(
+    id               SERIAL,
+    reservation_date timestamp NULL,
+    available_date       timestamp NULL,
+    start_date       timestamp NULL,
+    planned_end_date timestamp NULL,
+    end_date         timestamp NULL,
+    isbn            varchar(255) NOT NULL,
+    book_id          int4      NULL,
+    borrower_id      int4      NULL,
+    CONSTRAINT loan_pkey PRIMARY KEY (id),
+    CONSTRAINT fkckf2g131el3qunjs9afsf6265 FOREIGN KEY (borrower_id) REFERENCES member (id),
+    CONSTRAINT fkllwvq8yhcx4uqka3jay8a53o2 FOREIGN KEY (book_id) REFERENCES book (id)
+);
+
+
 INSERT INTO public."member" (dateconnect, datejoin, email, firstName, lastName, login, "password", "role", "token",
                              "tokenexpiration", "reminder")
 VALUES (current_timestamp, '2019-01-17 17:22:58.013', 'POLI@KOL.FR', 'JOHN', 'POLI', 'JPOLINO',
@@ -33,7 +110,6 @@ INSERT INTO public.loan (reservation_date, available_date, start_date, planned_e
                          borrower_id)
 VALUES (NULL, NULL, '2019-01-18 15:26:17.468', '2019-01-25 00:00:00.000', '2019-01-25 16:25:26.422', '12345678OK', 3, 1)
      , (NULL, NULL, '2019-03-15 17:08:20.767', '2019-03-23 00:00:00.000', NULL, '8574596258', 6, 2)
-     , (NULL, NULL, '2019-08-12 00:00:00.000', '2019-08-19 00:00:00.000', NULL, '1234567824', 2, 1)
-     , ('2019-07-10 00:00:00.000', '2019-07-10 00:00:00.000', '2019-08-12 00:00:00.000', '2019-08-19 00:00:00.000', NULL, '1234567824', 2, 1)
+     , ('2019-07-10 00:00:00.000', '2019-07-10 00:00:00.000', '2019-08-12 00:00:00.000', '2019-08-19 00:00:00.000', NULL, '1234567824', 2, 3)
      , ('2019-07-10 00:00:00.000', '2019-07-10 00:00:00.000', NULL, null, NULL, '1234567824', null, 1)
 ;

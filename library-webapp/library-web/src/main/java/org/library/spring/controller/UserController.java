@@ -36,6 +36,7 @@ public class UserController {
     private static final String ERROR = "/errors/service";
     private static final String NOT_FOUND = "/errors/404";
     private static final String RESET_OK = "passwordReset/passwordResetOk";
+    private static final String SEND_EMAIL_OK = "passwordResetLinkOk";
     private static final String RESET_KO = "passwordReset/passwordResetLinkKo";
     private static final String SEND_EMAIL = "passwordReset/passwordResetSendEmail";
     private static Logger logger = Logger.getLogger(UserController.class);
@@ -145,7 +146,7 @@ public class UserController {
         mv.addObject("email", email);
         if (memberManager.sendResetPasswordLink(login, email)) {
 
-            mv.setViewName(RESET_OK);
+            mv.setViewName(SEND_EMAIL_OK);
         } else {
             mv.setViewName(RESET_KO);
         }
