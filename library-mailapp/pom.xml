@@ -22,7 +22,7 @@
         <mockito.version>3.0.0</mockito.version>
         <spring.version>5.1.8.RELEASE</spring.version>
         <spring-boot-autoconfigure.version>2.1.6.RELEASE</spring-boot-autoconfigure.version>
-        <spring-security.version>5.1.5.RELEASE</spring-security.version>
+        <spring-security.version>5.1.11.RELEASE</spring-security.version>
         <github-sha>48de6675c9a47fb7db09067a0563f0ed64f61f6b</github-sha>
     </properties>
     <profiles>
