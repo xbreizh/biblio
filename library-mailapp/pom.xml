@@ -20,7 +20,7 @@
         <log4j.version>1.2.17</log4j.version>
         <maven-surefire-plugin>2.22.2</maven-surefire-plugin>
         <mockito.version>3.0.0</mockito.version>
-        <spring.version>5.3.19</spring.version>
+        <spring.version>5.3.20</spring.version>
         <spring-boot-autoconfigure.version>2.1.6.RELEASE</spring-boot-autoconfigure.version>
         <spring-security.version>5.1.5.RELEASE</spring-security.version>
         <github-sha>48de6675c9a47fb7db09067a0563f0ed64f61f6b</github-sha>
